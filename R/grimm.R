@@ -1,7 +1,6 @@
 
 #Note this R code fit the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
-library(sn)
 adm<-function(y,V,mu=0,X=as.matrix(rep(1,length(y))),muknown=TRUE,type=1,graph=TRUE,out="short",Amax=0,graphwidth=300,graphheight=1200,CI=95,rando=1,Vfac=1,Vbool=FALSE,uset=FALSE){
   
   ##define some values that will be used often
