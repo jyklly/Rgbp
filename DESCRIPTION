@@ -1,0 +1,11 @@
+Package: gpb
+Version: 0.1-0
+Date: 2012-10-31
+Title: GRIMM, BRIMM and PRIMM1
+Authors@R: c(person("Joseph", "Kelly", role = c("aut", "cre")), person("Hyung Suk", "Tak", role = c("aut", "cre")), person("Carl", "Morris", role = c("ths)))
+Author: Joseph Kelly, Hyung Suk Tak, and Carl Morris
+Maintainer: Joseph Kelly <kelly2@fas.harvard.edu> Hyung Suk Tak <hyungsuk.tak@gmail.com>
+Depends: sn
+Description: Empirical Bayesian Hierarchical Modeling for Gaussian, Binomial and Poisson Data
+License: GPL-2
+BugReports: https://github.com/jyklly/gbp/issues
