@@ -1,6 +1,6 @@
-\name{gpb-package}
-\alias{gpb-package}
-\alias{gpb}
+\name{gbp-package}
+\alias{gbp-package}
+\alias{gbp}
 \docType{package}
 \title{
 Hierarchical modeling
@@ -11,13 +11,13 @@ More about what it does (maybe more than one line)
 }
 \details{
 \tabular{ll}{
-Package: \tab gpb\cr
+Package: \tab gbp\cr
 Type: \tab Package\cr
 Version: \tab 0.1-0\cr
 Date: \tab 2012-10-31\cr
 License: \tab What license is it under?\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
+ An overview of how to use the package, including the most important functions
 }
 \author{
 Who wrote it
@@ -35,5 +35,5 @@ Maintainer: Who to complain to <yourfault@somewhere.net>
 ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+# simple examples of the most important functions
 }
