@@ -278,40 +278,10 @@ pr1.post.est.prior.un<-function(B.res,a.res,ini,given){
 	list(lambda.hat=lambda.hat,se.lambda.hat=se.lambda.hat,lambda.hat.low=lambda.hat.low,lambda.hat.upp=lambda.hat.upp,u.gamma=u.gamma,v.gamma=v.gamma,lambda0.hat=lambda0.hat)
 }
 
-# graph function
-post.graph<-function(post.res,ini,given){
-	legend.position<-switch(given$leg.pos,"topleft","topright","bottomleft","bottomright")
-	prior.mean<-given$prior.mean
-	temp<-data.frame(n=given$n,y=given$sample.mean,p.hat=post.res[[1]],p.hat.low=post.res[[3]],p.hat.upp=post.res[[4]],p0.hat=post.res[[7]])
-	xl<-c("Indices (Groups) with input order")
-	if(given$gp.ord==T){
-		temp<-temp[order(temp$n),]
-		xl<-c("Indices (Groups) ordered by increasing n")
-	}
-	par(xaxs = "r", yaxs = "r", mai=c(1,0.6,1,0.3))
-	index<-1:length(temp$n)
-	cx<-(mean(log(temp$n+2))+min(log(temp$n+2)))/2
-	plot(index,temp$p.hat,ylim=c(0.8*min(c(temp$p.hat.low,temp$y)),1.2*max(c(temp$p.hat.upp,temp$y))),xlab=xl,ylab="Posterior p",main="95% Probability Interval for p",cex=log(temp$n+2)/cx,col="red",pch=19)
-	for (j in 1:length(n)){
-		lines(rep(index[j],2),c(temp$p.hat.low[j],temp$p.hat.upp[j]),lwd=0.5)
-	}
-	points(index,temp$p.hat.low,cex=1.5,pch="-")
-	points(index,temp$p.hat.upp,cex=1.5,pch="-")
-	points(index,temp$y,cex=log(temp$n+2)/cx)
-	if(!is.na(prior.mean)){
-		abline(h=prior.mean,col=4)
-	}else if(!identical(given$x,NA)){
-		points(index,temp$p0.hat,col=4,pch="-",cex=2)
-	}else{
-		points(index,temp$p0.hat,type="l",col=4)
-	}
-	legend(legend.position,pch=c(19,1,NA),col=c(2,1,4),lwd=c(NA,NA,2),c("posterior p","sample mean","prior mean"),seg.len=0.5)
-}
-
 # main function
-bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,result.order=F,graph=T,graph.order=F,graph.legend.position=2,grp.name=NA,eps=0.0001,r.alpha=0.0833){
+bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.0833){
 
-	given<-list(z=z,n=n,sample.mean=z/n,x=x,prior.mean=prior.mean,model=model,intercept=intercept,res.ord=result.order,gp=graph,gp.ord=graph.order,leg.pos=graph.legend.position,grp.name=grp.name,eps=eps,r.alpha=r.alpha)
+	given<-list(z=z,n=n,sample.mean=z/n,x=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,r.alpha=r.alpha)
 
 	# initial values
 	if(is.na(prior.mean)){
@@ -336,12 +306,6 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,result.order=F,graph=
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr1=pr1.post.est.prior.kn(B.res,given))
 	}
 
-	# graph
-	if(graph==T){
-		post.graph(post.res,ini,given)
-	}
-
-	options(scipen=3)
 	if(model=="br"){
 		output<-list(post.p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp)
 	}else{
