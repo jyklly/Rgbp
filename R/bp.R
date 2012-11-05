@@ -93,7 +93,7 @@ pr1.llik.prior.kn<-function(a,given){
 	sum(dnbinom(z,exp(-a)*prior.mean,exp(-a)/(exp(-a)+n),log=T))
 }
 
-# primm1 log likelihood function of alpha (when prior.mean is known)
+# primm1 log likelihood function of alpha (when prior.mean is unknown)
 pr1.llik.prior.un<-function(a,b,given,ini){
 	z<-given$z; n<-given$n; x<-ini$x
 	sum(dnbinom(z,exp(-a+x%*%as.matrix(b)),exp(-a)/(exp(-a)+n),log=T))
@@ -176,7 +176,7 @@ shrink.est<-function(a.res){
 	list(B.hat=B.hat,inv.info=inv.info,var.B.hat=var.B.hat,se.B.hat=se.B.hat,central3.B=central3.B)
 }
 
-# r estimation (when prior.mean is known)
+# r estimation
 r.est<-function(a.res,r.alpha){
 	alpha.hat<-a.res$a.new
 	alpha.hess<-a.res$a.hess
