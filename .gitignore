@@ -1,0 +1,41 @@
+# Build and Object Folders
+bin/
+obj/
+
+#User Specific Files
+*.user
+*.suo
+
+#Resource Caches
+_ReSharper.*
+*.sln.cache
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# R related files #
+######################
+.Rapp.history
+.Rhistory
+.RData
+
+# latex related files #
+######################
+*.aux
+*.log
+*.out
+*.gz
+*.nav
+*.toc
+*.snm
+
+# emacs related files #
+*~
+\#*\#
+auto-save-list
+tramp
+.\#*
