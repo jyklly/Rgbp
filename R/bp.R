@@ -207,7 +207,7 @@ br.post.est.prior.kn<-function(B.res,given){
 	a0.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*(1-p.hat)
 	p.hat.low<- qbeta(0.025,a1.beta.p,a0.beta.p)
 	p.hat.upp<- qbeta(0.975,a1.beta.p,a0.beta.p)
-	list(p.hat=p.hat,se.p.hat=se.p.hat,p.hat.low=p.hat.low,p.hat.upp=p.hat.upp,a1.beta.p=a1.beta.p,a0.beta.p=a0.beta.p,p0=p0)
+	list(p.hat=p.hat,se.p.hat=se.p.hat,p.hat.low=p.hat.low,p.hat.upp=p.hat.upp,a1.beta.p=a1.beta.p,a0.beta.p=a0.beta.p,p0=p0,p0.hat=NA)
 }
 
 # brimm posterior estimation (when prior.mean is unknown)
@@ -256,7 +256,7 @@ pr1.post.est.prior.kn<-function(B.res,given){
 	v.gamma<-lambda.hat/var.lambda.hat
 	lambda.hat.low<-qgamma(0.025,shape=u.gamma,rate=v.gamma)
 	lambda.hat.upp<-qgamma(0.975,shape=u.gamma,rate=v.gamma)
-	list(lambda.hat=lambda.hat,se.lambda.hat=se.lambda.hat,lambda.hat.low=lambda.hat.low,lambda.hat.upp=lambda.hat.upp,u.gamma=u.gamma,v.gamma=v.gamma,lambda0=lambda0)
+	list(lambda.hat=lambda.hat,se.lambda.hat=se.lambda.hat,lambda.hat.low=lambda.hat.low,lambda.hat.upp=lambda.hat.upp,u.gamma=u.gamma,v.gamma=v.gamma,lambda0=lambda0,lambda0.hat=NA)
 }
 
 
@@ -307,9 +307,10 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.
 	}
 
 	if(model=="br"){
-		output<-list(n=n,y=z/n,p0.hat=ifelse(prior.mean=="NA",post.res$p0.hat,NA),p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean)
+		output<-list(n=n,y=z/n,p0.hat=post.res$p0.hat,p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean,x=x)
 	}else{
-		output<-list(n=n,y=z/n,lambda0.hat=ifelse(prior.mean=="NA",post.res$lambda0.hat,NA),lambda.hat=post.res$lambda.hat,se.lambda.hat=post.res$se.lambda.hat,lambda.hat.low=post.res$lambda.hat.low,lambda.hat.upp=post.res$lambda.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean)
+		output<-list(n=n,y=z/n,lambda0.hat=post.res$lambda0.hat,lambda.hat=post.res$lambda.hat,se.lambda.hat=post.res$se.lambda.hat,lambda.hat.low=post.res$lambda.hat.low,lambda.hat.upp=post.res$lambda.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean,x=x)
 	}
 	class(output)<-"gbp"
+	output
 }
