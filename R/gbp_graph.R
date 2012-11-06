@@ -2,7 +2,7 @@ plot.gbp<-function(object,legend.pos=2,gp.ord=F){
 
 	leg.pos<-switch(legend.pos,"topleft","topright","bottomleft","bottomright")
 	prior.mean<-object$prior.mean
-	temp<-data.frame(n=object$n,y=object$y,p.hat=object[[4]],p.hat.low=object[[6]],p.hat.upp=object[[7]],p0.hat=object[[3]])
+	temp<-data.frame(n=object$n,y=object$sample.mean,p.hat=object[[30]],p.hat.low=object[[32]],p.hat.upp=object[[33]],p0.hat=object[[36]])
 	xl<-c("Indices (Groups) by the order of data input")
 	if(gp.ord==T){
 		temp<-temp[order(temp$n),]
@@ -18,7 +18,7 @@ plot.gbp<-function(object,legend.pos=2,gp.ord=F){
 	points(index,temp$y,cex=log(temp$n+2)/cx)
 	if(!is.na(prior.mean)){
 		abline(h=prior.mean,col=4)
-	}else if(!identical(object$x,NA)){
+	}else if(!identical(object$x.ini,NA)){
 		points(index,temp$p0.hat,col=4,pch="-",cex=2)
 	}else{
 		points(index,temp$p0.hat,type="l",col=4)

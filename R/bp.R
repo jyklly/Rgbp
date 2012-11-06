@@ -8,7 +8,7 @@ pr1.ini.kn<-function(given){
 
 # primm1 initial values (when prior.mean is unknown)
 pr1.ini.un<-function(given){
-	y<-given$sample.mean; x.ini<-given$x
+	y<-given$sample.mean; x.ini<-given$x.ini
 	if(identical(x.ini,NA) & !given$intercept){
 		print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
 	}else if(identical(x.ini,NA) & given$intercept){
@@ -21,11 +21,11 @@ pr1.ini.un<-function(given){
 	}else if(!identical(x.ini,NA) & !given$intercept){
 		if(any(y==0)){y[which(y==0)]<-0.00001}
 		x<-x.ini
-		b.ini<-solve(t(x.ini)%*%x.ini)%*%t(x.ini)%*%log(y)
+		b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y)
 		if(any(y==0.00001)){y[which(y==0.00001)]<-0}
 	}	
 	lambda0.ini<-mean(exp(x%*%b.ini)); r.ini<-lambda0.ini/var(y)
-	list(x=x,x.ini=x.ini,b.ini=b.ini,lambda0.ini=lambda0.ini,r.ini=r.ini,a.ini=-log(r.ini),beta.hess.ini=-solve(t(x)%*%x))
+	list(x=x,b.ini=b.ini,lambda0.ini=lambda0.ini,r.ini=r.ini,a.ini=-log(r.ini),beta.hess.ini=-solve(t(x)%*%x))
 }
 
 
@@ -38,7 +38,7 @@ br.ini.kn<-function(given){
 
 # brimm initial values (when prior.mean is unknown)
 br.ini.un<-function(given){
-	y<-given$sample.mean; x.ini<-given$x
+	y<-given$sample.mean; x.ini<-given$x.ini
 	if(identical(x.ini,NA) & !given$intercept){
 		print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
 	}else if(identical(x.ini,NA) & given$intercept){
@@ -55,13 +55,13 @@ br.ini.un<-function(given){
 		if(any(y==0)){y[which(y==0)]<-0.00001}
 		if(any(y==1)){y[which(y==1)]<-0.99999}
 		x<-x.ini
-		b.ini<-solve(t(x.ini)%*%x.ini)%*%t(x.ini)%*%log(y/(1-y))
+		b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y/(1-y))
 		if(any(y==0.00001)){y[which(y==0.00001)]<-0}
 		if(any(y==0.99999)){y[which(y==0.99999)]<-1}
 	}	
 	p0.ini<-mean(exp(x%*%b.ini)/(1+exp(x%*%b.ini)))
 	r.ini<-p0.ini*(1-p0.ini)/var(y)-1
-	list(x=x,x.ini=x.ini,b.ini=b.ini,p0.ini=p0.ini,r.ini=r.ini,a.ini=-log(r.ini),beta.hess.ini=-solve(t(x)%*%x))
+	list(x=x,b.ini=b.ini,p0.ini=p0.ini,r.ini=r.ini,a.ini=-log(r.ini),beta.hess.ini=-solve(t(x)%*%x))
 }
 
 # brimm log likelihood function of alpha (when prior.mean is known)
@@ -281,7 +281,7 @@ pr1.post.est.prior.un<-function(B.res,a.res,ini,given){
 # main function
 bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.0833){
 
-	given<-list(z=z,n=n,sample.mean=z/n,x=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,r.alpha=r.alpha)
+	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,r.alpha=r.alpha)
 
 	# initial values
 	if(is.na(prior.mean)){
@@ -306,11 +306,7 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr1=pr1.post.est.prior.kn(B.res,given))
 	}
 
-	if(model=="br"){
-		output<-list(n=n,y=z/n,p0.hat=post.res$p0.hat,p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean,x=x)
-	}else{
-		output<-list(n=n,y=z/n,lambda0.hat=post.res$lambda0.hat,lambda.hat=post.res$lambda.hat,se.lambda.hat=post.res$se.lambda.hat,lambda.hat.low=post.res$lambda.hat.low,lambda.hat.upp=post.res$lambda.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean,x=x)
-	}
+	output<-c(given,ini,a.res,B.res,r.res,post.res)
 	class(output)<-"gbp"
 	output
 }
