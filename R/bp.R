@@ -12,7 +12,7 @@ pr1.ini.un<-function(given){
 	if(identical(x.ini,NA) & !given$intercept){
 		print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
 	}else if(identical(x.ini,NA) & given$intercept){
-		x<-matrix(1, length(n), 1);	b.ini<-mean(y)
+		x<-matrix(1, length(y), 1);	b.ini<-mean(y)
 	}else if(!identical(x.ini,NA) & given$intercept){
 		if(any(y==0)){y[which(y==0)]<-0.00001}
 		x<-as.matrix(cbind(rep(1,length(y)),x.ini))
@@ -42,7 +42,7 @@ br.ini.un<-function(given){
 	if(identical(x.ini,NA) & !given$intercept){
 		print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
 	}else if(identical(x.ini,NA) & given$intercept){
-		x<-matrix(1, length(n), 1)
+		x<-matrix(1, length(y), 1)
 		b.ini<-as.vector(log(mean(y)/(1-mean(y))))
 	}else if(!identical(x.ini,NA) & given$intercept){
 		if(any(y==0)){y[which(y==0)]<-0.00001}
@@ -161,10 +161,10 @@ reg.coef<-function(a.res,given){
 }
 
 # shrinkage estimation
-shrink.est<-function(a.res){	
+shrink.est<-function(a.res,given){	
 	a.new<-a.res$a.new
 	a.hess<-a.res$a.hess
-	B.hat<-exp(-a.new)/(n+exp(-a.new))
+	B.hat<-exp(-a.new)/(given$n+exp(-a.new))
 	inv.info<- -a.hess
 	var.B.hat<-(B.hat*(1-B.hat))^2/((B.hat*(1-B.hat))+inv.info)
 	se.B.hat<-sqrt(var.B.hat)
@@ -294,7 +294,7 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.
 	a.res<-if(is.na(prior.mean)){alpha.est.prior.un(given,ini)}else{alpha.est.prior.kn(given,ini)}
 
 	# shrinkage estimation
-	B.res<-shrink.est(a.res)
+	B.res<-shrink.est(a.res,given)
 
 	# r estimation
 	r.res<-r.est(a.res,r.alpha)
@@ -307,8 +307,9 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.
 	}
 
 	if(model=="br"){
-		output<-list(post.p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp)
+		output<-list(n=n,y=z/n,p0.hat=ifelse(prior.mean=="NA",post.res$p0.hat,NA),p.hat=post.res$p.hat,se.p.hat=post.res$se.p.hat,p.hat.low=post.res$p.hat.low,p.hat.upp=post.res$p.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean)
 	}else{
-		output<-list(post.lambda.hat=post.res$lambda.hat,se.lambda.hat=post.res$se.lambda.hat,lambda.hat.low=post.res$lambda.hat.low,lambda.hat.upp=post.res$lambda.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp)
+		output<-list(n=n,y=z/n,lambda0.hat=ifelse(prior.mean=="NA",post.res$lambda0.hat,NA),lambda.hat=post.res$lambda.hat,se.lambda.hat=post.res$se.lambda.hat,lambda.hat.low=post.res$lambda.hat.low,lambda.hat.upp=post.res$lambda.hat.upp,shrinkage=B.res$B.hat,se.shrinkage=B.res$se.B.hat,reg.coef=a.res$beta.new,r.hat=r.res$r.hat,r.hat.low=r.res$r.hat.low,r.hat.upp=r.res$r.hat.upp,prior.mean=prior.mean)
 	}
+	class(output)<-"gbp"
 }
