@@ -3,9 +3,9 @@ plot.gbp<-function(object,legend.pos=2,gp.ord=F,many.grp=F){
 	leg.pos<-switch(legend.pos,"topleft","topright","bottomleft","bottomright")
 	prior.mean<-object$prior.mean
 	if(is.na(object$prior.mean)){
-		temp<-data.frame(n=object$n,y=object$sample.mean,p.hat=object[[30]],p.hat.low=object[[32]],p.hat.upp=object[[33]],p0.hat=object[[36]])
+		temp<-data.frame(n=object$n,y=object$sample.mean,p.hat=object[[25]],p.hat.low=object[[27]],p.hat.upp=object[[28]],p0.hat=object[[31]])
 	}else{
-		temp<-data.frame(n=object$n,y=object$sample.mean,p.hat=object[[24]],p.hat.low=object[[26]],p.hat.upp=object[[27]],p0.hat=object[[31]])
+		temp<-data.frame(n=object$n,y=object$sample.mean,p.hat=object[[19]],p.hat.low=object[[21]],p.hat.upp=object[[22]],p0.hat=object[[26]])
 	}
 	xl<-c("Indices (Groups) by the order of data input")
 	if(gp.ord==T){
