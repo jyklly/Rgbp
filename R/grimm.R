@@ -1,31 +1,31 @@
 
 #Note this R code fit the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
-adm<-function(y,V,mu=0,X=as.matrix(rep(1,length(y))),muknown=TRUE,type=1,graph=TRUE,out="short",Amax=0,graphwidth=300,graphheight=1200,CI=95,rando=1,Vfac=1,Vbool=FALSE,uset=FALSE){
-  
+adm<-function(y,se,mu,X,CI=95){
+
   ##define some values that will be used often
+  muknown <- !is.null(mu)
+  type <- 1
   k <- length(y)
+  V <- se^2
+  if(is.null(X))
+    X <- as.matrix(rep(1,k))
+  
+  ##optimize depending on if mu is specified. 
   if(muknown){
     r<-0
   }else{
     r <- dim(X)[2]
   }
-  Co<-1-r/k
-  mess <- ""
 
   ##log adjusted posterior
   allk<-function(params){
-    A<-exp(params)
+    mu <- params[1:length(y)]
+    A <- exp(params[(length(y)+1):length(params)])
     pia <- A^type
     lla<-log(pia)-0.5*Co*sum(log(V+A))-0.5*sum((y-mu)^2/(V+A))
     nlla<--lla
     nlla
-  }
-
-  ##wrapper for allk
-  allkind <- function(A){
-    alpha <- log(A)
-    allk(alpha)
   }
   
   ##optimize
