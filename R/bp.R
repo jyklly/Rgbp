@@ -255,7 +255,7 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 # main function
 bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001){
 
-	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,r.alpha=r.alpha)
+	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps)
 
 	# initial values
 	if(is.na(prior.mean)){
@@ -277,7 +277,7 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001){
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
-	output<-c(given,ini,a.res,B.res,r.res,post.res)
+	output<-c(given,ini,a.res,B.res,post.res)
 	class(output)<-"gbp"
 	output
 }
