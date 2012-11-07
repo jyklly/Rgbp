@@ -1,13 +1,13 @@
 ######### BRIMM (Hyung Suk Tak and Carl N. Morris, Nov 2012). This code is only for Stat324. Any feedback on it will be greatly appreciated.
 
 # primm1 initial values (when prior.mean is known)
-pr1.ini.kn<-function(given){
+pr.ini.kn<-function(given){
 	r.ini<-given$prior.mean/var(given$sample.mean); a.ini<- -log(r.ini)
 	list(r.ini=r.ini,a.ini=a.ini)
 }
 
 # primm1 initial values (when prior.mean is unknown)
-pr1.ini.un<-function(given){
+pr.ini.un<-function(given){
 	y<-given$sample.mean; x.ini<-given$x.ini
 	if(identical(x.ini,NA) & !given$intercept){
 		print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
@@ -88,22 +88,22 @@ br.llik.prior.un<-function(a,b,given,ini){
 }
 
 # primm1 log likelihood function of alpha (when prior.mean is known)
-pr1.llik.prior.kn<-function(a,given){
+pr.llik.prior.kn<-function(a,given){
 	z<-given$z; n<-given$n; prior.mean<-given$prior.mean
 	sum(dnbinom(z,exp(-a)*prior.mean,exp(-a)/(exp(-a)+n),log=T))
 }
 
 # primm1 log likelihood function of alpha (when prior.mean is unknown)
-pr1.llik.prior.un<-function(a,b,given,ini){
+pr.llik.prior.un<-function(a,b,given,ini){
 	z<-given$z; n<-given$n; x<-ini$x
 	sum(dnbinom(z,exp(-a+x%*%as.matrix(b)),exp(-a)/(exp(-a)+n),log=T))
 }
 
 # alpha estimation (when prior.mean is known)
 alpha.est.prior.kn<-function(given,ini){
-	# change log likelihood depending on the model: br or pr1
+	# change log likelihood depending on the model: br or pr
 	llik<-function(a){
-		switch(given$model,br=br.llik.prior.kn(a,given),pr1=pr1.llik.prior.kn(a,given))
+		switch(given$model,br=br.llik.prior.kn(a,given),pr=pr.llik.prior.kn(a,given))
 	}
 	dif<-1; n.iter<-0; a.ini<-ini$a.ini; eps<-given$eps
 	while(dif>eps){
@@ -119,9 +119,9 @@ alpha.est.prior.kn<-function(given,ini){
 
 # alpha estimation (when prior.mean is unknown)
 alpha.est.prior.un<-function(given,ini){
-	# change log likelihood depending on the model: br or pr1
+	# change log likelihood depending on the model: br or pr
 	llik<-function(a,b){
-		switch(given$model,br=br.llik.prior.un(a,b,given,ini),pr1=pr1.llik.prior.un(a,b,given,ini))
+		switch(given$model,br=br.llik.prior.un(a,b,given,ini),pr=pr.llik.prior.un(a,b,given,ini))
 	}
 	dif<-1; n.iter<-0; a.ini<-ini$a.ini; b.ini<-ini$b.ini; beta.hess<-ini$beta.hess.ini; eps<-given$eps
 	while(dif>eps){
@@ -146,20 +146,6 @@ alpha.est.prior.un<-function(given,ini){
 	list(a.new=a.new,a.hess=a.hess,beta.new=beta.new,beta.hess=beta.hess,n.iter=n.iter)
 }
 
-# regression coefficients output (when prior.mean is unknown)
-reg.coef<-function(a.res,given){
-	estimate<-as.vector(a.res$beta.new)
-	if(given$intercept){
-		names(estimate)<-paste("beta", 0:(length(estimate)-1), sep = "")
-   	}else{
-		names(estimate)<-paste("beta", 1:(length(estimate)), sep = "")
-	}
-	se<-sqrt(diag(solve(-a.res$beta.hess)))
-	z.val<-estimate/se
-	p.val<-ifelse(z.val<=0,2*pnorm(z.val),2*pnorm(-z.val))
-	list(estimate=estimate,se=se,z.val=z.val,p.val=p.val)
-}
-
 # shrinkage estimation
 shrink.est<-function(a.res,given){	
 	a.new<-a.res$a.new
@@ -174,18 +160,6 @@ shrink.est<-function(a.res,given){
 	B.hat.low<-qbeta(0.025,a1.beta,a0.beta)
 	B.hat.upp<-qbeta(0.975,a1.beta,a0.beta)
 	list(B.hat=B.hat,inv.info=inv.info,var.B.hat=var.B.hat,se.B.hat=se.B.hat,central3.B=central3.B)
-}
-
-# r estimation
-r.est<-function(a.res,r.alpha){
-	alpha.hat<-a.res$a.new
-	alpha.hess<-a.res$a.hess
-	se.alpha.hat<-sqrt(solve(-alpha.hess))
-	r.hat<-round(exp(-alpha.hat),0)
-	se.r.hat<-sqrt(solve(-alpha.hess)*exp(-2*alpha.hat))
-	r.hat.low<-round(exp(-(alpha.hat-qnorm(r.alpha/2)*se.alpha.hat)),0)
-	r.hat.upp<-round(exp(-(alpha.hat+qnorm(r.alpha/2)*se.alpha.hat)),0)
-	list(r.hat=r.hat,se.r.hat=se.r.hat,r.hat.low=r.hat.low,r.hat.upp=r.hat.upp)
 }
 
 # brimm posterior estimation (when prior.mean is known)
@@ -247,7 +221,7 @@ br.post.est.prior.un<-function(B.res,a.res,ini,given){
 }
 
 # primm1 posterior estimation (when prior.mean is known)
-pr1.post.est.prior.kn<-function(B.res,given){
+pr.post.est.prior.kn<-function(B.res,given){
 	B.hat<-B.res$B.hat; var.B.hat<-B.res$var.B.hat; lambda0<-given$prior.mean; n<-given$n;
 	y<-given$sample.mean;lambda.hat<- y-B.hat*(y-lambda0)
 	var.lambda.hat<-1/n*(lambda.hat-B.hat*y+(var.B.hat+B.hat^2)*y-(var.B.hat+B.hat^2)*lambda0)+(y-lambda0)^2*var.B.hat
@@ -261,7 +235,7 @@ pr1.post.est.prior.kn<-function(B.res,given){
 
 
 # primm1 posterior estimation (when prior.mean is unknown)
-pr1.post.est.prior.un<-function(B.res,a.res,ini,given){
+pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 	x<-as.matrix(ini$x); n<-given$n; y<-given$sample.mean; beta.new<-a.res$beta.new; B.hat<-B.res$B.hat;
 	var.B.hat<-B.res$var.B.hat
 	V<-solve(-a.res$beta.hess)
@@ -279,15 +253,15 @@ pr1.post.est.prior.un<-function(B.res,a.res,ini,given){
 }
 
 # main function
-bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.0833){
+bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001){
 
 	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,r.alpha=r.alpha)
 
 	# initial values
 	if(is.na(prior.mean)){
-		ini<-switch(model,br=br.ini.un(given),pr1=pr1.ini.un(given))
+		ini<-switch(model,br=br.ini.un(given),pr=pr.ini.un(given))
 	}else{
-		ini<-switch(model,br=br.ini.kn(given),pr1=pr1.ini.kn(given))
+		ini<-switch(model,br=br.ini.kn(given),pr=pr.ini.kn(given))
 	}
 
 	# alpha (and beta if prior.mean is unknown) estimation including hessian
@@ -296,14 +270,11 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,r.alpha=0.
 	# shrinkage estimation
 	B.res<-shrink.est(a.res,given)
 
-	# r estimation
-	r.res<-r.est(a.res,r.alpha)
-
 	# posterior estimation
 	if(is.na(prior.mean)){
-		post.res<-switch(model,br=br.post.est.prior.un(B.res,a.res,ini,given),pr1=pr1.post.est.prior.un(B.res,a.res,ini,given))
+		post.res<-switch(model,br=br.post.est.prior.un(B.res,a.res,ini,given),pr=pr.post.est.prior.un(B.res,a.res,ini,given))
 	}else{
-		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr1=pr1.post.est.prior.kn(B.res,given))
+		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
 	output<-c(given,ini,a.res,B.res,r.res,post.res)
