@@ -1,0 +1,5 @@
+#library(gbp)
+library(sn)
+source("../R/grimm.R")
+load("../data/schools.RData")
+m1 <- adm(schools$y,schools$se)
