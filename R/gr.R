@@ -1,5 +1,9 @@
 #Note this R code fits the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
+
+##still not sure what to do with library
+library(sn)
+
 gr<-function(y,se,X=NA,mu=NA,CI=0.95){
 
   ##define some values that will be used often
@@ -14,7 +18,7 @@ gr<-function(y,se,X=NA,mu=NA,CI=0.95){
   if(muknown){
     r<-0
     est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
-    Ahat <- est$par
+    Ahat <- exp(est$par)
   }else{
     r <- dim(X)[2]
     stop("still in development")
@@ -50,20 +54,22 @@ gr<-function(y,se,X=NA,mu=NA,CI=0.95){
   m4 <- 3*V^2*beta(a1+2,a0)/beta(a1,a0) + (mu-y)^4*m4B +6*(beta(a1+3,a0)/beta(a1,a0)*V*(y-mu)^2 - 2*beta(a1+2,a0)/beta(a1,a0)*(y-mu)^2*(1-a0/(a1+a0))*V + V*(1-a0/(a0+a1))^3*(y-mu)^2)
   kurt <- m4/shat^2
 
-  ##calculate CIs using either nct or skewed normal
+  ## calculate CIs using skewed normal
+  ## TODO: use apply not loop
   snparam <- matrix(nrow=length(thetahat),ncol=3)
   skewedmat <- c()
   for(i in 1:length(thetahat)){    
-    if(uset==FALSE){
-      snparam[i,] <- cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94)))
-      row <- c(qsn((1-CI/100)/2,snparam[i,1],snparam[i,2],snparam[i,3]),thetahat[i],qsn(1-(1-CI/100)/2,snparam[i,1],snparam[i,2],snparam[i,3]))
-    }else{
-      row <- c(qtj((1-CI/100)/2,thetahat[i],shat[i]^2,skew[i],kurt[i]),thetahat[i],qtj(1-(1-CI/100)/2,thetahat[i],shat[i]^2,skew[i],kurt[i]))
-    }
+    snparam[i,] <- gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94)))
+    row <- c(qsn((1-CI/100)/2,snparam[i,1],snparam[i,2],snparam[i,3]),thetahat[i],qsn(1-(1-CI/100)/2,snparam[i,1],snparam[i,2],snparam[i,3]))
     skewedmat <- rbind(skewedmat,row)
   }
+  skewedmat <- as.matrix(skewedmat)
   
-}
+  ## return output
+  ## TODO: discuss with Tak and sync output
+  output<- list(y=y,se=se,mu=mu,Bhat=Bhat,seB=seB,LCL=skewedmat[,1],theta=thetahat,UCL=skewedmat[,3],shat=shat)
+  return(output)
+  }
 
 ##log adjusted posterior for known mu
 gr.ll.muknown<-function(A,y,V,mu,type){
