@@ -67,7 +67,7 @@ gr<-function(y,se,X=NA,mu=NA,CI=0.95){
 	
 ## return output
 ## TODO: discuss with Tak and sync output
-	output<- list(y=y,se=se,mu=mu,Bhat=Bhat,seB=seB,LCL=skewedmat[,1],theta=thetahat,UCL=skewedmat[,3],shat=shat)
+	output<- list(y=y,se=se,mu=mu,Bhat=Bhat,seB=seB,LCL=skewedmat[,1],theta=thetahat,UCL=skewedmat[,3],shat=shat,model="gr")
 	return(output)
 }
 
