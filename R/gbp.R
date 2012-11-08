@@ -1,7 +1,9 @@
-gbp<-function(arg1,arg2,arg3,arg4,model="gr",intv.alpha,intercept=T){
-
-	switch(model, 
-		gr=adm(arg1,arg2,arg3,arg4,intv.alpha,intercept=T), 
-		br=bp(arg1,arg2,arg3,arg4,model="br",intv.alpha,intercept=T), 
-		pr=bp(arg1,arg2,arg3,arg4,model="pr",intv.alpha,intercept=T))
+gbp<-function(arg1,arg2,mu=NA,X=NA,model="gr",CI=0.95,intercept=T){
+  res<-switch(model, 
+              gr=gr(arg1,arg2,X,mu,CI), 
+              br=bp(arg1,arg2,prior.mean=mu,x=X,model="br",CI,intercept=intercept), 
+              pr=bp(arg1,arg2,prior.mean=mu,x=X,model="pr",CI,intercept=intercept) )
+  
+  class(res)<-"gbp"	
+  res
 }
