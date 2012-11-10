@@ -80,7 +80,7 @@ gr<-function(y,se,X=NA,mu=NA,CI=0.95){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(y=y,se=se,mu=mu,Bhat=Bhat,seB=seB,LCL=skewedmat[,1],theta=thetahat,UCL=skewedmat[,3],shat=shat,model="gr")
+  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr")
   return(output)
 }
 

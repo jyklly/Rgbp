@@ -181,7 +181,7 @@ br.post.est.prior.kn<-function(B.res,given){
 	a0.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*(1-p.hat)
 	p.hat.low<- qbeta((1-given$CI)/2,a1.beta.p,a0.beta.p)
 	p.hat.upp<- qbeta((1+given$CI)/2,a1.beta.p,a0.beta.p)
-	list(p.hat=p.hat,se.p.hat=se.p.hat,p.hat.low=p.hat.low,p.hat.upp=p.hat.upp,a1.beta.p=a1.beta.p,a0.beta.p=a0.beta.p,p0=p0,p0.hat=NA)
+	list(post.mean=p.hat,post.se=se.p.hat,post.intv.low=p.hat.low,post.intv.upp=p.hat.upp,prior.mean=p0)
 }
 
 # brimm posterior estimation (when prior.mean is unknown)
@@ -217,7 +217,7 @@ br.post.est.prior.un<-function(B.res,a.res,ini,given){
 	a0.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*(1-p.hat)
 	p.hat.low<- qbeta((1-given$CI)/2,a1.beta.p,a0.beta.p)
 	p.hat.upp<- qbeta((1+given$CI)/2,a1.beta.p,a0.beta.p)
-	list(p.hat=p.hat,se.p.hat=se.p.hat,p.hat.low=p.hat.low,p.hat.upp=p.hat.upp,a1.beta.p=a1.beta.p,a0.beta.p=a0.beta.p,p0.hat=p0.hat)
+	list(post.mean=p.hat,post.se=se.p.hat,post.intv.low=p.hat.low,post.intv.upp=p.hat.upp,prior.mean=p0.hat)
 }
 
 # primm1 posterior estimation (when prior.mean is known)
@@ -230,7 +230,7 @@ pr.post.est.prior.kn<-function(B.res,given){
 	v.gamma<-lambda.hat/var.lambda.hat
 	lambda.hat.low<-qgamma((1-given$CI)/2,shape=u.gamma,rate=v.gamma)
 	lambda.hat.upp<-qgamma((1+given$CI)/2,shape=u.gamma,rate=v.gamma)
-	list(lambda.hat=lambda.hat,se.lambda.hat=se.lambda.hat,lambda.hat.low=lambda.hat.low,lambda.hat.upp=lambda.hat.upp,u.gamma=u.gamma,v.gamma=v.gamma,lambda0=lambda0,lambda0.hat=NA)
+	list(post.mean=lambda.hat, post.se=se.lambda.hat, post.intv.low=lambda.hat.low, post.intv.upp=lambda.hat.upp, prior.mean=lambda0)
 }
 
 
@@ -249,7 +249,7 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 	v.gamma<-lambda.hat/var.lambda.hat
 	lambda.hat.low<-qgamma((1-given$CI)/2,shape=u.gamma,rate=v.gamma)
 	lambda.hat.upp<-qgamma((1+given$CI)/2,shape=u.gamma,rate=v.gamma)
-	list(lambda.hat=lambda.hat,se.lambda.hat=se.lambda.hat,lambda.hat.low=lambda.hat.low,lambda.hat.upp=lambda.hat.upp,u.gamma=u.gamma,v.gamma=v.gamma,lambda0.hat=lambda0.hat)
+	list(post.mean=lambda.hat, post.se=se.lambda.hat, post.intv.low=lambda.hat.low, post.intv.upp=lambda.hat.upp, prior.mean=lambda0.hat)
 }
 
 # main function
@@ -277,6 +277,6 @@ bp<-function(z,n,x=NA,prior.mean=NA,model="br",intercept=T,eps=0.0001,CI=0.95){
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
-	output<-c(given,ini,a.res,B.res,post.res)
+	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp)
 	output
 }
