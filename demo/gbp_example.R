@@ -6,8 +6,14 @@ load("../data/baseball.RData")
 load("../data/schools.RData")
 
 
-br <- bp(baseball$Hits, baseball$At.Bats, model="br")
-pr1 <- bp(baseball$Hits, baseball$At.Bats, model="pr1")
+br <- gbp(baseball$Hits, baseball$At.Bats, model="br")
+pr1 <- gbp(baseball$Hits, baseball$At.Bats, model="pr1")
+m1 <- gbp(schools$y,schools$se)
 
-source("../R/gbp_shrinkage_graph.R")
-m1 <- gr(schools$y,schools$se,mu=8)
+#covariates
+p <- 1
+X <- matrix(rnorm(length(baseball$hits*p)),nrow=length(baseball$hits),ncol=p)
+br <- gbp(baseball$Hits, baseball$At.Bats,X=X, model="br")
+pr1 <- gbp(baseball$Hits, baseball$At.Bats,X=X, model="pr1")
+X <- matrix(rnorm(length(schools$y*p)),nrow=length(schools$y),ncol=p)
+m1 <- gbp(schools$y,schools$se,X=X)
