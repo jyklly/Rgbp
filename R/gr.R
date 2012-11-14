@@ -4,15 +4,17 @@
 ##still not sure what to do with library
 library(sn)
 
-gr<-function(y,se,X=NA,mu=NA,CI=0.95){
+gr<-function(y,se,X,mu,CI=0.95){
 	
   ##define some values that will be used often
-  muknown <- !is.na(mu)
+  muknown <- !missing(mu)
   type <- 1
   k <- length(y)
   V <- se^2
-  if(is.na(X))
+  if(missing(X))
     X <- as.matrix(rep(1,k))
+  else
+    X <- as.matrix(X)
 	
   ##optimize depending on if mu is specified. 
   if(muknown){
