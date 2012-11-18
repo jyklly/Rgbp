@@ -27,16 +27,16 @@ plot.gbp<-function(object,legend.pos=2,gp.ord=F){
 	abline(h=4)
 	abline(h=0)
 	axis(2,c(0,4),c(expression(hat(theta)),expression(bar(y))), cex.axis=1.1)
-	for(i in 1:length(y)){
+	sapply(1:length(y), function(i){
 		lines(c(y[i],po.m[i]),c(4,0),xlim=c(min(y)-abs(min(y))*0,max(y)+abs(max(y))*0))
 		lines(c(y[i],y[i]+sdlens[i]*sd(y)*0.4),c(4,4+sdlens[i]),col="blue")
-	##posterior variance lines
-	lines(c(po.m[i]-postlens[i]*sd(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
-	xcord <- (4*po.m[i]/(y[i]-po.m[i])-4*po.m/(y-po.m))/(4/(y[i]-po.m[i])-4/(y-po.m))
-	ycord <- 4/(y-po.m)*xcord - 4/(y-po.m)*po.m
-	coords <- subset(cbind(xcord,ycord),ycord>0 & ycord<4)
-	points(coords,col="red")
-	}
+		##posterior variance lines
+		lines(c(po.m[i]-postlens[i]*sd(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
+		xcord <- (4*po.m[i]/(y[i]-po.m[i])-4*po.m/(y-po.m))/(4/(y[i]-po.m[i])-4/(y-po.m))
+		ycord <- 4/(y-po.m)*xcord - 4/(y-po.m)*po.m
+		coords <- subset(cbind(xcord,ycord),ycord>0 & ycord<4)
+		points(coords,col="red")
+	})
 
 	plot(index,po.m,ylim=c(ylim.low,ylim.upp),xlab=xl,ylab=expression(theta),main="100(1-CI)% Intervals for Posterior Mean",cex=log(se+2)/cx,col="red",pch=19)
 	sapply(1:length(y),function(j){lines(rep(index[j],2),c(po.low[j],po.upp[j]),lwd=0.5)})

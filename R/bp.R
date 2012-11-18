@@ -253,7 +253,10 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 }
 
 # main function
-bp<-function(z,n,prior.mean,x,model="br",intercept=T,eps=0.0001,CI=0.95){
+bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
+	
+	X<-ifelse(missing(X),NA,X)
+	prior.mean<-ifelse(missing(prior.mean),NA,prior.mean)
 
 	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,CI=CI)
 

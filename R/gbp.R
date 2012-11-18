@@ -1,20 +1,13 @@
-gbp<-function(arg1,arg2,mu,X,model="gr",CI=0.95,intercept=T,eps=0.0001){
+gbp <- function(x, ...) UseMethod("gbp")
 
-  if(missing(X))
-    x <- NA
-  else
-    x <- X
-  
-  if(missing(mu))
-    prior.mean <- NA
-  else
-    prior.mean <- mu
-  
+gbp.default<-function(arg1,arg2,mu,X,model="gr",CI=0.95,intercept=T,eps=0.0001){
+
   res<-switch(model, 
               gr=gr(arg1,arg2,X,mu,CI), 
-              br=bp(arg1,arg2,prior.mean,x,model="br",CI,intercept=intercept,eps=eps), 
-              pr=bp(arg1,arg2,prior.mean,x,model="pr",CI,intercept=intercept,eps=eps) )
+              br=bp(arg1,arg2,X,prior.mean=mu,model="br",CI=CI,intercept=intercept,eps=eps), 
+              pr=bp(arg1,arg2,X,prior.mean=mu,model="pr",CI=CI,intercept=intercept,eps=eps) )
   
   class(res)<-"gbp"	
   res
+
 }
