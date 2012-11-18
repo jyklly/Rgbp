@@ -12,6 +12,7 @@ gr<-function(y,se,X,mu,CI=0.95){
   k <- length(y)
   V <- se^2
   if(missing(X))
+	X.ini<-NA
     X <- as.matrix(rep(1,k))
   else
     X <- as.matrix(X)
@@ -82,7 +83,7 @@ gr<-function(y,se,X,mu,CI=0.95){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr")
+  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr",x=X.ini)
   return(output)
 }
 

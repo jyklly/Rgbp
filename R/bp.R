@@ -280,6 +280,6 @@ bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
-	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp,model=model)
+	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp,model=model,x=X)
 	output
 }

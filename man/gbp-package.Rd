@@ -16,7 +16,20 @@ Version: \tab 0.1-0\cr
 Date: \tab 2012-10-31\cr
 License: \tab GPL-2\cr
 }
- An overview of how to use the package, including the most important functions
+If you know the prior mean in advance (the mean of the second level Hierarchy, for example, 0.8),
+g<-gbp(y,se,mu=0.8,model="gr")
+b<-gbp(z,n,mu=0.8,model="br")
+p<-gbp(z,n,mu=0.8,model="pr")
+
+If you do not know the prior mean in advance (the mean of the second level Hierarchy, for example, 0.8), the regression will be an intercept model.
+g<-gbp(y,se,model="gr")
+b<-gbp(z,n,model="br")
+p<-gbp(z,n,model="pr")
+
+If you have any covariate(s),
+g<-gbp(y,se,x,model="gr")
+b<-gbp(z,n,x,model="br")
+p<-gbp(z,n,x,model="pr")
 }
 \author{
 Joseph Kelly, Hyung Suk Tak, and Carl Morris
@@ -27,10 +40,6 @@ Morris, C. and Tang, R. (2011), "Estimating Random Effects via Adjustment for De
 Morris, C. and Lysy, M. (2012), "Shrinkage Estimation in Multilevel Normal Models", Statistical Science 27 115-134
 }
 \keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
 \examples{
 library(sn)
 source("../R/gr.R")
