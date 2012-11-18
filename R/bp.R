@@ -254,11 +254,11 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 
 # main function
 bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
-	
-	X<-ifelse(missing(X),NA,X)
-	prior.mean<-ifelse(missing(prior.mean),NA,prior.mean)
 
-	given<-list(z=z,n=n,sample.mean=z/n,x.ini=x,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,CI=CI)
+	X<-if(missing(X)){X<-NA}else{X<-X}
+	prior.mean<-if(missing(prior.mean)){prior.mean<-NA}else{prior.mean<-prior.mean}
+
+	given<-list(z=z,n=n,sample.mean=z/n,x.ini=X,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,CI=CI)
 
 	# initial values
 	if(is.na(prior.mean)){
@@ -280,6 +280,6 @@ bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
-	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp)
+	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp,model=model)
 	output
 }

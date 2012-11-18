@@ -1,6 +1,4 @@
-gbp <- function(x, ...) UseMethod("gbp")
-
-gbp.default<-function(arg1,arg2,mu,X,model="gr",CI=0.95,intercept=T,eps=0.0001){
+gbp<-function(arg1,arg2,X,mu,model="gr",CI=0.95,intercept=T,eps=0.0001){
 
   res<-switch(model, 
               gr=gr(arg1,arg2,X,mu,CI), 
