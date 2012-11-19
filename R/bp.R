@@ -114,7 +114,7 @@ alpha.est.prior.kn<-function(given,ini){
 		a.ini<-a.new
 		n.iter<-n.iter+1
 	}
-	list(a.new=a.new,a.hess=a.hess,n.iter=n.iter)
+	list(a.new=a.new,a.hess=a.hess,n.iter=n.iter,beta.new=NA,beta.hess=NA)
 }
 
 # alpha estimation (when prior.mean is unknown)
@@ -280,6 +280,6 @@ bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
 		post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
 	}
 
-	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp,model=model,x=X)
+	output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, se.shrinkage=B.res$se.B.hat, post.mean=post.res$post.mean, post.se=post.res$post.se, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model=model, x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var=1/B.res$inv.info)
 	output
 }

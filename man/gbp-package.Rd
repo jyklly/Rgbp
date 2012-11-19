@@ -36,8 +36,8 @@ Joseph Kelly, Hyung Suk Tak, and Carl Morris
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 }
 \references{
-Morris, C. and Tang, R. (2011), "Estimating Random Effects via Adjustment for Density Maximization", Statistical Science 26 271-287
-Morris, C. and Lysy, M. (2012), "Shrinkage Estimation in Multilevel Normal Models", Statistical Science 27 115-134
+Morris, C. and Tang, R. (2011). \emph{Estimating Random Effects via Adjustment for Density Maximization}. Statistical Science. 26. 271-287.
+Morris, C. and Lysy, M. (2012). \emph{Shrinkage Estimation in Multilevel Normal Models}. Statistical Science. 27. 115-134.
 }
 \keyword{ package }
 \examples{

@@ -4,18 +4,18 @@
 ##still not sure what to do with library
 library(sn)
 
-gr<-function(y,se,X,mu,CI=0.95){
+gr<-function(y,se,X,mu,CI=0.95,intercept=T){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
   type <- 1
   k <- length(y)
   V <- se^2
-  if(missing(X))
+  if(missing(X)){
 	X.ini<-NA
-    X <- as.matrix(rep(1,k))
-  else
-    X <- as.matrix(X)
+    X <- as.matrix(rep(1,k))}
+  else{
+    X <- X.ini <- as.matrix(X)}
 	
   ##optimize depending on if mu is specified. 
   if(muknown){
@@ -23,6 +23,8 @@ gr<-function(y,se,X,mu,CI=0.95){
     est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
     est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par)
+	Betahat<-NA
+	hess<-NA
   }else{
     r <- dim(X)[2]
     est <- optim(c(mean(log(V)),rep(0,r)), function(x){gr.ll.muunknown(exp(x[1]),y,V,x[2:length(x)],X,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
@@ -30,9 +32,10 @@ gr<-function(y,se,X,mu,CI=0.95){
     Ahat <- exp(est$par[1])
     Betahat <- est$par[2:length(est$par)]
     BetahatSE <- sqrt(diag(est.var)[-1])
+	hess<-est$hessian[-1,-1]
     mu<-X%*%Betahat
   }
-	
+
   ##calculate estimates
   ninfo <- -1*as.matrix(est$hessian)[1,1]
   Avar<-est.var[1,1]*Ahat^2
@@ -83,7 +86,7 @@ gr<-function(y,se,X,mu,CI=0.95){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr",x=X.ini)
+  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr",x=X.ini,beta.new=Betahat,	beta.hess=hess,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
   return(output)
 }
 
