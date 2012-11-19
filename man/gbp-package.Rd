@@ -41,10 +41,12 @@ Morris, C. and Lysy, M. (2012). \emph{Shrinkage Estimation in Multilevel Normal 
 }
 \keyword{ package }
 \examples{
-library(sn)
 source("../R/gr.R")
 source("../R/gbp.R")
 source("../R/bp.R")
+source("../R/print.gbp.R")
+source("../R/plot.gbp.R")
+source("../R/summary.gbp.R")
 load("../data/baseball.RData")
 load("../data/schools.RData")
 

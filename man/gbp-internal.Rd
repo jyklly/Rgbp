@@ -16,13 +16,12 @@
 \alias{pr.ini.un}
 \alias{pr.llik.prior.kn}
 \alias{pr.llik.prior.un}
-\alias{pr.llik.prior.un}
 \alias{shrink.est}
-\alias{pr.llik.prior.un}
+\alias{pr.post.est.prior.kn}
+\alias{pr.post.est.prior.un}
 
 \title{Internal GBP functions}
 \description{Internal GBP functions}
-\Usage{}
 \details{These are not to be called by the user.}
 \keyword{internal}
 
