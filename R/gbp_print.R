@@ -1,15 +1,15 @@
-print.gbp<-function(object,...){
-	if(!identical(object$x,NA)){
-		if(object$model=="gr"){
-			temp<-data.frame(sample.mean=object$sample.mean, se=object$se, x=object$x, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.se=object$post.se)
+print.gbp<-function(x,...){
+	if(!identical(x$x,NA)){
+		if(x$model=="gr"){
+			temp<-data.frame(sample.mean=x$sample.mean, se=x$se, x=x$x, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.se=x$post.se)
 		}else{
-			temp<-data.frame(sample.mean=object$sample.mean, n=object$se, x=object$x, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.se=object$post.se)
+			temp<-data.frame(sample.mean=x$sample.mean, n=x$se, x=x$x, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.se=x$post.se)
 		}
 	}else{
-		if(object$model=="gr"){
-			temp<-data.frame(sample.mean=object$sample.mean, se=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.se=object$post.se)
+		if(x$model=="gr"){
+			temp<-data.frame(sample.mean=x$sample.mean, se=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.se=x$post.se)
 		}else{
-			temp<-data.frame(sample.mean=object$sample.mean, n=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.se=object$post.se)
+			temp<-data.frame(sample.mean=x$sample.mean, n=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.se=x$post.se)
 		}
 	}
 
