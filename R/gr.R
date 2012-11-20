@@ -86,7 +86,7 @@ gr<-function(y,se,X,mu,CI=0.95,intercept=T){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.se=shat,model="gr",x=X.ini,beta.new=Betahat,	beta.hess=hess,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
+  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,se.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",x=X.ini,beta.new=Betahat,	beta.hess=hess,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
   return(output)
 }
 

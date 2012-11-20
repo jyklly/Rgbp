@@ -20,8 +20,8 @@
 \alias{pr.post.est.prior.kn}
 \alias{pr.post.est.prior.un}
 
-\title{Internal GBP functions}
-\description{Internal GBP functions}
+\title{Internal \code{gbp} functions}
+\description{Internal \code{gbp} functions}
 \details{These are not to be called by the user.}
 \keyword{internal}
 

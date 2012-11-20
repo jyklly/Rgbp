@@ -5,6 +5,6 @@ Title: Empirical Bayesian Hierarchical Modeling
 Author: Joseph Kelly, Hyung Suk Tak, and Carl Morris
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 Depends: sn
-Description: Empirical Bayesian Hierarchical Modeling for Gaussian, Binomial, and Poisson Data
+Description: Empirical Bayesian Hierarchical Modeling for Gaussian, Binomial, and Poisson Data Hey Joey it should be longer than this. 5 to 6 lines would be ok.
 License: GPL-2
 BugReports: https://github.com/jyklly/gbp/issues
