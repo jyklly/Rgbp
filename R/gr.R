@@ -4,7 +4,7 @@
 ##still not sure what to do with library
 library(sn)
 
-gr<-function(y,se,X,mu,CI=0.95,intercept=T){
+gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
@@ -23,16 +23,30 @@ gr<-function(y,se,X,mu,CI=0.95,intercept=T){
     est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
     est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par)
-	Betahat<-NA
-	hess<-NA
+    Betahat<-NA
+    hess<-NA
   }else{
     r <- dim(X)[2]
+    ## chang<-1
+    ## count<-0
+    ## mu <- rep(mean(y),length(y))
+    ## while(chang > eps){
+    ##   est<-optim(log(mean(V)),allk,hessian=TRUE)
+    ##   Ahat<-exp(est$par)
+    ##   Bhat<-V/(V+Ahat)
+    ##   DVAhat<-diag(V+Ahat)
+    ##   Betahat<-solve(t(X)%*%solve(DVAhat)%*%X)%*%t(X)%*%solve(DVAhat)%*%y
+    ##   munew<-X%*%Betahat
+    ##   chang<-max(abs((mu-munew)/mu))
+    ##   mu<-munew
+    ##   count<-count+1
+    ## }
     est <- optim(c(mean(log(V)),rep(0,r)), function(x){gr.ll.muunknown(exp(x[1]),y,V,x[2:length(x)],X,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
     est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par[1])
     Betahat <- est$par[2:length(est$par)]
     BetahatSE <- sqrt(diag(est.var)[-1])
-	hess<-est$hessian[-1,-1]
+    hess<-est$hessian[-1,-1]
     mu<-X%*%Betahat
   }
 

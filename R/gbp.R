@@ -143,7 +143,9 @@ plot.gbp<-function(x,...){
 	sqrtV <- se
 	sdlens <- sqrtV/max(sqrtV)
 	postlens <- po.se/max(sqrtV)
-	sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(min(y)-abs(min(y))*0.1,max(y)+abs(max(y))*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
+        xmin <- min(c(y,po.m,pr.m))
+        xmax <- max(c(y,po.m,pr.m))
+	sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(xmin-abs(xmin)*0.1,xmax+abs(xmax*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
 	if(length(unique(pr.m))==1)
 		points(pr.m[1],0,col="darkviolet",pch=2,cex=4)
 	legend("bottomright",ifelse(x$model=="gr","se","n"),col="blue",lty=1,seg.len=0.5,lwd=2)
@@ -152,7 +154,7 @@ plot.gbp<-function(x,...){
 	abline(h=0)
 	axis(2,c(0,4),c(expression(hat(theta)),expression(bar(y))), cex.axis=1.1)
 	sapply(1:length(y), function(i){
-		lines(c(y[i],po.m[i]),c(4,0),xlim=c(min(y)-abs(min(y))*0,max(y)+abs(max(y))*0))
+		lines(c(y[i],po.m[i]),c(4,0))
 		lines(c(y[i],y[i]+sdlens[i]*sd(y)*0.4),c(4,4+sdlens[i]),col="blue")
 		##posterior variance lines
 		lines(c(po.m[i]-postlens[i]*sd(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
