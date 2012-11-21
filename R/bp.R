@@ -107,7 +107,7 @@ alpha.est.prior.kn<-function(given,ini){
 	}
 	dif<-1; n.iter<-0; a.ini<-ini$a.ini; eps<-given$eps
 	while(dif>eps){
-		opti <- optim(a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="BFGS",hessian=T)
+		opti <- optim(a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
 		a.new <- opti$par
 		a.hess <- opti$hessian
 		dif<-abs(a.new-a.ini)
@@ -128,7 +128,7 @@ alpha.est.prior.un<-function(given,ini){
 		adm.a<-function(a){
 			a+llik(a,b.ini)-0.5*log(det(-beta.hess))
 		} # laplace approximation
-		opti <- optim(a.ini,adm.a,control=list(fnscale=-1),method="BFGS",hessian=T)
+		opti <- optim(a.ini,adm.a,control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
 		a.new <- opti$par; a.hess <- opti$hessian
 		marginal.b<-function(b){
 			llik(a.new,b)-0.5*log(det(-a.hess))
@@ -137,7 +137,7 @@ alpha.est.prior.un<-function(given,ini){
 			opti2 <- optim(b.ini,marginal.b,control=list(fnscale=-1),hessian=T)
 			beta.new <- opti2$par; beta.hess <- opti2$hessian
 		}else{
-			opti2 <- optim(b.ini,marginal.b,control=list(fnscale=-1),method="BFGS",hessian=T)
+			opti2 <- optim(b.ini,marginal.b,control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
 			beta.new <- opti2$par; beta.hess <- opti2$hessian
 		}
 		dif<-max(abs(a.new-a.ini),abs(beta.new-b.ini))

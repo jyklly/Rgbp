@@ -146,7 +146,7 @@ plot.gbp<-function(x,...){
 	sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(min(y)-abs(min(y))*0.1,max(y)+abs(max(y))*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
 	if(length(unique(pr.m))==1)
 		points(pr.m[1],0,col="darkviolet",pch=2,cex=4)
-	legend("topright",c("se"),col="blue",lty=1,seg.len=0.5,lwd=2)
+	legend("bottomright",ifelse(x$model=="gr","se","n"),col="blue",lty=1,seg.len=0.5,lwd=2)
 	sunflowerplot(rep(0,length(y))~po.m,add=T)
 	abline(h=4)
 	abline(h=0)
@@ -162,7 +162,7 @@ plot.gbp<-function(x,...){
 		points(coords,col="red")
 	})
 
-	plot(index,po.m,ylim=c(ylim.low,ylim.upp),xlab=xl,ylab=expression(theta),main="100(1-CI)% Intervals for Posterior Mean",cex=log(se+2)/cx,col="red",pch=19)
+	plot(index,po.m,ylim=c(ylim.low,ylim.upp),xlab=xl,ylab=expression(theta),main="100*CI% Intervals for Posterior Mean",cex=log(se+2)/cx,col="red",pch=19)
 	sapply(1:length(y),function(j){lines(rep(index[j],2),c(po.low[j],po.upp[j]),lwd=0.5)})
 	points(index,po.low,cex=1.5,pch="-")
 	points(index,po.upp,cex=1.5,pch="-")
