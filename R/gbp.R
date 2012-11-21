@@ -96,7 +96,7 @@ summary.gbp<-function(object,...){
 
 
 print.summary.gbp<-function(x,...){
-	if(identical(x$reg,NA)){
+        if(identical(x$reg,NA)){
 		cat("Main summary:\n")
 		cat("\n")
 		print(round(x$main,3))
@@ -145,9 +145,9 @@ plot.gbp<-function(x,...){
 	postlens <- po.se/max(sqrtV)
         xmin <- min(c(y,po.m,pr.m))
         xmax <- max(c(y,po.m,pr.m))
-	sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(xmin-abs(xmin)*0.1,xmax+abs(xmax*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
-	if(length(unique(pr.m))==1)
-		points(pr.m[1],0,col="darkviolet",pch=2,cex=4)
+	sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(xmin-abs(xmin)*0.1,xmax+abs(xmax)*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
+        if(length(unique(pr.m))==1)
+          points(pr.m[1],0,col="darkviolet",pch=2,cex=4)
 	legend("bottomright",ifelse(x$model=="gr","se","n"),col="blue",lty=1,seg.len=0.5,lwd=2)
 	sunflowerplot(rep(0,length(y))~po.m,add=T)
 	abline(h=4)
