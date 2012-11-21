@@ -19,11 +19,6 @@
 \alias{shrink.est}
 \alias{pr.post.est.prior.kn}
 \alias{pr.post.est.prior.un}
-\alias{gbp.default}
-\alias{plot.gbp}
-\alias{print.gbp}
-\alias{summary.gbp}
-\alias{print.summary.gbp}
 
 \title{Internal \code{gbp} functions}
 \description{Internal \code{gbp} functions}
