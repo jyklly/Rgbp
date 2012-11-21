@@ -1,9 +1,6 @@
 #Note this R code fits the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
 
-##still not sure what to do with library
-library(sn)
-
 gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
