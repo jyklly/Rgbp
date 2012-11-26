@@ -1,0 +1,43 @@
+\name{print.summary.gbp}
+\alias{print.summary.gbp}
+\title{
+Print object defined as "summary.gbp" class
+}
+\description{
+This function returns the resulting object of "gbp.summary" function}
+\usage{
+\method{print}{summary.gbp}(x,...)
+}
+\arguments{
+  \item{x}{
+	The result of gbp function, which has \code{gbp.summary} class
+}
+  \item{...}{
+	Any argument for future purpose
+}
+}
+\value{
+   \item{Main summary}{minimum, 1st quantile, median, mean, 3rd quantile, maximum values of sample mean, se (or n), prior mean, shrinkage, standard error of shrinkage, posterior estimates(lower and upper bounds, mean and standard deviation)
+}
+  \item{Second-level Variance Component Estimation Summary}{we estimate alpha and transform it into r:
+    \describe{
+    \item{r.hat}{second-level variance component of BRIMM or PRIMM. The amount of prior information}
+    \item{se.r}{standard error of r.hat based on Delta method (Normal assumed)}
+	\item{low.r.hat}{transformed lower bound of 95\% posterior interval of alpha}
+	\item{upp.r.hat}{transformed upper bound of 95\% posterior interval of alpha}
+    }
+}
+  \item{Regression Summary}{if there is any covariate:
+    \describe{
+    \item{estimate}{coefficient estimates}
+    \item{se}{standard error of estimates}
+	\item{z.val}{estimate/se}
+	\item{p.val}{two-sided p-values}
+    }
+}
+}  
+\author{
+Hyung Suk Tak
+}
+
+\keyword{methods}
