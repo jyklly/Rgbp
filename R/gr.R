@@ -9,10 +9,13 @@ gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
   k <- length(y)
   V <- se^2
   if(missing(X)){
-	X.ini<-NA
-    X <- as.matrix(rep(1,k))}
-  else{
-    X <- X.ini <- as.matrix(X)}
+    X.ini<-NA
+    X <- as.matrix(rep(1,k))
+  }else{
+    X <- X.ini <- as.matrix(X)
+    if(intercept)
+      X <- cbind(rep(1,k),X)
+  }
 	
   ##optimize depending on if mu is specified. 
   if(muknown){
