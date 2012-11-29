@@ -1,11 +1,11 @@
 gbp<-function(x, ...) UseMethod("gbp")
 
-gbp.default<-function(x,y,X,mu,model="gr",CI=0.95,intercept=T,eps=0.0001, ...){
+gbp.default<-function(x,y,X,mu,model=gr,CI=0.95,intercept=T,eps=0.0001, ...){
 
   res<-switch(model, 
               gr=gr(x,y,X,mu,CI), 
-              br=bp(x,y,X,prior.mean=mu,model="br",CI=CI,intercept=intercept,eps=eps), 
-              pr=bp(x,y,X,prior.mean=mu,model="pr",CI=CI,intercept=intercept,eps=eps) )
+              br=bp(x,y,X,prior.mean=mu,model=br,CI=CI,intercept=intercept,eps=eps), 
+              pr=bp(x,y,X,prior.mean=mu,model=pr,CI=CI,intercept=intercept,eps=eps) )
   
   class(res)<-"gbp"	
   res
@@ -15,10 +15,13 @@ gbp.default<-function(x,y,X,mu,model="gr",CI=0.95,intercept=T,eps=0.0001, ...){
 print.gbp<-function(x,...){
   
   if(!identical(x$x,NA)){
+	cova<-as.matrix(x$x)
+	colnames(cova)<-paste(1:dim(cova)[2])
+    
     if(x$model=="gr"){
-      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, x=x$x, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }else{
-      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, x=x$x, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }
   }else{
     if(x$model=="gr"){
@@ -41,10 +44,14 @@ print.gbp<-function(x,...){
 summary.gbp<-function(object,...){
 
   if(!identical(object$x,NA)){
+
+	cova<-as.matrix(object$x)
+	colnames(cova)<-paste(1:dim(cova)[2])
+
     if(object$model=="gr"){
-      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, x=object$x, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }else{
-      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, x=object$x, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }
   }else{
     if(object$model=="gr"){

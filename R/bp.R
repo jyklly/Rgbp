@@ -253,7 +253,7 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 }
 
 # main function
-bp<-function(z,n,X,prior.mean,model="br",intercept=T,eps=0.0001,CI=0.95){
+bp<-function(z,n,X,prior.mean,model=br,intercept=T,eps=0.0001,CI=0.95){
 
 	X<-if(missing(X)){X<-NA}else{X<-X}
 	prior.mean<-if(missing(prior.mean)){prior.mean<-NA}else{prior.mean<-prior.mean}
