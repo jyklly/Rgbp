@@ -68,14 +68,14 @@ summary.gbp<-function(object,...){
   if(object$model=="gr"){
     A.hat<-exp(a.new)
     se.A<-sqrt(a.var*A.hat^2)
-    low.A.hat<-exp(a.new-1.96*sqrt(a.var))
-    upp.A.hat<-exp(a.new+1.96*sqrt(a.var))
+    low.A.hat<-exp(a.new-qnorm(1-0.0833/2)*sqrt(a.var))
+    upp.A.hat<-exp(a.new+qnorm(1-0.0833/2)*sqrt(a.var))
     result2<-data.frame(A.hat,se.A,low.A.hat,upp.A.hat)
   }else{
     r.hat<-exp(-a.new)
     se.r<-sqrt(a.var*exp(-2*a.new))
-    low.r.hat<-exp(-(a.new+1.96*sqrt(a.var)))
-    upp.r.hat<-exp(-(a.new-1.96*sqrt(a.var)))
+    low.r.hat<-exp(-(a.new+qnorm(1-0.0833/2)*sqrt(a.var)))
+    upp.r.hat<-exp(-(a.new-qnorm(1-0.0833/2)*sqrt(a.var)))
     result2<-data.frame(r.hat,se.r,low.r.hat,upp.r.hat)
   }
   
