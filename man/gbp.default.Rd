@@ -7,7 +7,7 @@ Shrinkage and Posterior Interval Plots
 This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as "gbp" class.
 }
 \usage{
-\method{gbp}{default}(x, y, X, mu, model="gr", CI=0.95, intercept=T, eps=0.0001, ...)
+\method{gbp}{default}(x, y, X, mu, model="gr", Alpha=0.95, intercept=T, eps=0.0001, ...)
 }
 \arguments{
   \item{x}{
@@ -25,8 +25,8 @@ This function plots two graphs, Shrinkage and Posterior Interval Plots, based on
   \item{model}{
 	"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM. Default is "gr"
 }
-  \item{CI}{
-	This function will estimate the lower and upper bounds of 100*CI\% posterior interval. Default is 0.95
+  \item{Alpha}{
+	This function will estimate the lower and upper bounds of 100*Alpha\% posterior interval. Default is 0.95
 }
   \item{intercept}{
 	User can determine whether the regression part includes the intercept term or not. Default is T.
@@ -46,9 +46,9 @@ This function plots two graphs, Shrinkage and Posterior Interval Plots, based on
 	\item{prior.mean}{numeric if entered, NA if not entered}
 	\item{shrinkage}{shrinkage estimate of each group}
 	\item{se.shrinkage}{standard error of shrinkage estimate}
-	\item{post.intv.low}{lower bound of 100*CI\% posterior interval}
+	\item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
 	\item{post.mean}{posterior mean of each group}
-	\item{post.intv.upp}{upper bound of 100*CI\% posterior interval}
+	\item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
 	\item{post.sd}{posterior standard deviation of each group}
 	\item{model}{"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM}
 	\item{x}{covariate vector or matrix if any. NA if not}

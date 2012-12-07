@@ -21,10 +21,10 @@ This function returns the resulting object of "gbp.summary" function}
 }
   \item{Second-level Variance Component Estimation Summary}{we estimate alpha and transform it into r:
     \describe{
-    \item{r.hat}{second-level variance component of BRIMM or PRIMM. The amount of prior information}
-    \item{se.r}{standard error of r.hat based on Delta method (Normal assumed)}
-	\item{low.r.hat}{transformed lower bound of 95\% posterior interval of alpha}
-	\item{upp.r.hat}{transformed upper bound of 95\% posterior interval of alpha}
+    \item{r.hat}{(or A.hat if Grimm) second-level variance component of BRIMM or PRIMM. The amount of prior information}
+    \item{se.r}{(or se.A if Grimm) standard error of r.hat based on Delta method (Normal assumed)}
+	\item{low.r.hat}{(or low.A.hat if Grimm) transformed lower bound of 95.835\% posterior interval of r}
+	\item{upp.r.hat}{(or upp.A.hat if Grimm) transformed upper bound of 95.835\% posterior interval of r}
     }
 }
   \item{Regression Summary}{if there is any covariate:

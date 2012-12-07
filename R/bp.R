@@ -157,8 +157,8 @@ shrink.est<-function(a.res,given){
 	a1.beta<-inv.info/(1-B.hat)
 	a0.beta<-inv.info/B.hat
 	central3.B<-2*(1-2*B.hat)*B.hat*(1-B.hat)/(a1.beta+a0.beta+1)/(a1.beta+a0.beta+2) # for brimm
-	B.hat.low<-qbeta((1-given$CI)/2,a1.beta,a0.beta)
-	B.hat.upp<-qbeta((1+given$CI)/2,a1.beta,a0.beta)
+	B.hat.low<-qbeta((1-given$Alpha)/2,a1.beta,a0.beta)
+	B.hat.upp<-qbeta((1+given$Alpha)/2,a1.beta,a0.beta)
 	list(B.hat=B.hat,inv.info=inv.info,var.B.hat=var.B.hat,se.B.hat=se.B.hat,central3.B=central3.B)
 }
 
@@ -179,8 +179,8 @@ br.post.est.prior.kn<-function(B.res,given){
 	se.p.hat<-sqrt(var.p.hat)
 	a1.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*p.hat
 	a0.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*(1-p.hat)
-	p.hat.low<- qbeta((1-given$CI)/2,a1.beta.p,a0.beta.p)
-	p.hat.upp<- qbeta((1+given$CI)/2,a1.beta.p,a0.beta.p)
+	p.hat.low<- qbeta((1-given$Alpha)/2,a1.beta.p,a0.beta.p)
+	p.hat.upp<- qbeta((1+given$Alpha)/2,a1.beta.p,a0.beta.p)
 	list(post.mean=p.hat,post.sd=se.p.hat,post.intv.low=p.hat.low,post.intv.upp=p.hat.upp,prior.mean=p0)
 }
 
@@ -215,8 +215,8 @@ br.post.est.prior.un<-function(B.res,a.res,ini,given){
 	se.p.hat<-sqrt(var.p.hat)
 	a1.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*p.hat
 	a0.beta.p<- (p.hat*(1-p.hat)/var.p.hat-1)*(1-p.hat)
-	p.hat.low<- qbeta((1-given$CI)/2,a1.beta.p,a0.beta.p)
-	p.hat.upp<- qbeta((1+given$CI)/2,a1.beta.p,a0.beta.p)
+	p.hat.low<- qbeta((1-given$Alpha)/2,a1.beta.p,a0.beta.p)
+	p.hat.upp<- qbeta((1+given$Alpha)/2,a1.beta.p,a0.beta.p)
 	list(post.mean=p.hat,post.sd=se.p.hat,post.intv.low=p.hat.low,post.intv.upp=p.hat.upp,prior.mean=p0.hat)
 }
 
@@ -228,8 +228,8 @@ pr.post.est.prior.kn<-function(B.res,given){
 	se.lambda.hat<-sqrt(var.lambda.hat)
 	u.gamma<-lambda.hat^2/var.lambda.hat
 	v.gamma<-lambda.hat/var.lambda.hat
-	lambda.hat.low<-qgamma((1-given$CI)/2,shape=u.gamma,rate=v.gamma)
-	lambda.hat.upp<-qgamma((1+given$CI)/2,shape=u.gamma,rate=v.gamma)
+	lambda.hat.low<-qgamma((1-given$Alpha)/2,shape=u.gamma,rate=v.gamma)
+	lambda.hat.upp<-qgamma((1+given$Alpha)/2,shape=u.gamma,rate=v.gamma)
 	list(post.mean=lambda.hat, post.sd=se.lambda.hat, post.intv.low=lambda.hat.low, post.intv.upp=lambda.hat.upp, prior.mean=lambda0)
 }
 
@@ -247,18 +247,18 @@ pr.post.est.prior.un<-function(B.res,a.res,ini,given){
 	se.lambda.hat<-sqrt(var.lambda.hat)
 	u.gamma<-lambda.hat^2/var.lambda.hat
 	v.gamma<-lambda.hat/var.lambda.hat
-	lambda.hat.low<-qgamma((1-given$CI)/2,shape=u.gamma,rate=v.gamma)
-	lambda.hat.upp<-qgamma((1+given$CI)/2,shape=u.gamma,rate=v.gamma)
+	lambda.hat.low<-qgamma((1-given$Alpha)/2,shape=u.gamma,rate=v.gamma)
+	lambda.hat.upp<-qgamma((1+given$Alpha)/2,shape=u.gamma,rate=v.gamma)
 	list(post.mean=lambda.hat, post.sd=se.lambda.hat, post.intv.low=lambda.hat.low, post.intv.upp=lambda.hat.upp, prior.mean=lambda0.hat)
 }
 
 # main function
-bp <- function(z, n, X, prior.mean, model="br", intercept=T, eps=0.0001, CI=0.95){
+bp <- function(z, n, X, prior.mean, model="br", intercept=T, eps=0.0001, Alpha=0.95){
 	
 	X<-if(missing(X)){X<-NA}else{X<-X}
 	prior.mean<-if(missing(prior.mean)){prior.mean<-NA}else{prior.mean<-prior.mean}
 
-	given<-list(z=z,n=n,sample.mean=z/n,x.ini=X,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,CI=CI)
+	given<-list(z=z,n=n,sample.mean=z/n,x.ini=X,prior.mean=prior.mean,model=model,intercept=intercept,eps=eps,Alpha=Alpha)
 
 	# initial values
 	if(is.na(prior.mean)){

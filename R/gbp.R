@@ -1,11 +1,11 @@
 gbp<-function(x, ...) UseMethod("gbp")
 
-gbp.default<-function(x,y,X,mu,model="gr",CI=0.95,intercept=T,eps=0.0001, ...){
+gbp.default<-function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T,eps=0.0001, ...){
 
   res<-switch(model, 
-              gr=gr(x,y,X,mu,CI), 
-              br=bp(x,y,X,prior.mean=mu,model="br",CI=CI,intercept=intercept,eps=eps), 
-              pr=bp(x,y,X,prior.mean=mu,model="pr",CI=CI,intercept=intercept,eps=eps) )
+              gr=gr(x,y,X,mu,SL), 
+              br=bp(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept,eps=eps), 
+              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept,eps=eps) )
   
   class(res)<-"gbp"	
   res
@@ -169,7 +169,7 @@ plot.gbp<-function(x,...){
     points(coords,col="red")
   })
   
-  plot(index,po.m,ylim=c(ylim.low,ylim.upp),xlab=xl,ylab=expression(theta),main="100*CI% Intervals for Posterior Mean",cex=log(se+2)/cx,col="red",pch=19)
+  plot(index,po.m,ylim=c(ylim.low,ylim.upp),xlab=xl,ylab=expression(theta),main="100*Alpha% Intervals for Posterior Mean",cex=log(se+2)/cx,col="red",pch=19)
   sapply(1:length(y),function(j){lines(rep(index[j],2),c(po.low[j],po.upp[j]),lwd=0.5)})
   points(index,po.low,cex=1.5,pch="-")
   points(index,po.upp,cex=1.5,pch="-")

@@ -1,7 +1,7 @@
 #Note this R code fits the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
 
-gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
+gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
@@ -55,8 +55,8 @@ gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
   v<-Bhat*(1-Bhat)/(a1+a0+1)
   seB<-sqrt(v)
   skewB<-2*(a0-a1)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
-  LCLB <- qbeta((1-CI)/2,a1,a0)
-  UCLB <- qbeta(1 - (1-CI)/2,a1,a0)
+  LCLB <- qbeta((1-Alpha)/2,a1,a0)
+  UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
   
   ##if mu is estimated use different formula for posterior sd and estimate mu
   if(muknown){
@@ -94,7 +94,7 @@ gr<-function(y,se,X,mu,CI=0.95,intercept=T,eps=0.0001){
   skewedmat <- c()
   for(i in 1:length(thetahat)){    
     snparam[i,] <- gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94)))
-    row <- c(qsn((1-CI)/2,snparam[i,1],snparam[i,2],snparam[i,3]),thetahat[i],qsn(1-(1-CI)/2,snparam[i,1],snparam[i,2],snparam[i,3]))
+    row <- c(qsn((1-Alpha)/2,snparam[i,1],snparam[i,2],snparam[i,3]),thetahat[i],qsn(1-(1-Alpha)/2,snparam[i,1],snparam[i,2],snparam[i,3]))
     skewedmat <- rbind(skewedmat,row)
   }
   skewedmat <- as.matrix(skewedmat)
