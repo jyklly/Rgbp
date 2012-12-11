@@ -31,12 +31,9 @@ print.gbp<-function(x,...){
     }
   }
 
-  temp.mean<-colMeans(temp)
-  res<-data.frame(rbind(temp,temp.mean),row.names=c(rownames(temp),"= Mean ="))
-  
   cat("Summary for whole observations:\n")
   cat("\n")
-  print(round(res,3))
+  print(round(temp,3))
   
 }
 
