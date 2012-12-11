@@ -6,6 +6,10 @@
 \alias{br.ini.un}
 \alias{br.llik.prior.kn}
 \alias{br.llik.prior.un}
+\alias{br.deriv2b}
+\alias{br.deriv2a}
+\alias{pr.deriv2b}
+\alias{pr.deriv2a}
 \alias{br.post.est.prior.kn}
 \alias{br.post.est.prior.un}
 \alias{gr.cp.to.dp}

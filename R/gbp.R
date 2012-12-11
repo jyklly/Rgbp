@@ -1,11 +1,11 @@
 gbp<-function(x, ...) UseMethod("gbp")
 
-gbp.default<-function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T,eps=0.0001, ...){
+gbp.default<-function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T, ...){
 
   res<-switch(model, 
-              gr=gr(x,y,X,mu,SL), 
-              br=bp(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept,eps=eps), 
-              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept,eps=eps) )
+              gr=gr(x,y,X,mu,Alpha), 
+              br=bp(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept), 
+              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept) )
   
   class(res)<-"gbp"	
   res

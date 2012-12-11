@@ -7,7 +7,7 @@ Shrinkage and Posterior Interval Plots
 This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as "gbp" class.
 }
 \usage{
-\method{gbp}{default}(x, y, X, mu, model="gr", Alpha=0.95, intercept=T, eps=0.0001, ...)
+\method{gbp}{default}(x, y, X, mu, model="gr", Alpha=0.95, intercept=T, ...)
 }
 \arguments{
   \item{x}{
@@ -30,9 +30,6 @@ This function plots two graphs, Shrinkage and Posterior Interval Plots, based on
 }
   \item{intercept}{
 	User can determine whether the regression part includes the intercept term or not. Default is T.
-}
-  \item{eps}{
-	User can adjust the tolerance. The estimation process stops if estimates converge within this value. Default is 0.0001.
 }
   \item{...}{
 	Any argument for future purpose

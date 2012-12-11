@@ -17,17 +17,17 @@ Date: \tab 2012-10-31\cr
 License: \tab GPL-2\cr
 }
 If you know the prior mean in advance (the mean of the second level Hierarchy, for example, 0.8),
-g<-gbp(y,se,mu=0.8,model="gr")
+g<-gbp(y,se,mu=0.8)
 b<-gbp(z,n,mu=0.8,model="br")
 p<-gbp(z,n,mu=0.8,model="pr")
 
 If you do not know the prior mean in advance (the mean of the second level Hierarchy, for example, 0.8), the regression will be an intercept model.
-g<-gbp(y,se,model="gr")
+g<-gbp(y,se)
 b<-gbp(z,n,model="br")
 p<-gbp(z,n,model="pr")
 
 If you have any covariate(s),
-g<-gbp(y,se,x,model="gr")
+g<-gbp(y,se,x)
 b<-gbp(z,n,x,model="br")
 p<-gbp(z,n,x,model="pr")
 }
