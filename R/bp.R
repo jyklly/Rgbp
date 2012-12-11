@@ -128,16 +128,6 @@ br.deriv2b<-function(a,b,given,ini){
   temp<-((trigamma(z+exp(-a)*p.)-trigamma(exp(-a)*p.)+trigamma(n-z+exp(-a)*q.)-trigamma(exp(-a)*q.))*exp(-a)*p.*q.+(digamma(z+exp(-a)*p.)-digamma(exp(-a)*p.)-digamma(n-z+exp(-a)*q.)+digamma(exp(-a)*q.))*(q.-p.))*p.*q.
   exp(-a)*t(x)%*%diag(as.numeric(temp))%*%x
 }
-
-# br hessian matrix with respect to alpha
-br.deriv2a<-function(a,b,given,ini){
-  z<-given$z
-  n<-given$n
-  x<-ini$x
-  p.<-exp(x%*%b)/(1+exp(x%*%b))
-  q.<-1-p.
-  sum( (trigamma(z+exp(-a)*p.)-trigamma(exp(-a)*p.))*p.^2+(trigamma(n-z+exp(-a)*q.)-trigamma(exp(-a)*q.))*q.^2+trigamma(exp(-a))-trigamma(n+exp(-a)) )*exp(-2*a)
-}
  
 # pr hessian matrix with respect to beta, regression coefficients
 pr.deriv2b<-function(a,b,given,ini){
@@ -148,14 +138,6 @@ pr.deriv2b<-function(a,b,given,ini){
   exp(-a)*t(x)%*%diag(as.numeric(temp))%*%x
 }
 
-# pr hessian matrix with respect to alpha
-pr.deriv2a<-function(a,b,given,ini){
-  z<-given$z
-  n<-given$n
-  x<-ini$x
-  sum((trigamma(z+exp(-a+x%*%b))-trigamma(exp(-a+x%*%b)))*exp(2*x%*%b) + exp(a+x%*%b)*(n/(exp(-a)+n))^2 +z/(exp(-a)+n)^2)*exp(-2*a)
-}
-
 alpha.est.prior.un<-function(given,ini){
 
   # switch log likelihood
@@ -163,9 +145,6 @@ alpha.est.prior.un<-function(given,ini){
 
   # switch hessian with respect to beta, regression coefficients (function of alpha)
   hess_a<-function(a,b){switch(given$model,br=br.deriv2b(a,b,given,ini),pr=pr.deriv2b(a,b,given,ini))}
-
-  # switch hessian with respect to alpha (function of beta)
-  hess_b<-function(a,b){switch(given$model,br=br.deriv2a(a,b,given,ini),pr=pr.deriv2a(a,b,given,ini))}
 
   # objective function of alpha
   objfun_a<-function(a){
