@@ -160,9 +160,9 @@ plot.gbp<-function(x,...){
   axis(2,c(0,4),c(expression(hat(theta)),expression(bar(y))), cex.axis=1.1)
   sapply(1:length(y), function(i){
     lines(c(y[i],po.m[i]),c(4,0))
-    lines(c(y[i],y[i]+sdlens[i]*se(y)*0.4),c(4,4+sdlens[i]),col="blue")
+    lines(c(y[i],y[i]+sdlens[i]*sd(y)*0.4),c(4,4+sdlens[i]),col="blue")
     ##posterior variance lines
-    lines(c(po.m[i]-postlens[i]*se(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
+    lines(c(po.m[i]-postlens[i]*sd(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
     xcord <- (4*po.m[i]/(y[i]-po.m[i])-4*po.m/(y-po.m))/(4/(y[i]-po.m[i])-4/(y-po.m))
     ycord <- 4/(y-po.m)*xcord - 4/(y-po.m)*po.m
     coords <- subset(cbind(xcord,ycord),ycord>0 & ycord<4)
