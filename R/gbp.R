@@ -19,15 +19,15 @@ print.gbp<-function(x,...){
 	colnames(cova)<-paste(1:dim(cova)[2])
     
     if(x$model=="gr"){
-      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, sd.shrinkage=x$sd.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }else{
-      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, x=cova, prior.mean=x$prior.mean, shrinkage=x$shrinkage, sd.shrinkage=x$sd.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }
   }else{
     if(x$model=="gr"){
-      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, se=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, sd.shrinkage=x$sd.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }else{
-      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, se.shrinkage=x$se.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
+      temp<-data.frame(sample.mean=x$sample.mean, n=x$se, prior.mean=x$prior.mean, shrinkage=x$shrinkage, sd.shrinkage=x$sd.shrinkage, post.intv.low=x$post.intv.low, post.mean=x$post.mean, post.intv.upp=x$post.intv.upp, post.sd=x$post.sd)
     }
   }
 
@@ -49,15 +49,15 @@ summary.gbp<-function(object,...){
 	colnames(cova)<-paste(1:dim(cova)[2])
 
     if(object$model=="gr"){
-      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, sd.shrinkage=object$sd.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }else{
-      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, x=cova, prior.mean=object$prior.mean, shrinkage=object$shrinkage, sd.shrinkage=object$sd.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }
   }else{
     if(object$model=="gr"){
-      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, se=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, sd.shrinkage=object$sd.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }else{
-      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, se.shrinkage=object$se.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
+      temp<-data.frame(sample.mean=object$sample.mean, n=object$se, prior.mean=object$prior.mean, shrinkage=object$shrinkage, sd.shrinkage=object$sd.shrinkage, post.intv.low=object$post.intv.low, post.mean=object$post.mean, post.intv.upp=object$post.intv.upp, post.sd=object$post.sd)
     }
   }
   
@@ -67,16 +67,16 @@ summary.gbp<-function(object,...){
   a.var<-object$a.var
   if(object$model=="gr"){
     A.hat<-exp(a.new)
-    se.A<-sqrt(a.var*A.hat^2)
+    sd.A<-sqrt(a.var*A.hat^2)
     low.A.hat<-exp(a.new-qnorm(1-0.0833/2)*sqrt(a.var))
     upp.A.hat<-exp(a.new+qnorm(1-0.0833/2)*sqrt(a.var))
-    result2<-data.frame(A.hat,se.A,low.A.hat,upp.A.hat)
+    result2<-data.frame(A.hat,sd.A,low.A.hat,upp.A.hat)
   }else{
     r.hat<-exp(-a.new)
-    se.r<-sqrt(a.var*exp(-2*a.new))
+    sd.r<-sqrt(a.var*exp(-2*a.new))
     low.r.hat<-exp(-(a.new+qnorm(1-0.0833/2)*sqrt(a.var)))
     upp.r.hat<-exp(-(a.new-qnorm(1-0.0833/2)*sqrt(a.var)))
-    result2<-data.frame(r.hat,se.r,low.r.hat,upp.r.hat)
+    result2<-data.frame(r.hat,sd.r,low.r.hat,upp.r.hat)
   }
   
   if(!identical(object$beta.new,NA)){
@@ -134,7 +134,7 @@ plot.gbp<-function(x,...){
   se<-x$se
   pr.m<-x$prior.mean
   po.m<-x$post.mean
-  po.se<-x$post.sd
+  po.sd<-x$post.sd
   po.low<-x$post.intv.low
   po.upp<-x$post.intv.upp
   cx<-(mean(log(se+2))+min(log(se+2)))/2
@@ -147,7 +147,7 @@ plot.gbp<-function(x,...){
   
   sqrtV <- se
   sdlens <- sqrtV/max(sqrtV)
-  postlens <- po.se/max(sqrtV)
+  postlens <- po.sd/max(sqrtV)
   xmin <- min(c(y,po.m,pr.m))
   xmax <- max(c(y,po.m,pr.m))
   sunflowerplot(rep(4,length(y))~y,ylim=c(-1,5),xlim=c(xmin-abs(xmin)*0.1,xmax+abs(xmax)*0.1), yaxt="n", col.lab="white", main="Shrinkage Plot")
@@ -160,9 +160,9 @@ plot.gbp<-function(x,...){
   axis(2,c(0,4),c(expression(hat(theta)),expression(bar(y))), cex.axis=1.1)
   sapply(1:length(y), function(i){
     lines(c(y[i],po.m[i]),c(4,0))
-    lines(c(y[i],y[i]+sdlens[i]*sd(y)*0.4),c(4,4+sdlens[i]),col="blue")
+    lines(c(y[i],y[i]+sdlens[i]*se(y)*0.4),c(4,4+sdlens[i]),col="blue")
     ##posterior variance lines
-    lines(c(po.m[i]-postlens[i]*sd(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
+    lines(c(po.m[i]-postlens[i]*se(y)*0.4,po.m[i]),c(0-postlens[i],0),col="blue")
     xcord <- (4*po.m[i]/(y[i]-po.m[i])-4*po.m/(y-po.m))/(4/(y[i]-po.m[i])-4/(y-po.m))
     ycord <- 4/(y-po.m)*xcord - 4/(y-po.m)*po.m
     coords <- subset(cbind(xcord,ycord),ycord>0 & ycord<4)
