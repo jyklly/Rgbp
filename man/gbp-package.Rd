@@ -1,4 +1,4 @@
-\name{gbp-package}
+\name{gbp}
 \alias{gbp-package}
 \alias{gbp}
 \docType{package}
