@@ -1,5 +1,5 @@
-\name{coverage.gbp}
-\alias{coverage.gbp}
+\name{coverage}
+\alias{coverage}
 \title{
 Estimating coverage probability from the object defined as "gbp" class
 }
@@ -7,14 +7,14 @@ Estimating coverage probability from the object defined as "gbp" class
 This function estimates Rao-Blackwellized and unbiased coverage probability based on Gaussian Quadrature
 }
 \usage{
-\method{coverage}{gbp}(x, nsim, detail=F, ...)
+coverage(x, nsim=100, detail=F, ...)
 }
 \arguments{
   \item{x}{
 The resultant object of "gbp" function
 }
   \item{nsim}{
-The number of simulations we want
+The number of data sets (repeated simulations)
 }
   \item{detail}{
 If TRUE, this function will give us detailed results
