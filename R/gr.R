@@ -65,8 +65,9 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
     DVAhat<-diag(V+Ahat)
     DVAhati <- diag(1/(V+Ahat))
     Betahat <- solve(t(X)%*%DVAhati%*%X)%*%t(X)%*%DVAhati%*%y
-    BetahatSE <- solve(t(X)%*%DVAhati%*%X)
-    hess <- -1/BetahatSE^2
+    Betahatvar <- solve(t(X)%*%DVAhati%*%X)
+    BetahatSE <- sqrt(diag(Betahatvar))
+    hess <- -1*t(X)%*%DVAhati%*%X
     mu<-X%*%Betahat
     ##calculate posterior variance
     E <- eigen(DVAhat)
