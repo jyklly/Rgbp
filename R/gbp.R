@@ -184,14 +184,14 @@ plot.gbp<-function(x,...){
 coverage.gbp<-function(x, nsim=100, detail=F,...){
 
   # assign empty space for the result to be input
-  coverage<-matrix(NA, nr=length(x$se), nc=nsim)
-  coverage.l<-matrix(NA, nr=length(x$se), nc=nsim)
-  coverage.u<-matrix(NA, nr=length(x$se), nc=nsim)
+  coverage<-matrix(NA, nrow=length(x$se), ncol=nsim)
+  coverage.l<-matrix(NA, nrow=length(x$se), ncol=nsim)
+  coverage.u<-matrix(NA, nrow=length(x$se), ncol=nsim)
 
   # 10 means 1-0 criterion that is 1 if interval icludes true parameter, 0 if not
-  coverage10<-matrix(NA, nr=length(x$se), nc=nsim)
-  coverage10.l<-matrix(NA, nr=length(x$se), nc=nsim)
-  coverage10.u<-matrix(NA, nr=length(x$se), nc=nsim)
+  coverage10<-matrix(NA, nrow=length(x$se), ncol=nsim)
+  coverage10.l<-matrix(NA, nrow=length(x$se), ncol=nsim)
+  coverage10.u<-matrix(NA, nrow=length(x$se), ncol=nsim)
 
   # covariate matrix
   if(identical(x$x,NA)){
@@ -213,14 +213,14 @@ coverage.gbp<-function(x, nsim=100, detail=F,...){
     r.u<-as.numeric(exp(-(x$a.new-qnorm(1-0.0833/2)*sqrt(x$a.var))))
 
     # 2. generate p matrix
-    sim.p<-matrix(rbeta(length(pre.p)*nsim, r*pre.p, r*(1-pre.p)), nr=length(n))
-    sim.p.l<-matrix(rbeta(length(pre.p)*nsim, r.l*pre.p, r.l*(1-pre.p)), nr=length(n))
-    sim.p.u<-matrix(rbeta(length(pre.p)*nsim, r.u*pre.p, r.u*(1-pre.p)), nr=length(n))
+    sim.p<-matrix(rbeta(length(pre.p)*nsim, r*pre.p, r*(1-pre.p)), nrow=length(n))
+    sim.p.l<-matrix(rbeta(length(pre.p)*nsim, r.l*pre.p, r.l*(1-pre.p)), nrow=length(n))
+    sim.p.u<-matrix(rbeta(length(pre.p)*nsim, r.u*pre.p, r.u*(1-pre.p)), nrow=length(n))
 
     # 3. generate z (data) matrix
-    sim.z<-matrix(rbinom(nrow(sim.p)*nsim, n, sim.p), nr=length(n))
-    sim.z.l<-matrix(rbinom(nrow(sim.p.l)*nsim, n, sim.p.l), nr=length(n))
-    sim.z.u<-matrix(rbinom(nrow(sim.p.u)*nsim, n, sim.p.u), nr=length(n))
+    sim.z<-matrix(rbinom(nrow(sim.p)*nsim, n, sim.p), nrow=length(n))
+    sim.z.l<-matrix(rbinom(nrow(sim.p.l)*nsim, n, sim.p.l), nrow=length(n))
+    sim.z.u<-matrix(rbinom(nrow(sim.p.u)*nsim, n, sim.p.u), nrow=length(n))
 
     # 4. simulation
     for (i in 1:nsim){
@@ -262,14 +262,14 @@ coverage.gbp<-function(x, nsim=100, detail=F,...){
     r.u<-as.numeric(exp(-(x$a.new-qnorm(1-0.0833/2)*sqrt(x$a.var))))
 
     # 2. generate lambda matrix
-    sim.lambda<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r, r), nr=length(n))
-    sim.lambda.l<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r.l, r.l), nr=length(n))
-    sim.lambda.u<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r.u, r.u), nr=length(n))
+    sim.lambda<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r, r), nrow=length(n))
+    sim.lambda.l<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r.l, r.l), nrow=length(n))
+    sim.lambda.u<-matrix(rgamma(length(pre.lambda)*nsim, pre.lambda*r.u, r.u), nrow=length(n))
 
     # 3. generate z (data) matrix
-    sim.z<-matrix(rpois(nrow(sim.lambda)*nsim, n*sim.lambda), nr=length(n))
-    sim.z.l<-matrix(rpois(nrow(sim.lambda.l)*nsim, n*sim.lambda.l), nr=length(n))
-    sim.z.u<-matrix(rpois(nrow(sim.lambda.u)*nsim, n*sim.lambda.u), nr=length(n))
+    sim.z<-matrix(rpois(nrow(sim.lambda)*nsim, n*sim.lambda), nrow=length(n))
+    sim.z.l<-matrix(rpois(nrow(sim.lambda.l)*nsim, n*sim.lambda.l), nrow=length(n))
+    sim.z.u<-matrix(rpois(nrow(sim.lambda.u)*nsim, n*sim.lambda.u), nrow=length(n))
 
     # 4. simulation
     for (i in 1:nsim){
@@ -311,14 +311,14 @@ coverage.gbp<-function(x, nsim=100, detail=F,...){
     A.u<-exp((x$a.new+qnorm(1-0.0833/2)*sqrt(x$a.var)))
 
     # 2. generate mu matrix
-    sim.mu<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A)), nr=length(se))
-    sim.mu.l<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A.l)), nr=length(se))
-    sim.mu.u<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A.u)), nr=length(se))
+    sim.mu<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A)), nrow=length(se))
+    sim.mu.l<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A.l)), nrow=length(se))
+    sim.mu.u<-matrix(rnorm(length(pre.mu)*nsim, pre.mu, sqrt(A.u)), nrow=length(se))
 
     # 3. generate y (data) matrix
-    sim.y<-matrix(rnorm(nrow(sim.mu)*nsim, sim.mu, se), nr=length(se))
-    sim.y.l<-matrix(rnorm(nrow(sim.mu.l)*nsim, sim.mu.l, se), nr=length(se))
-    sim.y.u<-matrix(rnorm(nrow(sim.mu.u)*nsim, sim.mu.u, se), nr=length(se))
+    sim.y<-matrix(rnorm(nrow(sim.mu)*nsim, sim.mu, se), nrow=length(se))
+    sim.y.l<-matrix(rnorm(nrow(sim.mu.l)*nsim, sim.mu.l, se), nrow=length(se))
+    sim.y.u<-matrix(rnorm(nrow(sim.mu.u)*nsim, sim.mu.u, se), nrow=length(se))
 
     # 4. simulation
     for (i in 1:nsim){
