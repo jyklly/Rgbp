@@ -163,7 +163,7 @@ alpha.est.prior.un<-function(given,ini){
 
   # estimation of beta
   if(ncol(as.matrix(ini$x))>1){
-    beta.new<-optim(ini$b.ini+2,objfun_b,control=list(fnscale=-1),hessian=T)$par
+    beta.new<-optim(ini$b.ini,objfun_b,control=list(fnscale=-1),hessian=T)$par
     beta.hess<-optim(ini$b.ini,objfun_b,control=list(fnscale=-1),hessian=T)$hessian
   }else{
     beta.new<-optim(ini$b.ini,objfun_b,control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)$par
