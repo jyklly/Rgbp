@@ -1,6 +1,6 @@
-\name{gbp}
-\alias{gbp-package}
-\alias{gbp}
+\name{Rgbp}
+\alias{Rgbp-package}
+\alias{Rgbp}
 \docType{package}
 \title{
 Empirical Bayesian Hierarchical modeling
@@ -10,7 +10,7 @@ Empirical Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Dat
 }
 \details{
 \tabular{ll}{
-Package: \tab gbp\cr
+Package: \tab Rgbp\cr
 Type: \tab Package\cr
 Version: \tab 0.1-0\cr
 Date: \tab 2012-10-31\cr
