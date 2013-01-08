@@ -1,6 +1,6 @@
-\name{gbp}
-\alias{gbp-package}
-\alias{gbp}
+\name{Rgbp}
+\alias{Rgbp-package}
+\alias{Rgbp}
 \docType{package}
 \title{
 Empirical Bayesian Hierarchical modeling
