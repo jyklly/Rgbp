@@ -124,7 +124,6 @@ print.summary.gbp<-function(x,...){
   }
 }
 
-
 plot.gbp<-function(x,...){
   
   y<-x$sample.mean
