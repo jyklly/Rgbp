@@ -1,10 +1,11 @@
 \name{gbp.default}
+\alias{gbp}
 \alias{gbp.default}
 \title{
-Shrinkage and Posterior Interval Plots
+Empirical Bayesian Hierarchical modeling
 }
 \description{
-This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as "gbp" class.
+Empirical Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
 }
 \usage{
 \method{gbp}{default}(x, y, X, mu, model="gr", Alpha=0.95, intercept=T, ...)
