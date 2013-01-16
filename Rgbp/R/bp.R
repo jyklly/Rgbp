@@ -1,68 +1,93 @@
-######### BRIMM (Hyung Suk Tak and Carl N. Morris, Nov 2012). This code is only for Stat324. Any feedback on it will be greatly appreciated.
-
-# primm1 initial values (when prior.mean is known)
-pr.ini.kn<-function(given){
-  r.ini<-given$prior.mean/var(given$sample.mean)
-  list(a.ini= -log(r.ini))
+MakingPRInitialValueKn <- function(given) {
+  # This function gives initial values for PRIMM when the second level mean (prior.mean) is known
+  r.ini <- given$prior.mean / var(given$sample.mean)
+  list(a.ini = -log(r.ini))
 }
 
-# primm1 initial values (when prior.mean is unknown)
-pr.ini.un<-function(given){
-  y<-given$sample.mean
-  x.ini<-given$x.ini
-  if(identical(x.ini,NA) & !given$intercept){
-    print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
-  }else if(identical(x.ini,NA) & given$intercept){
-    x<-matrix(1, length(y), 1);	b.ini<-mean(y)
-  }else if(!identical(x.ini,NA) & given$intercept){
-    if(any(y==0)){y[which(y==0)]<-0.00001}
-    x<-as.matrix(cbind(rep(1,length(y)),x.ini))
-    b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y)
-    if(any(y==0.00001)){y[which(y==0.00001)]<-0}
-  }else if(!identical(x.ini,NA) & !given$intercept){
-    if(any(y==0)){y[which(y==0)]<-0.00001}
-    x<-x.ini
-    b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y)
-    if(any(y==0.00001)){y[which(y==0.00001)]<-0}
+MakingPRInitialValueUn <- function(given) {
+  # This function gives initial values for PRIMM when the second level mean (prior.mean) is unknown
+  y <- given$sample.mean
+  x.ini <- given$x.ini
+  if (identical(x.ini, NA) & !given$intercept) {
+    print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)")
+    stop()
+  } else if (identical(x.ini, NA) & given$intercept) {
+    x <- matrix(1, length(y), 1)
+    b.ini <- mean(y)
+  } else if (!identical(x.ini, NA) & given$intercept) {
+    if (any(y == 0)) {
+      y[which(y == 0)] <- 0.00001
+    }
+    x <- as.matrix(cbind(rep(1, length(y)), x.ini))
+    b.ini <- solve(t(x) %*% x) %*% t(x) %*% log(y)
+    if (any(y == 0.00001)) {
+      y[which(y == 0.00001)] <- 0
+    }
+  } else if (!identical(x.ini,NA) & !given$intercept) {
+    if (any(y == 0)) {
+      y[which(y == 0)] <- 0.00001
+    }
+    x <- x.ini
+    b.ini <- solve(t(x) %*% x) %*% t(x) %*% log(y)
+    if (any(y == 0.00001)){
+      y[which(y == 0.00001)] <- 0
+    }
   }	
-  lambda0.ini<-mean(exp(x%*%b.ini))
-  r.ini<-lambda0.ini/var(y)
-  list(x=x,b.ini=b.ini,a.ini= -log(r.ini))
+  lambda0.ini <- mean(exp(x %*% b.ini))
+  r.ini <- lambda0.ini / var(y)
+  list(x=x, b.ini=b.ini, a.ini= -log(r.ini))
 }
 
-# brimm initial values (when prior.mean is known)
-br.ini.kn<-function(given){
-  r.ini<-given$prior.mean*(1-given$prior.mean)/var(given$sample.mean)-1
-  list(r.ini=r.ini,a.ini= -log(r.ini))
+MakingBRInitialValueKn <- function(given) {
+  # This function gives initial values for BRIMM when the second level mean (prior.mean) is known
+  r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean) -1
+  list(r.ini = r.ini, a.ini = -log(r.ini))
 }
 
-# brimm initial values (when prior.mean is unknown)
-br.ini.un<-function(given){
-  y<-given$sample.mean
-  x.ini<-given$x.ini
-  if(identical(x.ini,NA) & !given$intercept){
-    print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)");stop()
-  }else if(identical(x.ini,NA) & given$intercept){
-    x<-matrix(1, length(y), 1)
-    b.ini<-as.vector(log(mean(y)/(1-mean(y))))
-  }else if(!identical(x.ini,NA) & given$intercept){
-    if(any(y==0)){y[which(y==0)]<-0.00001}
-    if(any(y==1)){y[which(y==1)]<-0.99999}		
-    x<-as.matrix(cbind(rep(1,length(y)),x.ini))
-    b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y/(1-y))
-    if(any(y==0.00001)){y[which(y==0.00001)]<-0}
-    if(any(y==0.99999)){y[which(y==0.99999)]<-1}
-  }else if(!identical(x.ini,NA) & !given$intercept){
-    if(any(y==0)){y[which(y==0)]<-0.00001}
-    if(any(y==1)){y[which(y==1)]<-0.99999}
-    x<-x.ini
-    b.ini<-solve(t(x)%*%x)%*%t(x)%*%log(y/(1-y))
-    if(any(y==0.00001)){y[which(y==0.00001)]<-0}
-    if(any(y==0.99999)){y[which(y==0.99999)]<-1}
+MakingBRInitialValueUn <- function(given) {
+  # This function gives initial values for BRIMM when the second level mean (prior.mean) is unknown
+  y <- given$sample.mean
+  x.ini <- given$x.ini
+  if (identical(x.ini, NA) & !given$intercept) {
+    print("In case we do not designate prior mean, at least one beta should be estimated (either intercept=T or at least one covariate is needed)")
+    stop()
+  } else if (identical(x.ini, NA) & given$intercept) {
+    x <- matrix(1, length(y), 1)
+    b.ini <- as.vector(log(mean(y) / (1 - mean(y))))
+  } else if (!identical(x.ini, NA) & given$intercept) {
+    if (any(y == 0)) {
+      y[which(y == 0)] <- 0.00001
+    }
+    if (any(y==1)) {
+      y[which(y == 1)] <- 0.99999
+    }		
+    x <- as.matrix(cbind(rep(1, length(y)), x.ini))
+    b.ini <- solve(t(x) %*% x) %*% t(x) %*% log(y/(1 - y))
+    if (any(y==0.00001)) {
+      y[which(y == 0.00001)] <- 0
+    }
+    if (any(y == 0.99999)) {
+      y[which(y == 0.99999)] <- 1
+    }
+  } else if (!identical(x.ini, NA) & !given$intercept) {
+    if (any(y==0)) {
+      y[which(y == 0)] <- 0.00001
+    }
+    if (any(y==1)) {
+      y[which(y == 1)] <- 0.99999
+    }
+    x <- x.ini
+    b.ini <- solve(t(x) %*% x) %*% t(x) %*% log(y / (1 - y))
+    if (any(y == 0.00001)) {
+      y[which(y == 0.00001)] <- 0
+    }
+    if (any(y == 0.99999)) {
+      y[which(y == 0.99999)] <- 1
+    }
   }	
-  p0.ini<-mean(exp(x%*%b.ini)/(1+exp(x%*%b.ini)))
-  r.ini<-p0.ini*(1-p0.ini)/var(y)-1
-  list(x=x,b.ini=b.ini,a.ini= -log(r.ini))
+  p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
+  r.ini <- p0.ini * (1 - p0.ini) / var(y) - 1
+  list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
 # brimm log likelihood function of alpha (when prior.mean is known)
@@ -301,9 +326,9 @@ bp <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
 
   # initial values
   if(is.na(prior.mean)){
-    ini<-switch(model,br=br.ini.un(given),pr=pr.ini.un(given))
+    ini<-switch(model,br=MakingBRInitialValueUn(given),pr=MakingPRInitialValueUn(given))
   }else{
-    ini<-switch(model,br=br.ini.kn(given),pr=pr.ini.kn(given))
+    ini<-switch(model,br=MakingBRInitialValueKn(given),pr=MakingPRInitialValueKn(given))
   }
 
   # alpha (and beta if prior.mean is unknown) estimation including hessian
