@@ -1,11 +1,13 @@
-MakingPRInitialValueKn <- function(given) {
-  # This function gives initial values for PRIMM when the second level mean (prior.mean) is known
+PRInitialValueKn <- function(given) {
+  # This function makes the initial values needed to run PRIMM.
+  # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
   r.ini <- given$prior.mean / var(given$sample.mean)
   list(a.ini = -log(r.ini))
 }
 
-MakingPRInitialValueUn <- function(given) {
-  # This function gives initial values for PRIMM when the second level mean (prior.mean) is unknown
+PRInitialValueUn <- function(given) {
+  # This function makes the initial values needed to run PRIMM.
+  # "Un" means the descriptive second level mean (mean of Beta distribution) is unknown.
   y <- given$sample.mean
   x.ini <- given$x.ini
   if (identical(x.ini, NA) & !given$intercept) {
@@ -38,14 +40,16 @@ MakingPRInitialValueUn <- function(given) {
   list(x=x, b.ini=b.ini, a.ini= -log(r.ini))
 }
 
-MakingBRInitialValueKn <- function(given) {
-  # This function gives initial values for BRIMM when the second level mean (prior.mean) is known
+BRInitialValueKn <- function(given) {
+  # This function makes the initial values needed to run BRIMM.
+  # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
   r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean) -1
   list(r.ini = r.ini, a.ini = -log(r.ini))
 }
 
-MakingBRInitialValueUn <- function(given) {
-  # This function gives initial values for BRIMM when the second level mean (prior.mean) is unknown
+BRInitialValueUn <- function(given) {
+  # This function makes the initial values needed to run BRIMM.
+  # "Un" means the descriptive second level mean (mean of Beta distribution) is unknown.
   y <- given$sample.mean
   x.ini <- given$x.ini
   if (identical(x.ini, NA) & !given$intercept) {
@@ -90,54 +94,60 @@ MakingBRInitialValueUn <- function(given) {
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
-# brimm log likelihood function of alpha (when prior.mean is known)
-br.llik.prior.kn<-function(a,given){
-  n<-given$n
-  z<-given$z
-  prior.mean<-given$prior.mean
-  t0<-prior.mean*exp(-a); t1<-(1-prior.mean)*exp(-a); t2<-exp(-a)
-  if(any(c(t0,t1,t2,n-z+t1,t0+z)<=0)){
-    print("The components of lgamma should be positive");stop()
-  }else{
-    sum(lgamma(t0+z)-lgamma(t0)+lgamma(n-z+t1)-lgamma(t1)+lgamma(t2)-lgamma(n+t2))
+PRLogLikKn <- function(a, given) {
+  # Log likelihood function of alpha for PRIMM when the descriptive second level mean is known.
+  z <- given$z
+  n <- given$n
+  prior.mean <- given$prior.mean
+  sum(dnbinom(z, exp(-a) * prior.mean, prob = exp(-a) / (exp(-a) + n), log=T))
+}
+
+PRLogLikUn <- function(a, b, given, ini) {
+  # Log likelihood function of alpha and beta (regression coefficients) for PRIMM when the descriptive second level mean is unknown.
+  z <- given$z
+  n <- given$n
+  x <- ini$x
+  sum(dnbinom(z, exp(-a + x %*% as.vector(b)), prob = exp(-a) / (exp(-a) + n), log=T))
+}
+
+BRLogLikKn <- function(a, given) {
+  # Log likelihood function of alpha for BRIMM when the descriptive second level mean is known.
+  n <- given$n
+  z <- given$z
+  prior.mean <- given$prior.mean
+  t0 <- prior.mean * exp(-a)
+  t1 <- (1 - prior.mean) * exp(-a)
+  t2 <- exp(-a)
+  if (any(c(t0, t1, t2, n-z+t1, t0+z)<=0)) {
+    print("The components of lgamma should be positive")
+    stop()
+  } else {
+    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
   }
 }
 
-# brimm log likelihood function of alpha and beta (when prior.mean is unknown)
-br.llik.prior.un<-function(a,b,given,ini){
-  n<-given$n
-  z<-given$z
-  x<-ini$x
-  p0.hat<-exp(x%*%as.matrix(b))/(1+exp(x%*%as.matrix(b)))
-  t0<-p0.hat*exp(-a); t1<-(1-p0.hat)*exp(-a); t2<-exp(-a)
-  if(any(c(t0,t1,t2,n-z+t1,t0+z)<=0)){
-    print("The components of lgamma should be positive");stop()
-  }else{
-    sum(lgamma(t0+z)-lgamma(t0)+lgamma(n-z+t1)-lgamma(t1)+lgamma(t2)-lgamma(n+t2))
+BRLogLikUn <- function(a, b, given, ini) {
+  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM when the descriptive second level mean is unknown.
+  n <- given$n
+  z <- given$z
+  x <- ini$x
+  p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+  t0 <- p0.hat * exp(-a)
+  t1 <- (1 - p0.hat) * exp(-a)
+  t2 <- exp(-a)
+  if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+    print("The components of lgamma should be positive")
+    stop()
+  } else {
+    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
   }
-}
-
-# primm1 log likelihood function of alpha (when prior.mean is known)
-pr.llik.prior.kn<-function(a,given){
-  z<-given$z
-  n<-given$n
-  prior.mean<-given$prior.mean
-  sum(dnbinom(z,exp(-a)*prior.mean,prob=exp(-a)/(exp(-a)+n),log=T))
-}
-
-# primm1 log likelihood function of alpha (when prior.mean is unknown)
-pr.llik.prior.un<-function(a,b,given,ini){
-  z<-given$z
-  n<-given$n
-  x<-ini$x
-  sum(dnbinom(z,exp(-a+x%*%as.vector(b)),prob=exp(-a)/(exp(-a)+n),log=T))
 }
 
 # alpha estimation (when prior.mean is known)
 alpha.est.prior.kn<-function(given,ini){
   # change log likelihood depending on the model: br or pr
   llik<-function(a){
-    switch(given$model,br=br.llik.prior.kn(a,given),pr=pr.llik.prior.kn(a,given))
+    switch(given$model,br=BRLoglikKn(a,given),pr=PRLogLikKn(a,given))
   }
   opti <- optim(ini$a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
   list(a.new=opti$par,a.hess=opti$hessian,beta.new=NA,beta.hess=NA)
@@ -166,7 +176,7 @@ pr.deriv2b<-function(a,b,given,ini){
 alpha.est.prior.un<-function(given,ini){
 
   # switch log likelihood
-  loglik<-function(a,b){switch(given$model,br=br.llik.prior.un(a,b,given,ini),pr=pr.llik.prior.un(a,b,given,ini))}
+  loglik<-function(a,b){switch(given$model,br=BRLogLikUn(a,b,given,ini),pr=PRLogLikUn(a,b,given,ini))}
 
   # switch hessian with respect to beta, regression coefficients (function of alpha)
   hess_a<-function(a,b){switch(given$model,br=br.deriv2b(a,b,given,ini),pr=pr.deriv2b(a,b,given,ini))}
@@ -326,9 +336,9 @@ bp <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
 
   # initial values
   if(is.na(prior.mean)){
-    ini<-switch(model,br=MakingBRInitialValueUn(given),pr=MakingPRInitialValueUn(given))
+    ini<-switch(model,br=BRInitialValueUn(given),pr=PRInitialValueUn(given))
   }else{
-    ini<-switch(model,br=MakingBRInitialValueKn(given),pr=MakingPRInitialValueKn(given))
+    ini<-switch(model,br=BRInitialValueKn(given),pr=PRInitialValueKn(given))
   }
 
   # alpha (and beta if prior.mean is unknown) estimation including hessian
