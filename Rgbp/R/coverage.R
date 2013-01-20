@@ -228,9 +228,9 @@ coverage<-function(x, nsim=100, detail=F,...){
   abline(h=0.95)
   points(1:length(x$se),result2,type="l",lty=2,col=4,lwd=2)
   if(x$model=="gr"){
-    legend("bottomleft",c(paste("A =",paste( round(A.l,2),",", round(A,2),",", round(A.u,2) )) ,paste("beta",0:(length(betas)-1),"=",round(betas,3)),paste("average.coverage =",avr.cov, "(", avr.cov2, ")"),paste("minimum.coverage =",min.cov, "(", min.cov2, ")"),"Rao-Blackwellized","(Unbiased)"),lty=c(1,rep(1,length(betas)),1,1,1,2),col=c(1,rep(1,length(betas)),1,1,2,4),lwd=c(0,rep(0,length(betas)),0,0,2,2))
+    legend("bottomleft",c(paste("A =",paste( round(A.l,2),",", round(A,2),",", round(A.u,2) )) ,paste("beta",0:(length(betas)-1),"=",round(betas,3)),paste("AvgCoverage =",avr.cov, "(", avr.cov2, ")"),paste("MinCoverage =",min.cov, "(", min.cov2, ")"),"Rao-Blackwellized (Unbiased)"))
   }else{
-    legend("bottomleft",c(paste("r =",paste(round(r.l,2),",",round(r,2),",",round(r.u,2))),paste("average.coverage =",avr.cov, "(", avr.cov2, ")"),paste("minimum.coverage =",min.cov, "(", min.cov2, ")"),"Rao-Blackwellized","(Unbiased)"),lty=c(1,rep(1,length(betas)),1,1,1,2),col=c(1,rep(1,length(betas)),1,1,2,4),lwd=c(0,rep(0,length(betas)),0,0,2,2))
+    legend("bottomleft",c(paste("r =",paste(round(r.l,2),",",round(r,2),",",round(r.u,2))),paste("AvgCoverage =",avr.cov, "(", avr.cov2, ")"),paste("MinCoverage =",min.cov, "(", min.cov2, ")"),"Rao-Blackwellized (Unbiased)"))
   }
 
   # print output
