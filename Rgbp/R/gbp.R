@@ -5,7 +5,8 @@ gbp.default<-function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T, ...){
   res<-switch(model, 
               gr=gr(x,y,X,mu,Alpha), 
               br=bp(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept), 
-              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept) )
+              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept),
+              br2=bp2(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept))
   
   class(res)<-"gbp"	
   res
