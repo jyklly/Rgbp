@@ -103,7 +103,8 @@ PRLogLikKn <- function(a, given) {
 }
 
 PRLogLikUn <- function(a, b, given, ini) {
-  # Log likelihood function of alpha and beta (regression coefficients) for PRIMM when the descriptive second level mean is unknown.
+  # Log likelihood function of alpha and beta (regression coefficients) for PRIMM 
+  # when the descriptive second level mean is unknown.
   z <- given$z
   n <- given$n
   x <- ini$x
@@ -127,7 +128,8 @@ BRLogLikKn <- function(a, given) {
 }
 
 BRLogLikUn <- function(a, b, given, ini) {
-  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM when the descriptive second level mean is unknown.
+  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
+  # when the descriptive second level mean is unknown.
   n <- given$n
   z <- given$z
   x <- ini$x
@@ -151,11 +153,6 @@ pr.deriv2b<-function(a,b,given,ini){
   temp<-(trigamma(z+exp(-a+x%*%b))*exp(-a+x%*%b)+digamma(z+exp(-a+x%*%b))-trigamma(exp(-a+x%*%b))*exp(-a+x%*%b)-digamma(exp(-a+x%*%b))-log(1+n*exp(a)))*exp(x%*%b)
   exp(-a)*t(x)%*%diag(as.numeric(temp))%*%x
 }
-
-
-
-
-
 
 # alpha estimation 2
 BRAlphaBetaEstUn <- function(given, ini) {
@@ -197,36 +194,38 @@ BRAlphaBetaEstUn <- function(given, ini) {
     trigamma.r.q <- trigamma(exp(-a) * q)
     trigamma.r <- trigamma(exp(-a))
     trigamma.n.r <- trigamma(n + exp(-a))
-    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
-    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
-    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
-    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
-    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
-    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
-    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
-    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
+#    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
+#    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
+#    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
+#    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
+#    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
+#    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
+#    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
+#    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
 
-    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
-    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
+#    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
+#    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
     trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
                    + trigamma.r - trigamma.n.r)
-    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
+#    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
     dig.part2 <- ((digamma.z.r.p - digamma.r.p) * p + (digamma.n.z.r.q - digamma.r.q) * q 
                   + digamma.r - digamma.n.r)
-    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
-    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
-    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
+#    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
+#    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
+#    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
 
     const1 <- dig.part2
-    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
+#    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
+#               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
     const3 <- trig.part3
-    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
-    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+#    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
+#               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
+#    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
 
-    out <- c(1 - exp(-a) * (sum(const1) - m / 2 * sum(const2) / sum.diag), 
-             exp(-a * 2) * (sum(const3) - m / 2 * (sum(const4) / sum.diag - (sum(const2) / sum.diag)^2)))
+#    out <- c(1 - exp(-a) * (sum(const1) - m / 2 * sum(const2) / sum.diag), 
+#             exp(-a * 2) * (sum(const3) - m / 2 * (sum(const4) / sum.diag - (sum(const2) / sum.diag)^2)))
+
+    out <- c(1 - exp(-a) * sum(const1), exp(-a * 2) * sum(const3))
     out
   }
 
@@ -249,28 +248,16 @@ BRAlphaBetaEstUn <- function(given, ini) {
     out1 <- BRDerivAlpha(ini.value[1], ini.value[2 : (m+1)])
     out2 <- BRDerivBeta(ini.value[1], ini.value[2 : (m+1)])
     out3 <- BRDerivAlphaBeta(ini.value[1], ini.value[2 : (m+1)])
-    hessian <- cbind(c(out1[2], out3), rbind(as.vector(out3), out2[, 2 : (m + 1)]))
     score <- c(out1[1], out2[, 1])
+    hessian <- cbind(c(out1[2], out3), rbind(as.vector(out3), out2[, 2 : (m + 1)]))
     updated <- ini.value - solve(hessian) %*% score
     dif <- ini.value - updated
     ini.value <- updated
     n.iter <- n.iter + 1
   }
-  list(a.hat = ini.value[1], b.hat = ini.value[2 : (m+1)], hessian = hessian)
+  list(a.new = ini.value[1], beta.new = ini.value[2 : (m + 1)], 
+       a.hess = hessian[1, 1], beta.hess = hessian[2 : (m + 1), 2 : (m + 1)])
 }
-
-BRAlphaBetaEstUn(given, ini)
-
-
-
-
-
-
-
-
-
-
-
 
 # alpha estimation (when prior.mean is known)
 alpha.est.prior.kn<-function(given,ini){
@@ -465,13 +452,41 @@ bp <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
   }else{
     post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
   }
+  a.var=1/B.res$inv.info
+  output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, sd.shrinkage=sqrt(B.res$var.B.hat), post.mean=post.res$post.mean, post.sd=post.res$post.sd, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model=model, x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var=1/B.res$inv.info)
+  output
+}
+
+
+# main function
+bp2 <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
+
+  X<-if(missing(X)){X<-NA}else{X<-X}
+  prior.mean<-if(missing(prior.mean)){prior.mean<-NA}else{prior.mean<-prior.mean}
+
+  given<-list(z=z,n=n,sample.mean=z/n,x.ini=X,prior.mean=prior.mean,model=model,intercept=intercept,Alpha=Alpha)
+
+  # initial values
+  if(is.na(prior.mean)){
+    ini<-switch(model,br=BRInitialValueUn(given),pr=PRInitialValueUn(given))
+  }else{
+    ini<-switch(model,br=BRInitialValueKn(given),pr=PRInitialValueKn(given))
+  }
+
+  # alpha (and beta if prior.mean is unknown) estimation including hessian
+  a.res<-BRAlphaBetaEstUn(given, ini)
+
+  # shrinkage estimation
+  B.res<-shrink.est(a.res,given)
+
+  # posterior estimation
+  if(is.na(prior.mean)){
+    post.res<-switch(model,br=br.post.est.prior.un(B.res,a.res,ini,given),pr=pr.post.est.prior.un(B.res,a.res,ini,given))
+  }else{
+    post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
+  }
 
   output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, sd.shrinkage=sqrt(B.res$var.B.hat), post.mean=post.res$post.mean, post.sd=post.res$post.sd, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model=model, x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var=1/B.res$inv.info)
   output
 }
 
-n<-rep(10,10)
-z<-rbinom(10,10,0.5)
-X<-rnorm(10)
-bp(z,n,x[,2])
-BRDerivBeta(ini$a.ini, ini$b.ini)
