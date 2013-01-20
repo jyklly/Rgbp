@@ -208,22 +208,25 @@ BRAlphaBetaEstUn <- function(given, ini) {
 
     trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
     trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
+    trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
+                   + trigamma.r - trigamma.n.r)
     dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
+    dig.part2 <- ((digamma.z.r.p - digamma.r.p) * p + (digamma.n.z.r.q - digamma.r.q) * q 
+                  + digamma.r - digamma.n.r)
     fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
     fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
     fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
 
-    const <- ((digamma.z.r.p - digamma.r.p) * p
-              + (digamma.n.z.r.q - digamma.r.q) * q 
-              + digamma.r - digamma.n.r)
+    const1 <- dig.part2
     const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
                + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
-    const3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
-               + trigamma.r - trigamma.n.r)
+    const3 <- trig.part3
     const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
                + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
+    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
 
-    out <- c(sum(const + const2), sum(const3 + const4))
+    out <- c(1 - exp(-a) * (sum(const1) - m / 2 * sum(const2) / sum.diag), 
+             exp(-a * 2) * (sum(const3) - m / 2 * (sum(const4) / sum.diag - (sum(const2) / sum.diag)^2)))
     out
   }
 
@@ -235,13 +238,14 @@ BRAlphaBetaEstUn <- function(given, ini) {
             - digamma(n - z + exp(-a) *q) + digamma(exp(-a) * q)) * p * q
            + ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p)) * p
               - (trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * q) * exp(-a) * p * q
-    t(x) %*% as.vector(vec)
+    exp(-a) * t(x) %*% as.vector(vec)
   }
 
   ini.value <- c(a.ini, b.ini)
   dif <- 1
   eps <- 0.0001
-  while (min(abs(dif)) > eps) { 
+  n.iter <- 0
+  while (max(abs(dif)) > eps) { 
     out1 <- BRDerivAlpha(ini.value[1], ini.value[2 : (m+1)])
     out2 <- BRDerivBeta(ini.value[1], ini.value[2 : (m+1)])
     out3 <- BRDerivAlphaBeta(ini.value[1], ini.value[2 : (m+1)])
@@ -250,6 +254,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     updated <- ini.value - solve(hessian) %*% score
     dif <- ini.value - updated
     ini.value <- updated
+    n.iter <- n.iter + 1
   }
   list(a.hat = ini.value[1], b.hat = ini.value[2 : (m+1)], hessian = hessian)
 }
@@ -466,5 +471,5 @@ bp <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
 n<-rep(10,10)
 z<-rbinom(10,10,0.5)
 X<-rnorm(10)
-bp(z,n,x)
+bp(z,n,x[,2])
 BRDerivBeta(ini$a.ini, ini$b.ini)
