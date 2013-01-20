@@ -365,10 +365,12 @@ br.post.est.prior.un<-function(B.res,a.res,ini,given){
   beta.hess<-a.res$beta.hess
   B.hat<-B.res$B.hat
   y<-given$sample.mean
-  b1<-sapply(1:length(n),function(i){(1+exp(x[i,]%*%beta.new))/(x[i,]%*%solve(-beta.hess)%*%x[i,])+0.5})
-  b0<-sapply(1:length(n),function(i){(1+exp(x[i,]%*%beta.new))/(x[i,]%*%solve(-beta.hess)%*%x[i,])/exp(x[i,]%*%beta.new)+0.5})
+  xHx <- diag(x%*%solve(-beta.hess)%*%t(x))
+  mu0 <- exp(x %*% beta.new + xHx/2)
+  b0<- (1+mu0)/(mu0*(exp(xHx)-1))+2
+  b1<- mu0*(b0-1)
+  k1p <- b1/(b1+b0)
   # cumulants	
-  k1p<-as.vector(b1/(b1+b0))
   k2p<-as.vector(k1p*(1-k1p)/(b1+b0+1))
   k1b<-as.vector(B.hat)
   k2b<-as.vector(B.res$var.B.hat)
