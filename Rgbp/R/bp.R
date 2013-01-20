@@ -595,3 +595,35 @@ bp2 <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
   output
 }
 
+
+# main function
+bp3 <- function(z, n, X, prior.mean, model="br", intercept=T, Alpha=0.95){
+
+  X<-if(missing(X)){X<-NA}else{X<-X}
+  prior.mean<-if(missing(prior.mean)){prior.mean<-NA}else{prior.mean<-prior.mean}
+
+  given<-list(z=z,n=n,sample.mean=z/n,x.ini=X,prior.mean=prior.mean,model=model,intercept=intercept,Alpha=Alpha)
+
+  # initial values
+  if(is.na(prior.mean)){
+    ini<-switch(model,br=BRInitialValueUn(given),pr=PRInitialValueUn(given))
+  }else{
+    ini<-switch(model,br=BRInitialValueKn(given),pr=PRInitialValueKn(given))
+  }
+
+  # alpha (and beta if prior.mean is unknown) estimation including hessian
+  a.res<-BRAlphaBetaEstUn2(given, ini)
+
+  # shrinkage estimation
+  B.res<-shrink.est(a.res,given)
+
+  # posterior estimation
+  if(is.na(prior.mean)){
+    post.res<-switch(model,br=br.post.est.prior.un(B.res,a.res,ini,given),pr=pr.post.est.prior.un(B.res,a.res,ini,given))
+  }else{
+    post.res<-switch(model,br=br.post.est.prior.kn(B.res,given),pr=pr.post.est.prior.kn(B.res,given))
+  }
+
+  output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, sd.shrinkage=sqrt(B.res$var.B.hat), post.mean=post.res$post.mean, post.sd=post.res$post.sd, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model="br2", x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var=1/B.res$inv.info)
+  output
+}
