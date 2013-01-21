@@ -78,22 +78,16 @@ PRAlphaBetaEstUn <- function(given, ini) {
 
   PRDerivBeta <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to beta
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
-    q <- 1 - p
-    vec <- (digamma(z + exp(-a) * p) - digamma(exp(-a) * p)
-            - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * exp(-a) * p * q
-    diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
-              + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
-             (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+    mu0 <- exp(x %*% b)
+    vec <- (digamma(z + exp(-a) * mu0) - digamma(exp(-a) * mu0) - log(1 + n * exp(a))) * exp(-a) * mu0
+    diag <- (trigamma(z + exp(-a) * mu0) - trigamma(exp(-a) * mu0)) * exp(-2 * a) * mu0^2 + vec
     out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
     out
   }
  
-  BRDerivAlpha <- function(a, b) {
+  PRDerivAlpha <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to alpha
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
-    q <- 1 - p
+    mu0 <- exp(x %*% b)
     digamma.z.r.p <- digamma(z + exp(-a) * p)
     digamma.r.p <- digamma(exp(-a) * p)
     digamma.n.z.r.q <- digamma(n - z + exp(-a) * q)

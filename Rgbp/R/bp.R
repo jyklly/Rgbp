@@ -172,7 +172,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
             - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * exp(-a) * p * q
     diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
               + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
-             (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
+             (digamma(z + exp(-a) * p) - digamma(exp(-a) * p)
               - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
     out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
     out
