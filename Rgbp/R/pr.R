@@ -81,9 +81,10 @@ PRAlphaEstKn <- function(given, ini) {
     out <- c(1 - exp(-a) * sum(const1), exp(-a * 2) * sum(const3))
     out
   }
+
   dif <- 1
   eps <- 0.0001
-  while (max(abs(dif)) > eps) { 
+  while (abs(dif) > eps) { 
     out1 <- PRDerivAlpha(a.ini)
     score <- out1[1]
     hessian <- out1[2]
@@ -141,9 +142,8 @@ PRAlphaBetaEstUn <- function(given, ini) {
     const3 <- (trig.part1 * mu0 + n^2 * exp(a) / (exp(-a) + n)^2) * mu0 + z / (exp(-a) + n)^2
     const4 <- ((fifg.part1 + 4 * fourg.part1) * exp(-a) * mu0 + 2 * mu0 * trig.part1 
                + 2 * trig.part2 + exp(-a) * fourg.part2) * mu0
-
     out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
-             exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
+             exp(-2 * a) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
     out
   }
 
@@ -229,9 +229,9 @@ PRPosteriorEstUn <- function(B.res, a.res, ini, given){
   var.mu0 <- mu0.hat^2 * (exp(xSx) - 1)
   lambda.hat <- y - B.hat * (y - mu0.hat)
   var.lambda.hat <- ((lambda.hat - B.hat * y + (var.B.hat + B.hat^2) * y 
-                      - (var.B.hat + B.hat^2) * lambda0.hat) / n
-                     + (var.B.hat + B.hat^2) * (y^2 - 2 * y * lambda0.hat + var.mu0 + lambda0.hat^2)
-                     - (B.hat * (y - lambda0.hat))^2)
+                      - (var.B.hat + B.hat^2) * mu0.hat) / n
+                     + (var.B.hat + B.hat^2) * (y^2 - 2 * y * mu0.hat + var.mu0 + mu0.hat^2)
+                     - (B.hat * (y - mu0.hat))^2)
   u.gamma <- lambda.hat^2 / var.lambda.hat
   v.gamma <- lambda.hat / var.lambda.hat
   lambda.hat.low <- qgamma((1 - given$Alpha) / 2, shape = u.gamma, rate = v.gamma)
