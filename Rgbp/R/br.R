@@ -52,40 +52,6 @@ BRInitialValueUn <- function(given) {
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
-BRLogLikKn <- function(a, given) {
-  # Log likelihood function of alpha for BRIMM when the descriptive second level mean is known.
-  n <- given$n
-  z <- given$z
-  prior.mean <- given$prior.mean
-  t0 <- prior.mean * exp(-a)
-  t1 <- (1 - prior.mean) * exp(-a)
-  t2 <- exp(-a)
-  if (any(c(t0, t1, t2, n-z+t1, t0+z)<=0)) {
-    print("The components of lgamma should be positive")
-    stop()
-  } else {
-    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-  }
-}
-
-BRLogLikUn <- function(a, b, given, ini) {
-  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
-  # when the descriptive second level mean is unknown.
-  n <- given$n
-  z <- given$z
-  x <- ini$x
-  p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
-  t0 <- p0.hat * exp(-a)
-  t1 <- (1 - p0.hat) * exp(-a)
-  t2 <- exp(-a)
-  if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
-    print("The components of lgamma should be positive")
-    stop()
-  } else {
-    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-  }
-}
-
 BRAlphaEstKn <- function(given, ini) {
   # Alpha estimation of BRIMM when the second level mean is known
   z <- given$z
@@ -260,7 +226,7 @@ BRPosteriorEstKn <- function(B.res, given) {
   # when the descriptive second level mean is known.
   B.hat <- B.res$B.hat
   var.B.hat <- B.res$var.B.hat
-  p0 < -given$prior.mean
+  p0 <- given$prior.mean
   central3.B <- B.res$central3.B
   y <- given$sample.mean
   n <- given$n

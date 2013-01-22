@@ -40,23 +40,6 @@ PRInitialValueUn <- function(given) {
   list(x=x, b.ini=b.ini, a.ini= -log(r.ini))
 }
 
-PRLogLikKn <- function(a, given) {
-  # Log likelihood function of alpha for PRIMM when the descriptive second level mean is known.
-  z <- given$z
-  n <- given$n
-  prior.mean <- given$prior.mean
-  sum(dnbinom(z, exp(-a) * prior.mean, prob = exp(-a) / (exp(-a) + n), log=T))
-}
-
-PRLogLikUn <- function(a, b, given, ini) {
-  # Log likelihood function of alpha and beta (regression coefficients) for PRIMM 
-  # when the descriptive second level mean is unknown.
-  z <- given$z
-  n <- given$n
-  x <- ini$x
-  sum(dnbinom(z, exp(-a + x %*% as.vector(b)), prob = exp(-a) / (exp(-a) + n), log=T))
-}
-
 PRAlphaEstKn <- function(given, ini) {
   # Alpha estimation of PRIMM when the descriptive second level mean is known
   z <- given$z
@@ -164,7 +147,7 @@ PRAlphaBetaEstUn <- function(given, ini) {
   }
 
   ini.value <- c(a.ini, b.ini)
-  dif <- 1
+  dif <- rep(1, m + 1)
   eps <- 0.0001
   while (max(abs(dif)) > eps) { 
     out1 <- PRDerivAlpha(ini.value[1], ini.value[2 : (m+1)])
