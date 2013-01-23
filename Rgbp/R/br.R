@@ -37,7 +37,6 @@ BRInitialValueUn <- function(given) {
   }	
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
   r.ini <- p0.ini * (1 - p0.ini) / var(y) - 1
-#(p0.ini*(1-p0.ini)-*var(y))/(var(y)-p0.ini*(1-p0.ini)/mean(n))
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
@@ -119,6 +118,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     # The first and second order derivatives of log likelihood with respect to alpha
     p <- exp(x %*% b) / (1 + exp(x %*% b))
     q <- 1 - p
+    
     digamma.z.r.p <- digamma(z + exp(-a) * p)
     digamma.r.p <- digamma(exp(-a) * p)
     digamma.n.z.r.q <- digamma(n - z + exp(-a) * q)
@@ -131,40 +131,88 @@ BRAlphaBetaEstUn <- function(given, ini) {
     trigamma.r.q <- trigamma(exp(-a) * q)
     trigamma.r <- trigamma(exp(-a))
     trigamma.n.r <- trigamma(n + exp(-a))
-    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
-    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
-    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
-    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
-    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
-    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
-    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
-    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
 
-    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
     dig.part2 <- ((digamma.z.r.p - digamma.r.p) * p + (digamma.n.z.r.q - digamma.r.q) * q 
                   + digamma.r - digamma.n.r)
-    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
-    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
     trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
                    + trigamma.r - trigamma.n.r)
-    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
-    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
-    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
-
     const1 <- dig.part2
-    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
-    const3 <- trig.part3
-    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
-    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+    const3 <- trig.part3    
+    
+    # Hessian approximation 1st order
+    zrp <- z + exp(-a) * p
+    nzrq <- n - z + exp(-a) * q
+    rp <- exp(-a) * p
+    rq <- exp(-a) * q
+    p2q2 <- p^2 * q^2
+    pqqp <- p * q * (q - p)
+    
+    A1 <- 1 / zrp + 1 / nzrq
+    A2 <- log(zrp) - log(nzrq) - log(rp) - log(rq)
+    A4 <- (- p / zrp^2 - q / nzrq^2)
+    A5 <- p / zrp - q / nzrq
+    A7 <- (2 * p^2 / zrp^3 + 2 * q^2 / nzrq^3)
+    A8 <- q^2 / nzrq^2 - p^2 / zrp^2
 
-    out <- c(1 - exp(-a) * (sum(const1)), 
-             exp(-a * 2) * (sum(const3)))
+    sum.diag <- A1 * exp(-2 * a) * p2q2 + A2 * exp(-a) * pqqp - p * q * exp(-a)
+    const2 <- ((2 * A1 + exp(-a) * A4) * exp(-a) * p2q2 
+               + (A2 + exp(-a) * A5) * pqqp - p * q)
+    const4 <- ((2 * A1 + 4 * exp(-a) * A4 + exp(-2 * a) * A7) * p2q2
+               + (2 * A5 + exp(-a) * A8))
+
+#    # Hessian approximation 2nd order
+#    zrp <- z + exp(-a) * p
+#    nzrq <- n - z + exp(-a) * q
+#    rp <- exp(-a) * p
+#   rq <- exp(-a) * q
+#    p2q2 <- p^2 * q^2
+#    pqqp <- p * q * (q - p)
+    
+#    A1 <- (1 + 0.5 / zrp) / zrp + (1 + 0.5 / nzrq) / nzrq
+#    A2 <- log(zrp) - log(nzrq) - log(rp) - log(rq)
+#    A3 <- 1 / zrp - 1 / nzrq
+#    A4 <- (- (1 + 1 / zrp) * p / zrp^2 - (1 + 1 / nzrq) * q / nzrq^2)
+#    A5 <- p / zrp - q / nzrq
+#    A6 <- q / nzrq^2 - p / zrp^2
+#    A7 <- (2 + 3 / zrp) * p^2 / zrp^3 + (2 + 3 / nzrq) * q^2 / nzrq^3
+#    A8 <- q^2 / nzrq^2 - p^2 / zrp^2
+#    A9 <- 2 * (p^2 / zrp^3 - q^2 / nzrq^3)
+#    sum.diag <- A1 * exp(-2 * a) * p2q2 + (A2 - A3 / 2) * exp(-a) * pqqp - p * q * (1 + exp(-a))
+#    const2 <- ((2 * A1 + exp(-a) * A4) * exp(-a) * p2q2 
+#               + (A2 + exp(-a) * A5 - 0.5 * A3 - 0.5 * exp(-a) * A6) * pqqp - p * q)
+#    const4 <- ((2 * A1 + 4 * exp(-a) * A4 + exp(-2 * a) * A7) * p2q2
+#               +(2 * A5 - A6 + exp(-a) * (A8 - 0.5 * A9)))
+
+
+
+#    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
+#    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
+#    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
+#    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
+#    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
+#    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
+#    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
+#    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
+
+#    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
+#    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
+#    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
+#    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
+#    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
+#    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
+
+#    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
+#               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
+
+#    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
+#               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
+#    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+
+    out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
+             exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
     out
   }
-# - m / (2 * k) * sum(const2 / sum.diag)
-# - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)
+
   BRDerivAlphaBeta <- function(a, b) {
     # The cross derivative of log likelihood with respect to alpha and beta
     p <- exp(x %*% b) / (1 + exp(x %*% b))
@@ -358,8 +406,7 @@ BR(z,n,prior.mean=0.2)
 n<-c(18,24,28,37,42,48,56,60,68,73,75,79,91,99,104)
 z<-c(4,1,3,1,2,1,2,3,6,0,8,3,3,9,7)
 x<-c(0.251,-0.021,0.208,0.019,-0.169,0.164,0.296,0.199,0.209,0.093,0.002,0.064,0.105,0.073,0.209)
-BR(z,n,x)  # not working
-bp(z,n,x,model="br")
+BR(z,n,x)
 BR(z,n)
 BR(z,n,prior.mean=0.05)
 
@@ -367,7 +414,7 @@ BR(z,n,prior.mean=0.05)
 BR(test$z1,test$n,test[,4:6])
 BR(test$z1,test$n)
 BR(test$z1,test$n,prior.mean=0.49)
-BR(test$z3,test$n,test[,4:6])
+BR(test$z3,test$n,test[,4:6])  # not working
 BR(test$z3,test$n)
 BR(test$z3,test$n,prior.mean=0.5)
 
@@ -405,18 +452,11 @@ n10<-data3[,2]
 y10<-z10/n10
 x10<-data3[,7]
 system.time(BR(z0,n0,x0))
-system.time(bp(z0,n0,x0,model="br"))
-BR(z0,n0,cbind(x0,log(n0)))  # not working
-system.time(bp(z0,n0,cbind(x0,log(n0)),model="br"))
+BR(z0,n0,cbind(x0,log(n0)))
 system.time(BR(z0,n0))
-system.time(bp(z0,n0,model="br"))
-
 system.time(BR(z10,n10,x10))
-system.time(bp(z10,n10,x10,model="br"))
-BR(z10,n10,cbind(x10,log(n10)))  # not working
-bp(z10,n10,cbind(x10,log(n10)),model="br")
+BR(z10,n10,cbind(x10,log(n10)))
 BR(z10,n10)
-bp(z10,n10,model="br")
 
 # test6
 n<-rep(10,10)
@@ -443,24 +483,24 @@ x1<-c(0,0,0,0,1,1,1,1,1,1)
 x2<-rnorm(10)
 BR(z,n)
 BR(z,n,prior.mean=0.02)
-BR(z,n,x1)  # not working
-BR(z,n,x2)  # not working
+BR(z,n,x1)
+BR(z,n,x2)
 
 # test9
 n<-rep(100,10)
 z<-c(1,1,1,1,2,2,3,3,3,3)
 x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)  # not working
+BR(z,n)
 BR(z,n,prior.mean=0.02)
-BR(z,n,x)  # not working
+BR(z,n,x)
 
 # test10
 n<-rep(100,10)
 z<-c(rep(1,5),rep(3,5))
 x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)  # not working
+BR(z,n)
 BR(z,n,prior.mean=0.02)
-BR(z,n,x)  # not working
+BR(z,n,x)
 
 # test11
 n<-rep(100,10)
@@ -472,9 +512,9 @@ BR(z,n,x)
 
 # test12
 n<-rep(10000,10)
-z<-c(0, 0, 0, 0, 1, 1, 1, 2, 2, 3)
+z<-c(0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)
+BR(z,n)  # not working
 BR(z,n,prior.mean=0.0001)
 BR(z,n,x)  # not working
 
@@ -483,14 +523,14 @@ n<-rep(1000,10)
 z<-c(476, 482, 488, 494, 500,500, 506, 512, 518, 524)
 x<-c(1,1,1,1,0,0,0,0,0,0)
 BR(z,n)
-BR(z,n,prior.mean=0.53)  # not working
-BR(z,n,x)
+BR(z,n,prior.mean=0.5)
+BR(z,n,x)  # not working
 
 # test14
 z<-baseball[,4]
 n<-baseball[,3]
 BR(z,n)
-BR(z,n,prior.mean=0.4)  # not working
+BR(z,n,prior.mean=0.5)
 
 # test15
 n<-c(33,50,70,63)
@@ -500,8 +540,8 @@ x2<-c(9.19,1.5)
 x3<-c(19.13,2.09)
 x4<-c(18.97,1.94)
 x<-rbind(x1,x2,x3,x4)
-BR(z,n,x)
-BR(z,n)
+BR(z,n,x)  # not working
+BR(z,n)  # not working
 
 # test16
 n<-rep(2,27)
@@ -509,7 +549,7 @@ z<-c( 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1,
 left<-rep(c(1,1,1,0,0,0,0,0,0),3)
 right<-rep(c(0,0,0,1,1,1,0,0,0),3)
 x<-cbind(left,right)
-BR(z,n,x)  # not working
+BR(z,n,x)
 BR(z,n)
 
 # test17
