@@ -145,6 +145,17 @@ BRLogLikUn <- function(a, b, given, ini) {
   }
 }
 
+# br hessian matrix with respect to beta, regression coefficients
+br.deriv2b<-function(a,b,given,ini){
+  z<-given$z
+  n<-given$n
+  x<-ini$x
+  p.<-exp(x%*%b)/(1+exp(x%*%b))
+  q.<-1-p.
+  temp<-((trigamma(z+exp(-a)*p.)-trigamma(exp(-a)*p.)+trigamma(n-z+exp(-a)*q.)-trigamma(exp(-a)*q.))*exp(-a)*p.*q.+(digamma(z+exp(-a)*p.)-digamma(exp(-a)*p.)-digamma(n-z+exp(-a)*q.)+digamma(exp(-a)*q.))*(q.-p.))*p.*q.
+  exp(-a)*t(x)%*%diag(as.numeric(temp))%*%x
+}
+
 # pr hessian matrix with respect to beta, regression coefficients
 pr.deriv2b<-function(a,b,given,ini){
   z<-given$z
