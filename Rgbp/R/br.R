@@ -140,31 +140,31 @@ BRAlphaBetaEstUn <- function(given, ini) {
     const3 <- trig.part3    
     
     # Hessian approximation 1st order
-    zrp <- z + exp(-a) * p
-    nzrq <- n - z + exp(-a) * q
-    rp <- exp(-a) * p
-    rq <- exp(-a) * q
-    p2q2 <- p^2 * q^2
-    pqqp <- p * q * (q - p)
+#    zrp <- z + exp(-a) * p
+#    nzrq <- n - z + exp(-a) * q
+#    rp <- exp(-a) * p
+#    rq <- exp(-a) * q
+#    p2q2 <- p^2 * q^2
+#    pqqp <- p * q * (q - p)
     
-    A1 <- 1 / zrp + 1 / nzrq
-    A2 <- log(zrp) - log(nzrq) - log(rp) - log(rq)
-    A4 <- (- p / zrp^2 - q / nzrq^2)
-    A5 <- p / zrp - q / nzrq
-    A7 <- (2 * p^2 / zrp^3 + 2 * q^2 / nzrq^3)
-    A8 <- q^2 / nzrq^2 - p^2 / zrp^2
+#    A1 <- 1 / zrp + 1 / nzrq
+#    A2 <- log(zrp) - log(nzrq) - log(rp) - log(rq)
+#    A4 <- (- p / zrp^2 - q / nzrq^2)
+#    A5 <- p / zrp - q / nzrq
+#    A7 <- (2 * p^2 / zrp^3 + 2 * q^2 / nzrq^3)
+#    A8 <- q^2 / nzrq^2 - p^2 / zrp^2
 
-    sum.diag <- A1 * exp(-2 * a) * p2q2 + A2 * exp(-a) * pqqp - p * q * exp(-a)
-    const2 <- ((2 * A1 + exp(-a) * A4) * exp(-a) * p2q2 
-               + (A2 + exp(-a) * A5) * pqqp - p * q)
-    const4 <- ((2 * A1 + 4 * exp(-a) * A4 + exp(-2 * a) * A7) * p2q2
-               + (2 * A5 + exp(-a) * A8))
+#    sum.diag <- A1 * exp(-2 * a) * p2q2 + A2 * exp(-a) * pqqp - p * q * exp(-a)
+#    const2 <- ((2 * A1 + exp(-a) * A4) * exp(-a) * p2q2 
+#              + (A2 + exp(-a) * A5) * pqqp - p * q)
+#    const4 <- ((2 * A1 + 4 * exp(-a) * A4 + exp(-2 * a) * A7) * p2q2
+#               + (2 * A5 + exp(-a) * A8))
 
 #    # Hessian approximation 2nd order
 #    zrp <- z + exp(-a) * p
 #    nzrq <- n - z + exp(-a) * q
 #    rp <- exp(-a) * p
-#   rq <- exp(-a) * q
+#    rq <- exp(-a) * q
 #    p2q2 <- p^2 * q^2
 #    pqqp <- p * q * (q - p)
     
@@ -185,28 +185,28 @@ BRAlphaBetaEstUn <- function(given, ini) {
 
 
 
-#    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
-#    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
-#    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
-#    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
-#    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
-#    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
-#    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
-#    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
+    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
+    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
+    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
+    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
+    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
+    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
+    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
+    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
 
-#    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
-#    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
-#    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
-#    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
-#    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
-#    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
+    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
+    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
+    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
+    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
+    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
+    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
 
-#    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-#               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
+    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
+               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
 
-#    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-#               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
-#    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
+               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
+    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
 
     out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
              exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
@@ -376,7 +376,184 @@ BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
   output
 }
 
+
+
 # test1
+n<-rep(100,10)
+z<-c(0,0,1,1,2,2,3,3,4,4)
+x1<-c(1,1,1,1,0,0,0,0,0,0)
+x2<-rnorm(10)
+
+system.time(b<-bp(z,n,prior.mean=0.02,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x1,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x2,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.02))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x1))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x2))
+mean(b$shrinkage)
+
+# test2
+n<-rep(100,10)
+z<-c(1,1,1,1,2,2,3,3,3,3)
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+system.time(b<-bp(z,n,prior.mean=0.02,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.02))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test3
+n<-rep(100,10)
+z<-c(rep(1,5),rep(3,5))
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+system.time(b<-bp(z,n,prior.mean=0.02,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.02))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test4
+n<-rep(100,10)
+z<-c(36, 37, 37,38, 42, 42, 42, 45, 45, 50)
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+system.time(b<-bp(z,n,prior.mean=0.414,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.414))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test5
+n<-rep(10000,10)
+z<-c(0, 0, 0, 0, 1, 1, 1, 2, 2, 3)
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+sum(z)/sum(n)
+system.time(b<-bp(z,n,prior.mean=0.0001,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.0001))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test6
+n<-rep(1000,10)
+z<-c(476, 482, 488, 494, 500,500, 506, 512, 518, 524)
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+sum(z)/sum(n)
+system.time(b<-bp(z,n,prior.mean=0.5,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.5))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+
+# test7
+n<-c(10,10,10,10,10)
+z<-c( 3, 4, 1, 2, 0)
+x<-c( 1, 1, 0, 0, 0)
+
+sum(z)/sum(n)
+system.time(b<-bp(z,n,prior.mean=0.2,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.2))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+
+# test8
+n<-rep(10,10)
+z<-c(2,2,2,2,3,3,3,4,5,5)
+x<-c(1,1,1,1,0,0,0,0,0,0)
+
+system.time(b<-bp(z,n,prior.mean=0.4,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,prior.mean=0.4))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+
+# test9
+z<-baseball[,4]
+n<-baseball[,3]
+
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+
+
+
+# test10
 nba<-read.csv("demo_nba.csv",header=T)
 nba$ThreePA<-round(nba$GamePlayed*nba$X3PA,0)
 nba$ThreePM<-round(nba$GamePlayed*nba$X3PM,0)
@@ -390,35 +567,61 @@ nba<-nba[c(1:12),c(1,7,4,5,6,38,35,34,2,3,36)]
 z<-nba$totalFGM
 n<-nba$totalFGA
 x<-X<-cbind(log(nba$avgMIN),nba$TAR)
-BR(z,n,x)
-BR(z,n)
-BR(z,n,prior.mean=0.4)
 
-# test2
-n<-c(10,10,10,10,10)
-z<-c( 3, 4, 1, 2, 0)
-x<-c( 1, 1, 0, 0, 0)
-BR(z,n,x)
-BR(z,n)
-BR(z,n,prior.mean=0.2)
+system.time(b<-bp(z,n,prior.mean=0.4,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
 
-# test3
+
+
+system.time(b<-BR(z,n,prior.mean=0.4))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+
+# test11
 n<-c(18,24,28,37,42,48,56,60,68,73,75,79,91,99,104)
 z<-c(4,1,3,1,2,1,2,3,6,0,8,3,3,9,7)
 x<-c(0.251,-0.021,0.208,0.019,-0.169,0.164,0.296,0.199,0.209,0.093,0.002,0.064,0.105,0.073,0.209)
-BR(z,n,x)
-BR(z,n)
-BR(z,n,prior.mean=0.05)
 
-# test4
-BR(test$z1,test$n,test[,4:6])
-BR(test$z1,test$n)
-BR(test$z1,test$n,prior.mean=0.49)
-BR(test$z3,test$n,test[,4:6])  # not working
-BR(test$z3,test$n)
-BR(test$z3,test$n,prior.mean=0.5)
+system.time(b<-bp(z,n,prior.mean=0.05,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
 
-# test5
+system.time(b<-BR(z,n,prior.mean=0.05))
+mean(b$shrinkage)
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+
+# test12
+system.time(b<-BR(test$z1,test$n,prior.mean=0.49))
+mean(b$shrinkage)
+system.time(b<-BR(test$z1,test$n))
+mean(b$shrinkage)
+system.time(b<-BR(test$z1,test$n,test[,4:6]))
+mean(b$shrinkage)
+
+
+system.time(b<-bp(test$z1,test$n,prior.mean=0.49,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(test$z1,test$n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(test$z1,test$n,test[,4:6],model="br"))
+mean(b$shrinkage)
+
+# test13
 bb<-read.csv("2005dataset.csv",header=T)
 head(bb)
 n1<-ab_1st<-bb$AB.4.+bb$AB.5.+bb$AB.6.
@@ -451,22 +654,40 @@ z10<-data3[,1]
 n10<-data3[,2]
 y10<-z10/n10
 x10<-data3[,7]
-system.time(BR(z0,n0,x0))
-BR(z0,n0,cbind(x0,log(n0)))
-system.time(BR(z0,n0))
-system.time(BR(z10,n10,x10))
-BR(z10,n10,cbind(x10,log(n10)))
-BR(z10,n10)
 
-# test6
-n<-rep(10,10)
-z<-c(2,2,2,2,3,3,3,4,5,5)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n,x)
-BR(z,n)
-BR(z,n,prior.mean=0.4)
+system.time(b<-bp(z0,n0,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z0,n0,x0,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z0,n0,cbind(x0,log(n0)),model="br"))
+mean(b$shrinkage)
 
-# test7
+system.time(b<-BR(z0,n0))
+mean(b$shrinkage)
+system.time(b<-BR(z0,n0,x0))
+mean(b$shrinkage)
+system.time(b<-BR(z0,n0,cbind(x0,log(n0))))
+mean(b$shrinkage)
+
+
+# test14
+system.time(b<-bp(z10,n10,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z10,n10,x10,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z10,n10,cbind(x10,log(n10)),model="br"))
+mean(b$shrinkage)
+
+
+system.time(b<-BR(z10,n10))
+mean(b$shrinkage)
+system.time(b<-BR(z10,n10,x10))
+mean(b$shrinkage)
+system.time(b<-BR(z10,n10,cbind(x10,log(n10))))
+mean(b$shrinkage)
+
+
+# test15
 ALL<-c(147,134,134,122,118,117,115,114,111,111,109,100,100,97,95,94,88,87,86,84,84,83,81,79,78,77,74,69,66,62)
 ALLPG<-c(1.62,1.46,1.46,1.33,1.3,1.3,1.25,1.24,1.22,1.25,1.18,1.09,1.09,1.07,1.03,1.03,0.98,0.97,0.93,0.95,0.91,0.9,0.88,0.9,0.85,0.84,0.8,0.78,0.73,0.67)
 ngp<-ALL/ALLPG
@@ -474,65 +695,16 @@ exps<-ngp*40
 MPF<-c(26,21,33,21,27,21,24,14,29,28,19,24,21,17,29,13,18,19,22,20,22,24,25,6,14,17,12,12,4,17)
 dvs<-c(0,0,0,0,1,1,0,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,1,0,0,1,0,1)
 row.name<-c("FLA","ARI","ATL","WAS","KCR","TBR","SFG","CHW","COL","MIN","CIN","HOU","LAD","SEA","SDP","NYM","BOS","PIT","DET","BAL","TOR","OAK","MIL","NYY","TEX","CHC","STL","CLE","PHI","LAA")
-BR(MPF,exps)
 
-# test8
-n<-rep(100,10)
-z<-c(0,0,1,1,2,2,3,3,4,4)
-x1<-c(0,0,0,0,1,1,1,1,1,1)
-x2<-rnorm(10)
-BR(z,n)
-BR(z,n,prior.mean=0.02)
-BR(z,n,x1)
-BR(z,n,x2)
+system.time(b<-bp(MPF,exps,model="br"))
+mean(b$shrinkage)
 
-# test9
-n<-rep(100,10)
-z<-c(1,1,1,1,2,2,3,3,3,3)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)
-BR(z,n,prior.mean=0.02)
-BR(z,n,x)
+system.time(b<-BR(MPF,exps))
+mean(b$shrinkage)
 
-# test10
-n<-rep(100,10)
-z<-c(rep(1,5),rep(3,5))
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)
-BR(z,n,prior.mean=0.02)
-BR(z,n,x)
 
-# test11
-n<-rep(100,10)
-z<-c(36, 37, 37,38, 42, 42, 42, 45, 45, 50)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)
-BR(z,n,prior.mean=0.4)
-BR(z,n,x)
 
-# test12
-n<-rep(10000,10)
-z<-c(0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)  # not working
-BR(z,n,prior.mean=0.0001)
-BR(z,n,x)  # not working
-
-# test13
-n<-rep(1000,10)
-z<-c(476, 482, 488, 494, 500,500, 506, 512, 518, 524)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-BR(z,n)
-BR(z,n,prior.mean=0.5)
-BR(z,n,x)  # not working
-
-# test14
-z<-baseball[,4]
-n<-baseball[,3]
-BR(z,n)
-BR(z,n,prior.mean=0.5)
-
-# test15
+# test16
 n<-c(33,50,70,63)
 z<-c(23,40,62,40)
 x1<-c(13.93,2.27)
@@ -540,40 +712,76 @@ x2<-c(9.19,1.5)
 x3<-c(19.13,2.09)
 x4<-c(18.97,1.94)
 x<-rbind(x1,x2,x3,x4)
-BR(z,n,x)  # not working
-BR(z,n)  # not working
 
-# test16
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test17
 n<-rep(2,27)
 z<-c( 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
 left<-rep(c(1,1,1,0,0,0,0,0,0),3)
 right<-rep(c(0,0,0,1,1,1,0,0,0),3)
 x<-cbind(left,right)
-BR(z,n,x)
-BR(z,n)
 
-# test17
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(z,n,x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+system.time(b<-BR(z,n,x))
+mean(b$shrinkage)
+
+# test18
 new.n<-rep(3,9)
 new.z<-c(1,1,1,2,0,1,1,2,3)
 new.left<-rep(c(1,0,0),3)
 new.right<-rep(c(0,1,0),3)
 new.x<-cbind(new.left,new.right)
-BR(new.z,new.n,new.x)
-BR(new.z,new.n)
 
-# test18
+system.time(b<-bp(new.z,new.n,model="br"))
+mean(b$shrinkage)
+system.time(b<-bp(new.z,new.n,new.x,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(new.z,new.n))
+mean(b$shrinkage)
+system.time(b<-BR(new.z,new.n,new.x))
+mean(b$shrinkage)
+
+# test19
 hp<-read.csv("hospitals.csv",head=T)
 z<-hp[,4]
 n<-hp[,5]
-BR(z,n)
 
-# test19
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+
+# test20
 rat_dat <- read.table("rats_alex.txt", header=TRUE)
 z <- rat_dat$y
 n <- rat_dat$N
-BR(z,n)
 
-# test20
+system.time(b<-bp(z,n,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(z,n))
+mean(b$shrinkage)
+
+
+# test21
 ab<-c(150,358,605,581,573,506,591,553,428,345,563,542,588,421,497,428,507,526,556,625,415,233,490,353)
 hit<-c(36,113,212,188,216,194,248,226,167,127,208,201,225,161,191,143,197,211,189,211,157,79,175,114)
-BR(hit,ab)
+
+system.time(b<-bp(hit,ab,model="br"))
+mean(b$shrinkage)
+
+system.time(b<-BR(hit,ab))
+mean(b$shrinkage)

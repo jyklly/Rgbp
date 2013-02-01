@@ -169,7 +169,7 @@ pr.deriv2b<-function(a,b,given,ini){
 alpha.est.prior.kn<-function(given,ini){
   # change log likelihood depending on the model: br or pr
   llik<-function(a){
-    switch(given$model,br=BRLoglikKn(a,given),pr=PRLogLikKn(a,given))
+    switch(given$model,br=BRLogLikKn(a,given),pr=PRLogLikKn(a,given))
   }
   opti <- optim(ini$a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
   list(a.new=opti$par,a.hess=opti$hessian,beta.new=NA,beta.hess=NA)
