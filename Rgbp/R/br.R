@@ -183,8 +183,6 @@ BRAlphaBetaEstUn <- function(given, ini) {
 #    const4 <- ((2 * A1 + 4 * exp(-a) * A4 + exp(-2 * a) * A7) * p2q2
 #               +(2 * A5 - A6 + exp(-a) * (A8 - 0.5 * A9)))
 
-
-
     fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
     fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
     fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
@@ -207,10 +205,17 @@ BRAlphaBetaEstUn <- function(given, ini) {
     const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
                + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
     sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
-
-    out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
-             exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
-    out
+    
+    if (m == 1) {
+      out <- c(1 - exp(-a) * (sum(const1) - sum(const2) / sum(sum.diag) / 2), 
+               exp(-a * 2) * (sum(const3) - (sum(const4) / sum(sum.diag) 
+               - (sum(const2) / sum(sum.diag))^2) / 2))
+      out      
+    } else {
+      out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
+               exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
+      out
+    }
   }
 
   BRDerivAlphaBeta <- function(a, b) {
@@ -377,12 +382,10 @@ BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
 }
 
 
-
 # test1
 n<-rep(100,10)
 z<-c(0,0,1,1,2,2,3,3,4,4)
 x1<-c(1,1,1,1,0,0,0,0,0,0)
-x2<-rnorm(10)
 
 system.time(b<-bp(z,n,prior.mean=0.02,model="br"))
 mean(b$shrinkage)
@@ -390,16 +393,12 @@ system.time(b<-bp(z,n,model="br"))
 mean(b$shrinkage)
 system.time(b<-bp(z,n,x1,model="br"))
 mean(b$shrinkage)
-system.time(b<-bp(z,n,x2,model="br"))
-mean(b$shrinkage)
 
 system.time(b<-BR(z,n,prior.mean=0.02))
 mean(b$shrinkage)
 system.time(b<-BR(z,n))
 mean(b$shrinkage)
 system.time(b<-BR(z,n,x1))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x2))
 mean(b$shrinkage)
 
 # test2
