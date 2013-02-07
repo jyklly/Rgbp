@@ -252,7 +252,7 @@ BRPosteriorEstUn <- function(B.res, a.res, ini, given){
   beta.var <- a.res$beta.var
   B.hat <- B.res$B.hat
   y <- given$sample.mean
-  xVx <- diag(x %*% bata.var %*% t(x))
+  xVx <- diag(x %*% beta.var %*% t(x))
   mu0 <- exp(x %*% beta.new + xVx / 2)
   b0 <- (1 + mu0) / (mu0 * (exp(xVx) - 1)) + 2
   b1 <- mu0 * (b0 - 1)
@@ -339,13 +339,6 @@ n<-rep(100,10)
 z<-c(0,0,1,1,2,2,3,3,4,4)
 x1<-X<-c(1,1,1,1,0,0,0,0,0,0)
 
-
-system.time(b<-BR1(z,n,prior.mean=0.02))
-mean(b$shrinkage)
-system.time(b<-BR1(z,n))
-mean(b$shrinkage)
-system.time(b<-BR1(z,n,x1))
-mean(b$shrinkage)
 
 system.time(b<-BR(z,n,prior.mean=0.02))
 mean(b$shrinkage)
