@@ -40,6 +40,25 @@ BRInitialValueUn <- function(given) {
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
+BRLogLikUn <- function(a, b, given, ini) {
+  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
+  # when the descriptive second level mean is unknown.
+  n <- given$n
+  z <- given$z
+  x <- ini$x
+  p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+  t0 <- p0.hat * exp(-a)
+  t1 <- (1 - p0.hat) * exp(-a)
+  t2 <- exp(-a)
+  if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+    print("The components of lgamma should be positive")
+    stop()
+  } else {
+    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+  }
+}
+
+
 BRAlphaEstKn <- function(given, ini) {
   # Alpha estimation of BRIMM when the second level mean is known
   z <- given$z
@@ -90,6 +109,7 @@ BRAlphaEstKn <- function(given, ini) {
   list(a.new = a.ini, a.var = - 1 / hessian)
 }
 
+
 BRAlphaBetaEstUn <- function(given, ini) {
   # Alpha and Beta estimation of BRIMM when the second level mean is unknown
   z <- given$z
@@ -100,25 +120,23 @@ BRAlphaBetaEstUn <- function(given, ini) {
   b.ini <- ini$b.ini
   m <- ncol(x)
 
-  BRDerivBeta <- function(a, b) {
+  BRDerivBeta2order <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to beta
     p <- exp(x %*% b) / (1 + exp(x %*% b))
     q <- 1 - p
-    vec <- (digamma(z + exp(-a) * p) - digamma(exp(-a) * p)
-            - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * exp(-a) * p * q
     diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
               + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
              (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
               - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
-    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
+    out <- t(x) %*% diag(as.numeric(diag)) %*% x
     out
   }
  
-  BRDerivAlpha <- function(a, b) {
+  BRDerivAlpha2order <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to alpha
     p <- exp(x %*% b) / (1 + exp(x %*% b))
     q <- 1 - p
-    
+
     digamma.z.r.p <- digamma(z + exp(-a) * p)
     digamma.r.p <- digamma(exp(-a) * p)
     digamma.n.z.r.q <- digamma(n - z + exp(-a) * q)
@@ -141,8 +159,6 @@ BRAlphaBetaEstUn <- function(given, ini) {
     fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
 
     dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
-    dig.part2 <- ((digamma.z.r.p - digamma.r.p) * p + (digamma.n.z.r.q - digamma.r.q) * q 
-                  + digamma.r - digamma.n.r)
     trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
     trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
     trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
@@ -151,7 +167,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
     fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
 
-    const1 <- dig.part2
+    # no const1
     const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
                + (dig.part1 + exp(-a) * trig.part2) * p * q * (p - q))
     const3 <- trig.part3    
@@ -159,9 +175,14 @@ BRAlphaBetaEstUn <- function(given, ini) {
                + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (p - q))
     sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (p - q)) * exp(-a) * p * q
     
-    out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
-             exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2)))
-    out
+    if (m == 1) {
+      out <- (exp(-a * 2) * (sum(const3) - (sum(const4) / sum(sum.diag) 
+               - (sum(const2) / sum(sum.diag))^2) / 2))
+      out      
+    } else {
+      out <- exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2))
+      out
+    }
   }
 
   BRDerivAlphaBeta <- function(a, b) {
@@ -176,21 +197,19 @@ BRAlphaBetaEstUn <- function(given, ini) {
     out
   }
 
-  ini.value <- c(a.ini, b.ini)
-  dif <- 1
-  eps <- 0.0001
-  while (max(abs(dif)) > eps) { 
-    out1 <- BRDerivAlpha(ini.value[1], ini.value[2 : (m+1)])
-    out2 <- BRDerivBeta(ini.value[1], ini.value[2 : (m+1)])
-    out3 <- BRDerivAlphaBeta(ini.value[1], ini.value[2 : (m+1)])
-    score <- c(out1[1], out2[, 1])
-    hessian <- cbind(c(out1[2], out3), rbind(as.vector(out3), out2[, 2 : (m + 1)]))
-    updated <- ini.value - solve(hessian) %*% score
-    dif <- ini.value - updated
-    ini.value <- updated    
+  objfun.a.b <- function(para) {
+	(para[1] + BRLogLikUn(para[1], as.vector(para[2 : (m + 1)]), given, ini) 
+     - 0.5 * log(det(-BRDerivBeta2order(para[1], as.vector(para[2 : (m + 1)])))))
   }
+
+  new.a.b <- optim(c(a.ini, b.ini), objfun.a.b, control = list(fnscale = -1), method="SANN")
+  
+  out1 <- BRDerivAlpha2order(new.a.b[1], new.a.b[2 : (m + 1)])
+  out2 <- BRDerivBeta2order(new.a.b[1], new.a.b[2 : (m + 1)])
+  out3 <- BRDerivAlphaBeta(new.a.b[1], new.a.b[2 : (m + 1)])
+  hessian <- cbind(c(out1, out3), rbind(as.vector(out3), out2))
   var.a.b <- -solve(hessian)
-  list(a.new = ini.value[1], beta.new = ini.value[2 : (m + 1)], 
+  list(a.new = new.a.b[1], beta.new = new.a.b[2 : (m + 1)], 
        a.var = var.a.b[1, 1], beta.var = var.a.b[2 : (m + 1), 2 : (m + 1)])
 }
 
@@ -327,282 +346,4 @@ BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
   output
 }
 
-# test1
-n<-rep(100,10)
-z<-c(0,0,1,1,2,2,3,3,4,4)
-x1<-X<-c(1,1,1,1,0,0,0,0,0,0)
 
-system.time(b<-BR(z,n,prior.mean=0.02))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x1))
-mean(b$shrinkage)
-
-# test2
-n<-rep(100,10)
-z<-c(1,1,1,1,2,2,3,3,3,3)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.02))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test3
-n<-rep(100,10)
-z<-c(rep(1,5),rep(3,5))
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.02))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test4
-n<-rep(100,10)
-z<-c(36, 37, 37,38, 42, 42, 42, 45, 45, 50)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.414))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test5
-n<-rep(10000,10)
-z<-c(0, 0, 0, 0, 1, 1, 1, 2, 2, 3)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.0001))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test6
-n<-rep(1000,10)
-z<-c(476, 482, 488, 494, 500,500, 506, 512, 518, 524)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.5))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test7
-n<-c(10,10,10,10,10)
-z<-c( 3, 4, 1, 2, 0)
-x<-c( 1, 1, 0, 0, 0)
-
-system.time(b<-BR(z,n,prior.mean=0.2))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-
-# test8
-n<-rep(10,10)
-z<-c(2,2,2,2,3,3,3,4,5,5)
-x<-c(1,1,1,1,0,0,0,0,0,0)
-
-system.time(b<-BR(z,n,prior.mean=0.4))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-
-# test9
-z<-baseball[,4]
-n<-baseball[,3]
-
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-
-
-
-# test10
-nba<-read.csv("demo_nba.csv",header=T)
-nba$ThreePA<-round(nba$GamePlayed*nba$X3PA,0)
-nba$ThreePM<-round(nba$GamePlayed*nba$X3PM,0)
-nba$totalFGA<-nba$TwoPA+nba$ThreePA
-nba$totalFGM<-nba$TwoPM+nba$ThreePM
-nba$TAR<-round(nba$TwoPA/nba$totalFGA,3)
-nba$Threeratio<-round(nba$ThreePA/nba$totalFGA,3)
-name<-nba[c(1:12),1]
-nba$logMIN<-round(log(nba$avgMIN),3)
-nba<-nba[c(1:12),c(1,7,4,5,6,38,35,34,2,3,36)]
-z<-nba$totalFGM
-n<-nba$totalFGA
-x<-X<-cbind(log(nba$avgMIN),nba$TAR)
-
-
-system.time(b<-BR(z,n,prior.mean=0.4))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-
-# test11
-n<-c(18,24,28,37,42,48,56,60,68,73,75,79,91,99,104)
-z<-c(4,1,3,1,2,1,2,3,6,0,8,3,3,9,7)
-x<-c(0.251,-0.021,0.208,0.019,-0.169,0.164,0.296,0.199,0.209,0.093,0.002,0.064,0.105,0.073,0.209)
-
-system.time(b<-BR(z,n,prior.mean=0.05))
-mean(b$shrinkage)
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-
-# test12
-system.time(b<-BR(test$z1,test$n,prior.mean=0.49))
-mean(b$shrinkage)
-system.time(b<-BR(test$z1,test$n))
-mean(b$shrinkage)
-system.time(b<-BR(test$z1,test$n,test[,4:6]))
-mean(b$shrinkage)
-
-# test13
-bb<-read.csv("2005dataset.csv",header=T)
-head(bb)
-n1<-ab_1st<-bb$AB.4.+bb$AB.5.+bb$AB.6.
-z1<-hit_1st<-bb$H.4.+bb$H.5.+bb$H.6.
-n2<-ab_2nd<-bb$AB.7.+bb$AB.8.+bb$AB.9.10.
-z2<-hit_2nd<-bb$H.7.+bb$H.8.+bb$H.9.10.
-y1<-y_1st<-hit_1st/ab_1st
-y2<-y_2nd<-hit_2nd/ab_2nd
-x<-bb$isPitcher
-data<-as.data.frame(cbind(hit_1st, ab_1st, y_1st, hit_2nd, ab_2nd, y_2nd, x))
-data<-data[order(data$ab_1st,data$ab_2nd),]
-first.half.0<-(data[,2]==0)
-second.half.0<-(data[,5]==0)
-excluded_without_justification<-(data[,2]>0 & data[,2]<=10)
-fit.index0<-(data[,2]>0)
-eval.index0<-(data[,2] >0 & data[,5]>0)
-fit.index10<-(data[,2]>10)
-eval.index10<-(data[,2] >10 & data[,5]>10)
-data0<-data[fit.index0,]
-index<-1:nrow(data0)
-data0<-cbind(data0,index)
-z0<-data0[,1]
-n0<-data0[,2]
-y0<-z0/n0
-x0<-data0[,7]
-data$eval<-fit.index10*eval.index10
-data3<-data[fit.index10,]
-data.eval<-data3[which(data3[,8]==1 ),]
-z10<-data3[,1]
-n10<-data3[,2]
-y10<-z10/n10
-x10<-data3[,7]
-
-system.time(b<-BR(z0,n0))
-mean(b$shrinkage)
-system.time(b<-BR(z0,n0,x0))
-mean(b$shrinkage)
-system.time(b<-BR(z0,n0,cbind(x0,log(n0))))
-mean(b$shrinkage)
-
-
-# test14
-system.time(b<-BR(z10,n10))
-mean(b$shrinkage)
-system.time(b<-BR(z10,n10,x10))
-mean(b$shrinkage)
-system.time(b<-BR(z10,n10,cbind(x10,log(n10))))
-mean(b$shrinkage)
-
-
-# test15
-ALL<-c(147,134,134,122,118,117,115,114,111,111,109,100,100,97,95,94,88,87,86,84,84,83,81,79,78,77,74,69,66,62)
-ALLPG<-c(1.62,1.46,1.46,1.33,1.3,1.3,1.25,1.24,1.22,1.25,1.18,1.09,1.09,1.07,1.03,1.03,0.98,0.97,0.93,0.95,0.91,0.9,0.88,0.9,0.85,0.84,0.8,0.78,0.73,0.67)
-ngp<-ALL/ALLPG
-exps<-ngp*40
-MPF<-c(26,21,33,21,27,21,24,14,29,28,19,24,21,17,29,13,18,19,22,20,22,24,25,6,14,17,12,12,4,17)
-dvs<-c(0,0,0,0,1,1,0,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,1,0,0,1,0,1)
-row.name<-c("FLA","ARI","ATL","WAS","KCR","TBR","SFG","CHW","COL","MIN","CIN","HOU","LAD","SEA","SDP","NYM","BOS","PIT","DET","BAL","TOR","OAK","MIL","NYY","TEX","CHC","STL","CLE","PHI","LAA")
-
-system.time(b<-BR(MPF,exps))
-mean(b$shrinkage)
-
-
-
-# test16
-n<-c(33,50,70,63)
-z<-c(23,40,62,40)
-x1<-c(13.93,9.19,19.13,18.97)
-x2<-c(2.27,1.5,2.09,1.94)
-
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,cbind(x1,x2)))
-mean(b$shrinkage)
-
-# test17
-n<-rep(2,27)
-z<-c( 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
-left<-c(1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-right<-c(0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0)
-x<-cbind(left,right)
-
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-system.time(b<-BR(z,n,x))
-mean(b$shrinkage)
-
-# test18
-new.n<-rep(3,9)
-new.z<-c(1,1,1,2,0,1,1,2,3)
-new.left<-c(1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-new.right<-c(0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0)
-new.x<-cbind(new.left,new.right)
-
-system.time(b<-BR(new.z,new.n))
-mean(b$shrinkage)
-system.time(b<-BR(new.z,new.n,new.x))
-mean(b$shrinkage)
-
-# test19
-hp<-read.csv("hospitals.csv",head=T)
-z<-hp[,4]
-n<-hp[,5]
-
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-
-# test20
-rat_dat <- read.table("rats_alex.txt", header=TRUE)
-z <- rat_dat$y
-n <- rat_dat$N
-
-system.time(b<-BR(z,n))
-mean(b$shrinkage)
-
-
-# test21
-ab<-c(150,358,605,581,573,506,591,553,428,345,563,542,588,421,497,428,507,526,556,625,415,233,490,353)
-hit<-c(36,113,212,188,216,194,248,226,167,127,208,201,225,161,191,143,197,211,189,211,157,79,175,114)
-x1<-seq(1:24)
-x2<-(x1-8)^2
-
-system.time(b<-BR(hit,ab))
-mean(b$shrinkage)
-system.time(b<-BR(hit,ab,cbind(x1,x2)))
-mean(b$shrinkage)

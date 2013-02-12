@@ -109,7 +109,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
               + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
              (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
     out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
     out
   }
@@ -153,16 +153,16 @@ BRAlphaBetaEstUn <- function(given, ini) {
 
     const1 <- dig.part2
     const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
+               + (dig.part1 + exp(-a) * trig.part2) * p * q * (p - q))
     const3 <- trig.part3    
     const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
-    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (p - q))
+    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (p - q)) * exp(-a) * p * q
     
     if (m == 1) {
       out <- c(1 - exp(-a) * (sum(const1) - sum(const2) / sum(sum.diag) / 2), 
                exp(-a * 2) * (sum(const3) - (sum(const4) / sum(sum.diag) 
-               - (sum(const2) / sum(sum.diag))^2) / 2))
+                               - (sum(const2) / sum(sum.diag))^2) / 2))
       out      
     } else {
       out <- c(1 - exp(-a) * (sum(const1) - m / (2 * k) * sum(const2 / sum.diag)), 
@@ -192,13 +192,14 @@ BRAlphaBetaEstUn <- function(given, ini) {
     out3 <- BRDerivAlphaBeta(ini.value[1], ini.value[2 : (m+1)])
     score <- c(out1[1], out2[, 1])
     hessian <- cbind(c(out1[2], out3), rbind(as.vector(out3), out2[, 2 : (m + 1)]))
-    updated <- ini.value - solve(hessian) %*% score
+    hessian.inverse <- solve(hessian)
+    updated <- ini.value - hessian.inverse %*% score
     dif <- ini.value - updated
     ini.value <- updated
   }
   var.a.b <- -solve(hessian)
   list(a.new = ini.value[1], beta.new = ini.value[2 : (m + 1)], 
-       a.var = var.a.b[1, 1], beta.var = var.a.b[2 : (m + 1), 2 : (m + 1)])
+       a.var = -hessian.inverse[1, 1], beta.var = -hessian.inverse[2 : (m + 1), 2 : (m + 1)])
 }
 
 ShrinkageEst <- function(a.res, given) {	
@@ -488,14 +489,6 @@ mean(b$shrinkage)
 system.time(b<-BR(test$z1,test$n,test[,4:6]))
 mean(b$shrinkage)
 
-
-system.time(b<-bp(test$z1,test$n,prior.mean=0.49,model="br"))
-mean(b$shrinkage)
-system.time(b<-bp(test$z1,test$n,model="br"))
-mean(b$shrinkage)
-system.time(b<-bp(test$z1,test$n,test[,4:6],model="br"))
-mean(b$shrinkage)
-
 # test13
 bb<-read.csv("2005dataset.csv",header=T)
 head(bb)
@@ -556,9 +549,6 @@ MPF<-c(26,21,33,21,27,21,24,14,29,28,19,24,21,17,29,13,18,19,22,20,22,24,25,6,14
 dvs<-c(0,0,0,0,1,1,0,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,1,0,0,1,0,1)
 row.name<-c("FLA","ARI","ATL","WAS","KCR","TBR","SFG","CHW","COL","MIN","CIN","HOU","LAD","SEA","SDP","NYM","BOS","PIT","DET","BAL","TOR","OAK","MIL","NYY","TEX","CHC","STL","CLE","PHI","LAA")
 
-system.time(b<-bp(MPF,exps,model="br"))
-mean(b$shrinkage)
-
 system.time(b<-BR(MPF,exps))
 mean(b$shrinkage)
 
@@ -567,16 +557,12 @@ mean(b$shrinkage)
 # test16
 n<-c(33,50,70,63)
 z<-c(23,40,62,40)
-x1<-c(13.93,2.27)
-x2<-c(9.19,1.5)
-x3<-c(19.13,2.09)
-x4<-c(18.97,1.94)
-x<-rbind(x1,x2,x3,x4)
+x1<-c(13.93,9.19,19.13,18.97)
+x2<-c(2.27,1.5,2.09,1.94)
 
-system.time(b<-bp(z,n,x,model="br"))
+system.time(b<-BR(z,n))
 mean(b$shrinkage)
-
-system.time(b<-BR(z,n,x))
+system.time(b<-BR(z,n,cbind(x1,x2)))
 mean(b$shrinkage)
 
 # test17
@@ -594,14 +580,9 @@ mean(b$shrinkage)
 # test18
 new.n<-rep(3,9)
 new.z<-c(1,1,1,2,0,1,1,2,3)
-new.left<-rep(c(1,0,0),3)
+new.left<-c(1,1,1,0,0,0,0,0,0)
 new.right<-rep(c(0,1,0),3)
 new.x<-cbind(new.left,new.right)
-
-system.time(b<-bp(new.z,new.n,model="br"))
-mean(b$shrinkage)
-system.time(b<-bp(new.z,new.n,new.x,model="br"))
-mean(b$shrinkage)
 
 system.time(b<-BR(new.z,new.n))
 mean(b$shrinkage)
@@ -613,9 +594,6 @@ hp<-read.csv("hospitals.csv",head=T)
 z<-hp[,4]
 n<-hp[,5]
 
-system.time(b<-bp(z,n,model="br"))
-mean(b$shrinkage)
-
 system.time(b<-BR(z,n))
 mean(b$shrinkage)
 
@@ -624,9 +602,6 @@ rat_dat <- read.table("rats_alex.txt", header=TRUE)
 z <- rat_dat$y
 n <- rat_dat$N
 
-system.time(b<-bp(z,n,model="br"))
-mean(b$shrinkage)
-
 system.time(b<-BR(z,n))
 mean(b$shrinkage)
 
@@ -634,9 +609,10 @@ mean(b$shrinkage)
 # test21
 ab<-c(150,358,605,581,573,506,591,553,428,345,563,542,588,421,497,428,507,526,556,625,415,233,490,353)
 hit<-c(36,113,212,188,216,194,248,226,167,127,208,201,225,161,191,143,197,211,189,211,157,79,175,114)
-
-system.time(b<-bp(hit,ab,model="br"))
-mean(b$shrinkage)
+x1<-seq(1:24)
+x2<-(x1-8)^2
 
 system.time(b<-BR(hit,ab))
+mean(b$shrinkage)
+system.time(b<-BR(hit,ab,cbind(x1,x2)))
 mean(b$shrinkage)

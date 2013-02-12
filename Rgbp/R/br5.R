@@ -129,7 +129,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
               + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
              (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
     out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
     out
   }
@@ -141,7 +141,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
     diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
               + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
              (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
     out <- t(x) %*% diag(as.numeric(diag)) %*% x
     out
   }
@@ -183,11 +183,11 @@ BRAlphaBetaEstUn <- function(given, ini) {
 
     # no const1
     const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-               + (dig.part1 + exp(-a) * trig.part2) * p * q * (q - p))
+               + (dig.part1 + exp(-a) * trig.part2) * p * q * (p - q))
     const3 <- trig.part3    
     const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (q - p))
-    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (q - p)) * exp(-a) * p * q
+               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (p - q))
+    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (p - q)) * exp(-a) * p * q
     
     if (m == 1) {
       out <- (exp(-a * 2) * (sum(const3) - (sum(const4) / sum(sum.diag) 
