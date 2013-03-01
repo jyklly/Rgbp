@@ -53,7 +53,7 @@ NR = function(vals,tol = 0.01,maxits = 100, weight = 1){
   return(list(est = vals$alpha, der2 = vals$dl2alpha2))
 }
 
-test = NR(derval(log(5),y,V,X),maxits=5,weight=0.1,tol=0.0001)
+test = NR(derval(5.5,y,V,X),maxits=500,weight=0.1,tol=0.0001)
 #golden section
 
 alphavec = seq(-5,15,length.out=1000)
@@ -66,13 +66,11 @@ plot(dl2alpha ~ alphavec)
 
 
 
-lambda<-(sqrt(5)-1)/2
 
-golden.section<-function(f, pL, pU, p1, p2, top, result){
-  if (top==26){
-    return(result)
-  }
-  else if(top==1){
+lambda<-(sqrt(5)-1)/2
+golden.section<-function(f, pL, pU, p1, p2, top, result,tol = 0.0000001){
+  
+  if(top==1){
     p1<-pL + (1-lambda)*(pU - pL)
     p2<-pU - (1-lambda)*(pU - pL)
   } 
@@ -88,6 +86,8 @@ golden.section<-function(f, pL, pU, p1, p2, top, result){
     p1 <- p2
     p2<-pU - (1-lambda)*(pU - pL)
   }
+  if(abs(p1-p2) < tol)
+    return(result)
   result<-golden.section(f, pL, pU, p1, p2, top=top+1, result)
   return(result)
 }
@@ -102,9 +102,9 @@ f1 <- function(alpha){
   return(l2)
 }
 alphavec
-golden.section(f1,-50, 50, NA, NA, 1, result)
-
-
+system.time(golden.section(f1,4, 8, NA, NA, 1, result,tol=0.0001))
+system.time(NR(derval(8,y,V,X),maxits=500,weight=0.1,tol=0.0001))
+system.time(gr(y,se,X))
 alphavec = seq(-5,15,length.out=1000)
 res = lapply(alphavec,f1)
 l2 <- as.numeric(res)
