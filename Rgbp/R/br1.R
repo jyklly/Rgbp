@@ -2,9 +2,9 @@ BRInitialValueKn <- function(given) {
   # This function makes the initial values needed to run BRIMM.
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
   if (given$prior.mean == 0) {
-    r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean) -1    
+    r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean)   
   } else {
-    r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean) -1
+    r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
   }
   list(r.ini = r.ini, a.ini = -log(r.ini))
 }
@@ -36,7 +36,7 @@ BRInitialValueUn <- function(given) {
     x <- x.ini
   }	
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
-  r.ini <- p0.ini * (1 - p0.ini) / var(y) - 1
+  r.ini <- p0.ini * (1 - p0.ini) / var(y) 
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
@@ -81,7 +81,18 @@ br.deriv2b<-function(a,b,given,ini){
   x<-ini$x
   p.<-exp(x%*%b)/(1+exp(x%*%b))
   q.<-1-p.
+  zap <- z + exp(-a) * p.
+  nzaq <- n - z + exp(-a) * q.
+  ap <- exp(-a) * p.
+  aq <- exp(-a) * q.
+  if (any(c(ap, aq)==0)) {
+    temp[(ap == 0 | aq == 0)] <- 0
+    tmp <- !(ap == 0 | aq == 0)
+    temp[tmp] <-((trigamma(zap[tmp])-trigamma(ap[tmp])+trigamma(nzaq[tmp])-trigamma(aq[tmp]))*exp(-a)*p.[tmp]*q.[tmp]+(digamma(zap[tmp])-digamma(ap[tmp])-digamma(nzaq[tmp])+digamma(aq[tmp]))*(q.[tmp] - p.[tmp]))* p.[tmp] *q.[tmp]* exp(-a)
+  } else {
   temp<-((trigamma(z+exp(-a)*p.)-trigamma(exp(-a)*p.)+trigamma(n-z+exp(-a)*q.)-trigamma(exp(-a)*q.))*exp(-a)*p.*q.+(digamma(z+exp(-a)*p.)-digamma(exp(-a)*p.)-digamma(n-z+exp(-a)*q.)+digamma(exp(-a)*q.))*(q.-p.))*p.*q.*exp(-a)
+  }
+
   t(x)%*%diag(as.numeric(temp))%*%x
 }
 
@@ -91,7 +102,8 @@ alpha.est.prior.kn<-function(given,ini){
   llik<-function(a){
     BRLogLikKn(a,given)
   }
-  opti <- optim(ini$a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
+#  opti <- optim(ini$a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T,lower=-Inf,upper=Inf)
+  opti <- optim(ini$a.ini,function(a){a+llik(a)},control=list(fnscale=-1),method="BFGS",hessian=T)
   list(a.new=opti$par,a.hess=opti$hessian,beta.new=NA,beta.hess=NA)
 }
 
@@ -238,7 +250,7 @@ BR <- function(z, n, X, prior.mean, intercept=T, Alpha=0.95){
   }else{
     post.res<-br.post.est.prior.kn(B.res,given)
   }
-  a.var=1/B.res$inv.info
-  output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, sd.shrinkage=sqrt(B.res$var.B.hat), post.mean=post.res$post.mean, post.sd=post.res$post.sd, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model="br", x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var=1/B.res$inv.info)
+
+  output<-list(sample.mean=given$sample.mean,se=given$n,prior.mean=post.res$prior.mean, shrinkage=B.res$B.hat, sd.shrinkage=sqrt(B.res$var.B.hat), post.mean=post.res$post.mean, post.sd=post.res$post.sd, post.intv.low=post.res$post.intv.low, post.intv.upp=post.res$post.intv.upp, model="br", x=X, beta.new=a.res$beta.new, beta.hess=a.res$beta.hess, intercept=intercept, a.new=a.res$a.new, a.var= -1/a.res$a.hess)
   output
 }

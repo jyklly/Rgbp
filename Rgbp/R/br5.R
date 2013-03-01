@@ -2,9 +2,9 @@ BRInitialValueKn <- function(given) {
   # This function makes the initial values needed to run BRIMM.
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
   if (given$prior.mean == 0) {
-    r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean) -1    
+    r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean)
   } else {
-    r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean) -1
+    r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
   }
   list(r.ini = r.ini, a.ini = -log(r.ini))
 }
@@ -36,30 +36,11 @@ BRInitialValueUn <- function(given) {
     x <- x.ini
   }	
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
-  r.ini <- p0.ini * (1 - p0.ini) / var(y) - 1
+  r.ini <- p0.ini * (1 - p0.ini) / var(y) 
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
-BRLogLikUn <- function(a, b, given, ini) {
-  # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
-  # when the descriptive second level mean is unknown.
-  n <- given$n
-  z <- given$z
-  x <- ini$x
-  p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
-  t0 <- p0.hat * exp(-a)
-  t1 <- (1 - p0.hat) * exp(-a)
-  t2 <- exp(-a)
-  if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
-    print("The components of lgamma should be positive")
-    stop()
-  } else {
-    sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-  }
-}
-
-
-BRAlphaEstKn <- function(given, ini) {
+BRAlphaEstKn2 <- function(given, ini) {
   # Alpha estimation of BRIMM when the second level mean is known
   z <- given$z
   n <- given$n
@@ -70,28 +51,18 @@ BRAlphaEstKn <- function(given, ini) {
 
   BRDerivAlpha <- function(a) {
     # The first and second order derivatives of log likelihood with respect to alpha
-    digamma.z.r.p <- digamma(z + exp(-a) * p0)
-    digamma.r.p <- digamma(exp(-a) * p0)
-    digamma.n.z.r.q <- digamma(n - z + exp(-a) * q0)
-    digamma.r.q <- digamma(exp(-a) * q0)
-    digamma.r <- digamma(exp(-a))
-    digamma.n.r <- digamma(n + exp(-a))
-    trigamma.z.r.p <- trigamma(z + exp(-a) * p0)
-    trigamma.r.p <- trigamma(exp(-a) * p0)
-    trigamma.n.z.r.q <- trigamma(n - z + exp(-a) * q0)
-    trigamma.r.q <- trigamma(exp(-a) * q0)
-    trigamma.r <- trigamma(exp(-a))
-    trigamma.n.r <- trigamma(n + exp(-a))
+    zap <- z + exp(-a) * p0 
+    nzaq <- n - z + exp(-a) * q0
+    ap <- exp(-a) * p0 
+    aq <- exp(-a) * q0
+    al <- exp(-a)
 
-    dig.part2 <- ((digamma.z.r.p - digamma.r.p) * p0 + (digamma.n.z.r.q - digamma.r.q) * q0
-                  + digamma.r - digamma.n.r)
-    trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p0^2 + (trigamma.n.z.r.q - trigamma.r.q) * q0^2
-                   + trigamma.r - trigamma.n.r)
+    const1 <- ((digamma(zap) - digamma(ap)) * p0 + (digamma(nzaq) - digamma(aq)) * q0
+               + digamma(al) - digamma(n + al))
+    const3 <- ((trigamma(zap) - trigamma(ap)) * p0^2 + (trigamma(nzaq) - trigamma(aq)) * q0^2
+               + trigamma(al) - trigamma(n + al))
 
-    const1 <- dig.part2
-    const3 <- trig.part3
-
-    out <- c(1 - exp(-a) * sum(const1), exp(-a * 2) * sum(const3))
+    out <- c(1 - exp(-a) * sum(const1), exp(-a) * (sum(const1) + exp(-a) * sum(const3)))
     out
   }
 
@@ -101,16 +72,14 @@ BRAlphaEstKn <- function(given, ini) {
     out1 <- BRDerivAlpha(a.ini)
     score <- out1[1]
     hessian <- out1[2]
-    updated <- a.ini - score / hessian
-    dif <- a.ini - updated
-    a.ini <- updated
+    dif <- score / hessian
+    a.ini <- a.ini - dif
   }
-
   list(a.new = a.ini, a.var = - 1 / hessian)
 }
 
 
-BRAlphaBetaEstUn <- function(given, ini) {
+BRAlphaBetaEstUn2 <- function(given, ini) {
   # Alpha and Beta estimation of BRIMM when the second level mean is unknown
   z <- given$z
   n <- given$n
@@ -120,128 +89,114 @@ BRAlphaBetaEstUn <- function(given, ini) {
   b.ini <- ini$b.ini
   m <- ncol(x)
 
+  BRLogLikUn <- function(a, b) {
+    # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
+    # when the descriptive second level mean is unknown.
+
+    p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+    t0 <- p0.hat * exp(-a)
+    t1 <- (1 - p0.hat) * exp(-a)
+    t2 <- exp(-a)
+    if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
   BRDerivBeta <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to beta
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
+    p <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
     q <- 1 - p
-    vec <- (digamma(z + exp(-a) * p) - digamma(exp(-a) * p)
-            - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * exp(-a) * p * q
-    diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
-              + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
-             (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
+    zap <- z + exp(-a) * p 
+    nzaq <- n - z + exp(-a) * q
+    ap <- exp(-a) * p 
+    aq <- exp(-a) * q
+    if (any(c(ap, aq)==0)) {
+      vec[(ap == 0 | aq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0)
+      vec[tmp] <- (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) 
+                   + digamma(aq[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      vec <- (digamma(zap) - digamma(ap) - digamma(nzaq) + digamma(aq)) * exp(-a) * p * q
+    }
+    if (any(c(ap, aq)==0)) {
+      diag[(ap == 0 | aq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0)
+      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+                    * exp(-a) * p[tmp] * q[tmp] 
+                    + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
+                    * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+                + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
+               (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
+                - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+    }
     out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
     out
-  }
+  } 
 
   BRDerivBeta2order <- function(a, b) {
     # The first and second order derivatives of log likelihood with respect to beta
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
+    p <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
     q <- 1 - p
-    diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
-              + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
-             (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
-              - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (p - q)) * exp(-a) * p * q
+    zap <- z + exp(-a) * p 
+    nzaq <- n - z + exp(-a) * q
+    ap <- exp(-a) * p 
+    aq <- exp(-a) * q
+    if (any(c(ap, aq)==0)) {
+      diag[(ap == 0 | aq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0)
+      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+                    * exp(-a) * p[tmp] * q[tmp] 
+                    + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
+                    * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+                + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
+               (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
+                - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+    }
     out <- t(x) %*% diag(as.numeric(diag)) %*% x
     out
-  }
- 
-  BRDerivAlpha2order <- function(a, b) {
-    # The first and second order derivatives of log likelihood with respect to alpha
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
-    q <- 1 - p
+  } 
 
-    digamma.z.r.p <- digamma(z + exp(-a) * p)
-    digamma.r.p <- digamma(exp(-a) * p)
-    digamma.n.z.r.q <- digamma(n - z + exp(-a) * q)
-    digamma.r.q <- digamma(exp(-a) * q)
-    digamma.r <- digamma(exp(-a))
-    digamma.n.r <- digamma(n + exp(-a))
-    trigamma.z.r.p <- trigamma(z + exp(-a) * p)
-    trigamma.r.p <- trigamma(exp(-a) * p)
-    trigamma.n.z.r.q <- trigamma(n - z + exp(-a) * q)
-    trigamma.r.q <- trigamma(exp(-a) * q)
-    trigamma.r <- trigamma(exp(-a))
-    trigamma.n.r <- trigamma(n + exp(-a))
-    fourgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 2)
-    fourgamma.r.p <- psigamma(exp(-a) * p, deriv = 2)
-    fourgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 2)
-    fourgamma.r.q <- psigamma(exp(-a) * q, deriv = 2)
-    fifgamma.z.r.p <- psigamma(z + exp(-a) * p, deriv = 3)
-    fifgamma.r.p <- psigamma(exp(-a) * p, deriv = 3)
-    fifgamma.n.z.r.q <- psigamma(n - z + exp(-a) * q, deriv = 3)
-    fifgamma.r.q <- psigamma(exp(-a) * q, deriv = 3)
-
-    dig.part1 <- digamma.z.r.p - digamma.r.p - digamma.n.z.r.q + digamma.r.q
-    trig.part1 <- trigamma.z.r.p - trigamma.r.p + trigamma.n.z.r.q - trigamma.r.q
-    trig.part2 <- (trigamma.z.r.p - trigamma.r.p) * p - (trigamma.n.z.r.q - trigamma.r.q) * q
-    trig.part3 <- ((trigamma.z.r.p - trigamma.r.p) * p^2 + (trigamma.n.z.r.q - trigamma.r.q) * q^2
-                   + trigamma.r - trigamma.n.r)
-    fourg.part1 <- (fourgamma.z.r.p - fourgamma.r.p) * p + (fourgamma.n.z.r.q - fourgamma.r.q) * q
-    fourg.part2 <- (fourgamma.z.r.p - fourgamma.r.p) * p^2 + (fourgamma.n.z.r.q - fourgamma.r.q) * q^2
-    fifg.part1 <- (fifgamma.z.r.p - fifgamma.r.p) * p^2 + (fifgamma.n.z.r.q - fifgamma.r.q) * q^2
-
-    # no const1
-    const2 <- ((2 * trig.part1 + exp(-a) * fourg.part1) * exp(-a) * p^2 * q^2 
-               + (dig.part1 + exp(-a) * trig.part2) * p * q * (p - q))
-    const3 <- trig.part3    
-    const4 <- ((2 * (trig.part1 + 2 * exp(-a) * fourg.part1) + exp(-a * 2) * fifg.part1) * p^2 * q^2
-               + (2 * trig.part2 + exp(-a) * fourg.part2) * p * q * (p - q))
-    sum.diag <- (trig.part1 * exp(-a) * p * q + dig.part1 * (p - q)) * exp(-a) * p * q
-    
-    if (m == 1) {
-      out <- (exp(-a * 2) * (sum(const3) - (sum(const4) / sum(sum.diag) 
-               - (sum(const2) / sum(sum.diag))^2) / 2))
-      out      
-    } else {
-      out <- exp(-a * 2) * (sum(const3) - m / (2 * k) * sum(const4 / sum.diag - (const2 / sum.diag)^2))
-      out
-    }
-  }
-
-  BRDerivAlphaBeta <- function(a, b) {
-    # The cross derivative of log likelihood with respect to alpha and beta
-    p <- exp(x %*% b) / (1 + exp(x %*% b))
-    q <- 1 - p
-    vec <- ((digamma(z + exp(-a) * p) - digamma(exp(-a) * p)
-            - digamma(n - z + exp(-a) *q) + digamma(exp(-a) * q)) * p * q
-           + ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p)) * p
-              - (trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * q) * exp(-a) * p * q)
-    out <- -exp(-a) * t(x) %*% as.vector(vec)
-    out
-  }
-
-  beta.func.of.a <- function(a) {
+  BetaHatSubAlpha <- function(a) {
     dif <- 1
     eps <- 0.0001
-    while (max(abs(dif)) > eps) { 
+    n.iter <- 1
+    while (any(abs(dif) > eps)) { 
       out <- BRDerivBeta(a, b.ini)
       score <- out[, 1]
       hessian <- out[, 2 : (m + 1)]
-      updated <- b.ini - solve(hessian) %*% score
-      dif <- b.ini - updated
-      b.ini <- updated
+      dif <- solve(hessian) %*% score
+      b.ini <- b.ini - dif
+      n.iter <- n.iter + 1
+      if (n.iter > 50) {
+        stop()  
+        print("Alpha estimate does not converge in Newton-Raphson")
+      }
     }
-    b.ini
+    list(beta.new = b.ini, beta.hessian = BRDerivBeta2order(a, b.ini))
   }
 
-  objfun.a <- function(a) {
-    b.dep.a <- beta.func.of.a(a)
-	a + BRLogLikUn(a, b.dep.a, given, ini) - 0.5 * log(det(-BRDerivBeta2order(a, b.dep.a)))
+  MarginalPostAlpha <- function(a) {
+    b.sub.a <-  BetaHatSubAlpha(a)$beta.new
+    a + BRLogLikUn(a, b.sub.a) - 0.5 * log(det(-BRDerivBeta2order(a, b.sub.a)))
   }
+  a.temp <- optim(a.ini, MarginalPostAlpha, control = list(fnscale = -1), method= "L-BFGS-B",
+                  hessian = T,  lower = -Inf, upper = Inf)
+  a.new <- a.temp$par
+  a.hess <- a.temp$hessian
+  b.temp.result <- BetaHatSubAlpha(a.new)
+  b.new <- b.temp.result$beta.new
+  b.hessian <- b.temp.result$beta.hessian
 
-  a.new <- optim(a.ini, objfun.a, control=list(fnscale=-1), method="L-BFGS-B",lower=-Inf,upper=Inf)$par
-  b.new <- beta.func.of.a(a.new)
-
-  out1 <- BRDerivAlpha2order(a.new, b.new)
-  out2 <- BRDerivBeta2order(a.new, b.new)
-  out3 <- BRDerivAlphaBeta(a.new, b.new)
-  hessian <- cbind(c(out1, out3), rbind(as.vector(out3), out2))
-  var.a.b <- -solve(hessian)
   list(a.new = a.new, beta.new = b.new, 
-       a.var = var.a.b[1, 1], beta.var = var.a.b[2 : (m + 1), 2 : (m + 1)])
+       a.var = -1/a.hess, beta.var = -solve(b.hessian))
 }
-
 
 
 ShrinkageEst <- function(a.res, given) {	
@@ -337,7 +292,7 @@ BRPosteriorEstUn <- function(B.res, a.res, ini, given){
        post.intv.low = p.hat.low, post.intv.upp = p.hat.upp, prior.mean = p0.hat)
 }
 
-BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
+BR5 <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95){
   # The main function of PRIMM
   X <- if (missing(X)) {
          X <- NA
@@ -357,9 +312,9 @@ BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
     ini <- BRInitialValueKn(given)
   }
   a.res <- if (is.na(prior.mean)) {
-             BRAlphaBetaEstUn(given, ini)
+             BRAlphaBetaEstUn2(given, ini)
            } else {
-             BRAlphaEstKn(given, ini)
+             BRAlphaEstKn2(given, ini)
            }
   B.res <- ShrinkageEst(a.res, given)
   if (is.na(prior.mean)) {
@@ -372,9 +327,7 @@ BR <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.9167){
                  shrinkage = B.res$B.hat, sd.shrinkage = sqrt(B.res$var.B.hat), 
                  post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
                  post.intv.low = post.res$post.intv.low, post.intv.upp = post.res$post.intv.upp,
-                 model="br", x = X, beta.new = a.res$beta.new, beta.hess = a.res$beta.hess,
-                 intercept = intercept, a.new = a.res$a.new, a.var = 1 / B.res$inv.info)
+                 model="br", x = X, beta.new = a.res$beta.new, beta.var = a.res$beta.var,
+                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var)
   output
 }
-
-

@@ -1,5 +1,5 @@
 
-coverage<-function(x, nsim=100, detail=F,...){
+coverage<-function(x, nsim=30, detail=F,...){
 
   # assign empty space for the result to be input
   coverage<-matrix(NA, nrow=length(x$se), ncol=nsim)
@@ -65,55 +65,7 @@ coverage<-function(x, nsim=100, detail=F,...){
         coverage10.l[,i]<-ifelse(low.l<=sim.p.l[,i] & sim.p.l[,i]<=upp.l,1,0)
         coverage10.u[,i]<-ifelse(low.u<=sim.p.u[,i] & sim.p.u[,i]<=upp.u,1,0)
       },error=function(x){print(c(i,"error"))},warning=function(x){print(c(i,"warning"))})
-    }
-  }else if(x$model=="br2"){
-
-    # 1. initial values
-    betas<-as.vector(x$beta.new)
-    pre.p<-exp(pre.x%*%betas)/(1+exp(pre.x%*%betas))
-    n<-x$se
-    X<-x$x
-    r<-exp(-x$a.new)
-    r.l<-as.numeric(exp(-(x$a.new+qnorm(1-0.0833/2)*sqrt(x$a.var))))
-    r.u<-as.numeric(exp(-(x$a.new-qnorm(1-0.0833/2)*sqrt(x$a.var))))
-
-    # 2. generate p matrix
-    sim.p<-matrix(rbeta(length(pre.p)*nsim, r*pre.p, r*(1-pre.p)), nrow=length(n))
-    sim.p.l<-matrix(rbeta(length(pre.p)*nsim, r.l*pre.p, r.l*(1-pre.p)), nrow=length(n))
-    sim.p.u<-matrix(rbeta(length(pre.p)*nsim, r.u*pre.p, r.u*(1-pre.p)), nrow=length(n))
-
-    # 3. generate z (data) matrix
-    sim.z<-matrix(rbinom(nrow(sim.p)*nsim, n, sim.p), nrow=length(n))
-    sim.z.l<-matrix(rbinom(nrow(sim.p.l)*nsim, n, sim.p.l), nrow=length(n))
-    sim.z.u<-matrix(rbinom(nrow(sim.p.u)*nsim, n, sim.p.u), nrow=length(n))
-
-    # 4. simulation
-    for (i in 1:nsim){
-      tryCatch({
-        out<-if(identical(X,NA)){gbp(sim.z[,i],n,model="br2")}else{gbp(sim.z[,i],n,X,model="br2")}
-        out.l<-if(identical(X,NA)){gbp(sim.z.l[,i],n,model="br2")}else{gbp(sim.z.l[,i],n,X,model="br2")}
-        out.u<-if(identical(X,NA)){gbp(sim.z.u[,i],n,model="br2")}else{gbp(sim.z.u[,i],n,X,model="br2")}
-        a1<-r*pre.p+sim.z[,i]
-        a1.l<-r.l*pre.p+sim.z.l[,i]
-        a1.u<-r.u*pre.p+sim.z.u[,i]
-        a0<-r*(1-pre.p)+n-sim.z[,i]
-        a0.l<-r.l*(1-pre.p)+n-sim.z.l[,i]
-        a0.u<-r.u*(1-pre.p)+n-sim.z.u[,i]
-        low<-out$post.intv.low
-        low.l<-out.l$post.intv.low
-        low.u<-out.u$post.intv.low
-        upp<-out$post.intv.upp
-        upp.l<-out.l$post.intv.upp
-        upp.u<-out.u$post.intv.upp
-        coverage[,i]<-pbeta(upp,a1,a0)-pbeta(low,a1,a0)
-        coverage.l[,i]<-pbeta(upp.l,a1.l,a0.l)-pbeta(low.l,a1.l,a0.l)
-        coverage.u[,i]<-pbeta(upp.u,a1.u,a0.u)-pbeta(low.u,a1.u,a0.u)
-        coverage10[,i]<-ifelse(low<=sim.p[,i] & sim.p[,i]<=upp,1,0)
-        coverage10.l[,i]<-ifelse(low.l<=sim.p.l[,i] & sim.p.l[,i]<=upp.l,1,0)
-        coverage10.u[,i]<-ifelse(low.u<=sim.p.u[,i] & sim.p.u[,i]<=upp.u,1,0)
-      },error=function(x){print(c(i,"error"))},warning=function(x){print(c(i,"warning"))})
-    }
-	
+    }	
   # if model=PRIMM
   }else if(x$model=="pr"){
 	

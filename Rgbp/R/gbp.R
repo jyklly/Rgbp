@@ -1,14 +1,12 @@
 gbp<-function(x, ...) UseMethod("gbp")
 
-gbp.default<-function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T, ...){
-
+gbp.default <- function(x,y,X,mu,model="gr",Alpha=0.95,intercept=T, ...) {
   res<-switch(model, 
               gr=gr(x,y,X,mu,Alpha), 
-              br=bp(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept), 
-              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept),
-              br2=bp2(x,y,X,prior.mean=mu,model="br",Alpha=Alpha,intercept=intercept))
+              br=BR(x,y,X,prior.mean=mu,Alpha=Alpha,intercept=intercept), 
+              pr=bp(x,y,X,prior.mean=mu,model="pr",Alpha=Alpha,intercept=intercept))
   
-  class(res)<-"gbp"	
+  class(res) <- "gbp"	
   res
 }
 
@@ -84,7 +82,7 @@ summary.gbp<-function(object,...){
     }else{
       names(estimate)<-paste("beta", 1:(length(estimate)), sep = "")
     }
-    se<-as.vector(sqrt(diag(solve(-object$beta.hess))))
+    se<-as.vector(sqrt(diag(object$beta.var)))
     z.val<-estimate/se
     p.val<-2*pnorm(-abs(z.val))
     beta.result<-data.frame(estimate,se,z.val,p.val)
