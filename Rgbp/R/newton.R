@@ -64,3 +64,51 @@ par(mfrow = c(2,1))
 plot(l2~alphavec)
 plot(dl2alpha ~ alphavec)
 
+
+
+lambda<-(sqrt(5)-1)/2
+
+golden.section<-function(f, pL, pU, p1, p2, top, result){
+  if (top==26){
+    return(result)
+  }
+  else if(top==1){
+    p1<-pL + (1-lambda)*(pU - pL)
+    p2<-pU - (1-lambda)*(pU - pL)
+  } 
+  result[top,]<-c(p1,p2)
+  if(f(p2) < f(p1)){
+    pU<-p2
+    pL<-pL
+    p2<-p1
+    p1<-pL + (1-lambda)*(pU - pL)
+  } else if (f(p2) > f(p1)){
+    pU <- pU
+    pL <- p1
+    p1 <- p2
+    p2<-pU - (1-lambda)*(pU - pL)
+  }
+  result<-golden.section(f, pL, pU, p1, p2, top=top+1, result)
+  return(result)
+}
+
+f1 <- function(alpha){
+  A = exp(alpha)
+  wv = 1/(V+A)
+  Wm = diag(wv)
+  Sigmam = solve(t(X)%*%Wm%*%X)
+  Betahat <- solve(t(X)%*%Wm%*%X)%*%t(X)%*%Wm%*%y
+  l2 <- log(A) - 1/2*sum(log(V+A)) + 1/2*log(det(Sigmam)) - 1/2*sum(wv*(y-X%*%Betahat)^2)
+  return(l2)
+}
+alphavec
+golden.section(f1,-50, 50, NA, NA, 1, result)
+
+
+alphavec = seq(-5,15,length.out=1000)
+res = lapply(alphavec,f1)
+l2 <- as.numeric(res)
+#dl2alpha <- as.numeric(getattr(res,"dl2alpha"))
+#par(mfrow = c(2,1))
+plot(l2~alphavec)
+#plot(dl2alpha ~ alphavec)
