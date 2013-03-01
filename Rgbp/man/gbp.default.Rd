@@ -59,4 +59,75 @@ Empirical Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Dat
 \author{
 Joseph Kelly and Hyung Suk Tak
 }
+\examples{
+data(baseball)
+data(schools)
+
+z<-baseball$Hits
+n<-baseball$At.Bats
+y<-schools$y
+se<-schools$se
+
+# If we know a prior mean, the second-level mean parameter,
+# GRIMM when prior mean is known
+g <- gbp(y,se,mu=8.75)
+g
+summary(g)
+plot(g)
+
+# BRIMM when prior mean is known
+b <- gbp(z, n, mu=0.265, model="br")
+b
+summary(b)
+plot(b)
+
+# PRIMM when prior mean is known
+p <- gbp(z, n, mu=0.265, model="pr")
+p
+summary(p)
+plot(p)
+
+# If we do not know a prior mean and do not have any covariate,
+# GRIMM without covariate when prior mean is unknown
+g <- gbp(y,se)
+g
+summary(g)
+plot(g)
+
+# BRIMM without covariate when prior mean is unknown
+b <- gbp(z, n, model="br")
+b
+summary(b)
+plot(b)
+
+# PRIMM without covariate when prior mean is unknown
+p <- gbp(z, n, model="pr")
+p
+summary(p)
+plot(p)
+
+# If we have two covariates
+m <- 2
+X <- matrix(rnorm(length(z)*m),nrow=length(z),ncol=m)
+X2 <- matrix(rnorm(length(y)*m),nrow=length(y),ncol=m)
+
+# GRIMM with two covariates
+g2 <- gbp(schools$y, schools$se, X2, model="gr")
+g2
+summary(g2)
+plot(g2)
+
+# BRIMM with two covariates
+b2 <- gbp(z, n, X, model="br")
+b2
+summary(b2)
+plot(b2)
+
+# BRIMM with two covariates
+p2 <- gbp(z, n, X, model="pr")
+p2
+summary(p2)
+plot(p2)
+}
+
 \keyword{methods}
