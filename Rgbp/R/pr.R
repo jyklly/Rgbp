@@ -250,17 +250,13 @@ PRPosteriorEstUn <- function(B.res, a.res, ini, given){
 pr <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95) {
   # The main function of PRIMM
 
-  X <- if (missing(X)) { 
-         X <- NA
-       } else {
-         X <- X
-       }
+  if (missing(X)) { 
+    X <- NA
+  }
 
-  prior.mean <- if (missing(prior.mean)) {
-                  prior.mean <- NA
-                } else {
-                  prior.mean <- prior.mean
-                }
+  if (missing(prior.mean)) {
+    prior.mean <- NA
+  }
 
   given <- list(z = z, n = n, sample.mean = z/n, x.ini = X, 
                 prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
@@ -285,11 +281,12 @@ pr <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95) {
     post.res <- PRPosteriorEstKn(B.res, given)
   }
 
-  output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = post.res$prior.mean,
+  output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean, 
                  shrinkage = B.res$B.hat, sd.shrinkage = sqrt(B.res$var.B.hat), 
                  post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
-                 post.intv.low = post.res$post.intv.low, post.intv.upp = post.res$post.intv.upp,
-                 model = "pr", x = X, beta.new = a.res$beta.new, beta.var = a.res$beta.var,
+                 prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
+                 post.intv.upp = post.res$post.intv.upp, model = "pr", X = X, 
+                 beta.new = a.res$beta.new, beta.var = a.res$beta.var, 
                  intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var)
   output
 }

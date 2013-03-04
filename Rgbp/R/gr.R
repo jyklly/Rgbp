@@ -5,6 +5,9 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
+  if (missing(mu)) {
+    prior.mean <- NA
+  }
   type <- 1
   k <- length(y)
   V <- se^2
@@ -103,7 +106,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",x=X.ini,beta.new=Betahat,beta.var=    Betahatvar,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=    Betahatvar,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
   return(output)
 }
 
