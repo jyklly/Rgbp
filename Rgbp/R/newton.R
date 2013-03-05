@@ -102,9 +102,15 @@ f1 <- function(alpha){
   return(l2)
 }
 alphavec
-system.time(golden.section(f1,4, 8, NA, NA, 1, result,tol=0.0001))
-system.time(NR(derval(8,y,V,X),maxits=500,weight=0.1,tol=0.0001))
-system.time(gr(y,se,X))
+
+a <- b <- c <- 0
+for(i in 1:10){
+  X = matrix(rnorm(length(y)*2),ncol=2)
+  a <- a + system.time(golden.section(f1,-190, 500, NA, NA, 1, result,tol=0.0001))
+  b <- b + system.time(NR(derval(8,y,V,X),maxits=500,weight=0.1,tol=0.0001))
+  c <- c + system.time(gr(y,se,X))
+}
+
 alphavec = seq(-5,15,length.out=1000)
 res = lapply(alphavec,f1)
 l2 <- as.numeric(res)
