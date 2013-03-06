@@ -30,23 +30,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
     hess<-NA
   }else{
     r <- dim(X)[2]
-    ## chang<-1
-    ## count<-0
-    ## mu <- rep(mean(y),length(y))
-    ## while(chang > eps){
-    ##   est<-optim(log(mean(V)),allk,hessian=TRUE)
-    ##   Ahat<-exp(est$par)
-    ##   Bhat<-V/(V+Ahat)
-    ##   DVAhat<-diag(V+Ahat)
-    ##   Betahat<-solve(t(X)%*%solve(DVAhat)%*%X)%*%t(X)%*%solve(DVAhat)%*%y
-    ##   munew<-X%*%Betahat
-    ##   chang<-max(abs((mu-munew)/mu))
-    ##   mu<-munew
-    ##   count<-count+1
-    ## }
-    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
-    print(est$hessian)
-    print(derval(est$par[1],y,V,X))
+    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",gr = derval, hessian=T)
     est.var <- -1/est$hessian
     Ahat <- exp(est$par[1])
   }
@@ -149,7 +133,8 @@ gr.cp.to.dp <- function (param) {
   dp
 }
 
-derval = function(alpha,y,V,X){
+
+derval <- function(alpha){
   
   A = exp(alpha)
   wv = 1/(V+A)
@@ -168,5 +153,12 @@ derval = function(alpha,y,V,X){
   dl2alpha = dlralphaBEVAL + A*sum(wv*(y-X%*%Betahat)*X%*%dbetahatA)
   dl2alpha2 = dlralphaBEVAL2 + A*sum(wv^2*V*(y-X%*%Betahat)*X%*%dbetahatA) - A^2*sum(wv*(X%*%dbetahatA)^2) +
     A^2*sum(wv*(y-X%*%Betahat)*X%*%dbetahatA2) - A^2*sum(wv^2*(y-X%*%Betahat)*X%*%dbetahatA)
-  return(list(alpha=alpha,l2=l2,dl2alpha=dl2alpha,dl2alpha2=dl2alpha2))
+
+  ## return(list(alpha=alpha,l2=l2,dl2alpha=dl2alpha,dl2alpha2=dl2alpha2))
+  return(dl2alpha=dl2alpha)
+}
+
+
+tr <- function(M){
+  sum(diag(M))
 }
