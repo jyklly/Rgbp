@@ -1,5 +1,5 @@
 
-coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
+coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
 
   # Rao-Blackwellized criterion
   coverageRB <- matrix(NA, nr = length(x$se), nc = nsim)
@@ -7,7 +7,7 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
   coverage10 <- matrix(NA, nr = length(x$se), nc = nsim)
 
-  if (missing(r) & missing(beta) & missing(prior.mean)) {
+  if (missing(y)) {
     only.gbp.result <- T
   } else {
     only.gbp.result <- F
@@ -47,7 +47,7 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
                  } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
                    gbp(sim.z[, i], n, X, model = "br")
                  } else if (!is.na(x$prior.mean)) {
-                   gbp(sim.z[, i], n, mu = p0, model = "br")
+                   gbp(sim.z[, i], n, mu0 = p0, model = "br")
                  }
 
           a1 <- r * p0 + sim.z[, i]
@@ -65,24 +65,24 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
 
     } else if (!only.gbp.result) {
       # 1. initial values
-      if (missing(r)) {
-        print("(r, beta) or (r, prior,mean) should be designated")
+      if (missing(y)) {
+        print("(r, beta, X) or (r, mu0) should be designated")
         stop()
-      } else if (missing(beta)) {
-        p0 <- prior.mean
-      } else if (missing(prior.mean) & identical(x$X, NA)) {
+      } else if (!missing(mu0)) {
+        p0 <- mu0
+      } else if (!missing(beta) & missing(X)) {
         temp.x <- as.matrix(rep(1, length(x$se)))
         betas <- as.vector(beta)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-      } else if (missing(prior.mean) & !identical(x$X, NA)) { 
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
+      } else if (!missing(beta) & !missing(X)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
         betas <- as.vector(beta)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-        X <- x$X
       }
   
       n <- x$se
-
+      r <- y
+ 
       # 2. generate p matrix
       sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nr = length(n))
 
@@ -92,12 +92,12 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (missing(prior.mean) & identical(x$X, NA)) {
+          out <- if (!missing(beta) & missing(X)) {
                    gbp(sim.z[, i], n, model = "br")
-                 } else if (missing(prior.mean) & !identical(x$X, NA)) {
+                 } else if (!missing(beta) & !missing(X)) {
                    gbp(sim.z[, i], n, X, model = "br")
-                 } else if (missing(beta)) {
-                   gbp(sim.z[, i], n, mu = p0, model = "br")
+                 } else if (!missing(mu0)) {
+                   gbp(sim.z[, i], n, mu0 = mu0, model = "br")
                  }
           a1 <- r * p0 + sim.z[, i]
           a0 <- r * (1 - p0) + n - sim.z[, i]
@@ -134,7 +134,7 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
       n <- x$se
       r <- exp(-x$a.new)
 
-      # 2. generate p matrix
+      # 2. generate lambda matrix
       sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nr = length(n))
 
       # 3. generate z (data) matrix
@@ -148,7 +148,7 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
                  } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
                    gbp(sim.z[, i], n, X, model = "pr")
                  } else if (!is.na(x$prior.mean)) {
-                   gbp(sim.z[, i], n, mu = lambda0, model = "pr")
+                   gbp(sim.z[, i], n, mu0 = lambda0, model = "pr")
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -167,25 +167,26 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
     } else if (!only.gbp.result) {
  
      # 1. initial values
-      if (missing(r)) {
-        print("(r, beta) or (r, prior,mean) should be designated")
+      if (missing(y)) {
+        print("(r, beta, X) or (r, mu0) should be designated")
         stop()
       } else if (missing(beta)) {
-        lambda0 <- prior.mean
-      } else if (missing(prior.mean) & identical(x$X, NA)) {
+        lambda0 <- mu0
+      } else if (missing(mu0) & missing(X)) {
         temp.x <- as.matrix(rep(1, length(x$se)))
         betas <- as.vector(beta)
         lambda0 <- exp(temp.x %*% betas)
-      } else if (missing(prior.mean) & !identical(x$X, NA)) { 
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
+      } else if (missing(mu0) & !missing(X)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
         betas <- as.vector(beta)
         lambda0 <- exp(temp.x %*% betas)
         X <- x$X
       }
 
       n <- x$se
+      r <- y
 
-      # 2. generate p matrix
+      # 2. generate lambda matrix
       sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nr = length(n))
 
       # 3. generate z (data) matrix
@@ -194,12 +195,12 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (missing(prior.mean) & identical(x$X, NA)) {
+          out <- if (missing(mu0) & missing(X)) {
                    gbp(sim.z[, i], n, model = "pr")
-                 } else if (missing(prior.mean) & !identical(x$X, NA)) {
+                 } else if (missing(mu0) & !missing(X)) {
                    gbp(sim.z[, i], n, X, model = "pr")
                  } else if (missing(beta)) {
-                   gbp(sim.z[, i], n, mu = lambda0, model = "pr")
+                   gbp(sim.z[, i], n, mu0 = mu0, model = "pr")
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -217,36 +218,102 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
     }
 
   } else if (x$model == "gr") {	
+
+     if (only.gbp.result) {
+      # 1. initial values
+      if (is.na(x$prior.mean) & identical(x$X, NA)) {
+        temp.x <- as.matrix(rep(1, length(x$se)))
+        betas <- as.vector(x$beta.new)
+        mu0 <- temp.x %*% betas
+      } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
+        betas <- as.vector(x$beta.new)
+        mu0 <- temp.x %*% betas
+        X <- x$X
+      } else if (!is.na(x$prior.mean)) {
+        mu0 <- x$prior.mean
+      }
+  
+      se <- x$se
+      A <- exp(x$a.new)
+
+      # 2. generate mu matrix
+      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nr = length(se))
+
+      # 3. generate y (data) matrix
+      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nr = length(se))
+
+      # 4. simulation
+      for (i in 1 : nsim) {
+        tryCatch({
+          out <- if (is.na(x$prior.mean) & identical(x$X, NA)) {
+                   gbp(sim.y[, i], se)
+                 } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+                   gbp(sim.y[, i], se, X)
+                 } else if (!is.na(x$prior.mean)) {
+                   gbp(sim.y[, i], se, mu0 = mu0)
+                 }
+          postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
+          postsd <- sqrt(se^2 * (A / (se^2 + A)))
+          low <- out$post.intv.low
+          upp <- out$post.intv.upp
+          coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
+          coverage10[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+        }, error = function(x) {
+                     print(c(i,"error"))
+                   }, warning = function(x) {
+                                  print(c(i, "warning"))
+                                })
+      }	
+
+    } else if (!only.gbp.result) {
+      # 1. initial values
+      if (missing(y)) {
+        print("(A, beta, X) or (A, mu0) should be designated")
+        stop()
+      } else if (!missing(mu0)) {
+        mu0 <- mu0
+      } else if (!missing(beta) & missing(X)) {
+        temp.x <- as.matrix(rep(1, length(x$se)))
+        betas <- as.vector(beta)
+        mu0 <- temp.x %*% betas
+      } else if (!missing(beta) & !missing(X)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
+        betas <- as.vector(beta)
+        mu0 <- temp.x %*% betas
+      }
+  
+      se <- x$se
+      A <- y
  
-    # 1. initial values
-    pre.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
-    betas <- x$beta.new
-    pre.mu <- as.matrix(pre.x) %*% as.vector(betas)
-    se <- x$se
-    X <- x$X
-    A <- exp(x$a.new)
+      # 2. generate mu matrix
+      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nr = length(se))
 
-    # 2. generate mu matrix
-    sim.mu <- matrix(rnorm(length(pre.mu) * nsim, pre.mu, sqrt(A)), nr = length(se))
+      # 3. generate y (data) matrix
+      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nr = length(se))
 
-    # 3. generate y (data) matrix
-    sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nr = length(se))
-
-    # 4. simulation
-    for (i in 1 : nsim) {
-      tryCatch({
-        out <- if(identical(x$x, NA)){gbp(sim.y[, i], se)} else {gbp(sim.y[, i], se, X)}
-        low <- out$post.intv.low
-        upp <- out$post.intv.upp
-        postmean <- pre.mu * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
-        postsd <- sqrt(se^2 * (A / (se^2 + A)))
-        coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
-        coverage10[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
-      }, error = function(x) {
-                   print(c(i, "error"))
-                 }, warning = function(x) {
-                                print(c(i, "warning"))
-                              })
+      # 4. simulation
+      for (i in 1 : nsim) {
+        tryCatch({
+          out <- if (!missing(beta) & missing(X)) {
+                   gbp(sim.y[, i], se)
+                 } else if (!missing(beta) & !missing(X)) {
+                   gbp(sim.y[, i], se, X)
+                 } else if (!missing(mu0)) {
+                   gbp(sim.y[, i], se, mu0 = mu0)
+                 }
+          postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
+          postsd <- sqrt(se^2 * (A / (se^2 + A)))
+          low <- out$post.intv.low
+          upp <- out$post.intv.upp
+          coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
+          coverage10[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+        }, error = function(x) {
+                     print(c(i,"error"))
+                   }, warning = function(x) {
+                                  print(c(i, "warning"))
+                                })
+      }	
     }
   }
 
@@ -267,16 +334,18 @@ coverage <- function(x, r, beta, prior.mean, nsim = 10, ...) {
   abline(h = 0.95)
   points(1 : length(x$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
   if (x$model == "gr") {
-    legend("bottomleft", c(paste("A =", round(A, 2)), 
+    legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                           "Blue Dotted Line: (Unbiased)",
+                           paste("A =", round(A, 2)), 
                            paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
                            paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")"), 
-                           "Rao-Blackwellized (Unbiased)"))
+                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
   } else {
-    legend("bottomleft", c(paste("r =", round(r, 2)), 
+    legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                           "Blue Dotted Line: (Unbiased)",
+                           paste("r =", round(r, 2)), 
                            paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")"),
-                           "Rao-Blackwellized (Unbiased)"))
+                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
   }
 
   # print output

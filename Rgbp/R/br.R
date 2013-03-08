@@ -208,7 +208,7 @@ BRAlphaBetaEstUn <- function(given, ini) {
 }
 
 
-ShrinkageEst <- function(a.res, given) {	
+BRShrinkageEst <- function(a.res, given) {	
   # This function calculates the shrinkage-related estimates
 
   a.new <- a.res$a.new
@@ -336,7 +336,7 @@ br <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95){
              BRAlphaEstKn(given, ini)
            }
 
-  B.res <- ShrinkageEst(a.res, given)
+  B.res <- BRShrinkageEst(a.res, given)
 
   if (is.na(prior.mean)) {
     post.res <- BRPosteriorEstUn(B.res, a.res, ini, given)

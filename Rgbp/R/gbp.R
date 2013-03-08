@@ -1,10 +1,10 @@
 gbp <- function(x, ...) UseMethod("gbp")
 
-gbp.default <- function(x, y, covariates, mu, model = "gr", intercept = T, Alpha = 0.95, ...) {
+gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...) {
   res <- switch(model, 
-                gr = gr(x, y, X = covariates, mu, Alpha), 
-                br = br(x, y, X = covariates, prior.mean = mu, intercept = intercept, Alpha = Alpha), 
-                pr = pr(x, y, X = covariates, prior.mean = mu, intercept = intercept, Alpha = Alpha))
+                gr = gr(x, y, X = covariates, mu = mu0, Alpha = Alpha, intercept = intercept), 
+                br = br(x, y, X = covariates, prior.mean = mu0, intercept = intercept, Alpha = Alpha), 
+                pr = pr(x, y, X = covariates, prior.mean = mu0, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
   res
@@ -119,9 +119,15 @@ summary.gbp <- function(object, ...) {
       summary.table <- temp[summary.index, ]
       summary.table <- summary.table[order(summary.table$sample.mean), ]
       number.of.medians <- dim(summary.table)[1] - 2
-      row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                    paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
-                                    "Group w/ max(sample.mean)")
+      if (number.of.medians == 1) {
+        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
+                                      "Group w/ median(sample.mean)", 
+                                      "Group w/ max(sample.mean)")
+      } else {
+        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
+                                     paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
+                                     "Group w/ max(sample.mean)")
+      }
     } else { 
       summary.index <- (x$sample.mean == min(x$sample.mean) | 
                         x$sample.mean == max(x$sample.mean) | 
@@ -130,9 +136,15 @@ summary.gbp <- function(object, ...) {
       summary.table <- temp[summary.index, ]
       summary.table <- summary.table[order(summary.table$sample.mean), ]
       number.of.medians <- dim(summary.table)[1] - 2
-      row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                    paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
-                                    "Group w/ max(sample.mean)")
+      if (number.of.medians == 1) {
+        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
+                                      "Group w/ median(sample.mean)", 
+                                      "Group w/ max(sample.mean)")
+      } else {
+        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
+                                     paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
+                                     "Group w/ max(sample.mean)")
+      }
     }
 
   } else { # if n is different from each group
@@ -141,18 +153,43 @@ summary.gbp <- function(object, ...) {
       summary.table <- temp[summary.index, ]
       summary.table <- summary.table[order(summary.table[, 2]), ]
       number.of.medians <- dim(summary.table)[1] - 2
-      row.names(summary.table) <- c("Group w/ min(n)", 
-                                    paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
-                                    "Group w/ max(n)")
+      if (x$model == "gr") {
+        if (number.of.medians == 1) {
+          row.names(summary.table) <- c("Group w/ min(se)", 
+                                        "Group w/ median(se)", 
+                                        "Group w/ max(se)")
+        } else {
+          row.names(summary.table) <- c("Group w/ min(se)", 
+                                       paste("Group w/ median(se)", 1 : number.of.medians, sep = ""),
+                                       "Group w/ max(se)")
+        }
+      } else {
+        if (number.of.medians == 1) {
+          row.names(summary.table) <- c("Group w/ min(n)", 
+                                        "Group w/ median(n)", 
+                                        "Group w/ max(n)")
+        } else {
+          row.names(summary.table) <- c("Group w/ min(n)", 
+                                       paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
+                                       "Group w/ max(n)")
+        }
+      }
+
     } else { 
       summary.index <- (x$se == min(x$se) | x$se == max(x$se) | x$se == sort(x$se)[length(x$se) / 2] |
                         x$se == sort(x$se)[length(x$se) / 2 + 1])
       summary.table <- temp[summary.index, ]
       summary.table <- summary.table[order(summary.table[, 2]), ]
       number.of.medians <- dim(summary.table)[1] - 2
-      row.names(summary.table) <- c("Group w/ min(n)", 
-                                    paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
-                                    "Group w/ max(n)")
+      if (number.of.medians == 1) {
+        row.names(summary.table) <- c("Group w/ min(n)", 
+                                      "Group w/ median(n)", 
+                                      "Group w/ max(n)")
+      } else {
+        row.names(summary.table) <- c("Group w/ min(n)", 
+                                     paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
+                                     "Group w/ max(n)")
+      }
     }
   }
 

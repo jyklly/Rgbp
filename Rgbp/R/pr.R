@@ -181,7 +181,7 @@ PRAlphaBetaEstUn <- function(given, ini) {
        a.var = -1 / a.hess, beta.var = -solve(b.hessian))
 }
 
-ShrinkageEst <- function(a.res, given) {	
+PRShrinkageEst <- function(a.res, given) {	
   # This function calculates the shrinkage-related estimates
 
   a.new <- a.res$a.new
@@ -273,7 +273,7 @@ pr <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95) {
              PRAlphaEstKn(given, ini)
            }
 
-  B.res <- ShrinkageEst(a.res, given)
+  B.res <- PRShrinkageEst(a.res, given)
 
   if (is.na(prior.mean)) {
     post.res <- PRPosteriorEstUn(B.res, a.res, ini, given)
