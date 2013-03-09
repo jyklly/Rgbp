@@ -23,6 +23,8 @@
 \alias{derval}
 \alias{tr}
 
+\alias{newton}
+
 \title{Internal \code{gbp} functions}
 \description{Internal \code{gbp} functions}
 \details{These are not to be called by the user.}
