@@ -5,14 +5,12 @@ attach(schools)
 
 
 
-tr <- function(M){
-  sum(diag(M))
-}
 
 V = se^2
 X = matrix(rnorm(length(y)*2),ncol=2)
 source("gr.R")
-a <- gr(y,se,X)
+b <- gr(y,se,X)
+a
 
 derval = function(alpha,y,V,X){
   

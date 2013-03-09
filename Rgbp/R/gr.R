@@ -27,7 +27,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
     hess<-NA
   }else{
     r <- dim(X)[2]
-    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",gr = derval, hessian=T)
+    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",gr = function(x){derval(x,y,V,X)}, hessian=T)
     est.var <- -1/est$hessian
     Ahat <- exp(est$par[1])
   }
@@ -132,7 +132,7 @@ gr.cp.to.dp <- function (param) {
 }
 
 
-derval <- function(alpha){
+derval <- function(alpha,y,V,X){
   
   A = exp(alpha)
   wv = 1/(V+A)
