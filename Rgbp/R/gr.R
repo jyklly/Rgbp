@@ -5,8 +5,10 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
-  if (missing(mu)) {
+  if (!muknown) {
     prior.mean <- NA
+  } else {
+	prior.mean <- mu
   }
   type <- 1
   k <- length(y)
@@ -27,7 +29,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
     est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par)
     Betahat<-NA
-    hess<-NA
+    Betahatvar<-NA
   }else{
     r <- dim(X)[2]
     est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",gr = function(x){derval(x,y,V,X)}, hessian=T)
@@ -90,7 +92,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=    Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1])
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1])
   return(output)
 }
 

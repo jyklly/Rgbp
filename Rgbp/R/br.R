@@ -1,4 +1,4 @@
-BRInitialValueKn <- function(given) {
+BRInitialValue2ndLevelMeanKnown <- function(given) {
   # This function makes the initial values needed to run BRIMM.
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
 
@@ -11,7 +11,7 @@ BRInitialValueKn <- function(given) {
   list(r.ini = r.ini, a.ini = -log(r.ini))
 }
 
-BRInitialValueUn <- function(given) {
+BRInitialValue2ndLevelMeanUnknown <- function(given) {
   # This function makes the initial values needed to run BRIMM.
   # "Un" means the descriptive second level mean (mean of Beta distribution) is unknown.
 
@@ -46,7 +46,7 @@ BRInitialValueUn <- function(given) {
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
-BRAlphaEstKn <- function(given, ini) {
+BRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
   # Alpha estimation of BRIMM when the second level mean is known
 
   z <- given$z
@@ -86,7 +86,7 @@ BRAlphaEstKn <- function(given, ini) {
   list(a.new = a.ini, a.var = - 1 / hessian)
 }
 
-BRAlphaBetaEstUn <- function(given, ini) {
+BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
   # Alpha and Beta estimation of BRIMM when the second level mean is unknown
 
   z <- given$z
@@ -227,7 +227,7 @@ BRShrinkageEst <- function(a.res, given) {
   list(B.hat = B.hat, inv.info = inv.info, var.B.hat = var.B.hat, central3.B = central3.B)
 }
 
-BRPosteriorEstKn <- function(B.res, given) {
+BRPosteriorEst2ndLevelMeanKnown <- function(B.res, given) {
   # This function calculates posterior-related estimates
   # when the descriptive second level mean is known.
 
@@ -257,7 +257,7 @@ BRPosteriorEstKn <- function(B.res, given) {
        post.intv.low = p.hat.low, post.intv.upp = p.hat.upp, prior.mean = p0)
 }
 
-BRPosteriorEstUn <- function(B.res, a.res, ini, given){
+BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
   # This function calculates posterior-related estimates
   # when the descriptive second level mean is unknown.
 
@@ -325,23 +325,23 @@ br <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95){
                 prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
 
   if (is.na(prior.mean)) {
-    ini <- BRInitialValueUn(given)
+    ini <- BRInitialValue2ndLevelMeanUnknown(given)
   } else {
-    ini <- BRInitialValueKn(given)
+    ini <- BRInitialValue2ndLevelMeanKnown(given)
   }
 
   a.res <- if (is.na(prior.mean)) {
-             BRAlphaBetaEstUn(given, ini)
+             BRAlphaBetaEst2ndLevelMeanUnknown(given, ini)
            } else {
-             BRAlphaEstKn(given, ini)
+             BRAlphaEst2ndLevelMeanKnown(given, ini)
            }
 
   B.res <- BRShrinkageEst(a.res, given)
 
   if (is.na(prior.mean)) {
-    post.res <- BRPosteriorEstUn(B.res, a.res, ini, given)
+    post.res <- BRPosteriorEst2ndLevelMeanUnknown(B.res, a.res, ini, given)
   } else {
-    post.res <- BRPosteriorEstKn(B.res,given)
+    post.res <- BRPosteriorEst2ndLevelMeanKnown(B.res,given)
   }
 
   output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,

@@ -2,10 +2,10 @@
 coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
 
   # Rao-Blackwellized criterion
-  coverageRB <- matrix(NA, nr = length(x$se), nc = nsim)
+  coverageRB <- matrix(NA, nrow = length(x$se), ncol = nsim)
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
-  coverage10 <- matrix(NA, nr = length(x$se), nc = nsim)
+  coverage10 <- matrix(NA, nrow = length(x$se), ncol = nsim)
 
   if (missing(y)) {
     only.gbp.result <- T
@@ -34,10 +34,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       r <- exp(-x$a.new)
 
       # 2. generate p matrix
-      sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nr = length(n))
+      sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nrow = length(n))
 
       # 3. generate z (data) matrix
-      sim.z <- matrix(rbinom(nrow(sim.p) * nsim, n, sim.p), nr = length(n))
+      sim.z <- matrix(rbinom(nrow(sim.p) * nsim, n, sim.p), nrow = length(n))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -84,10 +84,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       r <- y
  
       # 2. generate p matrix
-      sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nr = length(n))
+      sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nrow = length(n))
 
       # 3. generate z (data) matrix
-      sim.z <- matrix(rbinom(nrow(sim.p) * nsim, n, sim.p), nr = length(n))
+      sim.z <- matrix(rbinom(nrow(sim.p) * nsim, n, sim.p), nrow = length(n))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -135,10 +135,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       r <- exp(-x$a.new)
 
       # 2. generate lambda matrix
-      sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nr = length(n))
+      sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nrow = length(n))
 
       # 3. generate z (data) matrix
-      sim.z <- matrix(rpois(nrow(sim.lambda) * nsim, n * sim.lambda), nr = length(n))
+      sim.z <- matrix(rpois(nrow(sim.lambda) * nsim, n * sim.lambda), nrow = length(n))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -187,10 +187,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       r <- y
 
       # 2. generate lambda matrix
-      sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nr = length(n))
+      sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nrow = length(n))
 
       # 3. generate z (data) matrix
-      sim.z <- matrix(rpois(nrow(sim.lambda) * nsim, n * sim.lambda), nr = length(n))
+      sim.z <- matrix(rpois(nrow(sim.lambda) * nsim, n * sim.lambda), nrow = length(n))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -238,10 +238,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       A <- exp(x$a.new)
 
       # 2. generate mu matrix
-      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nr = length(se))
+      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nrow = length(se))
 
       # 3. generate y (data) matrix
-      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nr = length(se))
+      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nrow = length(se))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -287,10 +287,10 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
       A <- y
  
       # 2. generate mu matrix
-      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nr = length(se))
+      sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nrow = length(se))
 
       # 3. generate y (data) matrix
-      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nr = length(se))
+      sim.y <- matrix(rnorm(nrow(sim.mu) * nsim, sim.mu, se), nrow = length(se))
 
       # 4. simulation
       for (i in 1 : nsim) {
@@ -333,20 +333,38 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
        lwd = 3, lty = 1)
   abline(h = 0.95)
   points(1 : length(x$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
-  if (x$model == "gr") {
-    legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                           "Blue Dotted Line: (Unbiased)",
-                           paste("A =", round(A, 2)), 
-                           paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                           paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
-  } else {
-    legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                           "Blue Dotted Line: (Unbiased)",
-                           paste("r =", round(r, 2)), 
-                           paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+  if (is.na(x$prior.mean)){
+    if (x$model == "gr") {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("A =", round(A, 2)), 
+                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    } else {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("r =", round(r, 2)), 
+                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    }
+  } else {  # if prior mean is assigned
+    if (x$model == "gr") {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("A =", round(A, 2)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    } else {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("r =", round(r, 2)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    }
   }
+
 
   # print output
   output <- list(coverageRB = result, coverage10 = result2, 

@@ -17,7 +17,7 @@ This function returns the resulting object of "gbp.summary" function}
 }
 }
 \value{
-   \item{Main summary}{minimum, 1st quantile, median, mean, 3rd quantile, maximum values of sample mean, se (or n), prior mean, shrinkage, standard error of shrinkage, posterior estimates(lower and upper bounds, mean and standard deviation)
+   \item{Main summary}{The estimation results for units with minimum, median, and maximum values of se or n (if all se's or n's are the same, then units with minimum, median, and maximum values of sample mean) and overall mean of the estimation result
 }
   \item{Second-level Variance Component Estimation Summary}{we estimate alpha and transform it into r:
     \describe{
@@ -27,7 +27,7 @@ This function returns the resulting object of "gbp.summary" function}
 	\item{upp.r.hat}{(or upp.A.hat if Grimm) transformed upper bound of 95.835\% posterior interval of r}
     }
 }
-  \item{Regression Summary}{if there is any covariate:
+  \item{Regression Summary}{if we did not assign a known prior mean (2nd level mean):
     \describe{
     \item{estimate}{coefficient estimates}
     \item{se}{standard error of estimates}
@@ -37,7 +37,7 @@ This function returns the resulting object of "gbp.summary" function}
 }
 }  
 \author{
-Hyung Suk Tak
+Hyungsuk Tak
 }
 
 \keyword{methods}
