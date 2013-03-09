@@ -57,6 +57,8 @@ print.gbp <- function(x, ...) {
                          post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
   }
+  temp.mean <- colMeans(temp)
+  temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "== Mean =="))
 
   cat("Summary for whole observations:\n")
   cat("\n")
@@ -111,13 +113,15 @@ summary.gbp <- function(object, ...) {
                          post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
   }
+
+
+
   if (min(x$se) == max(x$se)) {
+
+    temp2 <- temp[order(temp[, 1]), ]
+
     if (length(x$se) %% 2) {
-      summary.index <- (x$sample.mean == min(x$sample.mean) | 
-                        x$sample.mean == max(x$sample.mean) | 
-                        x$sample.mean == sort(x$sample.mean)[(length(x$se) + 1) / 2])
-      summary.table <- temp[summary.index, ]
-      summary.table <- summary.table[order(summary.table$sample.mean), ]
+      summary.table <- temp2[c(1, (dim(temp2)[1] + 1) / 2, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
         row.names(summary.table) <- c("Group w/ min(sample.mean)", 
@@ -129,12 +133,7 @@ summary.gbp <- function(object, ...) {
                                      "Group w/ max(sample.mean)")
       }
     } else { 
-      summary.index <- (x$sample.mean == min(x$sample.mean) | 
-                        x$sample.mean == max(x$sample.mean) | 
-                        x$sample.mean == sort(x$sample.mean)[length(x$se) / 2] |
-                        x$sample.mean == sort(x$sample.mean)[length(x$se) / 2 + 1])
-      summary.table <- temp[summary.index, ]
-      summary.table <- summary.table[order(summary.table$sample.mean), ]
+      summary.table <- temp2[c(1, dim(temp2)[1] / 2, dim(temp2)[1] / 2 + 1, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
         row.names(summary.table) <- c("Group w/ min(sample.mean)", 
@@ -148,10 +147,11 @@ summary.gbp <- function(object, ...) {
     }
 
   } else { # if n is different from each group
+
+    temp2 <- temp[order(temp[, 2], temp[, 1]), ]
+
     if (length(x$se) %% 2) {
-      summary.index <- (x$se == min(x$se) | x$se == max(x$se) | x$se == sort(x$se)[(length(x$se) + 1) / 2])
-      summary.table <- temp[summary.index, ]
-      summary.table <- summary.table[order(summary.table[, 2]), ]
+      summary.table <- temp2[c(1, (dim(temp2)[1] + 1) / 2, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (x$model == "gr") {
         if (number.of.medians == 1) {
@@ -176,10 +176,7 @@ summary.gbp <- function(object, ...) {
       }
 
     } else { 
-      summary.index <- (x$se == min(x$se) | x$se == max(x$se) | x$se == sort(x$se)[length(x$se) / 2] |
-                        x$se == sort(x$se)[length(x$se) / 2 + 1])
-      summary.table <- temp[summary.index, ]
-      summary.table <- summary.table[order(summary.table[, 2]), ]
+      summary.table <- temp2[c(1, dim(temp2)[1] / 2, dim(temp2)[1] / 2 + 1, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
         row.names(summary.table) <- c("Group w/ min(n)", 
@@ -192,6 +189,10 @@ summary.gbp <- function(object, ...) {
       }
     }
   }
+
+  temp.mean <- colMeans(temp)
+  summary.table <- data.frame(rbind(summary.table, temp.mean), 
+                              row.names = c(rownames(summary.table), "Means over all groups"))
 
   alpha.hat <- x$a.new
   alpha.hat.sd <- sqrt(x$a.var)
