@@ -21,7 +21,7 @@ Anything else
   \item{sample.mean}{sample mean}
   \item{se}{standard error if model="gr"}
   \item{n}{number of total trials if model="br" or "pr"}
-  \item{x}{if we put covariates}
+  \item{X}{if we put covariates}
   \item{prior.mean}{prior mean}
   \item{shrinkage}{shrinkage estimates}
   \item{se.shrinkage}{standard error of shrinkage estimate}
@@ -31,7 +31,7 @@ Anything else
   \item{post.se}{square root of posterior variance}
 }
 \author{
-Hyung Suk Tak
+Hyungsuk Tak
 }
 
 \keyword{methods}

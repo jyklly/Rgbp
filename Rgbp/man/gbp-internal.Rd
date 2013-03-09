@@ -1,26 +1,27 @@
 \name{gbp-internal}
-\alias{alpha.est.prior.kn}
-\alias{alpha.est.prior.un}
-\alias{bp}
-\alias{br.ini.kn}
-\alias{br.ini.un}
-\alias{br.llik.prior.kn}
-\alias{br.llik.prior.un}
-\alias{br.deriv2b}
-\alias{pr.deriv2b}
-\alias{br.post.est.prior.kn}
-\alias{br.post.est.prior.un}
-\alias{gr.cp.to.dp}
+\alias{BRInitialValue2ndLevelMeanKnown}
+\alias{BRInitialValue2ndLevelMeanUnknown}
+\alias{BRAlphaEst2ndLevelMeanKnown}
+\alias{BRAlphaBetaEst2ndLevelMeanUnknown}
+\alias{BRShrinkageEst}
+\alias{BRPosteriorEst2ndLevelMeanKnown}
+\alias{BRPosteriorEst2ndLevelMeanUnknown}
+\alias{br}
+
+\alias{PRInitialValue2ndLevelMeanKnown}
+\alias{PRInitialValue2ndLevelMeanUnknown}
+\alias{PRAlphaEst2ndLevelMeanKnown}
+\alias{PRAlphaBetaEst2ndLevelMeanUnknown}
+\alias{PRShrinkageEst}
+\alias{PRPosteriorEst2ndLevelMeanKnown}
+\alias{PRPosteriorEst2ndLevelMeanUnknown}
+\alias{pr}
+
 \alias{gr.ll.muknown}
 \alias{gr.ll.muunknown}
-\alias{gr}
-\alias{pr.ini.kn}
-\alias{pr.ini.un}
-\alias{pr.llik.prior.kn}
-\alias{pr.llik.prior.un}
-\alias{shrink.est}
-\alias{pr.post.est.prior.kn}
-\alias{pr.post.est.prior.un}
+\alias{gr.cp.to.dp}
+\alias{derval}
+\alias{tr}
 
 \title{Internal \code{gbp} functions}
 \description{Internal \code{gbp} functions}

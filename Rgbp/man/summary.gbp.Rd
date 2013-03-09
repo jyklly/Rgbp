@@ -24,6 +24,6 @@ Anything else
   \item{regression.summary}{summary of the regression, if any}
 }
 \author{
-Hyung Suk Tak
+Hyungsuk Tak
 }
 \keyword{method}

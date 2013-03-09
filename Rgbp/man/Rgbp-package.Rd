@@ -3,10 +3,10 @@
 \alias{Rgbp}
 \docType{package}
 \title{
-  Empirical Bayesian Hierarchical modeling
+Bayesian Hierarchical Modeling with Stein's and Generalized Stein's Harmonic Priors
 }
 \description{
-  Empirical Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
+Bayesian Hierarchical modeling for Gaussian (Stein's), Binomial (Generalized Stein's), and Poisson (Generalized Stein's)Data
 }
 \details{
   \tabular{ll}{
@@ -18,7 +18,7 @@
   }
 }
 \author{
-  Joseph Kelly, Hyung Suk Tak, and Carl Morris
+  Joseph Kelly, Carl Morris, and Hyungsuk Tak
 
   Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 }

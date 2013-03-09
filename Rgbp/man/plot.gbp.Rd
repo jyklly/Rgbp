@@ -21,6 +21,6 @@ This function plots two graphs, Shrinkage and Posterior Interval Plots, based on
 If an object defined as "gbp" class is put into this function, then two plots, shrinkage and posterior interval plots, will show up.
 }
 \author{
-Joseph Kelly and Hyung Suk Tak
+Joseph Kelly and Hyungsuk Tak
 }
 \keyword{methods}
