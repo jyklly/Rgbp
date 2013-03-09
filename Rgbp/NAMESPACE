@@ -1,0 +1,6 @@
+import(sn)
+exportPattern("^[[:alpha:]]+")
+S3method(print, gbp)
+S3method(plot, gbp)
+S3method(summary, gbp)
+

@@ -1,0 +1,10 @@
+Package: Rgbp
+Version: 0.1-0
+Date: 2012-10-31
+Title: Empirical Bayesian Hierarchical Modeling
+Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
+Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
+Depends: sn
+Description: Bayesian Hierarchical Modeling for Gaussian, Binomial, and Poisson Data
+License: GPL-2
+BugReports: https://github.com/jyklly/gbp/issues
