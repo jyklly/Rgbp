@@ -333,20 +333,38 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
        lwd = 3, lty = 1)
   abline(h = 0.95)
   points(1 : length(x$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
-  if (x$model == "gr") {
-    legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                           "Blue Dotted Line: (Unbiased)",
-                           paste("A =", round(A, 2)), 
-                           paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                           paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
-  } else {
-    legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                           "Blue Dotted Line: (Unbiased)",
-                           paste("r =", round(r, 2)), 
-                           paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
-                           paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+  if (is.na(x$prior.mean)){
+    if (x$model == "gr") {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("A =", round(A, 2)), 
+                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    } else {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("r =", round(r, 2)), 
+                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    }
+  } else {  # if prior mean is assigned
+    if (x$model == "gr") {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("A =", round(A, 2)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    } else {
+      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+                             "Blue Dotted Line: (Unbiased)",
+                             paste("r =", round(r, 2)), 
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
+                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+    }
   }
+
 
   # print output
   output <- list(coverageRB = result, coverage10 = result2, 
