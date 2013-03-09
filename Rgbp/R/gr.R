@@ -5,6 +5,9 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
+  if (missing(mu)) {
+    prior.mean <- NA
+  }
   type <- 1
   k <- length(y)
   V <- se^2
@@ -53,7 +56,6 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
     Betahat <- solve(t(X)%*%DVAhati%*%X)%*%t(X)%*%DVAhati%*%y
     Betahatvar <- solve(t(X)%*%DVAhati%*%X)
     BetahatSE <- sqrt(diag(Betahatvar))
-    hess <- -1*t(X)%*%DVAhati%*%X
     mu<-X%*%Betahat
     ##calculate posterior variance
     E <- eigen(DVAhat)
@@ -88,7 +90,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",x=X.ini,beta.new=Betahat,beta.hess=hess,intercept=T,a.new=log(Ahat),a.var=est.var[1,1])
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=    Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1])
   return(output)
 }
 
@@ -151,6 +153,7 @@ derval <- function(alpha,y,V,X){
   dl2alpha = dlralphaBEVAL + A*sum(wv*(y-X%*%Betahat)*X%*%dbetahatA)
   dl2alpha2 = dlralphaBEVAL2 + A*sum(wv^2*V*(y-X%*%Betahat)*X%*%dbetahatA) - A^2*sum(wv*(X%*%dbetahatA)^2) +
     A^2*sum(wv*(y-X%*%Betahat)*X%*%dbetahatA2) - A^2*sum(wv^2*(y-X%*%Betahat)*X%*%dbetahatA)
+
   ## return(list(alpha=alpha,l2=l2,dl2alpha=dl2alpha,dl2alpha2=dl2alpha2))
   return(dl2alpha=dl2alpha)
 }
