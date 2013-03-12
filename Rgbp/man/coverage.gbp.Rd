@@ -4,7 +4,11 @@
 Estimating Coverage Probability
 }
 \description{
-This function estimates Rao-Blackwellized and unbiased coverage probabilities. Unbiased coverage probability is calculated based on counting how many times the interval covers the true parameter value among all simulations. Rao-Blackellized coverage probability is expected value of unbiased coverage probability given sufficient statistic over all simulations.
+This function estimates Rao-Blackwellized and unbiased coverage
+probabilities. The unbiased coverage probability is calculated from the
+frequency the interval estimates from gbp covers the true parameter
+value among all simulations. Rao-Blackellized coverage probability is
+expected value of the unbiased coverage probability given the sufficient statistic over all simulations.
 }
 \usage{
 coverage(x, y, beta, X, mu0, nsim = 10, ...)
@@ -15,7 +19,7 @@ The resultant object of "gbp" function.  For example, if you ran the gbp functio
 }
   \item{y}{
 This argument is useful and should be assigned when you want to try a different true value of r for BR (and PR) or A for GR. For reference, if you want to try a different true value instead of treating its estimated value as a true value, then arguments, (y, beta, X(if any)) or (y, mu0), should be filled in with object x. If you assign this value, the coverage function will consider the assigned value as a true value to generate datasets, ignoring estimated r or A value in the object x. 
-}
+} %TODO finish arguments
   \item{beta}{
 abc
 }

@@ -2,42 +2,43 @@
 \alias{gbp}
 \alias{gbp.default}
 \title{
-  Bayesian Hierarchical Modeling with (Generalized) Stein's Harmonic Priors
+   Fits a Bayesian hierarchical model.
 }
 \description{
-  Bayesian Hierarchical modeling for Gaussian (Stein's), Binomial (Generalized Stein's), 
-  and Poisson (Generalized Stein's)Data
+  Fits a Bayesian hierarchical model for Gaussian, Binomial, 
+  and Poisson data assuming generalized Stein's harmonic priors. Returns
+  the result as an object of class 'gbp'.
 }
 \usage{
   \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...)
 }
 \arguments{
   \item{x}{
-	The first argument of gbp is a vector of the sample mean for GRIMM and of the number of successful 
+    A vector of the sample mean for GRIMM and of the number of successful 
     trials for BRIMM and PRIMM.
   }
   \item{y}{
-	The second argument of gbp is a vector composed of the standard errors of all groups for GRIMM and 
+    A vector composed of the standard errors of all groups for GRIMM and 
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-	Any covariate, if any. The intercept part will be automatically generated. The right format for 
-    one covariate is a vector and for the two covariate is k by 2 matrix.
+    (optional) A vector or a (kx2) matrix of covariate values, where k
+    is the number of covariates. To fit an intercept do not include a
+    vector of ones but rather use the intercept argument. (optional)
   }
   \item{mu0}{
-	A prior mean, the second-level mean parameter, if you know this value a priori.
+    A vector containing the prior mean, the second-level mean parameter,
+    if you know this value a priori. (optional)
   }
   \item{model}{
-	"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM. Default is "gr"
+    A character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
-	User can determine whether the regression part includes the intercept term or not. Default is True.
+    'TRUE' or 'FALSE' flag indicating whether an intercept should be
+    included in the regressuin. Default is 'TRUE'.
   }
   \item{Alpha}{
-	This function will estimate 100*Alpha\% intervals. Default is 95\%
-  }
-  \item{...}{
-	Any argument for future improvement
+    A 'float' between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
   }
 }
 \value{
