@@ -40,6 +40,9 @@
   \item{Alpha}{
     A 'float' between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
   }
+  \item{...}{
+    For future improvement
+  }
 }
 \value{
 	An object of class \code{gbp} comprises of:
