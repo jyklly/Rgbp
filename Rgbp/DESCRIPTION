@@ -5,6 +5,6 @@ Title: Bayesian Hierarchical Modeling with Steins Harmonic Prior
 Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 Depends: sn
-Description: Bayesian Hierarchical Modeling for Gaussian, Binomial, and Poisson  Data
+Description: Bayesian Hierarchical Modeling for Gaussian, Binomial, and Poisson Data
 License: GPL-2
 BugReports: https://github.com/jyklly/gbp/issues
