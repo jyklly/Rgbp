@@ -6,7 +6,7 @@
 Bayesian Hierarchical Modeling with (Generalized) Stein's Harmonic Prior
 }
 \description{
-Bayesian Hierarchical modeling for Gaussian (Stein's), Binomial (Generalized Stein's), and Poisson (Generalized Stein's) Data
+Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data assuming generalized Stein's harmonic priors.
 }
 \details{
   \tabular{ll}{
