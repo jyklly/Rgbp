@@ -1,10 +1,10 @@
 Package: Rgbp
 Version: 0.1-0
 Date: 2012-10-31
-Title: Bayesian Hierarchical Modeling with (Generalized) Stein¡¯s Harmonic Prior
+Title: Bayesian Hierarchical Modeling with (Generalized) Steins Harmonic Prior
 Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 Depends: sn
-Description: Bayesian Hierarchical Modeling for Gaussian (Stein¡¯s), Binomial (Generalized Stein¡¯s), and Poisson (Generalized Stein¡¯s) Data
+Description: Bayesian Hierarchical Modeling for Gaussian (Steins), Binomial (Generalized Steins), and Poisson (Generalized Steins) Data
 License: GPL-2
 BugReports: https://github.com/jyklly/gbp/issues
