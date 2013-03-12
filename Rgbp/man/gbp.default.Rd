@@ -1,4 +1,4 @@
-\name{gbp.default}
+\name{gbp}
 \alias{gbp}
 \alias{gbp.default}
 \title{
@@ -7,7 +7,7 @@
 \description{
   Fits a Bayesian hierarchical model for Gaussian (GRIMM), Binomial (BRIMM), 
   and Poisson (PRIMM) data assuming generalized Stein's harmonic priors. Returns
-  the result as an object of class 'gbp'.
+  the result as an object of class \code{gbp}.
 }
 \usage{
   \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept =
@@ -35,11 +35,11 @@ T, Alpha = 0.95, ...)
     A character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
-    'TRUE' or 'FALSE' flag indicating whether an intercept should be
-    included in the regressuin. Default is 'TRUE'.
+    \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
+    included in the regressuin. Default is \code{TRUE}.
   }
   \item{Alpha}{
-    A 'float' between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
+    A \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
    \item{...}{
     Optional arguments that may be included in future versions.
@@ -47,12 +47,12 @@ T, Alpha = 0.95, ...)
 }
 
 \details{
-  'gbp' fits a Bayesian hierarchical model by maximizing the adjusted
-  posterior using the quasi-Newton method 'BFGS' via 'optim'. By
+  \code{gbp} fits a Bayesian hierarchical model by maximizing the adjusted
+  posterior using the quasi-Newton method "BFGS" via \code{optim}. By
   adjusting the posterior greater coverage is achieved for simiarly
   sized intervals (Morris, Tang, 2011). The function returns an object
-  of class 'gbp' which provides the functions 'plot', 'summary' and
-  'coverage'.
+  of class \code{gbp} which provides the functions \code{plot},
+  \code{summary} and \code{coverage}.
 }
 
 \value{
