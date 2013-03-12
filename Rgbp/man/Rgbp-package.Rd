@@ -3,7 +3,7 @@
 \alias{Rgbp}
 \docType{package}
 \title{
-Bayesian Hierarchical Modeling with (Generalized) Stein's Harmonic Prior
+Bayesian Hierarchical Modeling with Steins Harmonic Prior
 }
 \description{
 Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data assuming generalized Stein's harmonic priors.
@@ -12,7 +12,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   \tabular{ll}{
     Package: \tab Rgbp\cr
     Type: \tab Package\cr
-    Version: \tab 0.1-0\cr
+    Version: \tab 1.0.0\cr
     Date: \tab 2012-10-31\cr
     License: \tab GPL-2\cr
   }
