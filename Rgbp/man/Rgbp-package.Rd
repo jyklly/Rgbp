@@ -3,7 +3,7 @@
 \alias{Rgbp}
 \docType{package}
 \title{
-Bayesian Hierarchical Modeling using (generalized) Stein's Harmonic Prior
+Bayesian Hierarchical Modeling using Stein's Harmonic Prior
 }
 \description{
 Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
