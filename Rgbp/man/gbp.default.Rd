@@ -2,7 +2,7 @@
 \alias{gbp}
 \alias{gbp.default}
 \title{
-  Bayesian Hierarchical Modeling with Stein's and Generalized Stein's Harmonic Priors
+  Bayesian Hierarchical Modeling with (Generalized) Stein's Harmonic Priors
 }
 \description{
   Bayesian Hierarchical modeling for Gaussian (Stein's), Binomial (Generalized Stein's), 
