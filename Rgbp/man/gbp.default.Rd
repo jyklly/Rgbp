@@ -10,7 +10,7 @@
   object of class \code{gbp}.
 }
 \usage{
-  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95)
+  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...)
 }
 \arguments{
   \item{x}{
@@ -39,6 +39,9 @@
   }
   \item{Alpha}{
     a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
+  }
+  \item{...}{
+    further arguments to be passed to other methods.
   }
 }
 
