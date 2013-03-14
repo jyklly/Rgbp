@@ -28,11 +28,21 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
 }
 
 \examples{
+  data(baseball)
   data(schools)
+
+  z <- baseball$Hits
+  n <- baseball$At.Bats
+  x1 <- rep(c(-1, 0, 1), 6)
+
   y <- schools$y
   se <- schools$se
+  x2 <- rep(c(-1, 0, 1, 2), 2)
+
+  # If we know a prior mean, the second-level mean parameter,
+  # GRIMM
   g <- gbp(y, se, mu0 = 8)
-  print(g)
+  g
   summary(g)
   plot(g)
 
