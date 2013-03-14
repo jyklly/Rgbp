@@ -90,7 +90,7 @@
   plot(g)
 
   # when we want to simulated psuedo datasets considering the estimated values as true ones
-  coverage(g, nsim = 100)  
+  coverage(g, nsim = 10)  
 
   # when we want to simulate psuedo datasets based on different values of A and of 2nd level mean 
   # as true ones, not using estimated values as true ones
@@ -196,7 +196,7 @@
   plot(p3)
 
   # when we want to simulated psuedo datasets considering the estimated values as true ones
-  coverage(p3, nsim = 100)  
+  coverage(p3, nsim = 10)  
 
   # when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
   # and of covariate, not using estimated values as true ones
