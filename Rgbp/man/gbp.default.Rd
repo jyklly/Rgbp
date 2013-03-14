@@ -6,32 +6,32 @@
 }
 \description{
   \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data using generalized Stein's harmonic priors, returning the result as an 
-  object of class \code{gbp}.
+  and Poisson (PRIMM) data using generalized Stein's harmonic priors.
 }
 \usage{
   \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...)
 }
 \arguments{
   \item{x}{
-    a k by 1 vector of the sample mean for GRIMM and of the number of successful 
-    trials for BRIMM and PRIMM.
+    a (k by 1) vector of the sample mean for GRIMM and of the number of successful 
+    trials for BRIMM and PRIMM, where k is the number of groups (or units) in a dataset.
   }
   \item{y}{
-    a k by 1 vector composed of the standard errors of all groups for GRIMM and 
+    a (k by 1) vector composed of the standard errors of all groups for GRIMM and 
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    a k by 1 vector or a k by (m - 1) matrix of covariate values, where (m - 1)
-    is the number of covariates. To fit an intercept do not include a
-    vector of ones but rather use the intercept argument. (optional)
+    (optional) a (k by t) matrix of covariate values, where t
+    is the number of covariates greater than or equal to 1. To fit an intercept do not include a
+    vector of ones but rather use the intercept argument.
   }
   \item{mu0}{
-    a numeric value for the second-level mean parameter, the mean of prior (second-levle) distribution, 
-    if you know this value a priori. (optional)
+    (optional) a numeric value for the second-level mean parameter, the mean of prior (second-level)
+    distribution, if you know this value a priori.
   }
   \item{model}{
-    a character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
+    a character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, 
+    and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
     \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
@@ -41,32 +41,7 @@
     a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
   \item{...}{
-    The beta binomial distribution with total \eqn{= n} and
-\code{prob} \eqn{= m} has density
-\deqn{p(y) = \frac{B(y+\sigma \mu, n-y+\sigma*(1-\mu)) {n \choose y}
-}{ B(s m,s (1-m))}%
-    }{p(y) = B(y+s m,n-y+s (1-m)) Choose(n,y) / B(s m,s (1-m))}
-for \eqn{y = 0, \ldots, n} where \eqn{B()} is the beta function.
-further arguments to be passed to other methods.
-Let
-\deqn{\gamma_k = \textrm{cov}(X_i, X_{i + k})}{gamma[k] = cov(x[i], x[i + k])}
-considered as a function of the lag \eqn{k} be
-the autocovariance function of the input time series.
-Define
-\deqn{\Gamma_k = \gamma_{2 k} + \gamma_{2 k + 1}}{Gamma[k] = gamma[2 k] + gamma[2 k + 1]}
-the sum of consecutive pairs of autocovariances.  Then Theorem 3.1 in
-Geyer (1992) says that \eqn{\Gamma_k}{Gamma[k]} considered as a function of
-\eqn{k} is strictly positive, strictly decreasing, and strictly convex,
-assuming the input time series is a scalar-valued functional of a reversible Markov
-chain.  All of the MCMC done by this package is reversible.
-This \R function estimates the \dQuote{big gamma} function,
-\eqn{\Gamma_k}{Gamma[k]} considered as a function of
-\eqn{k}, subject to three different constraints, (1) nonnegative,
-(2) nonnegative and nonincreasing, and (3) nonnegative, nonincreasing,
-and convex.  It also estimates the variance in the Markov chain central
-limit theorem (CLT)
-\deqn{\gamma_0 + 2 \sum_{k = 1}^\infty \gamma_k = - \gamma_0 + 2 \sum_{k = 0}^\infty \Gamma_k}{- gamma0 + 2 * sum(gamma) = - gamma0 + 2 * sum(Gamma)}
-\eqn{g_1}{g1}
+    further arguments to be passed to other methods.
   }
 }
 
