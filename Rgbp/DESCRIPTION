@@ -2,12 +2,7 @@ Package: Rgbp
 <<<<<<< HEAD
 Version: 0.1-0
 Date: 2012-10-31
-Title: Bayesian Hierarchical Modeling using Steins Harmonic Prior
-=======
-Version: 1.0.0
-Date: 2013-03-13
-Title: Bayesian Hierarchical Modeling with (Generalized) Stein's Harmonic Prior
->>>>>>> 7ae0dd1a4d091bc9f9f704283559c6d6d9363b2a
+Title: Bayesian Hierarchical Modeling using (generalized) Stein's Harmonic Prior
 Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 Depends: sn
