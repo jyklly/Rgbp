@@ -41,7 +41,13 @@
     a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
   \item{...}{
-    further arguments to be passed to other methods.
+    The beta binomial distribution with total \eqn{= n} and
+\code{prob} \eqn{= m} has density
+\deqn{p(y) = \frac{B(y+\sigma \mu, n-y+\sigma*(1-\mu)) {n \choose y}
+}{ B(s m,s (1-m))}%
+    }{p(y) = B(y+s m,n-y+s (1-m)) Choose(n,y) / B(s m,s (1-m))}
+for \eqn{y = 0, \ldots, n} where \eqn{B()} is the beta function.
+further arguments to be passed to other methods.
   }
 }
 
