@@ -222,3 +222,4 @@ T, Alpha = 0.95, ...)
 }
 
 
+\keyword{methods}

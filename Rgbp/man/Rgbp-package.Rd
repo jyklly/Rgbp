@@ -150,4 +150,4 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   # and of covariate, not using estimated values as true ones
   coverage(p3, y = 60, beta = c(-2, 0), X = x1, nsim = 10)  
 
-\keyword{ package }
+\keyword{package}
