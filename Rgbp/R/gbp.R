@@ -1,6 +1,6 @@
 gbp <- function(x, ...) UseMethod("gbp")
 
-gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...) {
+gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95) {
   res <- switch(model, 
                 gr = gr(x, y, X = covariates, mu = mu0, Alpha = Alpha, intercept = intercept), 
                 br = br(x, y, X = covariates, prior.mean = mu0, intercept = intercept, Alpha = Alpha), 

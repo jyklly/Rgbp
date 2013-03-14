@@ -2,16 +2,16 @@
 \alias{gbp}
 \alias{gbp.default}
 \title{
-   Fits a Bayesian hierarchical model.
+   Fitting Bayesian Hierarchical Models
 }
 \description{
-  Fits a Bayesian hierarchical model for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data assuming generalized Stein's harmonic priors. Returns
-  the result as an object of class \code{gbp}.
+  \code"gbp" is used to fits Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
+  and Poisson (PRIMM) data using generalized Stein's harmonic priors, returning the result as an 
+  object of class \code{gbp}.
 }
 \usage{
   \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept =
-T, Alpha = 0.95, ...)
+T, Alpha = 0.95)
 }
 \arguments{
   \item{x}{
@@ -40,9 +40,6 @@ T, Alpha = 0.95, ...)
   }
   \item{Alpha}{
     A \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
-  }
-   \item{...}{
-    Optional arguments that may be included in future versions.
   }
 }
 
