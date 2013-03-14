@@ -1,4 +1,4 @@
-gbp <- function(x, ...) UseMethod("gbp")
+gbp <- function(x) UseMethod("gbp")
 
 gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95) {
   res <- switch(model, 

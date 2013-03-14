@@ -5,41 +5,40 @@
    Fitting Bayesian Hierarchical Models
 }
 \description{
-  \code{gbp} is used to fits Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
+  \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
   and Poisson (PRIMM) data using generalized Stein's harmonic priors, returning the result as an 
   object of class \code{gbp}.
 }
 \usage{
-  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept =
-T, Alpha = 0.95)
+  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95)
 }
 \arguments{
   \item{x}{
-    A vector of the sample mean for GRIMM and of the number of successful 
+    a k by 1 vector of the sample mean for GRIMM and of the number of successful 
     trials for BRIMM and PRIMM.
   }
   \item{y}{
-    A vector composed of the standard errors of all groups for GRIMM and 
+    a k by 1 vector composed of the standard errors of all groups for GRIMM and 
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    A vector or a (kx2) matrix of covariate values, where k
+    a k by 1 vector or a k by (m - 1) matrix of covariate values, where (m - 1)
     is the number of covariates. To fit an intercept do not include a
     vector of ones but rather use the intercept argument. (optional)
   }
   \item{mu0}{
-    A vector containing the prior mean, the second-level mean parameter,
+    a numeric value for the second-level mean parameter, the mean of prior (second-levle) distribution, 
     if you know this value a priori. (optional)
   }
   \item{model}{
-    A character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
+    a character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
     \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
     included in the regressuin. Default is \code{TRUE}.
   }
   \item{Alpha}{
-    A \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
+    a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
 }
 
@@ -48,8 +47,7 @@ T, Alpha = 0.95)
   posterior using the quasi-Newton method "BFGS" via \code{optim}. By
   adjusting the posterior greater coverage is achieved for simiarly
   sized intervals (Morris, Tang, 2011). The function returns an object
-  of class \code{gbp} which provides the functions \code{plot},
-  \code{summary} and \code{coverage}.
+  of class \code{gbp} which provides the functions \code{plot} and \code{summary}.
 }
 
 \value{
@@ -81,7 +79,7 @@ T, Alpha = 0.95)
 }
 
 \author{
-  Joseph Kelly and Hyungsuk Tak
+  Joseph Kelly, Carl Morris, and Hyungsuk Tak
 }
 \examples{
 
