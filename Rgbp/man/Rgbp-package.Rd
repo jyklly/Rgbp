@@ -35,7 +35,6 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   print(g)
   summary(g)
   plot(g)
-<<<<<<< HEAD
 
   # when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
