@@ -1,16 +1,17 @@
-\name{gbp.default}
+\name{gbp}
 \alias{gbp}
 \alias{gbp.default}
 \title{
    Fits a Bayesian hierarchical model.
 }
 \description{
-  Fits a Bayesian hierarchical model for Gaussian, Binomial, 
-  and Poisson data assuming generalized Stein's harmonic priors. Returns
-  the result as an object of class 'gbp'.
+  Fits a Bayesian hierarchical model for Gaussian (GRIMM), Binomial (BRIMM), 
+  and Poisson (PRIMM) data assuming generalized Stein's harmonic priors. Returns
+  the result as an object of class \code{gbp}.
 }
 \usage{
-  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...)
+  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept =
+T, Alpha = 0.95, ...)
 }
 \arguments{
   \item{x}{
@@ -22,7 +23,7 @@
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) A vector or a (kx2) matrix of covariate values, where k
+    A vector or a (kx2) matrix of covariate values, where k
     is the number of covariates. To fit an intercept do not include a
     vector of ones but rather use the intercept argument. (optional)
   }
@@ -34,37 +35,54 @@
     A character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
-    'TRUE' or 'FALSE' flag indicating whether an intercept should be
-    included in the regressuin. Default is 'TRUE'.
+    \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
+    included in the regressuin. Default is \code{TRUE}.
   }
   \item{Alpha}{
-    A 'float' between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
+    A \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
-  \item{...}{
-    For future improvement
+   \item{...}{
+    Optional arguments that may be included in future versions.
   }
 }
+
+\details{
+  \code{gbp} fits a Bayesian hierarchical model by maximizing the adjusted
+  posterior using the quasi-Newton method "BFGS" via \code{optim}. By
+  adjusting the posterior greater coverage is achieved for simiarly
+  sized intervals (Morris, Tang, 2011). The function returns an object
+  of class \code{gbp} which provides the functions \code{plot},
+  \code{summary} and \code{coverage}.
+}
+
 \value{
-	An object of class \code{gbp} comprises of:
-	\item{sample.mean}{sample mean of each group}
-	\item{se}{if GRIMM, standard error of each group}
-	\item{n}{if BRIMM and PRIMM, total number of trials of each group}
-	\item{prior.mean}{numeric if entered, NA if not entered}
-	\item{prior.mean.hat}{estimate of prior mean if prior mean is not assigned a priori}
-	\item{shrinkage}{shrinkage estimate of each group}
-	\item{sd.shrinkage}{standard error of shrinkage estimate}
-	\item{post.mean}{posterior mean of each group}
-	\item{post.sd}{posterior standard deviation of each group}
-	\item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
-	\item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
-	\item{model}{"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM}
-	\item{X}{covariate vector or matrix if any. NA if not}
-	\item{beta.new}{regression coefficient estimates}
-	\item{beta.var}{estimated variance matrix of regression coefficient}
-	\item{intercept}{whether T or F}
-	\item{a.new}{alpha estimate}
-	\item{a.var}{variance of alpha estimate}
+  An object of class \code{gbp} comprises of:
+  \item{sample.mean}{sample mean of each group}
+  \item{se}{if GRIMM, standard error of each group}
+  \item{n}{if BRIMM and PRIMM, total number of trials of each group}
+  \item{prior.mean}{numeric if entered, NA if not entered}
+  \item{prior.mean.hat}{estimate of prior mean if prior mean is not assigned a priori}
+  \item{shrinkage}{shrinkage estimate of each group}
+  \item{sd.shrinkage}{standard error of shrinkage estimate}
+  \item{post.mean}{posterior mean of each group}
+  \item{post.sd}{posterior standard deviation of each group}
+  \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
+  \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
+  \item{model}{"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM}
+  \item{X}{covariate vector or matrix if any. NA if not}
+  \item{beta.new}{regression coefficient estimates}
+  \item{beta.var}{estimated variance matrix of regression coefficient}
+  \item{intercept}{whether T or F}
+  \item{a.new}{alpha estimate}
+  \item{a.var}{variance of alpha estimate}
 }
+
+\references{
+  Morris, C. and Tang, R. (2011). \emph{Estimating Random Effects via
+  Adjustment for Density Maximization}. Statist. Sci. Volume 26, Number
+  2, (2011), 271-287.
+}
+
 \author{
   Joseph Kelly and Hyungsuk Tak
 }

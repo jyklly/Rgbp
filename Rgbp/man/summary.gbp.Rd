@@ -2,21 +2,21 @@
 \alias{summary.gbp}
 
 \title{
-Summary of Estimation
+  Summary of Estimation
 }
 \description{
-It retuns the summary of the object defined as "gbp" class
+  It retuns the summary of the object defined as "gbp" class
 }
 \usage{
-\method{summary}{gbp}(object, ...)
+  \method{summary}{gbp}(object, ...)
 }
 \arguments{
   \item{object}{
-The resultant object of "gbp" function 
-}
+    The resultant object of "gbp" function 
+  }
   \item{...}{
-Anything else
-}
+    Anything else
+  }
 }
 \value{
   \item{main.summary}{summary of result of the print.gbp function}
@@ -24,6 +24,13 @@ Anything else
   \item{regression.summary}{summary of the regression, if any}
 }
 \author{
-Hyungsuk Tak
+  Hyungsuk Tak
+}
+\examples{
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+  g <- gbp(y, se, mu0 = 8)
+  g.summary<-summary(g)
 }
 \keyword{method}

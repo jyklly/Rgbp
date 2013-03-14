@@ -25,14 +25,14 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   ##optimize depending on if mu is specified. 
   if(muknown){
     r<-0
-    est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},lower=0,upper=Inf,control=list(fnscale=-1),method="L-BFGS-B",hessian=T)
+    est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},control=list(fnscale=-1),method="BFGS",hessian=T)
     est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par)
     Betahat<-NA
     Betahatvar<-NA
   }else{
     r <- dim(X)[2]
-    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="L-BFGS-B",gr = function(x){derval(x,y,V,X)}, hessian=T)
+    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="BFGS",gr = function(x){derval(x,y,V,X)}, hessian=T)
     est.var <- -1/est$hessian
     Ahat <- exp(est$par[1])
   }

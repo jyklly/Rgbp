@@ -4,23 +4,33 @@
 Shrinkage and Posterior Interval Plots
 }
 \description{
-This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as "gbp" class.
+This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as \code{gbp} class.
 }
 \usage{
-\method{plot}{gbp}(x,...)
+\method{plot}{gbp}(x, ...)
 }
 \arguments{
   \item{x}{
-	The result of gbp function, which has "gbp" class
-}
+    The result of gbp function, which has \code{gbp} class
+  }
   \item{...}{
-	Any argument for future purpose
+    Optional arguments that may be included in future versions.
+  }
 }
-}
+
 \value{
-If an object defined as "gbp" class is put into this function, then two plots, shrinkage and posterior interval plots, will show up.
+  Two plots containing shrinkage and posterior interval plots will be displayed.
 }
+
 \author{
-Joseph Kelly and Hyungsuk Tak
+Hyungsuk Tak
+}
+
+\examples{
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+  g <- gbp(y, se, mu0 = 8)
+  plot(g)
 }
 \keyword{methods}

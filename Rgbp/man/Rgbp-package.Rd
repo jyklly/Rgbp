@@ -6,13 +6,13 @@
 Bayesian Hierarchical Modeling using Stein's Harmonic Prior
 }
 \description{
-Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
+Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data assuming generalized Stein's harmonic priors.
 }
 \details{
   \tabular{ll}{
     Package: \tab Rgbp\cr
     Type: \tab Package\cr
-    Version: \tab 0.1-0\cr
+    Version: \tab 1.0.0\cr
     Date: \tab 2012-10-31\cr
     License: \tab GPL-2\cr
   }
@@ -28,25 +28,14 @@ Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
 }
 
 \examples{
-
-  # Loading datasets
-  data(baseball)
   data(schools)
-
-  z <- baseball$Hits
-  n <- baseball$At.Bats
-  x1 <- rep(c(-1, 0, 1), 6)
-
   y <- schools$y
   se <- schools$se
-  x2 <- rep(c(-1, 0, 1, 2), 2)
-
-  # If we know a prior mean, the second-level mean parameter,
-  # GRIMM
   g <- gbp(y, se, mu0 = 8)
-  g
+  print(g)
   summary(g)
   plot(g)
+<<<<<<< HEAD
 
   # when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
@@ -161,5 +150,4 @@ Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
   # and of covariate, not using estimated values as true ones
   coverage(p3, y = 60, beta = c(-2, 0), X = x1, nsim = 10)  
 
-}
 \keyword{ package }

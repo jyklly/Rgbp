@@ -7,7 +7,7 @@ Print object defined as "gbp" class
 This function returns the resulting object of "gbp" function
 }
 \usage{
-\method{print}{gbp}(x, ...)
+  \method{print}{gbp}(x, ...)
 }
 \arguments{
   \item{x}{
@@ -31,7 +31,14 @@ Anything else
   \item{post.se}{square root of posterior variance}
 }
 \author{
-Hyungsuk Tak
+  Hyungsuk Tak
 }
 
+\examples{
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+  g <- gbp(y, se, mu0 = 8)
+  print(g)
+}
 \keyword{methods}
