@@ -48,6 +48,25 @@
     }{p(y) = B(y+s m,n-y+s (1-m)) Choose(n,y) / B(s m,s (1-m))}
 for \eqn{y = 0, \ldots, n} where \eqn{B()} is the beta function.
 further arguments to be passed to other methods.
+Let
+\deqn{\gamma_k = \textrm{cov}(X_i, X_{i + k})}{gamma[k] = cov(x[i], x[i + k])}
+considered as a function of the lag \eqn{k} be
+the autocovariance function of the input time series.
+Define
+\deqn{\Gamma_k = \gamma_{2 k} + \gamma_{2 k + 1}}{Gamma[k] = gamma[2 k] + gamma[2 k + 1]}
+the sum of consecutive pairs of autocovariances.  Then Theorem 3.1 in
+Geyer (1992) says that \eqn{\Gamma_k}{Gamma[k]} considered as a function of
+\eqn{k} is strictly positive, strictly decreasing, and strictly convex,
+assuming the input time series is a scalar-valued functional of a reversible Markov
+chain.  All of the MCMC done by this package is reversible.
+This \R function estimates the \dQuote{big gamma} function,
+\eqn{\Gamma_k}{Gamma[k]} considered as a function of
+\eqn{k}, subject to three different constraints, (1) nonnegative,
+(2) nonnegative and nonincreasing, and (3) nonnegative, nonincreasing,
+and convex.  It also estimates the variance in the Markov chain central
+limit theorem (CLT)
+\deqn{\gamma_0 + 2 \sum_{k = 1}^\infty \gamma_k = - \gamma_0 + 2 \sum_{k = 0}^\infty \Gamma_k}{- gamma0 + 2 * sum(gamma) = - gamma0 + 2 * sum(Gamma)}
+\eqn{g_1}{g1}
   }
 }
 
