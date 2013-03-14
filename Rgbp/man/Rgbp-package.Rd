@@ -158,4 +158,4 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   # when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
   # and of covariate, not using estimated values as true ones
   coverage(p3, y = 60, beta = c(-2, 0), X = x1, nsim = 10)  
-
+}
