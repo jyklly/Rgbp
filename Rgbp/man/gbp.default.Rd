@@ -5,7 +5,7 @@
    Fitting Bayesian Hierarchical Models
 }
 \description{
-  \code"gbp" is used to fits Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
+  \code{gbp} is used to fits Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
   and Poisson (PRIMM) data using generalized Stein's harmonic priors, returning the result as an 
   object of class \code{gbp}.
 }
