@@ -63,7 +63,7 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   # estimating coverage probability letting 'coverage' regard the assigned values for
   # 'y' (= 'r') and 'beta' in the argument of 'coverage' as true values 
   # when 'coverage' generates simulated datasets.
-  coverage(b, y = 60, beta = 0, nsim = 10)   
+  coverage(b, A.or.r = 60, reg.coef = 0, nsim = 10)   
 }
 
 \keyword{datasets}
