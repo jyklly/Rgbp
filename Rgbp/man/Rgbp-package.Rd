@@ -64,7 +64,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
 
   # when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
   # as true ones, not using estimated values as true ones
-  coverage(b, y = 60, mu0 = 0.3, model = "br", nsim = 10)  
+  coverage(b, y = 60, mu0 = 0.3, nsim = 10)  
 
   # PRIMM
   p <- gbp(z, n, mu0 = 0.265, model = "pr")
@@ -77,7 +77,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
 
   # when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
   # as true ones, not using estimated values as true ones
-  coverage(p, y = 60, mu0 = 0.3, model = "br", nsim = 10)  
+  coverage(p, y = 60, mu0 = 0.3, nsim = 10)  
 
   # If we do not know a prior mean (2nd-level mean) and do not have any covariate,
   # GRIMM
