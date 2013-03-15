@@ -1,19 +1,15 @@
 \name{gbp}
 \alias{gbp}
 \alias{gbp.default}
-\title{
-   Fitting Bayesian Hierarchical Models
-}
+\title{Fitting Bayesian Hierarchical Models}
 \description{
   \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
   and Poisson (PRIMM) data using generalized Stein's harmonic priors.
 }
-\usage{
-  \method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...)
-}
+\usage{\method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = TRUE, Alpha = 0.95, ...)}
 \arguments{
   \item{x}{
-    a (k by 1) vector of the sample mean for GRIMM and of the number of successful 
+    a (k \eqn{\times} 1) vector of the sample mean for GRIMM and of the number of successful 
     trials for BRIMM and PRIMM, where k is the number of groups (or units) in a dataset.
   }
   \item{y}{
@@ -21,9 +17,8 @@
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) a (k by t) matrix of covariate values, where t
-    is the number of covariates greater than or equal to 1. To fit an intercept do not include a
-    vector of ones but rather use the intercept argument.
+    (optional) a (k by t) matrix of covariate values, where t is the number of covariates (t \eqn{\ge} 1). 
+    To fit an intercept do not include a vector of ones but rather use the intercept argument.
   }
   \item{mu0}{
     (optional) a numeric value for the second-level mean parameter, the mean of prior (second-level)

@@ -8,9 +8,9 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
   coverage10 <- matrix(NA, nrow = length(x$se), ncol = nsim)
 
   if (missing(y)) {
-    only.gbp.result <- T
+    only.gbp.result <- TRUE
   } else {
-    only.gbp.result <- F
+    only.gbp.result <- FALSE
   }
 
   # if model=BRIMM	
@@ -318,11 +318,11 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
   }
 
   # average coverage probability
-  result <- round(apply(coverageRB, 1, mean, na.rm = T), 3)
+  result <- round(apply(coverageRB, 1, mean, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
   min.cov <- round(min(result), 3)
 
-  result2 <- round(apply(coverage10, 1, mean, na.rm = T), 3)
+  result2 <- round(apply(coverage10, 1, mean, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
   min.cov2 <- round(min(result2), 3)
 

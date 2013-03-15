@@ -1,6 +1,6 @@
 gbp <- function(x, ...) UseMethod("gbp")
 
-gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = T, Alpha = 0.95, ...) {
+gbp.default <- function(x, y, covariates, mu0, model = "gr", intercept = TRUE, Alpha = 0.95, ...) {
   res <- switch(model, 
                 gr = gr(x, y, X = covariates, mu = mu0, Alpha = Alpha, intercept = intercept), 
                 br = br(x, y, X = covariates, prior.mean = mu0, intercept = intercept, Alpha = Alpha), 
@@ -204,7 +204,7 @@ summary.gbp <- function(object, ...) {
 
   if (is.na(x$prior.mean)) {
     estimate <- as.vector(x$beta.new)
-    if (x$intercept == T) {
+    if (x$intercept == TRUE) {
       names(estimate) <- paste("beta", 0 : (length(estimate) - 1), sep = "")
     } else {
       names(estimate) <- paste("beta", 1 : (length(estimate)), sep = "")
@@ -289,7 +289,7 @@ plot.gbp <- function(x,...) {
     legend("bottomright", c(ifelse(x$model == "gr", "se", "n")), col = 4,
            lty = 1, lwd = 2, seg.len = 0.5, bty = "n")
   }
-  sunflowerplot(rep(0, length(y)) ~ po.m, add = T)
+  sunflowerplot(rep(0, length(y)) ~ po.m, add = TRUE)
   abline(h = 4)
   abline(h = 0)
   axis(2, c(0, 4), c(expression(hat(theta)), expression(bar(y))), cex.axis = 1.1)

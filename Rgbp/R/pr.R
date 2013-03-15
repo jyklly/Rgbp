@@ -170,7 +170,7 @@ PRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
   }
 
   a.temp <- optim(a.ini, MarginalPostAlpha, control = list(fnscale = -1), method= "L-BFGS-B",
-                  hessian = T,  lower = -Inf, upper = Inf)
+                  hessian = TRUE,  lower = -Inf, upper = Inf)
   a.new <- a.temp$par
   a.hess <- a.temp$hessian
   b.temp.result <- BetaHatSubAlpha(a.new)
@@ -247,7 +247,7 @@ PRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
 }
 
 # main function
-pr <- function(z, n, X, prior.mean, intercept = T, Alpha = 0.95) {
+pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
   # The main function of PRIMM
 
   if (missing(X)) { 
