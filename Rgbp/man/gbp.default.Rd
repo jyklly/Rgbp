@@ -17,7 +17,7 @@
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) a (k by t) matrix of covariate values, where \cn t is the number of covariates (t \eqn{\ge} 1). 
+    (optional) a (k by t) matrix of covariate values, where \cr t is the number of covariates (t \eqn{\ge} 1). 
     To fit an intercept do not include a vector of ones but rather use the intercept argument.
   }
   \item{mu0}{
