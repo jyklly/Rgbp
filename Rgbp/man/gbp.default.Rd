@@ -107,7 +107,7 @@
 
   # when we want to simulate psuedo datasets based on different values of A and of 2nd level mean 
   # as true ones, not using estimated values as true ones
-  coverage(g, y = 9, mu0 = 5, nsim = 10)  
+  coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
   # BRIMM
   b <- gbp(z, n, mu0 = 0.265, model = "br")
@@ -120,7 +120,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
   # as true ones, not using estimated values as true ones
-  coverage(b, y = 60, mu0 = 0.3, nsim = 10)  
+  coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   # PRIMM
   p <- gbp(z, n, mu0 = 0.265, model = "pr")
@@ -133,7 +133,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
   # as true ones, not using estimated values as true ones
-  coverage(p, y = 60, mu0 = 0.3, nsim = 10)  
+  coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   # If we do not know a prior mean (2nd-level mean) and do not have any covariate,
   # GRIMM
@@ -147,7 +147,7 @@
 
   # when we want to simulate psuedo datasets based on different values of A and of a regression coefficient
   # (intercept), not using estimated values as true ones
-  coverage(g2, y = 9, beta = 10, nsim = 10)  
+  coverage(g2, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
   # BRIMM
   b2 <- gbp(z, n, model = "br")
@@ -160,7 +160,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
   # (intercept), not using estimated values as true ones
-  coverage(b2, y = 60, beta = -1, nsim = 10)  
+  coverage(b2, A.or.r = 60, reg.coef = -1, nsim = 10)  
 
   # PRIMM
   p2 <- gbp(z, n, model = "pr")
@@ -173,7 +173,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
   # (intercept), not using estimated values as true ones
-  coverage(p2, y = 60, beta = -5, nsim = 10)  
+  coverage(p2, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
   # If we have one covariate,
   # GRIMM
@@ -187,7 +187,7 @@
 
   # when we want to simulate psuedo datasets based on different values of A, of regression coefficients, and
   # of covariate, not using estimated values as true ones
-  coverage(g3, y = 9, beta = c(10, 1), X = x2, nsim = 10)  
+  coverage(g3, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
 
   # BRIMM
   b3 <- gbp(z, n, x1, model = "br")
@@ -200,7 +200,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
   # and of covariate, not using estimated values as true ones
-  coverage(b2, y = 60, beta = c(-1, 0), X = x1, nsim = 10)  
+  coverage(b2, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
 
   # PRIMM
   p3 <- gbp(z, n, x1, model = "pr")
@@ -213,7 +213,7 @@
 
   # when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
   # and of covariate, not using estimated values as true ones
-  coverage(p3, y = 60, beta = c(-2, 0), X = x1, nsim = 10)  
+  coverage(p3, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
 }
 
 

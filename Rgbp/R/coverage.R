@@ -1,37 +1,37 @@
 
-coverage <- function(x, y, beta, X, mu0, nsim = 10) {
+coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, nsim = 10) {
 
   # Rao-Blackwellized criterion
-  coverageRB <- matrix(NA, nrow = length(x$se), ncol = nsim)
+  coverageRB <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
-  coverage10 <- matrix(NA, nrow = length(x$se), ncol = nsim)
+  coverage10 <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
-  if (missing(y)) {
+  if (missing(A.or.r)) {
     only.gbp.result <- TRUE
   } else {
     only.gbp.result <- FALSE
   }
 
   # if model=BRIMM	
-  if (x$model == "br") {
+  if (gbp.object$model == "br") {
     if (only.gbp.result) {
       # 1. initial values
-      if (is.na(x$prior.mean) & identical(x$X, NA)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(x$beta.new)
+      if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(gbp.object$beta.new)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-      } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
-        betas <- as.vector(x$beta.new)
+      } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), gbp.object$X))
+        betas <- as.vector(gbp.object$beta.new)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-        X <- x$X
-      } else if (!is.na(x$prior.mean)) {
-        p0 <- x$prior.mean
+        X <- gbp.object$X
+      } else if (!is.na(gbp.object$prior.mean)) {
+        p0 <- gbp.object$prior.mean
       }
   
-      n <- x$se
-      r <- exp(-x$a.new)
+      n <- gbp.object$se
+      r <- exp(-gbp.object$a.new)
 
       # 2. generate p matrix
       sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nrow = length(n))
@@ -42,11 +42,11 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (is.na(x$prior.mean) & identical(x$X, NA)) {
+          out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
                    gbp(sim.z[, i], n, model = "br")
-                 } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+                 } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
                    gbp(sim.z[, i], n, X, model = "br")
-                 } else if (!is.na(x$prior.mean)) {
+                 } else if (!is.na(gbp.object$prior.mean)) {
                    gbp(sim.z[, i], n, mu0 = p0, model = "br")
                  }
 
@@ -65,23 +65,24 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
 
     } else if (!only.gbp.result) {
       # 1. initial values
-      if (missing(y)) {
-        print("(r, beta, X) or (r, mu0) should be designated")
+      if (missing(A.or.r)) {
+        print("(A.or.r, reg.coef, covariates (if any) or 
+               (A.or.r, mean.PriorDist) should be designated")
         stop()
-      } else if (!missing(mu0)) {
-        p0 <- mu0
-      } else if (!missing(beta) & missing(X)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(beta)
+      } else if (!missing(mean.PriorDist)) {
+        p0 <- mean.PriorDist
+      } else if (!missing(reg.coef) & missing(covariates)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(reg.coef)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-      } else if (!missing(beta) & !missing(X)) { 
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
-        betas <- as.vector(beta)
+      } else if (!missing(reg.coef) & !missing(covariates)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), covariates))
+        betas <- as.vector(reg.coef)
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
       }
   
-      n <- x$se
-      r <- y
+      n <- gbp.object$se
+      r <- A.or.r
  
       # 2. generate p matrix
       sim.p <- matrix(rbeta(length(n) * nsim, r * p0, r * (1 - p0)), nrow = length(n))
@@ -92,12 +93,12 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (!missing(beta) & missing(X)) {
+          out <- if (!missing(reg.coef) & missing(covariates)) {
                    gbp(sim.z[, i], n, model = "br")
-                 } else if (!missing(beta) & !missing(X)) {
-                   gbp(sim.z[, i], n, X, model = "br")
-                 } else if (!missing(mu0)) {
-                   gbp(sim.z[, i], n, mu0 = mu0, model = "br")
+                 } else if (!missing(reg.coef) & !missing(covariates)) {
+                   gbp(sim.z[, i], n, covariates, model = "br")
+                 } else if (!missing(mean.PriorDist)) {
+                   gbp(sim.z[, i], n, mu0 = mean.PriorDist, model = "br")
                  }
           a1 <- r * p0 + sim.z[, i]
           a0 <- r * (1 - p0) + n - sim.z[, i]
@@ -113,26 +114,26 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       }	
     }
 
-  } else if(x$model == "pr") {
+  } else if(gbp.object$model == "pr") {
 
     if (only.gbp.result) {
 
       # 1. initial values
-      if (is.na(x$prior.mean) & identical(x$X, NA)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(x$beta.new)
+      if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(gbp.object$beta.new)
         lambda0 <- exp(temp.x %*% betas)
-      } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
-        betas <- as.vector(x$beta.new)
+      } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), gbp.object$X))
+        betas <- as.vector(gbp.object$beta.new)
         lambda0 <- exp(temp.x %*% betas)
-        X <- x$X
-      } else if (!is.na(x$prior.mean)) {
-        lambda0 <- x$prior.mean
+        X <- gbp.object$X
+      } else if (!is.na(gbp.object$prior.mean)) {
+        lambda0 <- gbp.object$prior.mean
       }
   
-      n <- x$se
-      r <- exp(-x$a.new)
+      n <- gbp.object$se
+      r <- exp(-gbp.object$a.new)
 
       # 2. generate lambda matrix
       sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nrow = length(n))
@@ -143,11 +144,11 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (is.na(x$prior.mean) & identical(x$X, NA)) {
+          out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
                    gbp(sim.z[, i], n, model = "pr")
-                 } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+                 } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
                    gbp(sim.z[, i], n, X, model = "pr")
-                 } else if (!is.na(x$prior.mean)) {
+                 } else if (!is.na(gbp.object$prior.mean)) {
                    gbp(sim.z[, i], n, mu0 = lambda0, model = "pr")
                  }
           
@@ -167,24 +168,24 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
     } else if (!only.gbp.result) {
  
      # 1. initial values
-      if (missing(y)) {
-        print("(r, beta, X) or (r, mu0) should be designated")
+      if (missing(A.or.r)) {
+        print("(A.or.r, reg.coef, covariates (if any) or 
+               (A.or.r, mean.PriorDist) should be designated")
         stop()
-      } else if (missing(beta)) {
-        lambda0 <- mu0
-      } else if (missing(mu0) & missing(X)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(beta)
+      } else if (missing(reg.coef)) {
+        lambda0 <- mean.PriorDist
+      } else if (missing(mean.PriorDist) & missing(covariates)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(reg.coef)
         lambda0 <- exp(temp.x %*% betas)
-      } else if (missing(mu0) & !missing(X)) { 
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
-        betas <- as.vector(beta)
+      } else if (missing(mean.PriorDist) & !missing(covariates)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), covariates))
+        betas <- as.vector(reg.coef)
         lambda0 <- exp(temp.x %*% betas)
-        X <- x$X
       }
 
-      n <- x$se
-      r <- y
+      n <- gbp.object$se
+      r <- A.or.r
 
       # 2. generate lambda matrix
       sim.lambda <- matrix(rgamma(length(n) * nsim, r * lambda0, r), nrow = length(n))
@@ -195,12 +196,12 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (missing(mu0) & missing(X)) {
+          out <- if (missing(mean.PriorDist) & missing(covariates)) {
                    gbp(sim.z[, i], n, model = "pr")
-                 } else if (missing(mu0) & !missing(X)) {
-                   gbp(sim.z[, i], n, X, model = "pr")
-                 } else if (missing(beta)) {
-                   gbp(sim.z[, i], n, mu0 = mu0, model = "pr")
+                 } else if (missing(mean.PriorDist) & !missing(covariates)) {
+                   gbp(sim.z[, i], n, covariates, model = "pr")
+                 } else if (missing(reg.coef)) {
+                   gbp(sim.z[, i], n, mu0 = mean.PriorDist, model = "pr")
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -217,25 +218,25 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       }	
     }
 
-  } else if (x$model == "gr") {	
+  } else if (gbp.object$model == "gr") {	
 
      if (only.gbp.result) {
       # 1. initial values
-      if (is.na(x$prior.mean) & identical(x$X, NA)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(x$beta.new)
+      if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(gbp.object$beta.new)
         mu0 <- temp.x %*% betas
-      } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), x$X))
-        betas <- as.vector(x$beta.new)
+      } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), gbp.object$X))
+        betas <- as.vector(gbp.object$beta.new)
         mu0 <- temp.x %*% betas
-        X <- x$X
-      } else if (!is.na(x$prior.mean)) {
-        mu0 <- x$prior.mean
+        X <- gbp.object$X
+      } else if (!is.na(gbp.object$prior.mean)) {
+        mu0 <- gbp.object$prior.mean
       }
   
-      se <- x$se
-      A <- exp(x$a.new)
+      se <- gbp.object$se
+      A <- exp(gbp.object$a.new)
 
       # 2. generate mu matrix
       sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nrow = length(se))
@@ -246,11 +247,11 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (is.na(x$prior.mean) & identical(x$X, NA)) {
+          out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
                    gbp(sim.y[, i], se)
-                 } else if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+                 } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
                    gbp(sim.y[, i], se, X)
-                 } else if (!is.na(x$prior.mean)) {
+                 } else if (!is.na(gbp.object$prior.mean)) {
                    gbp(sim.y[, i], se, mu0 = mu0)
                  }
           postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
@@ -268,23 +269,24 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
 
     } else if (!only.gbp.result) {
       # 1. initial values
-      if (missing(y)) {
-        print("(A, beta, X) or (A, mu0) should be designated")
+      if (missing(A.or.r)) {
+        print("(A.or.r, reg.coef, covariates (if any) or 
+               (A.or.r, mean.PriorDist) should be designated")
         stop()
-      } else if (!missing(mu0)) {
-        mu0 <- mu0
-      } else if (!missing(beta) & missing(X)) {
-        temp.x <- as.matrix(rep(1, length(x$se)))
-        betas <- as.vector(beta)
+      } else if (!missing(mean.PriorDist)) {
+        mu0 <- mean.PriorDist
+      } else if (!missing(reg.coef) & missing(covariates)) {
+        temp.x <- as.matrix(rep(1, length(gbp.object$se)))
+        betas <- as.vector(reg.coef)
         mu0 <- temp.x %*% betas
-      } else if (!missing(beta) & !missing(X)) { 
-        temp.x <- as.matrix(cbind(rep(1, length(x$se)), X))
-        betas <- as.vector(beta)
+      } else if (!missing(reg.coef) & !missing(covariates)) { 
+        temp.x <- as.matrix(cbind(rep(1, length(gbp.object$se)), covariates))
+        betas <- as.vector(reg.coef)
         mu0 <- temp.x %*% betas
       }
   
-      se <- x$se
-      A <- y
+      se <- gbp.object$se
+      A <- A.or.r
  
       # 2. generate mu matrix
       sim.mu <- matrix(rnorm(length(se) * nsim, mu0, sqrt(A)), nrow = length(se))
@@ -295,12 +297,12 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (!missing(beta) & missing(X)) {
+          out <- if (!missing(reg.coef) & missing(covariates)) {
                    gbp(sim.y[, i], se)
-                 } else if (!missing(beta) & !missing(X)) {
-                   gbp(sim.y[, i], se, X)
-                 } else if (!missing(mu0)) {
-                   gbp(sim.y[, i], se, mu0 = mu0)
+                 } else if (!missing(reg.coef) & !missing(covariates)) {
+                   gbp(sim.y[, i], se, covariates)
+                 } else if (!missing(mean.PriorDist)) {
+                   gbp(sim.y[, i], se, mu0 = mean.PriorDist)
                  }
           postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
           postsd <- sqrt(se^2 * (A / (se^2 + A)))
@@ -328,13 +330,13 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
-  plot(1 : length(x$se), result, ylim = c(0.7, 1), type = "l", col = 2, ylab = "",
+  plot(1 : length(gbp.object$se), result, ylim = c(0.7, 1), type = "l", col = 2, ylab = "",
        xlab = "Group_i, i = 1, ..., k", main = "Estimated Coverage Probability for Each Group",
        lwd = 3, lty = 1)
   abline(h = 0.95)
-  points(1 : length(x$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
-  if (is.na(x$prior.mean)){
-    if (x$model == "gr") {
+  points(1 : length(gbp.object$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
+  if (is.na(gbp.object$prior.mean)){
+    if (gbp.object$model == "gr") {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
                              "Blue Dotted Line: (Unbiased)",
                              paste("A =", round(A, 2)), 
@@ -350,7 +352,7 @@ coverage <- function(x, y, beta, X, mu0, nsim = 10) {
                              paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
     }
   } else {  # if prior mean is assigned
-    if (x$model == "gr") {
+    if (gbp.object$model == "gr") {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
                              "Blue Dotted Line: (Unbiased)",
                              paste("A =", round(A, 2)), 
