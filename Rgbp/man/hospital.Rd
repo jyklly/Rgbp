@@ -24,10 +24,8 @@
 }
 
 \source{
-Morris, C. and Lysy, M. (2012). \emph{Shrinkage Estimation in Multilevel Normal Models}. Statistical Science. 27. 115-134.
-}
-\references{
-Morris, C. and Lysy, M. (2012). \emph{Shrinkage Estimation in Multilevel Normal Models}. Statistical Science. 27. 115-134.
+  Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. 
+  \emph{Statistical Science}. \bold{27}. 115-134.
 }
 \examples{
 data(hospital)

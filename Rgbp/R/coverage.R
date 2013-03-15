@@ -1,5 +1,5 @@
 
-coverage <- function(x, y, beta, X, mu0, nsim = 10, ...) {
+coverage <- function(x, y, beta, X, mu0, nsim = 10) {
 
   # Rao-Blackwellized criterion
   coverageRB <- matrix(NA, nrow = length(x$se), ncol = nsim)

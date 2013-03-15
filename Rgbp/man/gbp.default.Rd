@@ -10,14 +10,14 @@
 \arguments{
   \item{x}{
     a (k \eqn{\times} 1) vector of the sample mean for GRIMM and of the number of successful 
-    trials for BRIMM and PRIMM, where k is the number of groups (or units) in a dataset.
+    trials for BRIMM and PRIMM,\cr where k is the number of groups (or units) in a dataset.
   }
   \item{y}{
     a (k by 1) vector composed of the standard errors of all groups for GRIMM and 
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) a (k by t) matrix of covariate values, where t is the number of covariates (t \eqn{\ge} 1). 
+    (optional) a (k by t) matrix of covariate values, where \cn t is the number of covariates (t \eqn{\ge} 1). 
     To fit an intercept do not include a vector of ones but rather use the intercept argument.
   }
   \item{mu0}{
@@ -71,9 +71,11 @@
 }
 
 \references{
-  Morris, C. and Tang, R. (2011). \emph{Estimating Random Effects via
-  Adjustment for Density Maximization}. Statist. Sci. Volume 26, Number
-  2, (2011), 271-287.
+  Morris, C. and Tang, R. (2011). Estimating Random Effects via
+  Adjustment for Density Maximization. \emph{Statistical Science}. \bold{26}. 271-287.
+
+  Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. 
+  \emph{Statistical Science}. \bold{27}. 115-134.
 }
 
 \author{
