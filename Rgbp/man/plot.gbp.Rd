@@ -1,6 +1,6 @@
 \name{plot.gbp}
 \alias{plot.gbp}
-\title{Shrinkage and Posterior Interval Plots}
+\title{Drawing Shrinkage and Posterior Interval Plots}
 \description{
 \code{plot(gbp.object)} draws shrinkage and posterior interval plots
 }

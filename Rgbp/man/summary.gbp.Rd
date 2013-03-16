@@ -1,7 +1,7 @@
 \name{summary.gbp}
 \alias{summary.gbp}
-\title{Summary of Estimation Result from "gbp" Object}
-\description{\code{summary.gbp} prepares the summary of the object defined as "gbp" class to display}
+\title{Summarizing Estimation Result from "gbp" Object}
+\description{\code{summary.gbp} prepares the summary of the object defined as "gbp" class creating "summary.gbp" class}
 \usage{\method{summary}{gbp}(object, ...)}
 \arguments{
   \item{object}{

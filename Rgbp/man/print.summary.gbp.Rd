@@ -1,6 +1,6 @@
 \name{print.summary.gbp}
 \alias{print.summary.gbp}
-\title{The Way to Disply "summary.gbp" Class}
+\title{Displying "summary.gbp" Class}
 \description{
 \code{summary(gbp.object)} enables users to see a compact summary of estimation result.
 }
