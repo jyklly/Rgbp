@@ -40,12 +40,12 @@
   on the first-level parameter. Covariates appear in the second-level because covariates are obtainable
   before we observe data.
  
-  To be specific, the 1st hierarchy has \eqn{f(y[j] | \theta[j])}{f(y | \theta)} proportional to 
-  Lik(\eqn{\theta[j]}{\theta}). And the 2nd hierarchy has a conjugate prior distribution such as 
+  To be specific, the first hierarchy has \eqn{f(y[j] | \theta[j])}{f(y | \theta)} proportional to 
+  Lik(\eqn{\theta[j]}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
   \eqn{p(\theta[j] | \mu[0j], A (or r)) = p[\mu[0j], A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
   \eqn{p[\mu[0j], \mu[0j] / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
   and \eqn{p[\mu[0j], \mu[0j] * (1 - \mu[0j]) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
-  where \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0) = x'\beta}. The elements of the square braket indicates 
+  where \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
   [mean, variance] of that distribution and \emph{g} is a link function. 
 
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 
@@ -57,14 +57,15 @@
   to run \code{gbp}.
 
   First, if any values related to the prior distribution are not designated like 
-  \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values from \code{gbp.object} 
-  as given true values. Next, it samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} from the prior
-  distribution determined by those estimated values in the \code{object.gbp}, \code{b}. And then, \code{gbp}
+  \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
+  (=\code{gbp.object}) as given true values. Next, it samples a (\emph{k} by 1) vector \eqn{\theta[i]}
+  {\theta_i} from the prior
+  distribution determined by those estimated values in \code{b} (=\code{gbp.object}). And then, \code{gbp}
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta[i]}{\theta_i} just sampled.
 
   Second, \code{coverage} allows us to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariate and 
-  do not know mean of the prior distribution a priori. One value in \code{reg.coef} means the mean of 
+  do not know mean of the prior distribution a priori. One value in \code{reg.coef} indicates the mean of 
   second-level distribution will be set by a designated intercept value like 
   \eqn{g(\mu[0]) = \beta[0] = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
   \eqn{\theta[i]}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
@@ -75,8 +76,8 @@
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on number of regression coefficients including
   an intercept term) but do not know mean of the prior distribution a priori. For reference, the input of 
-  X should not include column of ones and the mean of prior distribution will be set as 
-  \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of X). Then, 
+  \code{X} should not include column of ones and the mean of prior distribution will be set as 
+  \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of \code{X}). Then, 
   \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} from the prior distribution 
   determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 
   Sampling \emph{i}-th pseudo-data is based on \eqn{\theta[i]}{\theta_i} just sampled.
@@ -89,11 +90,12 @@
 
   The unbiased estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators
   over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated 
-  interval by \code{gbp} on \emph{i}-th simulated dataset for \emph{j}-th group contains a true parameter 
+  interval of the \emph{j}-th group by \code{gbp} on \emph{i}-th simulated dataset contains a true parameter 
   \eqn{\theta[ij]}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
-  Rao-Blackwellized estimator is an expectation of unbiased estimator given a sufficient statistic, \emph{y}.
+  Rao-Blackwellized estimator is an expectation of the unbiased estimator described above given a sufficient
+  statistic, \emph{y}.
 }
 
 \value{
@@ -104,16 +106,16 @@
     estimated unbiased coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{average.coverageRB}{
-    average value of Rao-Blackwellized coverage probabilities over all groups (units).
+    average value of Rao-Blackwellized coverage probabilities over values in \code{coverageRB}.
   }
   \item{average.coverage10}{
-    average value of unbiased coverage probabilities over all groups (units).
+    average value of unbiased coverage probabilities over values in \code{coverage10}.
   }
   \item{minimum.coverageRB}{
-    minimum value of Rao-Blackwellized coverage probabilities among all groups (units).
+    minimum value of Rao-Blackwellized coverage probabilities among values in \code{coverageRB}.
   }
   \item{minimum.coverage10}{
-    minimum value of unbiased coverage probabilities among all groups (units).
+    minimum value of unbiased coverage probabilities among values in \code{coverage10}.
   }
   \item{raw.resultRB}{
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
