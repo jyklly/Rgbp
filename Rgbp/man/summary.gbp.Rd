@@ -1,36 +1,63 @@
 \name{summary.gbp}
 \alias{summary.gbp}
-
-\title{
-  Summary of Estimation
-}
-\description{
-  It retuns the summary of the object defined as "gbp" class
-}
-\usage{
-  \method{summary}{gbp}(object, ...)
-}
+\title{Summary of Estimation Result from "gbp" Object}
+\description{\code{summary.gbp} prepares the summary of the object defined as "gbp" class to display}
+\usage{\method{summary}{gbp}(object, ...)}
 \arguments{
   \item{object}{
-    The resultant object of "gbp" function 
+    a resultant object of \code{gbp} function. 
   }
   \item{...}{
     further arguments passed to other methods.
   }
 }
 \value{
-  \item{main.summary}{summary of result of the print.gbp function}
-  \item{second.level.variance.summary}{summary of the second level variance component}
-  \item{regression.summary}{summary of the regression, if any}
+  \code{summary.gbp} prepares below contents:
+  \item{main}{
+    a table to be displayed by \code{print(gbp.object)}. \code{\link{print.summary.gbp}}.
+  }
+  \item{sec.var}{
+    second-level variance component estimation summary. \code{\link{print.summary.gbp}}.
+  }
+  \item{reg}{
+    regression summary (if fitted). \code{\link{print.summary.gbp}}.
+  }
 }
-\author{
-  Hyungsuk Tak
-}
+
+\author{Joseph Kelly, Carl Morris, and Hyungsuk Tak}
+
 \examples{
-  data(schools)
-  y <- schools$y
-  se <- schools$se
-  g <- gbp(y, se, mean.PriorDist = 8)
+
+  data(hospital)
+
+  z <- hospital$d
+  n <- hospital$n
+  y <- hospital$y
+  se <- hospital$se
+  
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+  #########
+  # GRIMM #
+  ######### 
+
+  g <- gbp(y, se)
   summary(g)
+
+  #########
+  # BRIMM #
+  ######### 
+
+  b <- gbp(z, n, model = "br")
+  summary(b)
+
+  #########
+  # PRIMM #
+  ######### 
+
+  p <- gbp(z, n, model = "pr")
+  summary(p)
 }
 \keyword{method}
