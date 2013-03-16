@@ -45,7 +45,7 @@
   z <- hospital$d
   n <- hospital$n
   y <- hospital$y
-  se <- hospital$sd
+  se <- hospital$se
   
   ###################################################################################
   # We do not have any covariates and do not know a mean of the prior distribution. #
