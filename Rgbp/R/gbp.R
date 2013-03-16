@@ -10,7 +10,7 @@ gbp.default <- function(x, y, covariates, mean.PriorDist, model = "gr", intercep
   res
 }
 
-print.gbp <- function(object, ...) {
+print.gbp <- function(object) {
   
   if (is.na(object$prior.mean) & !identical(object$X, NA)) {
 
@@ -31,7 +31,8 @@ print.gbp <- function(object, ...) {
                          post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     }
 
-  } else if (is.na(object$prior.mean) & identical(object$X, NA)) { # if there are neither prior.mean and X assigned
+  } else if (is.na(object$prior.mean) & identical(object$X, NA)) { 
+  # if there are neither prior.mean and X assigned
 
     if (object$model == "gr") {
       temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean.hat,
