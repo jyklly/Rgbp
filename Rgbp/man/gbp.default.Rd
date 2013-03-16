@@ -44,15 +44,23 @@
   repeated sampling property.
 
   For Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
-  (\eqn{\sigma^2} is assumed to be known):
-  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^[2])}
-  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
-  \deqn{\mu[0j] = x[j]'\beta}
+  (\eqn{\sigma^{2}}{\sigma^2} is assumed to be known):
+  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma^{2})}{(y|\theta) ~ N(\theta, \sigma^2)}
+  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}{(\theta|A, \mu0) ~ N(\mu0, A)}
+  \deqn{\mu[0j] = x[j]'\beta}{\mu0 = x'\beta}
+
+  For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model:
+  \deqn{(z[j]|\lambda[j]) ~ Pois(n[j]\lambda[j])}{(z|\lambda) ~ Pois(n\lambda)}
+  \deqn{(\lambda[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], r) ~ Gamma[\mu[0j], \mu[0j] / r)}
+  {(\lambda|r, \mu0) ~ Gamma(r\mu0, scale = 1 / r) ~ Gamma[\mu0, \mu0 / r]}
+  \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0) = x'\beta}
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
-  \deqn{(y[j]|\theta[j]) ~ Binom(n[j], \theta[j])}{(y|\theta) ~ N(\theta, \sigma2)}
-  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
-  \deqn{\mu[0j] = x[j]'\beta}
+  \deqn{(z[j]|p[j]) ~ Bin(n[j], p[j])}{(z|p) ~ Bin(n, p)}
+  \deqn{(p[j]|r, \mu[0j]) ~ Beta(r\mu[0j], r\mu[0j])}{(p|r, \mu0) ~ Beta(r\mu0, r(1 - \mu0))}
+  \deqn{logit(\mu[0j]) = x[j]'\beta}{logit(\mu0) = x'\beta}
+
+
   the distribution of hierarchy is Normal with mean \eqn{\theta[j]}{\theta} and variance
   \eqn{sigma^[2]}{sigma^2} assumed to be known. Asfor the 2nd hierarchy, a conjugate prior distribution on the parameter 
   of  1st level is 
