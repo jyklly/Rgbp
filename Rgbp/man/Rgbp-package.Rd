@@ -43,7 +43,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
 
   # If we know a prior mean, the second-level mean parameter,
   # GRIMM
-  g <- gbp(y, se, mu0 = 8)
+  g <- gbp(y, se, mean.PriorDist = 8)
   g
   summary(g)
   plot(g)
@@ -56,7 +56,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
   # BRIMM
-  b <- gbp(z, n, mu0 = 0.265, model = "br")
+  b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
   b
   summary(b)
   plot(b)
@@ -69,7 +69,7 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   # PRIMM
-  p <- gbp(z, n, mu0 = 0.265, model = "pr")
+  p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
   p
   summary(p)
   plot(p)
