@@ -15,7 +15,7 @@
 \usage{data(baseball)}
 
 \format{
-  A data set of 18 players with 10 covariates.
+  A data set of 18 players with 10 covariates:
   \describe{
     \item{\code{FirstName}}{each player's first name}
     \item{\code{LastName}}{each player's last name}
