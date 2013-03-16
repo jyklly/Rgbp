@@ -47,7 +47,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
                    gbp(sim.z[, i], n, X, model = "br")
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mu0 = p0, model = "br")
+                   gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br")
                  }
 
           a1 <- r * p0 + sim.z[, i]
