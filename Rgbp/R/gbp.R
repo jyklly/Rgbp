@@ -10,54 +10,54 @@ gbp.default <- function(x, y, covariates, mean.PriorDist, model = "gr", intercep
   res
 }
 
-print.gbp <- function(object, ...) {
+print.gbp <- function(x, ...) {
   
-  if (is.na(object$prior.mean) & !identical(object$X, NA)) {
+  if (is.na(x$prior.mean) & !identical(x$X, NA)) {
 
-	cova <- as.matrix(object$X)
+	cova <- as.matrix(x$X)
 	colnames(cova) <- paste(1 : dim(cova)[2])
     
-    if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, x = cova, 
-                         prior.mean = object$prior.mean.hat,
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+    if (x$model == "gr") {
+      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, x = cova, 
+                         prior.mean = x$prior.mean.hat,
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, x = cova, 
-                         prior.mean = object$prior.mean.hat,
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, x = cova, 
+                         prior.mean = x$prior.mean.hat,
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
 
-  } else if (is.na(object$prior.mean) & identical(object$X, NA)) { 
+  } else if (is.na(x$prior.mean) & identical(x$X, NA)) { 
   # if there are neither prior.mean and X assigned
 
-    if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean.hat,
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+    if (x$model == "gr") {
+      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, prior.mean = x$prior.mean.hat,
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, prior.mean = object$prior.mean.hat,
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, prior.mean = x$prior.mean.hat,
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
 
 
-  } else if (!is.na(object$prior.mean)) {
-    if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean, 
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+  } else if (!is.na(x$prior.mean)) {
+    if (x$model == "gr") {
+      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, prior.mean = x$prior.mean, 
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, prior.mean = object$prior.mean, 
-                         shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
-                         post.intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, prior.mean = x$prior.mean, 
+                         shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
+                         post.intv.low = x$post.intv.low, post.mean = x$post.mean, 
+                         post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
   }
   temp.mean <- colMeans(temp)
@@ -227,46 +227,46 @@ summary.gbp <- function(object, ...) {
 }
 
 
-print.summary.gbp <- function(object, ...) {
-  if (identical(object$reg, NA)) {
+print.summary.gbp <- function(x, ...) {
+  if (identical(x$reg, NA)) {
     cat("Main summary:\n")
     cat("\n")
-    print(round(object$main, 3))
+    print(round(x$main, 3))
     cat("\n")
     cat("\n")
     cat("Second-level Variance Component Estimation Summary:\n")
     cat("\n")
-    print(round(object$sec.var, 3))
+    print(round(x$sec.var, 3))
   } else {
     cat("Main summary:\n")
     cat("\n")
-    print(round(object$main, 3))
+    print(round(x$main, 3))
     cat("\n")
     cat("\n")
     cat("Second-level Variance Component Estimation Summary:\n")
     cat("\n")
-    print(round(object$sec.var, 3))
+    print(round(x$sec.var, 3))
     cat("\n")
     cat("\n")
     cat("Regression Summary:\n")
     cat("\n")
-    print(round(object$reg, 3))
+    print(round(x$reg, 3))
   }
 }
 
-plot.gbp <- function(object, ...) {
+plot.gbp <- function(x, ...) {
 
-  y <- object$sample.mean
-  se <- object$se
-  if (is.na(object$prior.mean)) {
-    pr.m <- object$prior.mean.hat
+  y <- x$sample.mean
+  se <- x$se
+  if (is.na(x$prior.mean)) {
+    pr.m <- x$prior.mean.hat
   } else {
-    pr.m <- object$prior.mean
+    pr.m <- x$prior.mean
   }
-  po.m <- object$post.mean
-  po.sd <- object$post.sd
-  po.low <- object$post.intv.low
-  po.upp <- object$post.intv.upp
+  po.m <- x$post.mean
+  po.sd <- x$post.sd
+  po.low <- x$post.intv.low
+  po.upp <- x$post.intv.upp
   cx <- (mean(log(se + 2)) + min(log(se + 2))) / 2
   index <- 1 : length(se)
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
@@ -297,12 +297,12 @@ plot.gbp <- function(object, ...) {
   if (min(pr.m) == max(pr.m)) {
     if(length(unique(pr.m)) == 1)
       points(pr.m[1], 0, col = "darkviolet", pch = 2, cex = 4)
-    legend("bottomright", c(ifelse(object$model == "gr", "se", "n"), "prior mean"), col = c(4, "darkviolet"),
+    legend("bottomright", c(ifelse(x$model == "gr", "se", "n"), "prior mean"), col = c(4, "darkviolet"),
            lty = 1, lwd = c(2, NA), pch = c(NA, 2), seg.len = 0.5, bty = "n")
   } else {
     if(length(unique(pr.m)) == 1)
       points(pr.m[1], 0, col = "darkviolet", pch = 2, cex = 4)
-    legend("bottomright", c(ifelse(object$model == "gr", "se", "n")), col = 4,
+    legend("bottomright", c(ifelse(x$model == "gr", "se", "n")), col = 4,
            lty = 1, lwd = 2, seg.len = 0.5, bty = "n")
   }
   sunflowerplot(rep(0, length(y)) ~ po.m, add = TRUE)
