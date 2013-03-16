@@ -2,18 +2,16 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{
-Bayesian Hierarchical Modeling using Stein's Harmonic Prior
-}
+\title{Bayesian Hierarchical Modeling using Stein's Harmonic Prior}
 \description{
-Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data assuming generalized Stein's harmonic priors.
+Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data \cr using generalized Stein's harmonic prior for good frequentist repeated sampling property.
 }
 \details{
   \tabular{ll}{
     Package: \tab Rgbp\cr
     Type: \tab Package\cr
     Version: \tab 1.0.0\cr
-    Date: \tab 2012-10-31\cr
+    Date: \tab 2013-03-16\cr
     License: \tab GPL-2\cr
   }
 }
@@ -23,12 +21,12 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 }
 \references{
-  Morris, C. and Tang, R. (2011). \emph{Estimating Random Effects via Adjustment for Density Maximization}. Statistical Science. 26. 271-287.
-  Morris, C. and Lysy, M. (2012). \emph{Shrinkage Estimation in Multilevel Normal Models}. Statistical Science. 27. 115-134.
+  Morris, C. and Tang, R. (2011). Estimating Random Effects via Adjustment for Density Maximization. \emph{Statistical Science}. \bold{26}. 271-287.
+
+  Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
 }
 
 \examples{
- 
 
   # Loading datasets
   data(schools)
