@@ -7,15 +7,12 @@ Print object defined as "gbp" class
 This function returns the resulting object of "gbp" function
 }
 \usage{
-  \method{print}{gbp}(x, ...)
+  \method{print}{gbp}(object)
 }
 \arguments{
-  \item{x}{
-The resultant object of "gbp" function
-}
-  \item{...}{
-Anything else
-}
+  \item{object}{
+    The resultant object of "gbp" function
+  }
 }
 \value{
   \item{sample.mean}{sample mean}

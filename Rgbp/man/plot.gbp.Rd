@@ -7,14 +7,11 @@ Shrinkage and Posterior Interval Plots
 This function plots two graphs, Shrinkage and Posterior Interval Plots, based on the object defined as \code{gbp} class.
 }
 \usage{
-\method{plot}{gbp}(x, ...)
+\method{plot}{gbp}(object)
 }
 \arguments{
-  \item{x}{
+  \item{object}{
     The result of gbp function, which has \code{gbp} class
-  }
-  \item{...}{
-    Optional arguments that may be included in future versions.
   }
 }
 

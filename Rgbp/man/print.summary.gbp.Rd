@@ -7,14 +7,11 @@ Print object defined as "summary.gbp" class
   This function returns the resulting object of "gbp.summary" function
 }
 \usage{
-  \method{print}{summary.gbp}(x,...)
+  \method{print}{summary.gbp}(object)
 }
 \arguments{
-  \item{x}{
+  \item{object}{
     The result of gbp function, which has \code{gbp.summary} class
-  }
-  \item{...}{
-    Any argument for future purpose
   }
 }
 \value{
