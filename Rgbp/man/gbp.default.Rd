@@ -1,11 +1,11 @@
-\name{gbp}
+\name{gbp}			
 \alias{gbp}
 \alias{gbp.default}
 \title{Fitting Bayesian Hierarchical Models}
 \description{
   \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data using generalized Stein's harmonic prior for good frequntist repeated sampling
-  perperty.
+  and Poisson (PRIMM) data using generalized Stein's harmonic prior for
+  good frequentist repeated sampling property.
 }
 \usage{\method{gbp}{default}(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
@@ -32,7 +32,7 @@
   }
   \item{intercept}{
     \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
-    included in the regressuin. Default is \code{TRUE}.
+    included in the regression. Default is \code{TRUE}.
   }
   \item{Alpha}{
     a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
@@ -40,9 +40,8 @@
 }
 
 \details{
-  \code{gbp} fits Bayesian hierarchical models using generalized Stein's harmonic prior for good frequentist
-  repeated sampling property. The first-level is a distribution of observed data (Likelihood) and the 
-  second-level is the prior distribution on the first-level parameter. 
+  \code{gbp} fits a Bayesian hierarchical model using generalized
+  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is the prior distribution on the first-level parameter. 
 
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
   (\eqn{\sigma[j]^{2}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
@@ -53,7 +52,7 @@
   for \eqn{j = 1, \ldots, k}.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
-  (a square braket below indicates [mean, variance] of distribution):
+  (a square bracket below indicates [mean, variance] of distribution):
   \deqn{(z[j] | \theta[j]) ~ Pois(n[j]\theta[j])}{(z_j | \theta_j) ~ Pois(n_j\theta_j)}
   \deqn{(\theta[j] | r, \mu[0j]) ~ Gamma(r\mu[0j], scale = 1 / r) ~ Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j | r, \mu0_j) ~ Gamma(r\mu0_j, scale = 1 / r) ~ Gamma[\mu0_j, \mu0_j / r]}
   \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0_j) = x_j'\beta}
@@ -76,16 +75,16 @@
   The argument \code{y} in \code{gbp} is a (\emph{k} by 1) vector composed of the standard errors 
   (\eqn{\sigma}) of all groups for GRIMM and the total numbers of trials (\emph{n}) for BRIMM and PRIMM.
 
-  As for two optional arguments, \code{covaraites} and \code{mean.PriorDist}, there are three feasible 
+  As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
-  know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, asssigning none of two
-  optional arguments, such as "\code{gbp(z, n, model = "br")}", will lead to a right model. \code{gbp} 
+  know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, assigning none of two
+  optional arguments, such as "\code{gbp(z, n, model = "br")}", will lead to a correct model. \code{gbp} 
   will automatically fit a regression with only an intercept term to estimate common mean of the prior
   distribution (exchangeability).
 
   The second situation is when we have some covariates (a \emph{k} by \emph{t} matrix, where \emph{t} 
   \eqn{\ge} 1) and do not know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, 
-  asssigning a \emph{k} by \emph{t} matrix (each column corresponds to one covariate), \emph{X}, such as 
+  assigning a \emph{k} by \emph{t} matrix (each column corresponds to one covariate), \emph{X}, such as 
   "\code{gbp(z, n, X, model = "pr")}", will lead to a right model. Default of \code{gbp} is to fit a
   regression with an intercept term to estimate mean of the prior distribution. Double exchangeability will
   hold in this case.
@@ -145,7 +144,7 @@
   # Loading datasets
   data(schools)
 
-  # baseball data where z is Hits and n is AtBats
+  # baseball data where z is Hits and n is at bats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
   x1 <- rep(c(-1, 0, 1), 6)
@@ -155,7 +154,7 @@
   x2 <- rep(c(-1, 0, 1, 2), 2)
   
   ####################################################################################
-  # If we do not have any covariate and do not know a mean of the prior distribution #
+  # If we do not have any covariates and do not know a mean of the prior distribution #
   ####################################################################################
 
   #########
@@ -167,10 +166,10 @@
   summary(g)
   plot(g)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of a regression coefficient
+  ### when we want to simulate pseudo datasets based on different values of A and of a regression coefficient
   ### (intercept), not using estimated values as true ones
   coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
@@ -183,10 +182,10 @@
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
+  ### when we want to simulate pseudo datasets based on different values of r and of a regression coefficient
   ### (intercept), not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
 
@@ -199,10 +198,10 @@
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
+  ### when we want to simulate pseudo datasets based on different values of r and of a regression coefficient
   ### (intercept), not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
@@ -236,10 +235,10 @@
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
+  ### when we want to simulate pseudo datasets based on different values of r, of regression coefficients,
   # and of covariate, not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
@@ -253,10 +252,10 @@
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
+  ### when we want to simulate pseudo datasets based on different values of r, of regression coefficients,
   ### and of covariate, not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
@@ -274,10 +273,10 @@
   summary(g)
   plot(g)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of 2nd level mean 
+  ### when we want to simulate pseudo datasets based on different values of A and of 2nd level mean 
   ### as true ones, not using estimated values as true ones
   coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
@@ -290,10 +289,10 @@
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
+  ### when we want to simulate pseudo datasets based on different values of r and of 2nd level mean 
   ### as true ones, not using estimated values as true ones
   coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
@@ -306,13 +305,15 @@
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
+  ### when we want to simulate pseudo datasets based on different values of r and of 2nd level mean 
   ### as true ones, not using estimated values as true ones
   coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 }
 
 
 \keyword{methods}
+
+%%  LocalWords:  gbp BRIMM PRIMM

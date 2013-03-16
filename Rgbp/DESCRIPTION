@@ -1,6 +1,6 @@
 Package: Rgbp
-Version: 0.1-0
-Date: 2012-10-31
+Version: 1.0.0
+Date: 2013-03-16
 Title: Bayesian Hierarchical Modeling using (generalized) Stein's Harmonic Prior
 Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>

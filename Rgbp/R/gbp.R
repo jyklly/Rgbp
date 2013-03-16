@@ -272,19 +272,20 @@ plot.gbp <- function(x, ...) {
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
   
-  dev.new <- function(width = 10, height = 5) { 
-    platform <- sessionInfo()$platform 
-    if (grepl("linux", platform)) { 
-      x11(width = width, height = height) 
-    } else if (grepl("pc", platform)) { 
-      windows(width = width, height = height)
-    } else if (grepl("apple", platform)) { 
-      quartz(width = width, height = height) 
-    } 
-  }
+  ## dev.new <- function(width = 10, height = 5) { 
+  ##   platform <- sessionInfo()$platform 
+  ##   if (grepl("linux", platform)) { 
+  ##     x11(width = width, height = height) 
+  ##   } else if (grepl("pc", platform)) { 
+  ##     windows(width = width, height = height)
+  ##   } else if (grepl("apple", platform)) { 
+  ##     quartz(width = width, height = height) 
+  ##   } 
+  ## }
 
-  dev.new(10, 5)
-  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13)
+  ## dev.new(10, 5)
+  
+  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
   xl <- c("Indices (Groups) by the order of data input")
   
   sqrtV <- se
@@ -293,33 +294,30 @@ plot.gbp <- function(x, ...) {
   xmin <- min(c(y, po.m, pr.m))
   xmax <- max(c(y, po.m, pr.m))
   sunflowerplot(rep(4, length(y)) ~ y, ylim = c(-1, 5), xlim = c(xmin - abs(xmin) * 0.1, 
-                xmax + abs(xmax) * 0.1), yaxt = "n", col.lab = "white", main = "Shrinkage Plot")
-  if (min(pr.m) == max(pr.m)) {
-    if(length(unique(pr.m)) == 1)
-      points(pr.m[1], 0, col = "darkviolet", pch = 2, cex = 4)
-    legend("bottomright", c(ifelse(x$model == "gr", "se", "n"), "prior mean"), col = c(4, "darkviolet"),
-           lty = 1, lwd = c(2, NA), pch = c(NA, 2), seg.len = 0.5, bty = "n")
+                xmax + abs(xmax) * 0.1), yaxt = "n", col.lab = "white", main = "Shrinkage Plot", pch=1,cex=1)
+  
+  if (length(unique(pr.m)) == 1) {
+    abline(v = pr.m, col = 4)
   } else {
-    if(length(unique(pr.m)) == 1)
-      points(pr.m[1], 0, col = "darkviolet", pch = 2, cex = 4)
-    legend("bottomright", c(ifelse(x$model == "gr", "se", "n")), col = 4,
-           lty = 1, lwd = 2, seg.len = 0.5, bty = "n")
+    points(pr.m, rep(0,length(pr.m)), col = 4, pch = "-", cex = 2)
   }
-  sunflowerplot(rep(0, length(y)) ~ po.m, add = TRUE)
+  
+  sunflowerplot(rep(0, length(y)) ~ po.m, add = TRUE,col="red",cex=1,pch=16)
   abline(h = 4)
   abline(h = 0)
-  axis(2, c(0, 4), c(expression(hat(theta)), expression(bar(y))), cex.axis = 1.1)
+ # axis(2, c(0, 4), c(expression(hat(theta)), expression(bar(y))), cex.axis = 1.1)
   sapply(1 : length(y), function(i) {
     lines(c(y[i], po.m[i]), c(4, 0))
-    lines(c(y[i], y[i] + sdlens[i] * sd(y) * 0.4), c(4, 4 + sdlens[i]), col = 4)
+    lines(c(y[i], y[i] + sdlens[i] * sd(y) * 0.4), c(4, 4 + sdlens[i]), col = "darkviolet")
     ##posterior variance lines
-    lines(c(po.m[i] - postlens[i] * sd(y) * 0.4, po.m[i]), c(0 - postlens[i], 0), col = 4)
+    lines(c(po.m[i] - postlens[i] * sd(y) * 0.4, po.m[i]), c(0 - postlens[i], 0), col = "darkviolet")
     xcord <- ((4 * po.m[i] / (y[i] - po.m[i]) - 4 * po.m / (y - po.m)) / 
               (4 / (y[i] - po.m[i]) - 4 / (y - po.m)))
     ycord <- 4 / (y - po.m) * xcord - 4 / (y - po.m) * po.m
     coords <- subset(cbind(xcord, ycord), ycord > 0 & ycord < 4)
     points(coords, col = 2)
   })
+
   
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = expression(theta),
        main = "100*Alpha% Intervals", cex = log(se + 2) / cx, col = 2, pch = 19)
@@ -334,6 +332,13 @@ plot.gbp <- function(x, ...) {
   } else {
     points(index, pr.m, col = 4, pch = "-", cex = 2)
   }
-  legend("topright", pch = c(19, 1, NA), col = c(2, 1, 4), lwd = c(NA, NA, 2), 
-         c("posterior mean", "sample mean", "prior mean"), seg.len = 0.5, bty = "n")
+
+  par(new=TRUE,mfrow=c(1,1))
+  par(xpd=NA)
+  plot(1, type="n", axes=F, xlab="", ylab="")
+  legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n",inset=c(-0.175,0))
+ # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
+  par(xpd=FALSE)
+
+
 }
