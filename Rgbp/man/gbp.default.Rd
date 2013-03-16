@@ -35,9 +35,6 @@
   \item{Alpha}{
     a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
   }
-  \item{...}{
-    further arguments to be passed to other methods.
-  }
 }
 
 \details{
