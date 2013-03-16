@@ -65,7 +65,7 @@
 
   Second, \code{coverage} allows us to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariate and 
-  do not know mean of the prior distribution a priori. One value in \code{reg.coef} indicates the mean of 
+  do not know a mean of the prior distribution a priori. One value in \code{reg.coef} indicates the mean of 
   second-level distribution will be set by a designated intercept value like 
   \eqn{g(\mu[0]) = \beta[0] = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
   \eqn{\theta[i]}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
@@ -75,7 +75,7 @@
   Third, \code{coverage} enables us to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on number of regression coefficients including
-  an intercept term) but do not know mean of the prior distribution a priori. For reference, the input of 
+  an intercept term) but do not know a mean of the prior distribution a priori. For reference, the input of 
   \code{X} should not include column of ones and the mean of prior distribution will be set as 
   \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of \code{X}). Then, 
   \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} from the prior distribution 

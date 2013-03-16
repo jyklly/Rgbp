@@ -4,7 +4,7 @@
 \title{Fitting Bayesian Hierarchical Models}
 \description{
   \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data using generalized Stein's harmonic prior for
+  and Poisson (PRIMM) data\cr using generalized Stein's harmonic prior for
   good frequentist repeated sampling property.
 }
 \usage{\method{gbp}{default}(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
@@ -19,15 +19,15 @@
   }
   \item{covariates}{
     (optional) a (\emph{k} by \emph{t}) matrix of covariate values, where \emph{t} is the number of 
-    covariates (\emph{t} \eqn{\ge} 1). To fit an intercept, do not include a vector of ones but rather use 
-    the intercept argument.
+    covariates (\emph{t} \eqn{\ge} 1).\cr To fit an intercept, do not include a vector of ones but rather use 
+    the \code{intercept} argument described below.
   }
   \item{mean.PriorDist}{
     (optional) a numeric value for the second-level mean parameter, \emph{i.e.} the mean of prior
     distribution, if you know this value a priori.
   }
   \item{model}{
-    a character string indicating which hierarchical model to fit. "gr" for Gaussian, "br" for Binomial, 
+    a character string indicating which hierarchical model to fit. "gr" for Gaussian data, "br" for Binomial, 
     and "pr" for Poisson. Default is "gr"
   }
   \item{intercept}{
@@ -41,26 +41,26 @@
 
 \details{
   \code{gbp} fits a Bayesian hierarchical model using generalized
-  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is the prior distribution on the first-level parameter. 
+  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is the conjugate prior distribution on the first-level parameter. 
 
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
   (\eqn{\sigma[j]^{2}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset):
-  \deqn{(y[j] | \theta[j]) ~ N(\theta[j], \sigma[j]^{2})}{(y_j | \theta_j) ~ N(\theta_j, \sigma_j^2)}
-  \deqn{(\theta[j] | A, \mu[0j]) ~ N(\mu[0j], A)}{(\theta_j | A, \mu0_j) ~ N(\mu0_j, A)}
+  \deqn{(y[j] | \theta[j]) ~ indep N(\theta[j], \sigma[j]^{2})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta[j] | A, \mu[0j]) ~ indep N(\mu[0j], A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
   \deqn{\mu[0j] = x[j]'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
   (a square bracket below indicates [mean, variance] of distribution):
-  \deqn{(z[j] | \theta[j]) ~ Pois(n[j]\theta[j])}{(z_j | \theta_j) ~ Pois(n_j\theta_j)}
-  \deqn{(\theta[j] | r, \mu[0j]) ~ Gamma(r\mu[0j], scale = 1 / r) ~ Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j | r, \mu0_j) ~ Gamma(r\mu0_j, scale = 1 / r) ~ Gamma[\mu0_j, \mu0_j / r]}
+  \deqn{(z[j] | \theta[j]) ~ indep Pois(n[j]\theta[j])}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta[j] | r, \mu[0j]) ~ indep Gamma(r\mu[0j], scale = 1 / r) ~ indep Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j | r, \mu0_j) ~ indep Gamma(r\mu0_j, scale = 1 / r) ~ indep Gamma[\mu0_j, \mu0_j / r]}
   \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
-  \deqn{(z[j] | \theta[j]) ~ Bin(n[j], \theta[j])}{(z_j | \theta_j) ~ Bin(n_j, \theta_j)}
-  \deqn{(\theta[j] | r, \mu[0j]) ~ Beta(r\mu[0j], r\mu[0j]) ~ Beta[\mu[0j], mu[0j](1 - mu[0j]) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ Beta(r\mu0_j, r(1 - \mu0_j)) ~ Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{(z[j] | \theta[j]) ~ indep Bin(n[j], \theta[j])}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta[j] | r, \mu[0j]) ~ indep Beta(r\mu[0j], r\mu[0j]) ~ indep Beta[\mu[0j], mu[0j](1 - mu[0j]) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
   \deqn{logit(\mu[0j]) = x[j]'\beta}{logit(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
@@ -77,30 +77,30 @@
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
-  know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, assigning none of two
+  know a mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, assigning none of two
   optional arguments, such as "\code{gbp(z, n, model = "br")}", will lead to a correct model. \code{gbp} 
-  will automatically fit a regression with only an intercept term to estimate common mean of the prior
+  will automatically fit a regression with only an intercept term to estimate a common mean of the prior
   distribution (exchangeability).
 
   The second situation is when we have some covariates (a \emph{k} by \emph{t} matrix, where \emph{t} 
-  \eqn{\ge} 1) and do not know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, 
+  \eqn{\ge} 1) and do not know a mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. In this case, 
   assigning a \emph{k} by \emph{t} matrix (each column corresponds to one covariate), \emph{X}, such as 
   "\code{gbp(z, n, X, model = "pr")}", will lead to a right model. Default of \code{gbp} is to fit a
-  regression with an intercept term to estimate mean of the prior distribution. Double exchangeability will
+  regression inclduing an intercept term to estimate a mean of the prior distribution. Double exchangeability will
   hold in this case.
 
-  The last case is when we know mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. Now, we do
+  The last case is when we know a mean of the prior distribution (\eqn{\mu[0]}{\mu0}) a priori. Now, we do
   not need to estimate regression coefficients at all because we know a true value of \eqn{\mu[0]}{\mu0}.
   Designating this value into the argument of \code{gbp} like 
   "\code{gbp(y, se, mean.PriorDist = 3, model = "gr")}" is enough to account for it. For reference, 
-  \code{mean.PriorDist} has the stronger priority than \code{covariates}, which means that when both
-  arguments are designated, \code{gbp} will fit a hierarchical model with known mean of prior distribution.
+  \code{mean.PriorDist} has a stronger priority than \code{covariates}, which means that when both
+  arguments are designated, \code{gbp} will fit a hierarchical model with known mean of prior distribution,  \code{mean.PriorDist}.
 
-  When it comes to estimating hyper-parameters, (\emph{A} or \emph{r} and \eqn{\beta}, \code{gbp} uses 
-  a mixture model with \eqn{\theta} integrated out, searching for a value that maximizes marginal posterior
-  distribution of \eqn{\alpha} (= log(\emph{A}) for GRIMM and -log(\emph{r}) for BRIMM and PRIMM). 
-  And then, \code{gbp} looks for estimated \eqn{\beta} that maximizes its likelihood given previously 
-  estimated \eqn{\alpha}. \code{optim} is used for maximizing functions. 
+  When it comes to estimating hyper-parameters, (\emph{A} or \emph{r}) and \eqn{\beta}, \code{gbp} uses 
+  a mixture model with \eqn{\theta} integrated out, first searching for a value that maximizes marginal posterior
+  distribution of \eqn{\alpha} (= log(\emph{A}) for GRIMM and -log(\emph{r}) for BRIMM and PRIMM), and then 
+  looking for an estimate of \eqn{\beta} (possibly a vector) that maximizes its likelihood given previously 
+  estimated \eqn{\alpha}. \code{optim} is used for maximizing marginal and conditional posterior distributions. 
 
   \code{gbp} returns an object of class \code{gbp} which provides the functions \code{plot}, \code{print},
   and \code{summary}.
@@ -112,15 +112,15 @@
   \item{se}{if GRIMM, standard error of each group}
   \item{n}{if BRIMM and PRIMM, total number of trials of each group}
   \item{prior.mean}{numeric if entered, NA if not entered}
-  \item{prior.mean.hat}{estimate of prior mean if prior mean is not assigned a priori}
+  \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
   \item{shrinkage}{shrinkage estimate of each group}
-  \item{sd.shrinkage}{standard error of shrinkage estimate}
+  \item{sd.shrinkage}{standard deviation of shrinkage estimate}
   \item{post.mean}{posterior mean of each group}
   \item{post.sd}{posterior standard deviation of each group}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
   \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
   \item{model}{"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM}
-  \item{X}{a covariate vector or matrix if any. NA if not}
+  \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{beta.new}{regression coefficient estimates}
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
@@ -147,15 +147,19 @@
   # baseball data where z is Hits and n is at bats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # an arbitrary covariate for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
 
   y <- schools$y
   se <- schools$se
+
+  # an arbitrary covariate for schools data
   x2 <- rep(c(-1, 0, 1, 2), 2)
   
-  ####################################################################################
+  #####################################################################################
   # If we do not have any covariates and do not know a mean of the prior distribution #
-  ####################################################################################
+  #####################################################################################
 
   #########
   # GRIMM #
@@ -205,9 +209,9 @@
   ### (intercept), not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
-  ##################################################################################
-  # If we have one covariate and do not know a mean of the prior distribution yet, #
-  ##################################################################################
+  #######################################################################################
+  # If we have one covariate and do not know a mean of the prior distribution a priori, #
+  #######################################################################################
 
   #########
   # GRIMM #
