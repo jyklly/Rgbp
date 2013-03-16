@@ -276,6 +276,6 @@
 Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}. 618-632.
 }
 
-\author{Hyungsuk Tak}
+\author{Joseph Kelly, Carl Morris, and Hyungsuk Tak}
 
 \keyword{methods}

@@ -47,8 +47,6 @@
   ######### 
 
   g <- gbp(y, se)
-  g
-  summary(g)
   plot(g)
 
   #########
@@ -56,8 +54,6 @@
   ######### 
 
   b <- gbp(z, n, model = "br")
-  b
-  summary(b)
   plot(b)
 
   #########
@@ -65,8 +61,6 @@
   ######### 
 
   p <- gbp(z, n, model = "pr")
-  p
-  summary(p)
   plot(p)
 
 }

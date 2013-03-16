@@ -26,6 +26,7 @@ Medical profiling evaluation of 31 New York hospitals in 1992. We are to conside
 \source{
 Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
 }
+
 \examples{
 
   data(hospital)
@@ -33,7 +34,7 @@ Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models
   z <- hospital$d
   n <- hospital$n
   y <- hospital$y
-  se <- hospital$se
+  se <- hospital$sd
   
   ###################################################################################
   # We do not have any covariates and do not know a mean of the prior distribution. #

@@ -1,10 +1,8 @@
 \name{print.summary.gbp}
 \alias{print.summary.gbp}
-\title{
-Print object defined as "summary.gbp" class
-}
+\title{The Way to Disply "summary.gbp" Class}
 \description{
-  This function returns the resulting object of "gbp.summary" function
+\code{summary(gbp.object)} enables users to see a compact summary of estimation result.
 }
 \usage{
   \method{print}{summary.gbp}(x, ...)
