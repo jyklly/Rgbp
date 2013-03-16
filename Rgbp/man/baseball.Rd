@@ -40,9 +40,9 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   z <- baseball$Hits
   n <- baseball$At.Bats
 
-  ########################################################################################
-  # Since we do not have any covariate and do not know a mean of the prior distribution, #
-  ########################################################################################
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
 
   #########
   # BRIMM #
@@ -53,13 +53,6 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
-  coverage(b, nsim = 10)  
-
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
-  coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
-
   #########
   # PRIMM #
   ######### 
@@ -68,13 +61,6 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   p
   summary(p)
   plot(p)
-
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
-  coverage(p, nsim = 10)  
-
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
-  coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
 }
 
