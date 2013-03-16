@@ -35,35 +35,48 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
 }
 
 \examples{
-  data(baseball)
 
-  # number of successful trials 
-  z <- baseball$Hits  
+  # baseball data where z is Hits and n is AtBats
+  z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+  n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+  x <- rep(c(-1, 0, 1), 6)
 
-  # total number of trials
-  n <- baseball$At.Bats  
-  
-  # running BRIMM without any covariate and saving resultant object to 'b'
-  b <- gbp(z, n, model = "br")  
-  
-  # printing the result
-  b  
+  ####################################################################################
+  # If we do not have any covariate and do not know a mean of the prior distribution #
+  ####################################################################################
 
-  # printing summary of the result
+  #########
+  # BRIMM #
+  ######### 
+
+  b <- gbp(z, n, model = "br")
+  b
   summary(b)
-
-  # visualizing shrinkage and 95\% interval plots
   plot(b)
 
-  # estimating coverage probability letting 'coverage' regard the estimates 
-  # of 'r' (proportional to inverse of the variance of prior distribution) and 'beta' (regression coefficients) 
-  # in 'b' as true values when 'coverage' generates simulated datasets.
-  coverage(b, nsim = 10)
+  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  coverage(b, nsim = 10)  
 
-  # estimating coverage probability letting 'coverage' regard the assigned values for
-  # 'A.or.r' ('r' if BRIMM) and 'beta' in the argument of 'coverage' as true values 
-  # when 'coverage' generates simulated datasets.
-  coverage(b, A.or.r = 60, reg.coef = 0, nsim = 10)   
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
+  ### (intercept), not using estimated values as true ones
+  coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
+
+  #########
+  # PRIMM #
+  ######### 
+
+  p <- gbp(z, n, model = "pr")
+  p
+  summary(p)
+  plot(p)
+
+  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  coverage(p, nsim = 10)  
+
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
+  ### (intercept), not using estimated values as true ones
+  coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
+
 }
 
 \keyword{datasets}
