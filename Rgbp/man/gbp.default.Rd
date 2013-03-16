@@ -4,9 +4,9 @@
 \title{Fitting Bayesian Hierarchical Models}
 \description{
   \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data using generalized Stein's harmonic priors.
+  and Poisson (PRIMM) data using generalized Stein's harmonic prior.
 }
-\usage{\method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = TRUE, Alpha = 0.95, ...)}
+\usage{\method{gbp}{default}(x, y, covariates, mu0, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
   \item{x}{
     a (k \eqn{\times} 1) vector of the sample mean for GRIMM and of the number of successful 
