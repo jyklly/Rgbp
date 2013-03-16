@@ -1,6 +1,6 @@
 \name{print.gbp}
 \alias{print.gbp}
-\title{\title{The Way to Disply "gbp" Class}}
+\title{The Way to Disply "gbp" Class}
 \description{
 \code{print.gbp} enables users to see a compact group-level (unit-level) estimation result of \code{gbp} function.
 }
