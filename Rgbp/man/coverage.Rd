@@ -58,8 +58,8 @@
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
-  (=\code{gbp.object}) as given true values. Next, it samples a (\emph{k} by 1) vector \eqn{\theta[i]}
-  {\theta_i} from the prior
+  (=\code{gbp.object}) as given true values. Next, it samples a (\emph{k} by 1) vector 
+  \eqn{\theta[i]}{\theta_i} from the prior
   distribution determined by those estimated values in \code{b} (=\code{gbp.object}). And then, \code{gbp}
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta[i]}{\theta_i} just sampled.
 
