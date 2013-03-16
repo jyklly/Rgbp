@@ -272,18 +272,18 @@ plot.gbp <- function(x, ...) {
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
   
-  ## dev.new <- function(width = 10, height = 5) { 
-  ##   platform <- sessionInfo()$platform 
-  ##   if (grepl("linux", platform)) { 
-  ##     x11(width = width, height = height) 
-  ##   } else if (grepl("pc", platform)) { 
-  ##     windows(width = width, height = height)
-  ##   } else if (grepl("apple", platform)) { 
-  ##     quartz(width = width, height = height) 
-  ##   } 
-  ## }
+  dev.new <- function(width = 10, height = 5) { 
+    platform <- sessionInfo()$platform 
+    if (grepl("linux", platform)) { 
+      x11(width = width, height = height) 
+    } else if (grepl("pc", platform)) { 
+      windows(width = width, height = height)
+    } else if (grepl("apple", platform)) { 
+      quartz(width = width, height = height) 
+    } 
+  }
 
-  ## dev.new(10, 5)
+  dev.new(10, 5)
   
   par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
   xl <- c("Indices (Groups) by the order of data input")
