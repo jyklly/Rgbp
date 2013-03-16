@@ -38,7 +38,7 @@ This function returns the resulting object of "gbp" function
   data(schools)
   y <- schools$y
   se <- schools$se
-  g <- gbp(y, se, mu0 = 8)
+  g <- gbp(y, se, mean.PriorDist = 8)
   print(g)
 }
 \keyword{methods}

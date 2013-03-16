@@ -46,7 +46,7 @@ Print object defined as "summary.gbp" class
   data(schools)
   y <- schools$y
   se <- schools$se
-  g <- gbp(y, se, mu0 = 8)
+  g <- gbp(y, se, mean.PriorDist = 8)
   g.summary <- summary(g)
   print(g.summary)
 }

@@ -30,7 +30,7 @@
   data(schools)
   y <- schools$y
   se <- schools$se
-  g <- gbp(y, se, mu0 = 8)
-  g.summary<-summary(g)
+  g <- gbp(y, se, mean.PriorDist = 8)
+  summary(g)
 }
 \keyword{method}
