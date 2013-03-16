@@ -47,21 +47,21 @@
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
   (\eqn{\sigma[j]^{2}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset):
-  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma[j]^{2})}{(y_j|\theta_j) ~ N(\theta_j, \sigma_j^2)}
-  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}{(\theta_j|A, \mu0_j) ~ N(\mu0_j, A)}
+  \deqn{(y[j] | \theta[j]) ~ N(\theta[j], \sigma[j]^{2})}{(y_j | \theta_j) ~ N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta[j] | A, \mu[0j]) ~ N(\mu[0j], A)}{(\theta_j | A, \mu0_j) ~ N(\mu0_j, A)}
   \deqn{\mu[0j] = x[j]'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
   (a square braket below indicates [mean, variance] of distribution):
-  \deqn{(z[j]|\theta[j]) ~ Pois(n[j]\theta[j])}{(z_j|\theta_j) ~ Pois(n_j\theta_j)}
-  \deqn{(\theta[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], scale = 1 / r) ~ Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j|r, \mu0_j) ~ Gamma(r\mu0_j, scale = 1 / r) ~ Gamma[\mu0_j, \mu0_j / r]}
+  \deqn{(z[j] | \theta[j]) ~ Pois(n[j]\theta[j])}{(z_j | \theta_j) ~ Pois(n_j\theta_j)}
+  \deqn{(\theta[j] | r, \mu[0j]) ~ Gamma(r\mu[0j], scale = 1 / r) ~ Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j | r, \mu0_j) ~ Gamma(r\mu0_j, scale = 1 / r) ~ Gamma[\mu0_j, \mu0_j / r]}
   \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
-  \deqn{(z[j]|\theta[j]) ~ Bin(n[j], \theta[j])}{(z_j|\theta_j) ~ Bin(n_j, \theta_j)}
-  \deqn{(\theta[j]|r, \mu[0j]) ~ Beta(r\mu[0j], r\mu[0j]) ~ Beta[\mu[0j], mu[0j](1 - mu[0j]) / (r + 1)]}{(\theta_j|r, \mu0_j) ~ Beta(r\mu0_j, r(1 - \mu0_j)) ~ Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{(z[j] | \theta[j]) ~ Bin(n[j], \theta[j])}{(z_j | \theta_j) ~ Bin(n_j, \theta_j)}
+  \deqn{(\theta[j] | r, \mu[0j]) ~ Beta(r\mu[0j], r\mu[0j]) ~ Beta[\mu[0j], mu[0j](1 - mu[0j]) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ Beta(r\mu0_j, r(1 - \mu0_j)) ~ Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
   \deqn{logit(\mu[0j]) = x[j]'\beta}{logit(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
@@ -99,9 +99,9 @@
 
   When it comes to estimating hyper-parameters, (\emph{A} or \emph{r} and \eqn{\beta}, \code{gbp} uses 
   a mixture model with \eqn{\theta} integrated out, searching for a value that maximizes marginal posterior
-  distribution of \eqn{\alpha} (\eqn{\alpha} = log(\emph{A}) or -log(\emph{r})). And then, \code{gbp} 
-  looks for estimated \eqn{beta} that maximizes its likelihood given previously estimated \eqn{\alpha}.
-  \code{optim} is used for maximizing functions. 
+  distribution of \eqn{\alpha} (= log(\emph{A}) for GRIMM and -log(\emph{r}) for BRIMM and PRIMM). 
+  And then, \code{gbp} looks for estimated \eqn{\beta} that maximizes its likelihood given previously 
+  estimated \eqn{\alpha}. \code{optim} is used for maximizing functions. 
 
   \code{gbp} returns an object of class \code{gbp} which provides the functions \code{plot}, \code{print},
   and \code{summary}.
