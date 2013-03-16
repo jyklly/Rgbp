@@ -51,8 +51,7 @@
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model:
   \deqn{(z[j]|\lambda[j]) ~ Pois(n[j]\lambda[j])}{(z|\lambda) ~ Pois(n\lambda)}
-  \deqn{(\lambda[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], r) ~ Gamma[\mu[0j], \mu[0j] / r)}
-  {(\lambda|r, \mu0) ~ Gamma(r\mu0, scale = 1 / r) ~ Gamma[\mu0, \mu0 / r]}
+  \deqn{(\lambda[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], r) ~ Gamma[\mu[0j], \mu[0j] / r)}{(\lambda|r, \mu0) ~ Gamma(r\mu0, scale = 1 / r) ~ Gamma[\mu0, \mu0 / r]}
   \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0) = x'\beta}
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
@@ -61,13 +60,6 @@
   \deqn{logit(\mu[0j]) = x[j]'\beta}{logit(\mu0) = x'\beta}
 
 
-  the distribution of hierarchy is Normal with mean \eqn{\theta[j]}{\theta} and variance
-  \eqn{sigma^[2]}{sigma^2} assumed to be known. Asfor the 2nd hierarchy, a conjugate prior distribution on the parameter 
-  of  1st level is 
-  \eqn{p(\theta[j] | \mu[0j], A (or r)) = p[\mu[0j], A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
-  \eqn{p[\mu[0j], \mu[0j] / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
-  and \eqn{p[\mu[0j], \mu[0j] * (1 - \mu[0j]) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
-  where \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0) = x'\beta}.
 by maximizing the adjusted
   posterior using the quasi-Newton method "BFGS" via \code{optim}. By
   adjusting the posterior greater coverage is achieved for simiarly
