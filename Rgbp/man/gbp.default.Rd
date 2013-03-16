@@ -10,19 +10,20 @@
 \usage{\method{gbp}{default}(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
   \item{x}{
-    a (k \eqn{\times} 1) vector of the sample mean for GRIMM and of the number of successful 
-    trials for BRIMM and PRIMM,\cr where k is the number of groups (or units) in a dataset.
+    a (\emph{k} by 1) vector of the sample mean for GRIMM and of the number of successful 
+    trials for BRIMM and PRIMM,\cr where \emph{k} is the number of groups (or units) in a dataset.
   }
   \item{y}{
-    a (k by 1) vector composed of the standard errors of all groups for GRIMM and 
+    a (\emph{k} by 1) vector composed of the standard errors of all groups for GRIMM and 
     of the total numbers of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) a (k by t) matrix of covariate values, where \cr t is the number of covariates (t \eqn{\ge} 1). 
-    To fit an intercept do not include a vector of ones but rather use the intercept argument.
+    (optional) a (\emph{k} by \emph{t}) matrix of covariate values, where \emph{t} is the number of 
+    covariates (\emph{t} \eqn{\ge} 1). To fit an intercept, do not include a vector of ones but rather use 
+    the intercept argument.
   }
   \item{mean.PriorDist}{
-    (optional) a numeric value for the second-level mean parameter, the mean of prior (second-level)
+    (optional) a numeric value for the second-level mean parameter, \emph{i.e.} the mean of prior
     distribution, if you know this value a priori.
   }
   \item{model}{
@@ -34,12 +35,31 @@
     included in the regressuin. Default is \code{TRUE}.
   }
   \item{Alpha}{
-    a \code{float} between 0 and 1 to estimate 100*Alpha intervals. Default is 0.95.
+    a \code{float} between 0 and 1 to estimate 100 * Alpha\% intervals. Default is 0.95.
   }
 }
 
 \details{
-  \code{gbp} fits a Bayesian hierarchical model by maximizing the adjusted
+  \code{gbp} fits Bayesian hierarchical models using generalized Stein's harmonic prior for good frequentist
+  repeated sampling property.
+
+  For Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. For reference, \eqn{\sigma^2} is assumed to be known:
+  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^2)}
+  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
+  \deqn{\mu[0j] = x[j]'\beta}
+
+  For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
+  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^{2})}
+  \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
+  \deqn{\mu[0j] = x[j]'\beta}
+  the distribution of hierarchy is Normal with mean \eqn{\theta[j]}{\theta} and variance
+  \eqn{sigma^[2]}{sigma^2} assumed to be known. Asfor the 2nd hierarchy, a conjugate prior distribution on the parameter 
+  of  1st level is 
+  \eqn{p(\theta[j] | \mu[0j], A (or r)) = p[\mu[0j], A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
+  \eqn{p[\mu[0j], \mu[0j] / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
+  and \eqn{p[\mu[0j], \mu[0j] * (1 - \mu[0j]) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
+  where \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0) = x'\beta}.
+by maximizing the adjusted
   posterior using the quasi-Newton method "BFGS" via \code{optim}. By
   adjusting the posterior greater coverage is achieved for simiarly
   sized intervals (Morris, Tang, 2011). The function returns an object
