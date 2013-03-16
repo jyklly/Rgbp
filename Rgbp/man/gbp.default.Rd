@@ -51,7 +51,8 @@
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model:
   \deqn{(z[j]|\lambda[j]) ~ Pois(n[j]\lambda[j])}{(z|\lambda) ~ Pois(n\lambda)}
-  \deqn{(\lambda[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], r) ~ Gamma[\mu[0j], \mu[0j] / r)}{(\lambda|r, \mu0) ~ Gamma(r\mu0, scale = 1 / r) ~ Gamma[\mu0, \mu0 / r]}
+  \deqn{(\lambda[j]|r, \mu[0j]) ~ Gamma(r\mu[0j], scale = 1 / r)}
+  {(\lambda|r, \mu0) ~ Gamma(r\mu0, scale = 1 / r)}
   \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0) = x'\beta}
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
