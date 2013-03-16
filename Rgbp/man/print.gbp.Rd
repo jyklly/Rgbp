@@ -7,11 +7,14 @@ Print object defined as "gbp" class
 This function returns the resulting object of "gbp" function
 }
 \usage{
-  \method{print}{gbp}(object)
+  \method{print}{gbp}(object, ...)
 }
 \arguments{
   \item{object}{
     The resultant object of "gbp" function
+  }
+  \item{...}{
+    further arguments passed to other methods.
   }
 }
 \value{

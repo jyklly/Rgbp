@@ -8,11 +8,14 @@
   It retuns the summary of the object defined as "gbp" class
 }
 \usage{
-  \method{summary}{gbp}(object)
+  \method{summary}{gbp}(object, ...)
 }
 \arguments{
   \item{object}{
     The resultant object of "gbp" function 
+  }
+  \item{...}{
+    further arguments passed to other methods.
   }
 }
 \value{

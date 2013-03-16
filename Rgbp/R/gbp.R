@@ -10,7 +10,7 @@ gbp.default <- function(x, y, covariates, mean.PriorDist, model = "gr", intercep
   res
 }
 
-print.gbp <- function(object) {
+print.gbp <- function(object, ...) {
   
   if (is.na(object$prior.mean) & !identical(object$X, NA)) {
 
@@ -68,7 +68,7 @@ print.gbp <- function(object) {
   print(round(temp, 3))
 }
 
-summary.gbp <- function(object) {
+summary.gbp <- function(object, ...) {
 
   if (is.na(object$prior.mean) & !identical(object$X, NA)) {
 
@@ -227,7 +227,7 @@ summary.gbp <- function(object) {
 }
 
 
-print.summary.gbp <- function(object) {
+print.summary.gbp <- function(object, ...) {
   if (identical(object$reg, NA)) {
     cat("Main summary:\n")
     cat("\n")
@@ -254,7 +254,7 @@ print.summary.gbp <- function(object) {
   }
 }
 
-plot.gbp <- function(object) {
+plot.gbp <- function(object, ...) {
 
   y <- object$sample.mean
   se <- object$se
