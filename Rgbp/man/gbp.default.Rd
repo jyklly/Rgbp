@@ -35,7 +35,7 @@
     included in the regressuin. Default is \code{TRUE}.
   }
   \item{Alpha}{
-    a \code{float} between 0 and 1 to estimate 100 * Alpha\% intervals. Default is 0.95.
+    a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
   }
 }
 
@@ -43,13 +43,14 @@
   \code{gbp} fits Bayesian hierarchical models using generalized Stein's harmonic prior for good frequentist
   repeated sampling property.
 
-  For Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. For reference, \eqn{\sigma^2} is assumed to be known:
-  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^2)}
+  For Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
+  (\eqn{\sigma^2} is assumed to be known):
+  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], \sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^[2])}
   \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
   \deqn{\mu[0j] = x[j]'\beta}
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
-  \deqn{(y[j]|\theta[j]) ~ N(\theta[j], sigma^[2])}{(y|\theta) ~ N(\theta, \sigma^{2})}
+  \deqn{(y[j]|\theta[j]) ~ Binom(n[j], \theta[j])}{(y|\theta) ~ N(\theta, \sigma2)}
   \deqn{(\theta[j]|A, \mu[0j]) ~ N(\mu[0j], A)}
   \deqn{\mu[0j] = x[j]'\beta}
   the distribution of hierarchy is Normal with mean \eqn{\theta[j]}{\theta} and variance
