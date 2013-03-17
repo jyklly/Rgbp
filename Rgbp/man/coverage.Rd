@@ -54,45 +54,42 @@
 
   In order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
   \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
-  or \emph{A} (or \emph{r}) and \eqn{\mu[0]}{\mu0} (\code{mean.PriorDist}). From here, we have four options
+  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options
   to run \code{gbp}.
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
-  (=\code{gbp.object}) as given true values. Next, it samples a (\emph{k} by 1) vector 
-  \eqn{\theta[i]}{\theta_i} from the prior
-  distribution determined by those estimated values in \code{b} (=\code{gbp.object}). And then, \code{gbp}
-  creates an \emph{i}-th pseudo-dataset based on \eqn{\theta[i]}{\theta_i} just sampled.
+  (=\code{gbp.object}) as given true values when it generates bunch of pseudo datasets. After sampling a (\emph{k} by 1) vector 
+  \eqn{\theta_{i}}{\theta_i} from the prior
+  distribution determined by those estimated values in \code{b} (=\code{gbp.object}), \code{coverage}
+  creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Second, \code{coverage} allows us to designate different true values in generating datasets like
+  Second, \code{coverage} allows us to designate different true values in generating datasets, for example\cr
   \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariate and 
-  do not know a mean of the prior distribution a priori. One value in \code{reg.coef} indicates the mean of 
-  second-level distribution will be set by a designated intercept value like 
-  \eqn{g(\mu[0]) = \beta[0] = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
-  \eqn{\theta[i]}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
+  do not know a mean of the prior distribution a priori. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
+  \eqn{\theta_{i}}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
-  \eqn{\theta[i]}{\theta_i} just sampled.
+  \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Third, \code{coverage} enables us to designate different true values in generating datasets like
+  Third, \code{coverage} enables us to designate different true values in generating datasets like\cr
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
-  (can be more than one but \code{reg.coef} should reflect on number of regression coefficients including
-  an intercept term) but do not know a mean of the prior distribution a priori. For reference, the input of 
-  \code{X} should not include column of ones and the mean of prior distribution will be set as 
-  \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of \code{X}). Then, 
-  \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} from the prior distribution 
+  (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
+  an intercept term) without any knowledge about the mean of prior distribution a priori. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept term in the regression and the mean of prior distribution will be set as 
+  \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where \eqn{x_{j}}{x_j} is (1, \emph{j}-th row of \code{X})'. Then, 
+  \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta_{i}}{\theta_i} from the prior distribution 
   determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 
-  Sampling \emph{i}-th pseudo-data is based on \eqn{\theta[i]}{\theta_i} just sampled.
+  Sampling \emph{i}-th pseudo-data is based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
   Lastly, \code{coverage} provides us a way to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, mean.PriorDist = 0.45, nsim = 100)} when we know the mean of prior 
-  distribution a priori. Then, \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} 
+  distribution a priori. Then, \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta_{i}}{\theta_i} 
   from the prior distribution determined by designated values, \code{A.or.r} and \code{mean.PriorDist}.
-  The \emph{i}-th Pseudo-datasets are generated based on \eqn{\theta[i]}{\theta_i} just sampled.
+  The \emph{i}-th Pseudo-datasets are generated based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
   The unbiased estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators
   over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated 
-  interval of the \emph{j}-th group by \code{gbp} on \emph{i}-th simulated dataset contains a true parameter 
-  \eqn{\theta[ij]}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
+  interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
+  \eqn{\theta_{ij}}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
   Rao-Blackwellized estimator is an expectation of the unbiased estimator described above given a sufficient
@@ -107,16 +104,16 @@
     estimated unbiased coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{average.coverageRB}{
-    average value of Rao-Blackwellized coverage probabilities over values in \code{coverageRB}.
+    average value over \code{coverageRB}.
   }
   \item{average.coverage10}{
-    average value of unbiased coverage probabilities over values in \code{coverage10}.
+    average value over \code{coverage10}.
   }
   \item{minimum.coverageRB}{
-    minimum value of Rao-Blackwellized coverage probabilities among values in \code{coverageRB}.
+    minimum value among \code{coverageRB}.
   }
   \item{minimum.coverage10}{
-    minimum value of unbiased coverage probabilities among values in \code{coverage10}.
+    minimum value among \code{coverage10}.
   }
   \item{raw.resultRB}{
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
