@@ -9,7 +9,7 @@
     a resultant object of \code{gbp} function. 
   }
   \item{A.or.r}{
-    (optional) a numeric value of \emph{r} for BRIMM (and PRIMM) or of \emph{A} for GRIMM.\cr
+    (optional) a numeric value of \emph{A} for GRIMM or of \emph{r} for BRIMM (and PRIMM).\cr
     Designating this argument should come with other arguments, for example, \cr
     (\code{A.or.r}, \code{reg.coef}, \code{covariates} (if any)) or (\code{A.or.r}, \code{mean.PriorDist}).
   }
@@ -18,13 +18,13 @@
     \emph{m} is the number of regression coefficients including an intercept.
   }
   \item{covariates}{
-    (optional) a (\emph{k} by \emph{t}) matrix of covariate values, where \cr
+    (optional) a (\emph{k} by \emph{t}) matrix of covariates without a column of ones for an intercept, where \cr
     \emph{k} is the number of groups (or units) in a dataset and \cr
     \emph{t} is the number of covariates (t \eqn{\ge} 1).\cr
     If \code{gbp} fits an intercept in the regression, \emph{t = (m - 1)}.
   }
   \item{mean.PriorDist}{
-    (optional) a numeric value for the mean of prior (second-level) distribution.
+    (optional) a numeric value for the mean of (second-level) prior distribution.
   }
   \item{nsim}{
     number of simulations (datasets to be generated). Default is 10.
@@ -33,14 +33,15 @@
 
 \details{
   As for the argument \code{gbp.object}, if the result of \code{gbp} is designated to 
-  \code{b} like "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} means \code{b}.
+  \code{b}, for example \cr 
+  "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
 
-  Data generating process is based on the second-level hierarchical model. The first-level is 
-  a distribution of observed data (Likelihood) and the second-level is the prior distribution 
+  Data generating process is based on a second-level hierarchical model. The first-level is 
+  a distribution of observed data (Likelihood) and the second-level is a conjugate prior distribution 
   on the first-level parameter. Covariates appear in the second-level because covariates are obtainable
   before we observe data.
  
-  To be specific, the first hierarchy has \eqn{f(y[j] | \theta[j])}{f(y | \theta)} proportional to 
+  To be specific, the first hierarchy has \eqn{f(y_{j} | \theta[j])}{f(y | \theta)} proportional to 
   Lik(\eqn{\theta[j]}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
   \eqn{p(\theta[j] | \mu[0j], A (or r)) = p[\mu[0j], A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
   \eqn{p[\mu[0j], \mu[0j] / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
