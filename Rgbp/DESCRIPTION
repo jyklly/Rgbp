@@ -1,10 +1,10 @@
 Package: Rgbp
 Version: 1.0.0
 Date: 2013-03-16
-Title: Bayesian Hierarchical Modeling using (generalized) Stein's Harmonic Prior
+Title: Bayesian Hierarchical Modeling using Generalized Stein's Harmonic Prior
 Author: Joseph Kelly, Carl Morris, and Hyungsuk Tak
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 Depends: sn, mnormt
-Description: Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data assuming generalized Stein's harmonic priors.
+Description: Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data using generalized Stein's harmonic prior.
 License: GPL-2
 BugReports: https://github.com/jyklly/gbp/issues
