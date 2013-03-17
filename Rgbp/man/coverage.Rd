@@ -41,12 +41,12 @@
   on the first-level parameter. Covariates appear in the second-level because covariates are obtainable
   before we observe data.
  
-  To be specific, the first hierarchy has \eqn{f(y_{j} | \theta[j])}{f(y | \theta)} proportional to 
-  Lik(\eqn{\theta[j]}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
-  \eqn{p(\theta[j] | \mu[0j], A (or r)) = p[\mu[0j], A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
-  \eqn{p[\mu[0j], \mu[0j] / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
-  and \eqn{p[\mu[0j], \mu[0j] * (1 - \mu[0j]) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
-  where \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
+  To be specific, the first hierarchy has \eqn{f(y_{j} | \theta_{j})}{f(y | \theta)} proportional to 
+  Lik(\eqn{\theta_{j}}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
+  \eqn{p(\theta_{j} | \mu_{0j}, A (\verb{or}~~ \r)) = p[\mu_{0j}, A]}{p(\theta | \mu0, A (or r)) = p[\mu0, A]} for GRIMM,
+  \eqn{p[\mu_{0j}, \mu_{0j} / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
+  and \eqn{p[\mu_{0j}, \mu_{0j} * (1 - \mu_{0j}) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
+  where \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
   [mean, variance] of that distribution and \emph{g} is a link function. 
 
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 
@@ -78,7 +78,7 @@
   (can be more than one but \code{reg.coef} should reflect on number of regression coefficients including
   an intercept term) but do not know a mean of the prior distribution a priori. For reference, the input of 
   \code{X} should not include column of ones and the mean of prior distribution will be set as 
-  \eqn{g(\mu[0j]) = x[j]'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of \code{X}). Then, 
+  \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where x_j is (1, \emph{j}-th row of \code{X}). Then, 
   \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta[i]}{\theta_i} from the prior distribution 
   determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 
   Sampling \emph{i}-th pseudo-data is based on \eqn{\theta[i]}{\theta_i} just sampled.
