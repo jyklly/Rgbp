@@ -320,11 +320,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   }
 
   # average coverage probability
-  result <- round(apply(coverageRB, 1, mean, na.rm = TRUE), 3)
+  result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
   min.cov <- round(min(result), 3)
 
-  result2 <- round(apply(coverage10, 1, mean, na.rm = TRUE), 3)
+  result2 <- round(rowMeans(coverage10, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
   min.cov2 <- round(min(result2), 3)
 
