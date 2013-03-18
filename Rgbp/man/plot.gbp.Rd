@@ -20,10 +20,9 @@
 
   The overall window popping up as a result of \code{plot(b)} has three parts. The first part (column) of this window is for a legend describing symbols used in the plots. In the legend, a black circle represents sample mean, a red dot does posterior mean, a blue line does prior mean, a violet line (additional explanation needed).
 
-  The second column is about the shrinkage plot and  it has two horizontal lines; the observed sample means are on the upper line and the posterior means are on the lower line. (additional explanation is expected of Joey)
+  The second column is about the shrinkage plot and  it has two horizontal lines; the observed sample means are on the upper line and the posterior means are on the lower line. In this plot, the length of violet line is relative length to max(se) (i.e. se of each group / max(se) for GRMM or n of each group / max(n) for GRMM) and the length of darkgreen line is relative length to max(post.sd) (i.e. posterior sd of each group / max(posterior sd)). additional explanation is expected of Joey.
 
   The final plot shows interval estimates of all the groups (units) in a dataset. Two short horizontal ticks at both ends of each black vertical line indicate 97.5\% and 2.5\% quantiles of a posterior distribution for each group (Normal for GRIMM, Gamma for PRIMM, and Beta for BRIMM). Red dots (posterior mean) are between black circles (sample mean) and blue line(s) (prior mean) as a result of shrinkage (regression toward the mean).
-
 
 }
 \value{Two plots described in \emph{details} will be displayed.}
