@@ -283,7 +283,7 @@ plot.gbp <- function(x, ...) {
     } 
   }
 
-  dev.new(10, 5)
+  dev.new(11, 5)
   
   par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
   xl <- c("Indices (Groups) by the order of data input")
