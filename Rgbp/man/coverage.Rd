@@ -150,8 +150,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
   #########
@@ -163,8 +163,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
 
   #########
@@ -176,8 +176,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
   ##################################################################################
@@ -193,8 +193,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A, of regression coefficients, and
-  ### of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -207,8 +207,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
-  # and of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -221,8 +221,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
-  ### and of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -239,8 +239,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
   #########
@@ -252,8 +252,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   #########
@@ -265,8 +265,8 @@
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 }
 
