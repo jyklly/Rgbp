@@ -333,12 +333,12 @@ plot.gbp <- function(x, ...) {
     points(index, pr.m, col = 4, pch = "-", cex = 2)
   }
 
-  se.or.n <- switch(x$model, "gr" = "stand.error", "br" = "n", "pr" = "n")
+  se.or.n <- switch(x$model, "gr" = "standard error", "br" = "n", "pr" = "n")
   par(new=TRUE,mfrow=c(1,1))
   par(xpd=NA)
   plot(1, type="n", axes=F, xlab="", ylab="")
   legend("topleft", pch = c(19, 1, NA, NA, NA), col = c(2, 1, 4,"darkviolet", "darkgreen"), 
-         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "stan.deviation"),
+         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd"),
          seg.len = 0.5, bty = "n", inset = c(-0.175, 0))
  # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
   par(xpd=FALSE)
