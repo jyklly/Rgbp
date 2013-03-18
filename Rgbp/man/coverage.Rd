@@ -41,12 +41,12 @@
   on the first-level parameter. Covariates appear in the second-level because covariates are obtainable
   before we observe data.
  
-  To be specific, the first hierarchy has \eqn{f(y_{j} | \theta_{j})}{f(y | \theta)} proportional to 
+  To be specific, the first hierarchy has \eqn{f(y_{j}~ |~ \theta_{j})}{f(y | \theta)} proportional to 
   Lik(\eqn{\theta_{j}}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
-  \eqn{p(\theta_{j} | \mu_{0j}, A}{p(\theta | \mu0, A} (or \eqn{r})) = \eqn{p[\mu_{0j}, A]}{p[\mu0, A]} for GRIMM,
-  \eqn{p[\mu_{0j}, \mu_{0j} / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
-  and \eqn{p[\mu_{0j}, \mu_{0j} * (1 - \mu_{0j}) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
-  where \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
+  \eqn{p(\theta_{j}~ |~ \mu_{0j},~ A}{p(\theta | \mu0, A} (or \eqn{r})) = \eqn{p[\mu_{0j},~ A]}{p[\mu0, A]} for GRIMM,
+  \eqn{p[\mu_{0j},~ \mu_{0j} / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
+  and \eqn{p[\mu_{0j},~ \mu_{0j} * (1 - \mu_{0j}) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
+  where \eqn{g(\mu_{0j})~ =~ x_{j}'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
   [mean, variance] of that distribution and \emph{g} is a link function. 
 
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 

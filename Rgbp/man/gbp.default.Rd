@@ -10,17 +10,16 @@
 \usage{\method{gbp}{default}(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
   \item{x}{
-    a (\emph{k} by 1) vector of all groups' sample means for GRIMM or of the number of successful 
-    trials for BRIMM and PRIMM,\cr where \emph{k} is the number of groups (or units) in a dataset.
+    a (\emph{k} by 1) vector of \emph{k} groups' sample means for GRIMM or of each group's number of successful trials for BRIMM and PRIMM, where \emph{k} is the number of groups (or units) in a dataset.
   }
   \item{y}{
-    a (\emph{k} by 1) vector composed of the standard errors of all groups for GRIMM and 
-    of the total numbers of trials for BRIMM and PRIMM.
+    a (\emph{k} by 1) vector composed of the standard errors of all groups for GRIMM or 
+    of each group's total number of trials for BRIMM and PRIMM.
   }
   \item{covariates}{
-    (optional) a (\emph{k} by \emph{t}) matrix of covariate values, where \emph{t} is the number of 
-    covariates (\emph{t} \eqn{\ge} 1).\cr To fit an intercept, do not include a vector of ones but rather use 
-    the \code{intercept} argument described below.
+    (optional) a (\emph{k} by \emph{t}) matrix of covariates without a column of ones for an intercept term, where \cr
+    \emph{k} is the number of groups (or units) in a dataset and \cr
+    \emph{t} is the number of covariates (t \eqn{\ge} 1).\cr
   }
   \item{mean.PriorDist}{
     (optional) a numeric value for the second-level mean parameter, \emph{i.e.} the mean of prior
@@ -41,27 +40,27 @@
 
 \details{
   \code{gbp} fits a Bayesian hierarchical model using generalized
-  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is the conjugate prior distribution on the first-level parameter. 
+  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is a conjugate prior distribution on the first-level parameter. 
 
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
-  (\eqn{\sigma[j]^{2}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
+  (\eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset):
-  \deqn{(y[j] | \theta[j]) ~ indep N(\theta[j], \sigma[j]^{2})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
-  \deqn{(\theta[j] | A, \mu[0j]) ~ indep N(\mu[0j], A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
-  \deqn{\mu[0j] = x[j]'\beta}{\mu0_j = x_j'\beta}
+  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta_{j}~ |~ A,~ \mu_{0j})~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
+  \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
   (a square bracket below indicates [mean, variance] of distribution):
-  \deqn{(z[j] | \theta[j]) ~ indep Pois(n[j]\theta[j])}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
-  \deqn{(\theta[j] | r, \mu[0j]) ~ indep Gamma(r\mu[0j], scale = 1 / r) ~ indep Gamma[\mu[0j], \mu[0j] / r]}{(\theta_j | r, \mu0_j) ~ indep Gamma(r\mu0_j, scale = 1 / r) ~ indep Gamma[\mu0_j, \mu0_j / r]}
-  \deqn{log(\mu[0j]) = x[j]'\beta}{log(\mu0_j) = x_j'\beta}
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~ Gamma(r\mu_{0j}, scale = 1 / r)~ \sim ~ indep~ Gamma[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep Gamma(r\mu0_j, scale = 1 / r) ~ indep Gamma[\mu0_j, \mu0_j / r]}
+  \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
-  \deqn{(z[j] | \theta[j]) ~ indep Bin(n[j], \theta[j])}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
-  \deqn{(\theta[j] | r, \mu[0j]) ~ indep Beta(r\mu[0j], r\mu[0j]) ~ indep Beta[\mu[0j], mu[0j](1 - mu[0j]) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
-  \deqn{logit(\mu[0j]) = x[j]'\beta}{logit(\mu0_j) = x_j'\beta}
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta_{j}~ |~ r, \mu_{0j})~ \sim ~ indep~ Beta(r\mu_{0j}, r\mu_{0j})~ \sim ~ indep~ Beta[\mu_{0j}, mu_{0j}(1 - mu_{0j}) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{logit(\mu_{0j})~ =~ x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}.
 
   Theoretically, generalized Stein's harmonic prior is Uniform on the second level variance component
