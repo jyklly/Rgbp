@@ -333,7 +333,7 @@ plot.gbp <- function(x, ...) {
     points(index, pr.m, col = 4, pch = "-", cex = 2)
   }
 
-  se.or.n <- switch(model, "gr" = "stand.error", "br" = "n", "pr" = "n")
+  se.or.n <- switch(x$model, "gr" = "stand.error", "br" = "n", "pr" = "n")
   par(new=TRUE,mfrow=c(1,1))
   par(xpd=NA)
   plot(1, type="n", axes=F, xlab="", ylab="")
