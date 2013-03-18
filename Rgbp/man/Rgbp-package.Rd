@@ -2,7 +2,7 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{Bayesian Hierarchical Modeling using Generalized Stein's Harmonic Prior}
+\title{Fitting Bayesian Hierarchical Models}
 \description{
 Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data using generalized Stein's harmonic prior for good frequentist repeated sampling property.
 }
