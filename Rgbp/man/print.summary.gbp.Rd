@@ -15,22 +15,22 @@
 }
 
 \details{
-  The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
+  The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \cr \code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
 
-  A display of \code{Main Summary} changes depending first on whether all the groups (units) has the same standard error for GRIMM (the same total number of trials for BRIMM and PRIMM). If they are not the same, 
-\code{Main Summary} lists groups (units) with minimun, median, and maximum values of the standard error for GRIMM (of the total number of trials for BRIMM and PRIMM). And the last line is about the overall average for all the groups (unites) within each column. Note it is not the average over groups (units) listed above.
+  A display of \code{Main Summary} changes depending on whether all the groups (units) has the same standard error for GRIMM (or the same total number of trials for BRIMM and PRIMM). If they are not the same, 
+\code{Main Summary} lists groups (units) with minimun, median, and maximum values of the standard error for GRIMM (or of the total number of trials for BRIMM and PRIMM). And the last row of \code{Main Summary} is about the overall average for all the groups (units) within each column. Note that this last row is not an average over displayed groups (units) above.
 
-  If groups (units) have the same standard error for GRIMM (the same total number of trials for BRIMM and PRIMM), \code{Main Summary} lists groups (units) with minimun, median, and maximum values of the sample mean. And the last row shows the overall average for all the groups (units) within each column.
+  If groups (units) have the same standard error for GRIMM (or the same total number of trials for BRIMM and PRIMM), \code{Main Summary} lists groups (units) with minimun, median, and maximum values of the sample mean. 
 
-  For reference, if there are several units with median values, they will show up with numbering.
+  For reference, if there are several units with the same median value, they will show up with numbering.
 
-  The second part is about the \code{Second-level Variance Component Estimation Summary}. To be specific, it shows estimate of \eqn{\alpha} defined as log(\emph{A}) for GRIMM and -log(\emph{r}) for BRIMM and PRIMM and its standard deviation. It is actually a posterior mode.
+  The second part is about the \code{Second-level Variance Component Estimation Summary}. To be specific, it shows estimate of \eqn{\alpha} defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM and its standard deviation. It is actually a posterior mode.
 
   The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In case, \code{gbp.object} includes a regression result, \code{summary(gbp.object)} will display the result of resgression fit.
 
 }
 \value{
-  \code{summary(gbp.object)} shows compact summary of estimation result such as:
+  \code{summary(gbp.object)} shows a compact summary of estimation result such as:
   \item{Main summary}{
     \describe{
       \item{Group w/ min(se or n)}{an estimation result of a group (unit) with the minimum standard error for GRIMM or the minimum total number of trials for BRIMM and PRIMM.}
@@ -44,7 +44,7 @@
   }
   \item{Second-level Variance Component Estimation Summary}{
     \describe{
-      \item{alpha.hat}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for GRIMM and -log(\emph{r}) for BRIMM and PRIMM.}
+      \item{alpha.hat}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM.}
       \item{alpha.hat.sd}{standard deviation of alpha.hat.}
     }
   }

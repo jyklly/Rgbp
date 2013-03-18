@@ -1,7 +1,7 @@
 \name{summary.gbp}
 \alias{summary.gbp}
-\title{Summarizing Estimation Result from "gbp" Object}
-\description{\code{summary.gbp} prepares the summary of the object defined as "gbp" class creating "summary.gbp" class}
+\title{Summarizing Estimation Result}
+\description{\code{summary.gbp} prepares a summary of estimation result saved in the object defined as "gbp" class creating "summary.gbp" class}
 \usage{\method{summary}{gbp}(object, ...)}
 \arguments{
   \item{object}{
@@ -14,13 +14,13 @@
 \value{
   \code{summary.gbp} prepares below contents:
   \item{main}{
-    a table to be displayed by \code{print(gbp.object)}. \code{\link{print.summary.gbp}}.
+    a table to be displayed by \code{summary(gbp.object)}. \code{\link{print.summary.gbp}}.
   }
   \item{sec.var}{
-    second-level variance component estimation summary. \code{\link{print.summary.gbp}}.
+    a vector containing an estimation result of the second-level variance component. \code{\link{print.summary.gbp}}.
   }
   \item{reg}{
-    regression summary (if fitted). \code{\link{print.summary.gbp}}.
+    a vector composed of a summary of regression fit (if fitted). \code{\link{print.summary.gbp}}.
   }
 }
 

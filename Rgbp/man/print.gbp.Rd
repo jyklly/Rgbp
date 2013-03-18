@@ -17,7 +17,7 @@
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
   \code{b} like "\code{b <- gbp(z, n, model = "br")}", the argument \code{x} is supposed to be \code{b}.
 
-  Users do not need to type \code{print(b)} but \code{b} itself is enough to call \code{print.gbp}.
+  Users do not need to type "\code{print(b)}" but "\code{b}" itself is enough to call \code{print.gbp}.
 }
 \value{
   \code{print(gbp.object)} will display
@@ -26,7 +26,7 @@
   \item{n}{if BRIMM and PRIMM, total number of trials of each group}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{prior.mean}{numeric if entered, NA if not entered}
-  \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
+  \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori. The variable name on the display will be "prior.mean."}
   \item{shrinkage}{shrinkage estimate of each group}
   \item{sd.shrinkage}{standard deviation of shrinkage estimate}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}

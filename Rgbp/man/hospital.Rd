@@ -8,7 +8,7 @@ Thirty-one Hospital Data
 }
 
 \description{
-Medical profiling evaluation of 31 New York hospitals in 1992. We are to consider these as Normally-distributed indices of successful outcome rates for patients at these 31 hospitals following coronary artery bypass graft (CABG) surgeries. The indices are centered in \code{y} so that the New York statewide average outcome over all hospitals lies near 0. Larger estimates of \code{y} indicate hospitals that performed better for these surgeries.
+Medical profiling evaluation of 31 New York hospitals in 1992. We are to consider these as Normally-distributed indices of successful outcome rates for patients at these 31 hospitals following Coronary Artery Bypass Graft (CABG) surgeries. The indices are centered so that the New York statewide average outcome over all hospitals lies near 0. Larger estimates of \code{y} indicate hospitals that performed better for these surgeries.
 }
 
 \usage{data(hospital)}

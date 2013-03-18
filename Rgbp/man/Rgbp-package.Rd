@@ -2,9 +2,9 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{Bayesian Hierarchical Modeling using Stein's Harmonic Prior}
+\title{Bayesian Hierarchical Modeling using Generalized Stein's Harmonic Prior}
 \description{
-Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data \cr using generalized Stein's harmonic prior for good frequentist repeated sampling property.
+Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data using generalized Stein's harmonic prior for good frequentist repeated sampling property.
 }
 \details{
   \tabular{ll}{
@@ -31,18 +31,22 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   # Loading datasets
   data(schools)
 
-  # baseball data where z is Hits and n is AtBats
+  # baseball data where z is Hits and n is at bats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # an arbitrary covariate for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
 
   y <- schools$y
   se <- schools$se
+
+  # an arbitrary covariate for schools data
   x2 <- rep(c(-1, 0, 1, 2), 2)
   
-  ####################################################################################
-  # If we do not have any covariate and do not know a mean of the prior distribution #
-  ####################################################################################
+  #####################################################################################
+  # If we do not have any covariates and do not know a mean of the prior distribution #
+  #####################################################################################
 
   #########
   # GRIMM #
@@ -53,11 +57,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(g)
   plot(g)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
   #########
@@ -69,11 +73,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
 
   #########
@@ -85,16 +89,16 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of a regression coefficient
-  ### (intercept), not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of a regression
+  ### coefficient (intercept), not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
-  ##################################################################################
-  # If we have one covariate and do not know a mean of the prior distribution yet, #
-  ##################################################################################
+  #######################################################################################
+  # If we have one covariate and do not know a mean of the prior distribution a priori, #
+  #######################################################################################
 
   #########
   # GRIMM #
@@ -108,8 +112,8 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   ### when we want to simulated psuedo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A, of regression coefficients, and
-  ### of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -122,11 +126,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
-  # and of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -139,11 +143,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r, of regression coefficients,
-  ### and of covariate, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r, of regression 
+  ### coefficients, and of covariate, not using estimated values as true ones
   coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
   ### two values of reg.coef are for beta0 and beta1
 
@@ -160,11 +164,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(g)
   plot(g)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(g, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of A and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of A and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
   #########
@@ -176,11 +180,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(b)
   plot(b)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(b, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   #########
@@ -192,11 +196,11 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
   summary(p)
   plot(p)
 
-  ### when we want to simulated psuedo datasets considering the estimated values as true ones
+  ### when we want to simulated pseudo datasets considering the estimated values as true ones
   coverage(p, nsim = 10)  
 
-  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level mean 
-  ### as true ones, not using estimated values as true ones
+  ### when we want to simulate psuedo datasets based on different values of r and of 2nd level
+  ### mean as true ones, not using estimated values as true ones
   coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
 }
