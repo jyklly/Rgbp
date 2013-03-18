@@ -310,7 +310,7 @@ plot.gbp <- function(x, ...) {
     lines(c(y[i], po.m[i]), c(4, 0))
     lines(c(y[i], y[i] + sdlens[i] * sd(y) * 0.4), c(4, 4 + sdlens[i]), col = "darkviolet")
     ##posterior variance lines
-    lines(c(po.m[i] - postlens[i] * sd(y) * 0.4, po.m[i]), c(0 - postlens[i], 0), col = "darkviolet")
+    lines(c(po.m[i] - postlens[i] * sd(y) * 0.4, po.m[i]), c(0 - postlens[i], 0), col = "darkgreen")
     xcord <- ((4 * po.m[i] / (y[i] - po.m[i]) - 4 * po.m / (y - po.m)) / 
               (4 / (y[i] - po.m[i]) - 4 / (y - po.m)))
     ycord <- 4 / (y - po.m) * xcord - 4 / (y - po.m) * po.m
@@ -333,11 +333,12 @@ plot.gbp <- function(x, ...) {
     points(index, pr.m, col = 4, pch = "-", cex = 2)
   }
 
+  se.or.n <- switch(model, "gr" = "stand.error", "br" = "n", "pr" = "n")
   par(new=TRUE,mfrow=c(1,1))
   par(xpd=NA)
   plot(1, type="n", axes=F, xlab="", ylab="")
-  legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), 
-         lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean", "se"),
+  legend("topleft", pch = c(19, 1, NA, NA, NA), col = c(2, 1, 4,"darkviolet", "darkgreen"), 
+         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "stan.deviation"),
          seg.len = 0.5, bty = "n", inset = c(-0.175, 0))
  # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
   par(xpd=FALSE)
