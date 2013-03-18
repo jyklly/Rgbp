@@ -41,21 +41,35 @@
   on the first-level parameter. Covariates appear in the second-level because covariates are obtainable
   before we observe data.
  
-  To be specific, the first hierarchy has \eqn{f(y_{j}~ |~ \theta_{j})}{f(y | \theta)} proportional to 
-  Lik(\eqn{\theta_{j}}{\theta}). And the second hierarchy has a conjugate prior distribution such as 
-  \eqn{p(\theta_{j}~ |~ \mu_{0j},~ A}{p(\theta | \mu0, A} (or \eqn{r})) = \eqn{p[\mu_{0j},~ A]}{p[\mu0, A]} for GRIMM,
-  \eqn{p[\mu_{0j},~ \mu_{0j} / r]}{p[\mu0, \mu0 / r]} for PRIMM, 
-  and \eqn{p[\mu_{0j},~ \mu_{0j} * (1 - \mu_{0j}) / (r + 1)]}{p[\mu0, \mu0 * (1 - \mu0) / (r + 1)]} for BRIMM,
-  where \eqn{g(\mu_{0j})~ =~ x_{j}'\beta}{g(\mu0) = x'\beta}. Two elements of the square braket indicate 
-  [mean, variance] of that distribution and \emph{g} is a link function. 
+  To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
+  (\eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
+  (or unit) in a dataset):
+  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta_{j}~ |~ A,~ \mu_{0j})~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
+  \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}.
+
+  For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
+  (a square bracket below indicates [mean, variance] of distribution):
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~ Gam(r\mu_{0j}, scale = 1 / r)~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep Gam(r\mu0_j, scale = 1 / r) ~ indep Gam[\mu0_j, \mu0_j / r]}
+  \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}.
+
+  For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta_{j}~ |~ r, \mu_{0j})~ \sim ~ indep~ Beta(r\mu_{0j},~ r(1-\mu_{0j}))~ \sim ~ indep~ Beta[\mu_{0j},~ \mu_{0j}(1 - \mu_{0j})~ /~ (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{logit(\mu_{0j})~ =~ x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}.
 
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 
   (or unit).
 
-  In order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
+  Pseudo-data generating process starts from the second level to the first level hiearchy. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second level and then moves onto the first level to simulate pseudo-data sets, \emph{y_{i}}{y_i} for GRIMM or \emph{z_{i}}{z_i} for BRIMM and PRIMM, given previously generated true parametes (\eqn{\theta_{i}}{\theta_i}). 
+
+  So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
   \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
-  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options
-  to run \code{gbp}.
+  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}) to start the pseudo-data generating process described above. From here, we have four options to run \code{gbp}.
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
