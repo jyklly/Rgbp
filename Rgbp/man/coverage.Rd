@@ -33,8 +33,7 @@
 
 \details{
   As for the argument \code{gbp.object}, if the result of \code{gbp} is designated to 
-  \code{b}, for example \cr 
-  "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
+  \code{b}, for example "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
 
   Data generating process is based on a second-level hierarchical model. The first-level is 
   a distribution of observed data (Likelihood) and the second-level is a conjugate prior distribution 
@@ -65,7 +64,7 @@
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 
   (or unit).
 
-  Pseudo-data generating process starts from the second level to the first level hiearchy. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second level and then moves onto the first level to simulate pseudo-data sets, \emph{y_{i}}{y_i} for GRIMM or \emph{z_{i}}{z_i} for BRIMM and PRIMM, given previously generated true parametes (\eqn{\theta_{i}}{\theta_i}). 
+  Pseudo-data generating process starts from the second-level to the first-level hiearchy. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second-level and then moves onto the first-level to simulate pseudo-data sets, \emph{y_{i}}{y_i} for GRIMM or \emph{z_{i}}{z_i} for BRIMM and PRIMM, given previously generated true parametes (\eqn{\theta_{i}}{\theta_i}). 
 
   So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
   \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
