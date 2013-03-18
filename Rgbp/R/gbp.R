@@ -290,7 +290,7 @@ plot.gbp <- function(x, ...) {
   
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
-  postlens <- po.sd / max(sqrtV)
+  postlens <- po.sd / max(po.sd)
   xmin <- min(c(y, po.m, pr.m))
   xmax <- max(c(y, po.m, pr.m))
   sunflowerplot(rep(4, length(y)) ~ y, ylim = c(-1, 5), xlim = c(xmin - abs(xmin) * 0.1, 
