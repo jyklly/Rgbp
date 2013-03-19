@@ -315,7 +315,7 @@ plot.gbp <- function(x, ...) {
               (4 / (y[i] - po.m[i]) - 4 / (y - po.m)))
     ycord <- 4 / (y - po.m) * xcord - 4 / (y - po.m) * po.m
     coords <- subset(cbind(xcord, ycord), ycord > 0 & ycord < 4)
-    points(coords, col = 2)
+    points(coords, pch=0)
   })
 
   
