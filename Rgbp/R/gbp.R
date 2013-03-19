@@ -12,7 +12,7 @@ gbp.default <- function(x, y, covariates, mean.PriorDist, model = "gr", intercep
 
 print.gbp <- function(x, ...) {
   
-  if (is.na(x$prior.mean) & !identical(x$X, NA)) {
+  if (any(is.na(x$prior.mean)) & !identical(x$X, NA)) {
 
 	cova <- as.matrix(x$X)
 	colnames(cova) <- paste(1 : dim(cova)[2])
@@ -31,7 +31,7 @@ print.gbp <- function(x, ...) {
                          post.intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     }
 
-  } else if (is.na(x$prior.mean) & identical(x$X, NA)) { 
+  } else if (any(is.na(x$prior.mean)) & identical(x$X, NA)) { 
   # if there are neither prior.mean and X assigned
 
     if (x$model == "gr") {
@@ -47,7 +47,7 @@ print.gbp <- function(x, ...) {
     }
 
 
-  } else if (!is.na(x$prior.mean)) {
+  } else if (!any(is.na(x$prior.mean))) {
     if (x$model == "gr") {
       temp <- data.frame(sample.mean = x$sample.mean, se = x$se, prior.mean = x$prior.mean, 
                          shrinkage = x$shrinkage, sd.shrinkage = x$sd.shrinkage, 
@@ -70,7 +70,7 @@ print.gbp <- function(x, ...) {
 
 summary.gbp <- function(object, ...) {
 
-  if (is.na(object$prior.mean) & !identical(object$X, NA)) {
+  if (any(is.na(object$prior.mean)) & !identical(object$X, NA)) {
 
 	cova <- as.matrix(object$X)
 	colnames(cova) <- paste(1 : dim(cova)[2])
@@ -89,7 +89,7 @@ summary.gbp <- function(object, ...) {
                          post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     }
 
-  } else if (is.na(object$prior.mean) & identical(object$X, NA)) { # if there are neither prior.mean and X assigned
+  } else if (any(is.na(object$prior.mean)) & identical(object$X, NA)) { # if there are neither prior.mean and X assigned
 
     if (object$model == "gr") {
       temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean.hat,
@@ -104,7 +104,7 @@ summary.gbp <- function(object, ...) {
     }
 
 
-  } else if (!is.na(object$prior.mean)) {
+  } else if (!any(is.na(object$prior.mean))) {
     if (object$model == "gr") {
       temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean, 
                          shrinkage = object$shrinkage, sd.shrinkage = object$sd.shrinkage, 
@@ -206,7 +206,7 @@ summary.gbp <- function(object, ...) {
   alpha.hat.sd <- sqrt(object$a.var)
   result2 <- data.frame(alpha.hat, alpha.hat.sd)
 
-  if (is.na(object$prior.mean)) {
+  if (any(is.na(object$prior.mean))) {
     estimate <- as.vector(object$beta.new)
     if (object$intercept == TRUE) {
       names(estimate) <- paste("beta", 0 : (length(estimate) - 1), sep = "")
@@ -258,7 +258,7 @@ plot.gbp <- function(x, ...) {
 
   y <- x$sample.mean
   se <- x$se
-  if (is.na(x$prior.mean)) {
+  if (any(is.na(x$prior.mean))) {
     pr.m <- x$prior.mean.hat
   } else {
     pr.m <- x$prior.mean
@@ -337,8 +337,8 @@ plot.gbp <- function(x, ...) {
   par(new=TRUE,mfrow=c(1,1))
   par(xpd=NA)
   plot(1, type="n", axes=F, xlab="", ylab="")
-  legend("topleft", pch = c(19, 1, NA, NA, NA), col = c(2, 1, 4,"darkviolet", "darkgreen"), 
-         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd"),
+  legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
+         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "cross-over"),
          seg.len = 0.5, bty = "n", inset = c(-0.175, 0))
  # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
   par(xpd=FALSE)
