@@ -338,7 +338,7 @@ plot.gbp <- function(x, ...) {
   par(xpd=NA)
   plot(1, type="n", axes=F, xlab="", ylab="")
   legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
-         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "cross-over"),
+         lwd = c(NA, NA, 2, 2, 2), c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "crossover"),
          seg.len = 0.5, bty = "n", inset = c(-0.175, 0))
  # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
   par(xpd=FALSE)

@@ -25,7 +25,7 @@
   upper horizontal line and prior (blue line) and posterior means (red
   circle) on the lower horizontal line. The aim of this plot is to get a sense of the
   magnitude of the shrinkage and to observe if any change in ordering of the
-  groups has occurred. Cross-overs (changes of order) are noted by a
+  groups has occurred. Crossovers (changes of order) are noted by a
   black square as indicated in the legend. If the points plotted have
   the same value then a sunflower plot is produced where each petal
   (line protruding from the point) represent the count of points with
