@@ -64,15 +64,15 @@
   From now on, the subscript \emph{i} means \emph{i}-th simulation and \emph{j} indicates \emph{j}-th group 
   (or unit).
 
-  Pseudo-data generating process starts from the second-level to the first-level hiearchy. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second-level and then moves onto the first-level to simulate pseudo-data sets, \eqn{y_{i}}{y_i} for GRIMM or \eqn{z_{i}}{z_i} for BRIMM and PRIMM, given previously generated true parametes (\eqn{\theta_{i}}{\theta_i}). 
+  Pseudo-data generating process starts from the second-level hierarchy to the first-level. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second-level and then moves onto the first-level to simulate pseudo-data sets, \eqn{y_{i}}{y_i} for GRIMM or \eqn{z_{i}}{z_i} for BRIMM and PRIMM, given previously generated true parametes (\eqn{\theta_{i}}{\theta_i}). 
 
   So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
   \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
-  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}) to start the pseudo-data generating process described above. From here, we have four options to run \code{gbp}.
+  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options to run \code{gbp}.
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
-  (\code{gbp.object}) as given true values when it generates bunch of pseudo datasets. After sampling a (\emph{k} by 1) vector 
+  (\code{gbp.object}) as given true values when it generates bunch of pseudo-datasets. After sampling a (\emph{k} by 1) vector 
   \eqn{\theta_{i}}{\theta_i} from the prior
   distribution determined by those estimated values in \code{b} (\code{gbp.object}), \code{coverage}
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{i}}{\theta_i} just sampled.

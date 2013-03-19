@@ -88,7 +88,7 @@
   The last case is when we know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. Now, we do
   not need to estimate regression coefficients at all because we know a true value of \eqn{\mu_{0}}{\mu0} (strong assumption).
   Designating this value into the argument of \code{gbp} like 
-  "\code{gbp(y, se, mean.PriorDist = 3, model = "gr")}" is enough to account for it. For reference, 
+  "\code{gbp(y, se, mean.PriorDist = 3)}" is enough to account for it. For reference, 
   \code{mean.PriorDist} has a stronger priority than \code{covariates}, which means that when both
   arguments are designated, \code{gbp} will fit a hierarchical model using the known mean of prior distribution, \code{mean.PriorDist}.
 
