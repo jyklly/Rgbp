@@ -33,7 +33,7 @@
 
 \details{
   As for the argument \code{gbp.object}, if the result of \code{gbp} is designated to 
-  \code{b}, for example "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
+  \code{b}, for example \cr "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
 
   Data generating process is based on a second-level hierarchical model. The first-level is 
   a distribution of observed data (Likelihood) and the second-level is a conjugate prior distribution 
