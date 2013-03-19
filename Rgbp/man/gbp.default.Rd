@@ -137,7 +137,6 @@
 }
 \examples{
 
-
   # Loading datasets
   data(schools)
 
@@ -159,6 +158,9 @@
   ######### 
 
   g <- gbp(y, se)
+  g
+  summary(g)
+  plot(g)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -174,6 +176,9 @@
   ######### 
 
   b <- gbp(z, n, model = "br")
+  b
+  summary(b)
+  plot(b)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -189,6 +194,9 @@
   ######### 
 
   p <- gbp(z, n, model = "pr")
+  p
+  summary(p)
+  plot(p)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -208,6 +216,9 @@
   ######### 
 
   g <- gbp(y, se, x2, model = "gr")
+  g
+  summary(g)
+  plot(g)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -224,6 +235,9 @@
   ######### 
 
   b <- gbp(z, n, x1, model = "br")
+  b
+  summary(b)
+  plot(b)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -240,6 +254,9 @@
   ######### 
 
   p <- gbp(z, n, x1, model = "pr")
+  p
+  summary(p)
+  plot(p)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -260,6 +277,9 @@
   ######### 
 
   g <- gbp(y, se, mean.PriorDist = 8)
+  g
+  summary(g)
+  plot(g)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -274,6 +294,9 @@
   #########
  
   b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
+  b
+  summary(b)
+  plot(b)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
@@ -288,6 +311,9 @@
   #########
 
   p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
+  p
+  summary(p)
+  plot(p)
 
   ### when we want to simulated pseudo datasets considering the estimated values 
   ### as true ones.
