@@ -72,14 +72,14 @@
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
-  (=\code{gbp.object}) as given true values when it generates bunch of pseudo datasets. After sampling a (\emph{k} by 1) vector 
+  (\code{gbp.object}) as given true values when it generates bunch of pseudo datasets. After sampling a (\emph{k} by 1) vector 
   \eqn{\theta_{i}}{\theta_i} from the prior
-  distribution determined by those estimated values in \code{b} (=\code{gbp.object}), \code{coverage}
+  distribution determined by those estimated values in \code{b} (\code{gbp.object}), \code{coverage}
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
   Second, \code{coverage} allows us to designate different true values in generating datasets, for example\cr
-  \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariate and 
-  do not know a mean of the prior distribution a priori. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
+  \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariates and 
+  do not know a mean of the prior distribution. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
   \eqn{\theta_{i}}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
   \eqn{\theta_{i}}{\theta_i} just sampled.
