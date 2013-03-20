@@ -1,6 +1,6 @@
 \name{print.summary.gbp}
 \alias{print.summary.gbp}
-\title{Displying "summary.gbp" Class}
+\title{Displying 'summary.gbp' Class}
 \description{
 \code{summary(gbp.object)} enables users to see a compact summary of estimation result.
 }
@@ -24,9 +24,9 @@
 
   For reference, if there are several units with the same median value, they will show up with numbering.
 
-  The second part is about the \code{Second-level Variance Component Estimation Summary}. To be specific, it shows estimate of \eqn{\alpha} defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM and its standard deviation. It is actually a posterior mode.
+  The second part is about the \code{Second-level Variance Component Estimation Summary}. To be specific, it shows estimate of \eqn{\alpha} (a posterior mode) defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM and its standard deviation.
 
-  The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In case, \code{gbp.object} includes a regression result, \code{summary(gbp.object)} will display the result of resgression fit.
+  The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In this case, \code{summary(gbp.object)} will display the result of resgression fit.
 
 }
 \value{

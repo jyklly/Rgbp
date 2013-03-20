@@ -68,7 +68,7 @@
 
   So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
   \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
-  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options to run \code{gbp}.
+  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options to run \code{coverage}.
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
@@ -79,7 +79,7 @@
 
   Second, \code{coverage} allows us to designate different true values in generating datasets, for example\cr
   \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariates and 
-  do not know a mean of the prior distribution. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}. Then, \code{coverage} samples a (\emph{k} by 1) vector
+  do not know a mean of the prior distribution. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}, where \emph{g} is a link function (linear for GRIMM, log for PRIMM, and logit for BRIMM). Then, \code{coverage} samples a (\emph{k} by 1) vector
   \eqn{\theta_{i}}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
   \eqn{\theta_{i}}{\theta_i} just sampled.
@@ -87,13 +87,13 @@
   Third, \code{coverage} enables us to designate different true values in generating datasets like\cr
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
-  an intercept term) without any knowledge about the mean of prior distribution a priori. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept term in the regression and the mean of prior distribution will be set as 
+  an intercept term) without any knowledge about the mean of prior distribution a priori. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
   \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where \eqn{x_{j}}{x_j} is (1, \emph{j}-th row of \code{X})'. Then, 
   \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta_{i}}{\theta_i} from the prior distribution 
   determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 
   Sampling \emph{i}-th pseudo-data is based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Lastly, \code{coverage} provides us a way to designate different true values in generating datasets like
+  Lastly, \code{coverage} provides us another way to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, mean.PriorDist = 0.45, nsim = 100)} when we know the mean of prior 
   distribution a priori. Then, \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta_{i}}{\theta_i} 
   from the prior distribution determined by designated values, \code{A.or.r} and \code{mean.PriorDist}.
@@ -105,8 +105,7 @@
   \eqn{\theta_{ij}}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
-  Rao-Blackwellized estimator is an expectation of the unbiased estimator described above given a sufficient
-  statistic, \emph{y}.
+  Rao-Blackwellized estimator for group \emph{j} is an expectation of the unbiased estimator described above given a sufficient statistic, \eqn{y_{j}}{y_j} for GRIMM or \eqn{z_{j}}{z_j} for BRIMM and PRIMM.
 }
 
 \value{
@@ -132,7 +131,7 @@
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
   }
   \item{raw.result10}{
-    all the unbiased coverage probabilities for every group and for every simulation.
+    all the values of indicators for every group and for every simulation.
   }
 }
 

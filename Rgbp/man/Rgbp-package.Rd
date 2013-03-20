@@ -13,7 +13,9 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
     Version: \tab 1.0.0\cr
     Date: \tab 2013-03-16\cr
     License: \tab GPL-2\cr
+    Main functions: \code{\link{gbp}}, \code{\link{coverage}}
   }
+  
 }
 \author{
   Joseph Kelly, Carl Morris, and Hyungsuk Tak

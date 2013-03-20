@@ -64,12 +64,12 @@
   for \eqn{j = 1, \ldots, k}.
 
   Theoretically, generalized Stein's harmonic prior is Uniform on the second level variance component
-  (variance of the prior distribution), \emph{i.e.}, \emph{dA} for GRIMM and \emph{d(1 / r)} 
+  (variance of the prior distribution), \emph{i.e.}, \emph{dA} for GRIMM and \eqn{d(\frac{1}{r})}{d(1 / r)} 
   (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for BRIMM and PRIMM, leading to proper posterior distributions. 
 
-  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\emph{y} used in the Normal-Normal model above) for GRIMM or of each group's number of successful trials (\emph{z}) for BRIMM and PRIMM, where \emph{k} is the number of groups (or units) in a dataset.
+  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for GRIMM or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for BRIMM and PRIMM, where \emph{k} is the number of groups (or units) in a dataset.
 
-  The argument \code{y} (not \emph{y} used in the Normal-Normal model above) in \code{gbp} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma}{\sigma}) of all groups for GRIMM or of each group's total number of trials (\emph{n}) for BRIMM and PRIMM.
+  The argument \code{y} (not the same as \eqn{y_{j}'s}{y_j's} used in the description of Normal-Normal model above) in \code{gbp} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's}) of all groups for GRIMM or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for BRIMM and PRIMM.
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
@@ -80,7 +80,7 @@
 
   The second situation is when we have some covariates (a \emph{k} by \emph{t} matrix, where \emph{t} 
   \eqn{\ge} 1) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, 
-  assigning a \emph{k} by \emph{t} matrix (each column corresponds to one covariate), \emph{X}, such as 
+  assigning a (\emph{k} by \emph{t}) matrix (each column corresponds to one covariate), \emph{X}, such as 
   "\code{gbp(z, n, X, model = "pr")}", will lead to a correct model. Default of \code{gbp} is to fit a
   regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability
   will hold in this case.
@@ -95,18 +95,18 @@
   When it comes to estimating hyper-parameters, (\emph{A} or \emph{r}) and \eqn{\beta}, \code{gbp} uses 
   a mixture model with \eqn{\theta} integrated out, first searching for a value that maximizes the marginal posterior
   distribution of \eqn{\alpha} (= log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM), and then 
-  looking for an estimate of \eqn{\beta} (possibly a vector) that maximizes its posterior distribution (Likelihood) given previously 
+  looking for an estimate of \eqn{\beta} (possibly a vector) that maximizes its conditional posterior distribution (Likelihood) given previously 
   estimated \eqn{\alpha}. \code{optim} is used for maximizing marginal and conditional posterior distributions. 
 
-  \code{gbp} returns an object of class "\code{gbp}" which provides the functions \code{plot}, \code{print},
+  \code{gbp} returns an object of class "\code{gbp}" which provides three relevant functions \code{plot}, \code{print},
   and \code{summary}.
 }
 
 \value{
   An object of class \code{gbp} comprises of:
-  \item{sample.mean}{sample mean of each group}
-  \item{se}{if GRIMM, standard error of each group}
-  \item{n}{if BRIMM and PRIMM, total number of trials of each group}
+  \item{sample.mean}{sample mean of each group (or unit)}
+  \item{se}{if GRIMM, standard error of each group (or unit)}
+  \item{n}{if BRIMM and PRIMM, total number of trials of each group (or unit)}
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
   \item{shrinkage}{shrinkage estimate of each group}
@@ -120,7 +120,7 @@
   \item{beta.new}{regression coefficient estimates}
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
-  \item{a.new}{alpha estimate}
+  \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM.}
   \item{a.var}{variance of alpha estimate}
 }
 
