@@ -44,18 +44,18 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   # We do not have any covariates and do not know a mean of the prior distribution. #
   ###################################################################################
 
-  #########
-  # BRIMM #
-  ######### 
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
 
   b <- gbp(z, n, model = "br")
   b
   summary(b)
   plot(b)
 
-  #########
-  # PRIMM #
-  ######### 
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
 
   p <- gbp(z, n, model = "pr")
   p
