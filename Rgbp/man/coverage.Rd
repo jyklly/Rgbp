@@ -79,7 +79,7 @@
   Third, \code{coverage} enables us to designate different true values in generating datasets like\cr
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
-  an intercept term) without any knowledge about the mean of prior distribution a priori. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
+  an intercept term) but we do not know what the second-level mean (\eqn{\mu_{0}}{\mu0}, mean of the prior distribution) is. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
   \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where \eqn{x_{j}}{x_j} is (1, \emph{j}-th row of \code{X})'. Then, 
   \code{coverage} samples a (\emph{k} by 1) vector \eqn{\theta_{i}}{\theta_i} from the prior distribution 
   determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 

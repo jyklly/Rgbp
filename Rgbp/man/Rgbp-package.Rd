@@ -14,8 +14,10 @@ Bayesian hierarchical modeling with the Uniform prior distribution on the second
     Date: \tab 2013-03-16\cr
     License: \tab GPL-2\cr
     Main functions: \tab \code{\link{gbp}}, \code{\link{coverage}}\cr
-  }
-  
+  }\cr
+
+  This package borrows Bayesian machine to build a multilevel (random-effect) model and evalueates it via frequentist repeated sampling procedure (we call it method check) for three kinds of people; for people outside of statistical world who want to use a hierarchical model for their datasets; for Bayesian who want to see a preliminary result before constructing their full-Bayesian hierarchical models and want to check whehter the result of their full-Bayesian hierarchical modeling is reasonable after modeling; for frequentist who want to build a random-effect model with good repeated sampling property.
+
 }
 \author{
   Joseph Kelly, Carl Morris, and Hyungsuk Tak
@@ -23,8 +25,6 @@ Bayesian hierarchical modeling with the Uniform prior distribution on the second
   Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 }
 \references{
-  Morris, C. and Tang, R. (2011). Estimating Random Effects via Adjustment for Density Maximization. \emph{Statistical Science}. \bold{26}. 271-287.
-
   Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
 }
 
