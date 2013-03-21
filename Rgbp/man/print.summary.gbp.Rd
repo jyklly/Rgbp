@@ -15,7 +15,7 @@
 }
 
 \details{
-  The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \cr \code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
+  The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
 
   A display of \code{Main Summary} changes depending on whether all the groups (units) has the same standard error for Gaussian data (or the same total number of trials for Binomial and Poisson data). If they are not the same, 
 \code{Main Summary} lists groups (units) with minimun, median, and maximum values of the standard error for Gaussian data (or of the total number of trials for Binomial and Poisson data). And the last row of \code{Main Summary} is about the overall average for all the groups (units) within each column. Note that this last row is not an average over displayed groups (units) above.
@@ -63,17 +63,6 @@
 }
 
 \examples{
-
-  data(hospital)
-
-  z <- hospital$d
-  n <- hospital$n
-  y <- hospital$y
-  se <- hospital$se
-  
-  ###################################################################################
-  # We do not have any covariates and do not know a mean of the prior distribution. #
-  ###################################################################################
 
   data(hospital)
 

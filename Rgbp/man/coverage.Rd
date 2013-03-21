@@ -69,14 +69,14 @@
   distribution determined by those estimated values in \code{b} (\code{gbp.object}), \code{coverage}
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Second, \code{coverage} allows us to designate different true values in generating datasets, for example\cr
+  Second, \code{coverage} allows us to designate different true values in generating datasets, for example 
   \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariates and 
   do not know a mean of the prior distribution. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}, where \emph{g} is a link function (\eqn{g(\mu_{0}) = \mu_{0}}{g(\mu0) = \mu0} for Gaussian, \eqn{g(\mu_{0}) = log(\mu_{0})}{g(\mu0) = log(\mu0)} for Poisson, and \eqn{g(\mu_{0}) = logit(\mu_{0})}{g(\mu0) = logit(\mu0)} for Binomial data). Then, \code{coverage} samples a (\emph{k} by 1) vector
   \eqn{\theta_{i}}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
   \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Third, \code{coverage} enables us to designate different true values in generating datasets like\cr
+  Third, \code{coverage} enables us to designate different true values in generating datasets like
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
   an intercept term) but we do not know what the second-level mean (\eqn{\mu_{0}}{\mu0}, mean of the prior distribution) is. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
