@@ -133,13 +133,15 @@
   data(schools)
   y <- schools$y
   se <- schools$se
-  # Arbitrary covaraite
+
+  # Arbitrary covaraite for schools data
   x2 <- rep(c(-1, 0, 1, 2), 2)
 
   # baseball data where z is Hits and n is AtBats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
-  # Arbitrary covaraite
+
+  # Arbitrary covaraite for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
   
   ########################################################
