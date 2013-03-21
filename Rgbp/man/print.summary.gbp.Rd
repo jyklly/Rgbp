@@ -15,20 +15,7 @@
 }
 
 \details{
-  The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
-
-  A display of \code{Main Summary} changes depending on whether all the groups (units) has the same standard error for Gaussian data (or the same total number of trials for Binomial and Poisson data). If they are not the same, 
-\code{Main Summary} lists groups (units) with minimun, median, and maximum values of the standard error for Gaussian data (or of the total number of trials for Binomial and Poisson data). And the last row of \code{Main Summary} is about the overall average for all the groups (units) within each column. Note that this last row is not an average over displayed groups (units) above.
-
-  If groups (units) have the same standard error for Gaussian (or the same total number of trials for Binomial and Poisson), \code{Main Summary} lists groups (units) with minimun, median, and maximum values of the sample mean. 
-
-  For reference, if there are several units with the same median value, they will show up with numbering.
-
-  The second part is about the \code{Second-level Variance Component Estimation Summary}. For reference, the second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance in ensemble information. It is \emph{A} for Gaussian, \eqn{\frac{\mu_{0j}}{r}}{\mu0_j / r} for Poisson, and \eqn{\frac{\mu_{0j}(1 - \mu_{0j})}{r}}{\mu0_j (1 - \mu0_j) / r}. To be specific, this part shows estimate of \eqn{\alpha} (a posterior mode) defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data, and its standard deviation. 
-
-  The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In this case, \code{summary(gbp.object)} will display the result of resgression fit.
-
-}
+a}
 \value{
   \code{summary(gbp.object)} shows a compact summary of estimation result such as:
   \item{Main summary}{
