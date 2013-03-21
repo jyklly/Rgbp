@@ -276,17 +276,11 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   po.low <- x$post.intv.low
   po.upp <- x$post.intv.upp
 
-  cx <- (mean(log(se + 2)) + min(log(se + 2))) / 2
-  index <- 1 : length(se)
-  ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
-  ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
-  xlabel <- "Indices (Groups) by the order of data input"
-
   if (sort == TRUE) {
-    temp.data <- cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp)
-    temp.data <- temp.data[order(temp.data[, 2])]
-    y <- temp.data[, 1]
-    se <- temp.data[, 2]
+    temp.data <- as.data.frame(cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp))
+    temp.data <- temp.data[order(temp.data$se), ]
+    y <- temp.data$y
+    se <- temp.data$se
     pr.m <- temp.data[, 3]
     po.m <- temp.data[, 4]
     po.sd <- temp.data[, 5]
@@ -298,6 +292,12 @@ plot.gbp <- function(x, sort = TRUE, ...) {
       xlabel <- "Indices (Groups) sorted by the order of n"
     }
   }
+
+  cx <- (mean(log(se + 2)) + min(log(se + 2))) / 2
+  index <- 1 : length(se)
+  ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
+  ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
+  xlabel <- "Indices (Groups) by the order of data input"
 
   dev.new <- function(width = 10, height = 5) { 
     platform <- sessionInfo()$platform 
