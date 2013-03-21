@@ -76,7 +76,7 @@
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
   \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  Third, \code{coverage} enables us to designate different true values in generating datasets like
+  Third, \code{coverage} enables us to designate different true values in generating datasets like\cr 
   \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
   (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
   an intercept term) but we do not know what the second-level mean (\eqn{\mu_{0}}{\mu0}, mean of the prior distribution) is. For reference, a covariate matrix, \code{X}, should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
