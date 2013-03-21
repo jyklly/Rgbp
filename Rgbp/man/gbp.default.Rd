@@ -3,23 +3,19 @@
 \alias{gbp.default}
 \title{Fitting Bayesian Hierarchical Models}
 \description{
-  \code{gbp} is used to fit Bayesian hierarchical models for Gaussian (GRIMM), Binomial (BRIMM), 
-  and Poisson (PRIMM) data using generalized Stein's harmonic prior for
-  good frequentist repeated sampling property.
+  \code{gbp} fits a Bayesian hierarchical model using the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
-\usage{\method{gbp}{default}(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
+\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
   \item{x}{
-    a (\emph{k} by 1) vector of \emph{k} groups' sample means for GRIMM or of each group's number of successful trials for BRIMM and PRIMM, where \emph{k} is the number of groups (or units) in a dataset.
+    a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
   }
-  \item{y}{
-    a (\emph{k} by 1) vector composed of the standard errors of all groups for GRIMM or 
-    of each group's total number of trials for BRIMM and PRIMM.
+  \item{w}{
+    a (\emph{k} by 1) vector composed of the standard errors of all groups for Gaussian or 
+    of each group's total number of trials for Binomial and Poisson data.
   }
   \item{covariates}{
-    (optional) a (\emph{k} by \emph{t}) matrix of covariates without a column of ones for an intercept term, where \cr
-    \emph{k} is the number of groups (or units) in a dataset and \cr
-    \emph{t} is the number of covariates (t \eqn{\ge} 1).\cr
+    (optional) a matrix of covariate(s) each column of which corresponds to one covariate.
   }
   \item{mean.PriorDist}{
     (optional) a numeric value for the second-level mean parameter, \emph{i.e.} the mean of prior
@@ -39,37 +35,32 @@
 }
 
 \details{
-  \code{gbp} fits a Bayesian hierarchical model using generalized
-  Stein's harmonic prior which enables good frequentist repeated sampling properties. The first-level is a distribution of observed data (likelihood) and the second-level is a conjugate prior distribution on the first-level parameter. 
-
-  To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model 
-  (\eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known and subscript \emph{j} indicates \emph{j}-th group 
+  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model
+  (\eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset):
   \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
   \deqn{(\theta_{j}~ |~ A,~ \mu_{0j})~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
   \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
-  for \eqn{j = 1, \ldots, k}.
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
-  For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model 
-  (a square bracket below indicates [mean, variance] of distribution):
+  For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model (for reference, a square bracket below indicates [mean, variance] of distribution and a constant multiplied to the notation representing Gamma distribution (Gam) is a scale. Also, for consistent notation, \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}):
   \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
-  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~ Gam(r\mu_{0j}, scale = 1 / r)~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep Gam(r\mu0_j, scale = 1 / r) ~ indep Gam[\mu0_j, \mu0_j / r]}
+  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~ \frac{1}{r}Gam(r\mu_{0j})~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
   \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
-  for \eqn{j = 1, \ldots, k}.
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
-  For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model:
+  For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model (for reference, a square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}):
   \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
   \deqn{(\theta_{j}~ |~ r, \mu_{0j})~ \sim ~ indep~ Beta(r\mu_{0j},~ r(1-\mu_{0j}))~ \sim ~ indep~ Beta[\mu_{0j},~ \mu_{0j}(1 - \mu_{0j})~ /~ (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
   \deqn{logit(\mu_{0j})~ =~ x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
-  for \eqn{j = 1, \ldots, k}.
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
-  Theoretically, generalized Stein's harmonic prior is Uniform on the second level variance component
-  (variance of the prior distribution), \emph{i.e.}, \emph{dA} for GRIMM and \eqn{d(\frac{1}{r})}{d(1 / r)} 
-  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for BRIMM and PRIMM, leading to proper posterior distributions. 
+  For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
+  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data.
 
-  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for GRIMM or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for BRIMM and PRIMM, where \emph{k} is the number of groups (or units) in a dataset.
+  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
-  The argument \code{y} (not the same as \eqn{y_{j}'s}{y_j's} used in the description of Normal-Normal model above) in \code{gbp} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's}) of all groups for GRIMM or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for BRIMM and PRIMM.
+  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's} or accurately estimated \eqn{s_{j}'s}{s_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
@@ -78,12 +69,7 @@
   will automatically fit a regression with only an intercept term to estimate a common mean of the prior
   distribution (exchangeability).
 
-  The second situation is when we have some covariates (a \emph{k} by \emph{t} matrix, where \emph{t} 
-  \eqn{\ge} 1) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, 
-  assigning a (\emph{k} by \emph{t}) matrix (each column corresponds to one covariate), \emph{X}, such as 
-  "\code{gbp(z, n, X, model = "pr")}", will lead to a correct model. Default of \code{gbp} is to fit a
-  regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability
-  will hold in this case.
+  The second situation is when we have covariate(s) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning a matrix, \emph{X}, each column of which corresponds to one covariate, such as "\code{gbp(z, n, X, model = "pr")}", will lead to a correct model. Default of \code{gbp} is to fit a regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability will hold in this case.
 
   The last case is when we know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. Now, we do
   not need to estimate regression coefficients at all because we know a true value of \eqn{\mu_{0}}{\mu0} (strong assumption).
@@ -92,21 +78,14 @@
   \code{mean.PriorDist} has a stronger priority than \code{covariates}, which means that when both
   arguments are designated, \code{gbp} will fit a hierarchical model using the known mean of prior distribution, \code{mean.PriorDist}.
 
-  When it comes to estimating hyper-parameters, (\emph{A} or \emph{r}) and \eqn{\beta}, \code{gbp} uses 
-  a mixture model with \eqn{\theta} integrated out, first searching for a value that maximizes the marginal posterior
-  distribution of \eqn{\alpha} (= log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM), and then 
-  looking for an estimate of \eqn{\beta} (possibly a vector) that maximizes its conditional posterior distribution (Likelihood) given previously 
-  estimated \eqn{\alpha}. \code{optim} is used for maximizing marginal and conditional posterior distributions. 
-
-  \code{gbp} returns an object of class "\code{gbp}" which provides three relevant functions \code{plot}, \code{print},
-  and \code{summary}.
+  \code{gbp} returns an object of class "\code{gbp}" which provides three relevant functions \code{plot}, \code{print}, and \code{summary}.
 }
 
 \value{
   An object of class \code{gbp} comprises of:
   \item{sample.mean}{sample mean of each group (or unit)}
-  \item{se}{if GRIMM, standard error of each group (or unit)}
-  \item{n}{if BRIMM and PRIMM, total number of trials of each group (or unit)}
+  \item{se}{if Gaussian data, standard error of sample mean in each group (or unit)}
+  \item{n}{if Binomial and Poisson data, total number of trials of each group (or unit)}
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
   \item{shrinkage}{shrinkage estimate of each group}
@@ -115,19 +94,16 @@
   \item{post.sd}{posterior standard deviation of each group}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
   \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
-  \item{model}{"gr" for GRIMM, "br" for BRIMM, and "pr" for PRIMM}
+  \item{model}{"gr" for Gaussian, "br" for Binomial, and "pr" for Poisson data}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{beta.new}{regression coefficient estimates}
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
-  \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for GRIMM or -log(\emph{r}) for BRIMM and PRIMM.}
+  \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or -log(\emph{r}) for Binomial and Poisson data.}
   \item{a.var}{variance of alpha estimate}
 }
 
 \references{
-  Morris, C. and Tang, R. (2011). Estimating Random Effects via
-  Adjustment for Density Maximization. \emph{Statistical Science}. \bold{26}. 271-287.
-
   Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. 
   \emph{Statistical Science}. \bold{27}. 115-134.
 }

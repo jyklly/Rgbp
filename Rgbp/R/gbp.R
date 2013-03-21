@@ -1,10 +1,10 @@
-gbp <- function(x, y, covariates, mean.PriorDist, model, intercept, Alpha) UseMethod("gbp")
+gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha) UseMethod("gbp")
 
-gbp.default <- function(x, y, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95) {
+gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95) {
   res <- switch(model, 
-           gr = gr(x, y, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept), 
-           br = br(x, y, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha), 
-           pr = pr(x, y, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
+           gr = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept), 
+           br = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha), 
+           pr = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
   res
