@@ -46,6 +46,7 @@ Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models
 
   g <- gbp(y, se)
   g
+  print(g, sort = TRUE)
   summary(g)
   plot(g)
 
@@ -55,6 +56,7 @@ Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models
 
   b <- gbp(z, n, model = "br")
   b
+  print(b, sort = TRUE)
   summary(b)
   plot(b)
 
@@ -63,6 +65,7 @@ Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models
   ######### 
 
   p <- gbp(z, n, model = "pr")
+  print(p, sort = TRUE)
   p
   summary(p)
   plot(p)

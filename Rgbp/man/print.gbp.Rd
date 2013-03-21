@@ -4,10 +4,14 @@
 \description{
 \code{print.gbp} enables users to see a compact group-level (unit-level) estimation result of \code{gbp} function.
 }
-\usage{\method{print}{gbp}(x, ...)}
+\usage{\method{print}{gbp}(x, sort = TRUE, ...)}
 \arguments{
   \item{x}{
     a resultant object of \code{gbp} function. 
+  }
+  \item{sort}{
+    \code{TRUE} or \code{FALSE} flag indicating whether the result should appear by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data.
+    included in the regression. Default is \code{TRUE}.
   }
   \item{...}{
     further arguments passed to other methods.
@@ -17,7 +21,7 @@
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
   \code{b} like "\code{b <- gbp(z, n, model = "br")}", the argument \code{x} is supposed to be \code{b}.
 
-  Users do not need to type "\code{print(b)}" but "\code{b}" itself is enough to call \code{print.gbp}.
+  We do not need to type "\code{print(b)}" but "\code{b}" itself is enough to call \code{print.gbp}. But if we want to see the result sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = TRUE)} is needed.
 }
 \value{
   \code{print(gbp.object)} will display
@@ -28,7 +32,7 @@
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori. The variable name on the display will be "prior.mean."}
   \item{shrinkage}{shrinkage estimate of each group}
-  \item{sd.shrinkage}{standard deviation of shrinkage estimate}
+  \item{se.shrinkage}{standard deviation of shrinkage estimate}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
   \item{post.mean}{posterior mean of each group}
   \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
@@ -57,6 +61,7 @@
 
   g <- gbp(y, se)
   g
+  print(g, sort = TRUE)
 
   #########
   # BRIMM #
@@ -64,6 +69,7 @@
 
   b <- gbp(z, n, model = "br")
   b
+  print(b, sort = TRUE)
 
   #########
   # PRIMM #
@@ -71,5 +77,7 @@
 
   p <- gbp(z, n, model = "pr")
   p
+  print(p, sort = TRUE)
+
 }
 \keyword{methods}

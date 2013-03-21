@@ -138,6 +138,7 @@
 
     g <- gbp(y, se)
     g
+    print(g, sort = TRUE)
     summary(g)
     plot(g)
 
@@ -159,6 +160,7 @@
 
     g <- gbp(y, se, x2, model = "gr")
     g
+    print(g, sort = TRUE)
     summary(g)
     plot(g)
 
@@ -180,6 +182,7 @@
 
     g <- gbp(y, se, mean.PriorDist = 8)
     g
+    print(g, sort = TRUE)
     summary(g)
     plot(g)
 

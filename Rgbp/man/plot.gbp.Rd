@@ -41,6 +41,7 @@
 \author{Joseph Kelly, Carl Morris, and Hyungsuk Tak}
 
 \examples{
+
   data(hospital)
 
   z <- hospital$d
