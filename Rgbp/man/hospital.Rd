@@ -40,35 +40,38 @@ Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models
   # We do not have any covariates and do not know a mean of the prior distribution. #
   ###################################################################################
 
-  #########
-  # GRIMM #
-  ######### 
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
 
-  g <- gbp(y, se)
-  g
-  print(g, sort = TRUE)
-  summary(g)
-  plot(g)
+    g <- gbp(y, se)
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)    
 
-  #########
-  # BRIMM #
-  ######### 
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
 
-  b <- gbp(z, n, model = "br")
-  b
-  print(b, sort = TRUE)
-  summary(b)
-  plot(b)
+    b <- gbp(z, n, model = "br")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)    
 
-  #########
-  # PRIMM #
-  ######### 
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
 
-  p <- gbp(z, n, model = "pr")
-  print(p, sort = TRUE)
-  p
-  summary(p)
-  plot(p)
+    p <- gbp(z, n, model = "pr")
+    print(p, sort = FALSE)
+    p
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)    
 
 }
 

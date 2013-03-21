@@ -50,9 +50,10 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
 
   b <- gbp(z, n, model = "br")
   b
-  print(b, sort = TRUE)
+  print(b, sort = FALSE)
   summary(b)
   plot(b)
+  plot(b, sort = FALSE)
 
   ##############################################################
   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
@@ -60,9 +61,10 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
 
   p <- gbp(z, n, model = "pr")
   p
-  print(p, sort = TRUE)
+  print(p, sort = FALSE)
   summary(p)
   plot(p)
+  plot(p, sort = FALSE)
 
 }
 

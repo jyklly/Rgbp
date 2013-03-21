@@ -128,9 +128,9 @@
   # Arbitrary covariate for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
 
-  ########################################################
-  # Gaussioan Regression Interactive Multilevel Modeling #
-  ########################################################
+  ################################################################
+  # Gaussioan Regression Interactive Multilevel Modeling (GRIMM) #
+  ################################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #
@@ -138,9 +138,10 @@
 
     g <- gbp(y, se)
     g
-    print(g, sort = TRUE)
+    print(g, sort = FALSE)
     summary(g)
     plot(g)
+    plot(g, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -160,9 +161,10 @@
 
     g <- gbp(y, se, x2, model = "gr")
     g
-    print(g, sort = TRUE)
+    print(g, sort = FALSE)
     summary(g)
     plot(g)
+    plot(g, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -182,9 +184,10 @@
 
     g <- gbp(y, se, mean.PriorDist = 8)
     g
-    print(g, sort = TRUE)
+    print(g, sort = FALSE)
     summary(g)
     plot(g)
+    plot(g, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -197,9 +200,9 @@
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
-  #######################################################
-  # Binomial Regression Interactive Multilevel Modeling #
-  #######################################################
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #
@@ -207,8 +210,10 @@
 
     b <- gbp(z, n, model = "br")
     b
+    print(b, sort = FALSE)
     summary(b)
     plot(b)
+    plot(b, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -228,8 +233,10 @@
 
     b <- gbp(z, n, x1, model = "br")
     b
+    print(b, sort = FALSE)
     summary(b)
     plot(b)
+    plot(b, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -249,8 +256,10 @@
 
     b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
     b
+    print(b, sort = FALSE)
     summary(b)
     plot(b)
+    plot(b, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -263,9 +272,9 @@
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
-  ######################################################
-  # Poisson Regression Interactive Multilevel Modeling #
-  ######################################################
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #
@@ -273,8 +282,10 @@
 
     p <- gbp(z, n, model = "pr")
     p
+    print(p, sort = FALSE)
     summary(p)
     plot(p)
+    plot(p, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -294,8 +305,10 @@
 
     p <- gbp(z, n, x1, model = "pr")
     p
+    print(p, sort = FALSE)
     summary(p)
     plot(p)
+    plot(p, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.
@@ -315,8 +328,10 @@
 
     p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
     p
+    print(p, sort = FALSE)
     summary(p)
     plot(p)
+    plot(p, sort = FALSE)
 
     ### when we want to simulate psuedo datasets considering the estimated values 
     ### as true ones.

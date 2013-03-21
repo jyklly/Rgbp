@@ -10,7 +10,7 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gr", intercep
   res
 }
 
-print.gbp <- function(x, sort = FALSE, ...) {
+print.gbp <- function(x, sort = TRUE, ...) {
   
   if (any(is.na(x$prior.mean)) & !identical(x$X, NA)) {
 
@@ -259,7 +259,7 @@ print.summary.gbp <- function(x, ...) {
   }
 }
 
-plot.gbp <- function(x, ...) {
+plot.gbp <- function(x, sort = TRUE, ...) {
 
   y <- x$sample.mean
   se <- x$se
@@ -272,11 +272,30 @@ plot.gbp <- function(x, ...) {
   po.sd <- x$post.sd
   po.low <- x$post.intv.low
   po.upp <- x$post.intv.upp
+
   cx <- (mean(log(se + 2)) + min(log(se + 2))) / 2
   index <- 1 : length(se)
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
-  
+  xlabel <- "Indices (Groups) by the order of data input"
+
+  if (sort == TRUE) {
+    temp.data <- cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp)
+    temp.data <- temp.data[order(temp.data[, 2])]
+    y <- temp.data[, 1]
+    se <- temp.data[, 2]
+    pr.m <- temp.data[, 3]
+    po.m <- temp.data[, 4]
+    po.sd <- temp.data[, 5]
+    po.low <- temp.data[, 6]
+    po.upp <- temp.data[, 7]
+    if (x$model == "gr") {
+      xlabel <- "Indices (Groups) sorted by the order of se"
+    } else {
+      xlabel <- "Indices (Groups) sorted by the order of n"
+    }
+  }
+
   dev.new <- function(width = 10, height = 5) { 
     platform <- sessionInfo()$platform 
     if (grepl("linux", platform)) { 
@@ -291,7 +310,7 @@ plot.gbp <- function(x, ...) {
   dev.new(11, 5)
   
   par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
-  xl <- c("Indices (Groups) by the order of data input")
+
   
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
@@ -324,7 +343,7 @@ plot.gbp <- function(x, ...) {
   })
 
   
-  plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = expression(theta),
+  plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xlabel, ylab = expression(theta),
        main = "100*Alpha% Intervals", cex = log(se + 2) / cx, col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
     lines(rep(index[j], 2), c(po.low[j], po.upp[j]), lwd = 0.5)

@@ -144,9 +144,9 @@
   # Arbitrary covaraite for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
   
-  ########################################################
-  # Gaussioan Regression Interactive Multilevel Modeling #
-  ########################################################
+  ################################################################
+  # Gaussioan Regression Interactive Multilevel Modeling (GRIMM) #
+  ################################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #
@@ -201,9 +201,9 @@
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
-  #######################################################
-  # Binomial Regression Interactive Multilevel Modeling #
-  #######################################################
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #
@@ -258,9 +258,9 @@
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
-  ######################################################
-  # Poisson Regression Interactive Multilevel Modeling #
-  ######################################################
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
 
     ####################################################################################
     # If we do not have any covariate and do not know a mean of the prior distribution #

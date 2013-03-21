@@ -10,8 +10,7 @@
     a resultant object of \code{gbp} function. 
   }
   \item{sort}{
-    \code{TRUE} or \code{FALSE} flag indicating whether the result should appear by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data.
-    included in the regression. Default is \code{TRUE}.
+    \code{TRUE} or \code{FALSE} flag. If \code{TRUE}, the result will appear by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data. If \code{FALSE}, it will do by the order of data input. Default is \code{TRUE}.
   }
   \item{...}{
     further arguments passed to other methods.
@@ -21,7 +20,7 @@
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
   \code{b} like "\code{b <- gbp(z, n, model = "br")}", the argument \code{x} is supposed to be \code{b}.
 
-  We do not need to type "\code{print(b)}" but "\code{b}" itself is enough to call \code{print.gbp}. But if we want to see the result sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = TRUE)} is needed.
+  We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
 }
 \value{
   \code{print(gbp.object)} will display
@@ -55,29 +54,29 @@
   # We do not have any covariates and do not know a mean of the prior distribution. #
   ###################################################################################
 
-  #########
-  # GRIMM #
-  ######### 
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
 
-  g <- gbp(y, se)
-  g
-  print(g, sort = TRUE)
+    g <- gbp(y, se)
+    g
+    print(g, sort = FALSE)
 
-  #########
-  # BRIMM #
-  ######### 
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
 
-  b <- gbp(z, n, model = "br")
-  b
-  print(b, sort = TRUE)
+    b <- gbp(z, n, model = "br")
+    b
+    print(b, sort = FALSE)
 
-  #########
-  # PRIMM #
-  ######### 
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
 
-  p <- gbp(z, n, model = "pr")
-  p
-  print(p, sort = TRUE)
+    p <- gbp(z, n, model = "pr")
+    p
+    print(p, sort = FALSE)
 
 }
 \keyword{methods}

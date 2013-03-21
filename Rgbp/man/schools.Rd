@@ -25,12 +25,26 @@ effects on SAT scores from eight schools.
 Rubin, D. B. (1981). \emph{Estimation in parallel randomized
   experiments.} Journal of Educational Statistics, 6:377-401.
 }
-\references{
-Rubin, D. B. (1981). \emph{Estimation in parallel randomized
-  experiments.} Journal of Educational Statistics, 6:377-401.
-}
+
 \examples{
-data(schools)
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+  ###############################################################
+  # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+  ###############################################################
+
+  g <- gbp(y, se)
+  g
+  print(g, sort = TRUE)
+  summary(g)
+  plot(g)
+
 }
 
 \keyword{datasets}
