@@ -35,7 +35,51 @@
 }
 
 \details{
-zz}
+  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model
+  (\eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
+  (or unit) in a dataset):
+  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta_{j}~ |~ A,~ \mu_{0j})~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | A, \mu0_j) ~ indep N(\mu0_j, A)}
+  \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
+
+  For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model (for reference, a square bracket below indicates [mean, variance] of distribution and a constant multiplied to the notation representing Gamma distribution (Gam) is a scale. Also, for consistent notation, \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}):
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~ \frac{1}{r}Gam(r\mu_{0j})~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
+  \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
+
+  For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model (for reference, a square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}):
+  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta_{j}~ |~ r, \mu_{0j})~ \sim ~ indep~ Beta(r\mu_{0j},~ r(1-\mu_{0j}))~ \sim ~ indep~ Beta[\mu_{0j},~ \mu_{0j}(1 - \mu_{0j})~ /~ (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{logit(\mu_{0j})~ =~ x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
+  for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
+
+  For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
+  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance of ensemble information.
+
+  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
+
+  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's} or accurately estimated \eqn{s_{j}'s}{s_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
+
+  As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
+  combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
+  know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning none of two
+  optional arguments, such as "\code{gbp(z, n, model = "br")}", will lead to a correct model. \code{gbp} 
+  will automatically fit a regression with only an intercept term to estimate a common mean of the prior
+  distribution (exchangeability).
+
+  The second situation is when we have covariate(s) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning a matrix, \emph{X}, each column of which corresponds to one covariate, such as "\code{gbp(z, n, X, model = "pr")}", will lead to a correct model. Default of \code{gbp} is to fit a regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability will hold in this case.
+
+  The last case is when we know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. Now, we do
+  not need to estimate regression coefficients at all because we know a true value of \eqn{\mu_{0}}{\mu0} (strong assumption).
+  Designating this value into the argument of \code{gbp} like 
+  "\code{gbp(y, se, mean.PriorDist = 3)}" is enough to account for it. For reference, 
+  \code{mean.PriorDist} has a stronger priority than \code{covariates}, which means that when both
+  arguments are designated, \code{gbp} will fit a hierarchical model using the known mean of prior distribution, \code{mean.PriorDist}.
+
+  \code{gbp} returns an object of class "\code{gbp}" which provides three relevant functions \code{plot}, \code{print}, and \code{summary}.
+}
 
 \value{
   An object of class \code{gbp} comprises of:
