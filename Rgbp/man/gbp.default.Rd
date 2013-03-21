@@ -56,7 +56,7 @@
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
-  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data.
+  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance in ensemble information.
 
   Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
@@ -89,11 +89,11 @@
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
   \item{shrinkage}{shrinkage estimate of each group}
-  \item{sd.shrinkage}{standard deviation of shrinkage estimate}
+  \item{se.shrinkage}{standard deviation of shrinkage estimate}
   \item{post.mean}{posterior mean of each group}
   \item{post.sd}{posterior standard deviation of each group}
-  \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
-  \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
+  \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
+  \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
   \item{model}{"gr" for Gaussian, "br" for Binomial, and "pr" for Poisson data}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{beta.new}{regression coefficient estimates}
