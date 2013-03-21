@@ -3,7 +3,7 @@
 \alias{gbp.default}
 \title{Fitting Bayesian Hierarchical Models}
 \description{
-  \code{gbp} fits a Bayesian hierarchical model using the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
+  \code{gbp} fits Bayesian hierarchical models using the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
@@ -56,7 +56,7 @@
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
-  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance in ensemble information.
+  (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance of ensemble information.
 
   Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
@@ -99,7 +99,7 @@
   \item{beta.new}{regression coefficient estimates}
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
-  \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or -log(\emph{r}) for Binomial and Poisson data. Practical meaning of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
+  \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
   \item{a.var}{variance of alpha estimate}
 }
 

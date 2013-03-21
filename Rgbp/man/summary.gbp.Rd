@@ -39,25 +39,26 @@
   # We do not have any covariates and do not know a mean of the prior distribution. #
   ###################################################################################
 
-  #########
-  # GRIMM #
-  ######### 
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
 
-  g <- gbp(y, se)
-  summary(g)
+    g <- gbp(y, se)
+    summary(g)
 
-  #########
-  # BRIMM #
-  ######### 
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
 
-  b <- gbp(z, n, model = "br")
-  summary(b)
+    b <- gbp(z, n, model = "br")
+    summary(b)
 
-  #########
-  # PRIMM #
-  ######### 
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
 
-  p <- gbp(z, n, model = "pr")
-  summary(p)
+    p <- gbp(z, n, model = "pr")
+    summary(p)
+
 }
 \keyword{method}

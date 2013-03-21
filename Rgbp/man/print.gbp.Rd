@@ -25,8 +25,8 @@
 \value{
   \code{print(gbp.object)} will display
   \item{sample.mean}{sample mean of each group}
-  \item{se}{if GRIMM, standard error of each group}
-  \item{n}{if BRIMM and PRIMM, total number of trials of each group}
+  \item{se}{if Gaussian data, standard error of each group}
+  \item{n}{if Binomial or Poisson data, total number of trials of each group}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori. The variable name on the display will be "prior.mean."}

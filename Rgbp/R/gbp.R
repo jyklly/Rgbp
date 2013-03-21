@@ -94,7 +94,8 @@ summary.gbp <- function(object, ...) {
                          post.intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     }
 
-  } else if (any(is.na(object$prior.mean)) & identical(object$X, NA)) { # if there are neither prior.mean and X assigned
+  } else if (any(is.na(object$prior.mean)) & identical(object$X, NA)) { 
+  # if there are neither prior.mean and X assigned
 
     if (object$model == "gr") {
       temp <- data.frame(sample.mean = object$sample.mean, se = object$se, prior.mean = object$prior.mean.hat,
@@ -240,6 +241,7 @@ print.summary.gbp <- function(x, ...) {
     cat("\n")
     cat("\n")
     cat("Second-level Variance Component Estimation Summary:\n")
+    cat("alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:\n")
     cat("\n")
     print(round(x$sec.var, 3))
   } else {
@@ -249,6 +251,7 @@ print.summary.gbp <- function(x, ...) {
     cat("\n")
     cat("\n")
     cat("Second-level Variance Component Estimation Summary:\n")
+    cat("alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:\n")
     cat("\n")
     print(round(x$sec.var, 3))
     cat("\n")

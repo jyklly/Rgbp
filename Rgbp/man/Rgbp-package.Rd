@@ -4,7 +4,7 @@
 \docType{package}
 \title{Fitting Bayesian Hierarchical Models}
 \description{
-Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisson (PRIMM) data using generalized Stein's harmonic prior for good frequentist repeated sampling property.
+Bayesian hierarchical modeling with the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 \details{
   \tabular{ll}{
@@ -30,191 +30,237 @@ Bayesian Hierarchical modeling for Gaussian (GRIMM), Binomial (BRIMM) and Poisso
 
 \examples{
 
+
   # Loading datasets
   data(schools)
+  y <- schools$y
+  se <- schools$se
 
+  # Arbitrary covariate for schools data
+  x2 <- rep(c(-1, 0, 1, 2), 2)
+  
   # baseball data where z is Hits and n is AtBats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # Arbitrary covariate for baseball data
   x1 <- rep(c(-1, 0, 1), 6)
 
-  y <- schools$y
-  se <- schools$se
-  x2 <- rep(c(-1, 0, 1, 2), 2)
-  
-  ####################################################################################
-  # If we do not have any covariate and do not know a mean of the prior distribution #
-  ####################################################################################
+  ################################################################
+  # Gaussioan Regression Interactive Multilevel Modeling (GRIMM) #
+  ################################################################
 
-  #########
-  # GRIMM #
-  ######### 
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
 
-  g <- gbp(y, se)
-  g
-  summary(g)
-  plot(g)
+    g <- gbp(y, se)
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
 
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(g, nsim = 10)  
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
 
-  ### when we want to simulate pseudo datasets based on different values of A and 
-  ### of a regression coefficient (intercept), 
-  ### not using estimated values as true ones.
-  coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-  #########
-  # BRIMM #
-  ######### 
+    ### when we want to simulate psuedo datasets based on different values of A and 
+    ### of a regression coefficient (intercept), 
+    ### not using estimated values as true ones.
+    gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
-  b <- gbp(z, n, model = "br")
-  b
-  summary(b)
-  plot(b)
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
 
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(b, nsim = 10)  
+    g <- gbp(y, se, x2, model = "gr")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
 
-  ### when we want to simulate pseudo datasets based on different values of r and 
-  ### of a regression coefficient (intercept), 
-  ### not using estimated values as true ones.
-  coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
-
-  #########
-  # PRIMM #
-  ######### 
-
-  p <- gbp(z, n, model = "pr")
-  p
-  summary(p)
-  plot(p)
-
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(p, nsim = 10)  
-
-  ### when we want to simulate pseudo datasets based on different values of r and 
-  ### of a regression coefficient (intercept), 
-  ### not using estimated values as true ones.
-  coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
-
-  ##################################################################################
-  # If we have one covariate and do not know a mean of the prior distribution yet, #
-  ##################################################################################
-
-  #########
-  # GRIMM #
-  ######### 
-
-  g <- gbp(y, se, x2, model = "gr")
-  g
-  summary(g)
-  plot(g)
-
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(g, nsim = 10)  
-
-  ### when we want to simulate pseudo datasets based on different values of A,
-  ### of regression coefficients, and of covariate, not using estimated values 
-  ### as true ones.
-  coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
-  ### two values of reg.coef are for beta0 and beta1
-
-  #########
-  # BRIMM #
-  ######### 
-
-  b <- gbp(z, n, x1, model = "br")
-  b
-  summary(b)
-  plot(b)
-
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(b, nsim = 10)  
-
-  ### when we want to simulate pseudo datasets based on different values of r,
-  ### of regression coefficients, and of covariate, not using estimated values 
-  ### as true ones.
-  coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
-  ### two values of reg.coef are for beta0 and beta1
-
-  #########
-  # PRIMM #
-  ######### 
-
-  p <- gbp(z, n, x1, model = "pr")
-  p
-  summary(p)
-  plot(p)
-
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(p, nsim = 10)  
-
-  ### when we want to simulate pseudo datasets based on different values of r,
-  ### of regression coefficients, and of covariate, not using estimated values 
-  ### as true ones.
-  coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
-  ### two values of reg.coef are for beta0 and beta1
-
-  ################################################
-  # If we know a mean of the prior distribution, #
-  ################################################
-
-  #########
-  # GRIMM #
-  ######### 
-
-  g <- gbp(y, se, mean.PriorDist = 8)
-  g
-  summary(g)
-  plot(g)
-
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(g, nsim = 10)  
-
-  ### when we want to simulate pseudo datasets based on different values of A and
-  ### of 2nd level mean as true ones, not using estimated values as true ones.
-  coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
-
-  #########
-  # BRIMM #
-  #########
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
  
-  b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
-  b
-  summary(b)
-  plot(b)
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(b, nsim = 10)  
+    ### when we want to simulate psuedo datasets based on different values of A,
+    ### of regression coefficients, and of covariate, not using estimated values 
+    ### as true ones. Two values of reg.coef are for beta0 and beta1
+    gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
 
-  ### when we want to simulate pseudo datasets based on different values of r and
-  ### of 2nd level mean as true ones, not using estimated values as true ones.
-  coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
 
-  #########
-  # PRIMM #
-  #########
+    g <- gbp(y, se, mean.PriorDist = 8)
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
 
-  p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
-  p
-  summary(p)
-  plot(p)
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
 
-  ### when we want to simulated pseudo datasets considering the estimated values 
-  ### as true ones.
-  coverage(p, nsim = 10)  
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-  ### when we want to simulate pseudo datasets based on different values of r and
-  ### of 2nd level mean as true ones, not using estimated values as true ones.
-  coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+    ### when we want to simulate psuedo datasets based on different values of A and
+    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    b <- gbp(z, n, model = "br")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r and 
+    ### of a regression coefficient (intercept), 
+    ### not using estimated values as true ones.
+    bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    b <- gbp(z, n, x1, model = "br")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r,
+    ### of regression coefficients, and of covariate, not using estimated values 
+    ### as true ones. Two values of reg.coef are for beta0 and beta1
+    bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r and
+    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    p <- gbp(z, n, model = "pr")
+    p
+    print(p, sort = FALSE)
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    pcv <- coverage(p, nsim = 10)  
+
+    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
+    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r and 
+    ### of a regression coefficient (intercept), 
+    ### not using estimated values as true ones.
+    pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    p <- gbp(z, n, x1, model = "pr")
+    p
+    print(p, sort = FALSE)
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    pcv <- coverage(p, nsim = 10)  
+
+    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
+    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r,
+    ### of regression coefficients, and of covariate, not using estimated values 
+    ### as true ones. Two values of reg.coef are for beta0 and beta1
+    pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
+    p
+    print(p, sort = FALSE)
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)
+
+    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### as true ones.
+    pcv <- coverage(p, nsim = 10)  
+
+    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
+    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
+
+    ### when we want to simulate psuedo datasets based on different values of r and
+    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
 }
 
