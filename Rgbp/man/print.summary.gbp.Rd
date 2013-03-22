@@ -24,7 +24,7 @@
 
   For reference, if there are several units with the same median value, they will show up with numbering.
 
-  The second part is about the \code{Second-level Variance Component Estimation Summary}. For reference, the second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance in ensemble information. It is \emph{A} for Gaussian, \eqn{\frac{\mu_{0j}}{r}}{\mu0_j / r} for Poisson, and \eqn{\frac{\mu_{0j}(1 - \mu_{0j})}{r}}{\mu0_j (1 - \mu0_j) / r}. To be specific, this part shows estimate of \eqn{\alpha} (a posterior mode) defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data, and its standard deviation. 
+  The second part is about the \code{Second-level Variance Component Estimation Summary}. For reference, the second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance in ensemble information. It is \emph{A} for Gaussian, \eqn{\frac{\mu_{0j}}{r}}{\mu0_j / r} for Poisson, and \eqn{\frac{\mu_{0j}(1 - \mu_{0j})}{r}}{\mu0_j (1 - \mu0_j) / (r + 1)} for Binomial data. To be specific, this part shows estimate of \eqn{\alpha} (a posterior mode) defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data, and its standard error. 
 
   The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In this case, \code{summary(gbp.object)} will display the result of resgression fit.
 
@@ -45,7 +45,7 @@
   \item{Second-level Variance Component Estimation Summary}{
     \describe{
       \item{alpha.hat}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data.}
-      \item{alpha.hat.sd}{standard deviation of alpha.hat.}
+      \item{alpha.hat.se}{standard error of alpha.hat.}
     }
   }
   \item{Regression Summary (if fitted)}{

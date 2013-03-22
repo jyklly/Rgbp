@@ -23,7 +23,7 @@
   We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
 }
 \value{
-  \code{print(gbp.object)} will display
+  \code{print(gbp.object)} will display:
   \item{sample.mean}{sample mean of each group}
   \item{se}{if Gaussian data, standard error of each group}
   \item{n}{if Binomial or Poisson data, total number of trials of each group}

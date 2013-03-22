@@ -16,7 +16,7 @@ Bayesian hierarchical modeling with the Uniform prior distribution on the second
     Main functions: \tab \code{\link{gbp}}, \code{\link{coverage}}\cr
   }
 
-  This package borrows Bayesian machine to build a multilevel (random-effect) model and evalueates it via frequentist repeated sampling procedure (we call it method check) for three kinds of people; for people outside of statistical world who want to use a hierarchical model for their datasets; for Bayesian who want to see a preliminary result before constructing their full-Bayesian hierarchical models and want to check whehter the result of their full-Bayesian hierarchical modeling is reasonable after modeling; for frequentist who want to build a random-effect model with good repeated sampling property.
+  This package borrows Bayesian machine to build a multilevel model (random-effect mixed model) and evalueates it via frequentist repeated sampling procedure (we call it method check). It will be useful for those who want to build a hierarchical model on their datasets; for Bayesian who want to see a preliminary result before constructing their full-Bayesian hierarchical models and want to check whehter the result of their full-Bayesian hierarchical modeling is reasonable after modeling; for frequentist who want to build a random-effect mixed model with good repeated sampling property.
 
 }
 \author{
