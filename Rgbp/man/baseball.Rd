@@ -27,6 +27,7 @@
     \item{\code{SeasonAt.Bats}}{number of times batted over the whole season}
     \item{\code{SeasonHits}}{each player's number of hits over the whole season}
     \item{\code{SeasonAverage}}{batting averages over the whole season}
+    \item{\code{League}}{1 if a player is in the National league}
   }
 }
 
@@ -39,16 +40,17 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   data(baseball)
   z <- baseball$Hits
   n <- baseball$At.Bats
+  x <- baseball$League
 
-  ###################################################################################
-  # We do not have any covariates and do not know a mean of the prior distribution. #
-  ###################################################################################
+  ###############################################################################
+  # We do have one covariates and do not know a mean of the prior distribution. #
+  ###############################################################################
 
   ###############################################################
   # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
   ###############################################################
 
-  b <- gbp(z, n, model = "br")
+  b <- gbp(z, n, x, model = "br")
   b
   print(b, sort = FALSE)
   summary(b)
@@ -59,7 +61,7 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
   ##############################################################
 
-  p <- gbp(z, n, model = "pr")
+  p <- gbp(z, n, x, model = "pr")
   p
   print(p, sort = FALSE)
   summary(p)
