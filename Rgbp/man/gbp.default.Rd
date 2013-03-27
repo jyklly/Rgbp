@@ -3,7 +3,7 @@
 \alias{gbp.default}
 \title{Fitting Bayesian Hierarchical Models}
 \description{
-  \code{gbp} fits Bayesian hierarchical models using the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
+  \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
 \arguments{
