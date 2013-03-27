@@ -5,7 +5,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   coverageRB <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
-  coverage10 <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
+  coverageP <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
   if (missing(A.or.r)) {
     only.gbp.result <- TRUE
@@ -55,7 +55,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
-          coverage10[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -105,7 +105,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
-          coverage10[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -157,7 +157,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
-          coverage10[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -209,7 +209,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
-          coverage10[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -259,7 +259,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
-          coverage10[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -309,7 +309,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
-          coverage10[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+          coverageP[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -324,7 +324,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   avr.cov <- round(mean(result), 3)
   min.cov <- round(min(result), 3)
 
-  result2 <- round(rowMeans(coverage10, na.rm = TRUE), 3)
+  result2 <- round(rowMeans(coverageP, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
   min.cov2 <- round(min(result2), 3)
 
@@ -369,9 +369,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
 
 
   # print output
-  output <- list(coverageRB = result, coverage10 = result2, 
-                 average.coverageRB = avr.cov, average.coverage10 = avr.cov2, 
-                 minimum.coverageRB = min.cov, minimum.coverage10 = min.cov2, 
-                 raw.resultRB = coverageRB, raw.result10 = coverage10)
+  output <- list(coverageRB = result, coverageP = result2, 
+                 average.coverageRB = avr.cov, average.coverageP = avr.cov2, 
+                 minimum.coverageRB = min.cov, minimum.coverageP = min.cov2, 
+                 raw.resultRB = coverageRB, raw.resultP = coverageP)
   return(output)
 }
