@@ -2,9 +2,9 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{Fitting Bayesian Hierarchical Models}
+\title{Bayesian Hierarchical Modeling and Frequentist Method Check}
 \description{
-Bayesian hierarchical modeling with the Uniform prior distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
+Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gaussian, Binomial, and Poisson data and frequentist method check for good coverage probability.
 }
 \details{
   \tabular{ll}{
