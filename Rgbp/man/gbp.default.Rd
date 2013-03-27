@@ -99,7 +99,7 @@
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
   \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
-  \item{a.var}{posterior variance of \eqn{alpha}}
+  \item{a.var}{posterior variance of \eqn{\alpha}}
 }
 
 \references{
