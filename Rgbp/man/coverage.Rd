@@ -1,7 +1,7 @@
 \name{coverage}
 \alias{coverage}
 \title{Estimating Coverage Probability}
-\description{\code{coverage} estimates Rao-Blackwellized and unbiased coverage probabilities.}
+\description{\code{coverage} estimates Rao-Blackwellized and proportional coverage probabilities.}
 \usage{coverage(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, nsim = 10)}
 
 \arguments{
@@ -89,38 +89,36 @@
   from the prior distribution determined by designated values, \code{A.or.r} and \code{mean.PriorDist}.
   The \emph{i}-th Pseudo-datasets are generated based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  The unbiased estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators
-  over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated 
-  interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
+  The proportional (typical) estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
   \eqn{\theta_{ij}}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
-  Rao-Blackwellized estimator (unbiased itself) for group \emph{j} is an expectation of the unbiased estimator described above given a sufficient statistic, \eqn{y_{j}}{y_j} for Gussian or \eqn{z_{j}}{z_j} for Binomial and Poisson data.
+  Rao-Blackwellized estimator (unbiased itself) for group \emph{j} is an expectation of the proportional estimator described above given a sufficient statistic, \eqn{y_{j}}{y_j} for Gussian or \eqn{z_{j}}{z_j} for Binomial and Poisson data.
 }
 
 \value{
   \item{coverageRB}{
     estimated Rao-Blackwellized coverage probability for each group (or unit) averaged over all simulations.
   }
-  \item{coverage10}{
-    estimated unbiased coverage probability for each group (or unit) averaged over all simulations.
+  \item{coverageP}{
+    estimated proportional coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{average.coverageRB}{
     average value over \code{coverageRB}.
   }
-  \item{average.coverage10}{
-    average value over \code{coverage10}.
+  \item{average.coverageP}{
+    average value over \code{coverageP}.
   }
   \item{minimum.coverageRB}{
     minimum value among \code{coverageRB}.
   }
-  \item{minimum.coverage10}{
-    minimum value among \code{coverage10}.
+  \item{minimum.coverageP}{
+    minimum value among \code{coverageP}.
   }
   \item{raw.resultRB}{
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
   }
-  \item{raw.result10}{
+  \item{raw.resultP}{
     all the values of indicators for every group and for every simulation.
   }
 }
