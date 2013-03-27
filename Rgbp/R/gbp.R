@@ -208,9 +208,9 @@ summary.gbp <- function(object, ...) {
                               row.names = c(rownames(summary.table), "Means over all groups"))
 
 
-  alpha.hat <- object$a.new
-  alpha.hat.sd <- sqrt(object$a.var)
-  result2 <- data.frame(alpha.hat, alpha.hat.sd)
+  post.mode.alpha <- object$a.new
+  post.sd.alpha <- sqrt(object$a.var)
+  result2 <- data.frame(post.mode.alpha, post.sd.alpha)
 
   if (any(is.na(object$prior.mean))) {
     estimate <- as.vector(object$beta.new)

@@ -44,8 +44,8 @@
   }
   \item{Second-level Variance Component Estimation Summary}{
     \describe{
-      \item{alpha.hat}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data.}
-      \item{alpha.hat.se}{standard error of alpha.hat.}
+      \item{post.mode.alpha}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data.}
+      \item{post.sd.alpha}{standard deviation of the posterior distribution of alpha}
     }
   }
   \item{Regression Summary (if fitted)}{
