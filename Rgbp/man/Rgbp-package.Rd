@@ -43,8 +43,8 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # Arbitrary covariate for baseball data
-  x1 <- rep(c(-1, 0, 1), 6)
+  # One covaraite: 1 if a player is in the National league
+  x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
 
   ################################################################
   # Gaussioan Regression Interactive Multilevel Modeling (GRIMM) #
