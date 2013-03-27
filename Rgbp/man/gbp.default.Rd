@@ -88,7 +88,7 @@
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori}
   \item{shrinkage}{shrinkage estimate of each group (adjusted posterior mean)}
-  \item{sd.shrinkage}{standard deviation of posterior distribution of shrinkage}
+  \item{sd.shrinkage}{posterior standard deviation of shrinkage}
   \item{post.mean}{posterior mean of each group}
   \item{post.sd}{posterior standard deviation of each group}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
@@ -99,7 +99,7 @@
   \item{beta.var}{estimated variance matrix of regression coefficient}
   \item{intercept}{whether TRUE or FALSE}
   \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
-  \item{a.var}{variance of posterior distribution of alpha}
+  \item{a.var}{posterior variance of \eqn{alpha}}
 }
 
 \references{
