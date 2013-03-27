@@ -345,7 +345,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95){
   }
 
   output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
-                 shrinkage = B.res$B.hat, se.shrinkage = sqrt(B.res$var.B.hat), 
+                 shrinkage = B.res$B.hat, sd.shrinkage = sqrt(B.res$var.B.hat), 
                  post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
                  prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
                  post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
