@@ -93,7 +93,7 @@
   \eqn{\theta_{ij}}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
-  Rao-Blackwellized estimator (unbiased itself) for group \emph{j} is an expectation of the proportional estimator described above given a sufficient statistic, \eqn{y_{j}}{y_j} for Gussian or \eqn{z_{j}}{z_j} for Binomial and Poisson data.
+  Rao-Blackwellized estimator (unbiased itself) for group \emph{j} is a conditional expectation of the proportional estimator described above given a sufficient statistic, \eqn{y_{j}}{y_j} for Gussian or \eqn{z_{j}}{z_j} for Binomial and Poisson data.
 }
 
 \value{
