@@ -40,7 +40,8 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   data(baseball)
   z <- baseball$Hits
   n <- baseball$At.Bats
-  x <- baseball$League
+  x <- ifelse(baseball$League == "NL", 1, 0)
+
 
   ###############################################################################
   # We do have one covariates and do not know a mean of the prior distribution. #
