@@ -124,11 +124,11 @@
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # One covaraite: 1 if a player is in the National league
+  # One covariate: 1 if a player is in the National league
   x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
 
   ################################################################
-  # Gaussioan Regression Interactive Multilevel Modeling (GRIMM) #
+  # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
   ################################################################
 
     ####################################################################################
@@ -142,14 +142,14 @@
     plot(g)
     plot(g, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     gcv <- coverage(g, nsim = 10)  
 
     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of A and 
+    ### when we want to simulate pseudo datasets based on different values of A and 
     ### of a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
@@ -165,14 +165,14 @@
     plot(g)
     plot(g, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     gcv <- coverage(g, nsim = 10)  
  
     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of A,
+    ### when we want to simulate pseudo datasets based on different values of A,
     ### of regression coefficients, and of covariate, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
@@ -188,14 +188,14 @@
     plot(g)
     plot(g, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     gcv <- coverage(g, nsim = 10)  
 
     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of A and
+    ### when we want to simulate pseudo datasets based on different values of A and
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
@@ -214,14 +214,14 @@
     plot(b)
     plot(b, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     bcv <- coverage(b, nsim = 10)  
 
     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r and 
+    ### when we want to simulate pseudo datasets based on different values of r and 
     ### of a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
@@ -237,14 +237,14 @@
     plot(b)
     plot(b, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     bcv <- coverage(b, nsim = 10)  
 
     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r,
+    ### when we want to simulate pseudo datasets based on different values of r,
     ### of regression coefficients, and of covariate, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
@@ -260,14 +260,14 @@
     plot(b)
     plot(b, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     bcv <- coverage(b, nsim = 10)  
 
     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r and
+    ### when we want to simulate pseudo datasets based on different values of r and
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
@@ -286,14 +286,14 @@
     plot(p)
     plot(p, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     pcv <- coverage(p, nsim = 10)  
 
     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r and 
+    ### when we want to simulate pseudo datasets based on different values of r and 
     ### of a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
@@ -309,14 +309,14 @@
     plot(p)
     plot(p, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     pcv <- coverage(p, nsim = 10)  
 
     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r,
+    ### when we want to simulate pseudo datasets based on different values of r,
     ### of regression coefficients, and of covariate, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
@@ -332,14 +332,14 @@
     plot(p)
     plot(p, sort = FALSE)
 
-    ### when we want to simulate psuedo datasets considering the estimated values 
+    ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
     pcv <- coverage(p, nsim = 10)  
 
     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
-    ### when we want to simulate psuedo datasets based on different values of r and
+    ### when we want to simulate pseudo datasets based on different values of r and
     ### of 2nd level mean as true ones, not using estimated values as true ones.
     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
