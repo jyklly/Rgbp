@@ -191,7 +191,13 @@ Here Adjustment for Density Maximization (Morris and Tang, 2011), called ADM, co
 After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution given only data, \emph{i.e.}, ($\mu_{j}\vert \textrm{data}$), ($\lambda_{j}\vert \textrm{data}$), or ($p_{j}\vert \textrm{data}$), by matching two moments with its parameters. The reason we said `reasonablely approximates' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $(p_{j}\vert \textrm{data})$ has also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
 
 \section[Method Check]{Method Check}
+Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a checking process, we usually go back to the fitting process and come back to checking process iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
+\\
 
+There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $(z_{j}\vert \beta, r)\sim\textrm{Negative-Binomial}$, for Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
+\\
+
+The other model justification process is the method check.
 \subsection{Pseudo-data Generation Process}
 \subsection{Unbiased Coverage Probability}
 \subsection{Rao-Blackwellized Coverage Probability}
@@ -208,14 +214,16 @@ Using 18 baseball data with BR
 \section[acknowledgments]{Acknowledgments}
 
 \section[Reference]{Reference}
-Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its Generalizations. \emph{Journal of the American Statistical Association}. \textbf{70}. 311-319.
+Christiansen, C. and Morris, C. (1996). ``Fitting and Checking a Two-Level Poisson Model: Modeling Patient Mortality Rates in Heart Transplant Patients,'' in \emph{Bayesian Biostatistics}, eds. D. Berry and D. Stangl, New York: Marcel Dekker, pp. 467-561.
 \\
-Rubin, D. B. (1981). Estimation in parallel randomized
-  experiments. \emph{Journal of Educational Statistics}. \textbf{6}. 377-401.
+Efron, B. and Morris, C. (1975). ``Data Analysis Using Stein's Estimator and its Generalizations.'' \emph{Journal of the American Statistical Association}. \textbf{70}. 311-319.
 \\
-Morris, C. and Tang, R. (2011). Estimating Random Effects via Adjustment for Density Maximization. \emph{Statistical Science}. \textbf{26}. 271-287.
+Morris, C. and Tang, R. (2011). ``Estimating Random Effects via Adjustment for Density Maximization.'' \emph{Statistical Science}. \textbf{26}. 271-287.
 \\
-Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \textbf{27}. 115-134.
+Morris, C. and Lysy, M. (2012). ``Shrinkage Estimation in Multilevel Normal Models.'' \emph{Statistical Science}. \textbf{27}. 115-134.
+\\
+Rubin, D. B. (1981). ``Estimation in parallel randomized
+  experiments.'' \emph{Journal of Educational Statistics}. \textbf{6}. 377-401.
 \\
 
 
