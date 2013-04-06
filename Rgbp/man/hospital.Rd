@@ -14,7 +14,7 @@ Medical profiling evaluation of 31 New York hospitals in 1992. We are to conside
 \usage{data(hospital)}
 
 \format{
-  A data set of 31 hospitals comprises of:
+  A dataset of 31 hospitals comprises of:
   \describe{
     \item{\code{y}}{values obtained through a variance stabilizing transformation of the unbiased death rate estimates, \code{d} / \code{n}, assuming Binomial data. Details in the reference.}
     \item{\code{se}}{approximated standard error of y.}

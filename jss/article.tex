@@ -8,18 +8,15 @@
 \author{Joseph Kelly\\Harvard University \And 
              Carl Morris\\ Harvard University\And
              Hyungsuk Tak\\Harvard University }
-\title{\pkg{Rgbp}: Empirical Bayesian Hierarchical Modeling}
+\title{\pkg{Rgbp}: Bayesian Hierarchical Modeling and Frequentist Method Check}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Joseph Kelly, Carl Morris, Hyung Suk Tak} %% comma-separated
-\Plaintitle{Rgbp: Empirical Bayesian Hierarchical Modeling} %% without formatting
-\Shorttitle{\pkg{Rgbp}: Empirical Bayesian Hierarchical Modeling} %% a short title (if necessary)
+\Plaintitle{Rgbp: Bayesian Hierarchical Modeling and Frequentist Method Check} %% without formatting
 
 %% an abstract and keywords
-\Abstract{
-  Empirical Bayesian Hierarchical modeling for Gaussian, Binomial, and Poisson Data
-}
-\Keywords{keywords, comma-separated, not capitalized, \proglang{R}}
+\Abstract{Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gaussian, Binomial, and Poisson data and frequentist method check for good coverage probability.}
+\Keywords{hierarchical model, multi-level model, random effects mixed model, method check, coverage probability, normal, binomial, poisson, shrinkage, \proglang{R}}
 \Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
 %% at least one keyword must be supplied
 
@@ -42,17 +39,18 @@
   E-mail: \email{kelly2@fas.harvard.edu}\\
   URL: \url{http://www.people.fas.harvard.edu/~kelly2/}\\
 
-  Hyungsuk Tak\\
-  Department of Statistics\\
-  Harvard University\\
-  1 Oxford Street, Cambridge, MA\\
-  E-mail: \email{tak@fas.harvard.edu}\\
-
   Carl Morris\\
   Department of Statistics\\
   Harvard University\\
   1 Oxford Street, Cambridge, MA\\
   E-mail: \email{morris@fas.harvard.edu}\\
+
+  Hyungsuk Tak\\
+  Department of Statistics\\
+  Harvard University\\
+  1 Oxford Street, Cambridge, MA\\
+  E-mail: \email{hyungsuk.tak@gmail.com}\\
+
 }
 
 %% It is also possible to add a telephone and fax number
@@ -72,16 +70,201 @@
 
 \section[introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
+\pkg{Rgbp} uses Bayesian machinery to estimate a two-level model (a random-effects mixed model) and allows for a check of its frequentist properties via a repeated sampling procedure (which we call a "method check"). It is found that even in small samples our procedure yields good frequency properties. Also, this package will be useful for Bayesians who want to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model. For frequentists, it will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
 
-\section[estimation]{Estimation}
-\subsection[adm]{Adjustment for Density Maximization}
+\section[Feasible Data Types]{Three Feasible Types of Data }
+This package is intended to fit a multi-level model on the group-level (or unit-level) data in which each group-level (or unit-level) observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible datasets.
 
-\section[userguide]{User Guide}
+\subsection{Normal: 8 Schools' Data}
+Education Testing Service conducted randomized experiments in eight separate schools and obtained this dataset. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) obtained after an analysis of covariance adjustment (Rubin, 1981).
+\begin{center}
+Table 1: The first four schools' data among 8 schools
+\\
+~
+\\
+\begin{tabular}{|c|c|c|}
+\hline
+School & Estimated Coaching Effect & Standard Error\\
+\hline
+A & 28 & 15\\
+\hline
+B & 8 & 10\\
+\hline
+C & -3 & 16\\
+\hline
+D & 7 & 11\\
+\hline
+\end{tabular}
+\end{center}
+~
 
-\section[discussion]{Discussion}
+In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each (group-level) coaching effect is distributed as independent Normal distribution with unknown mean and known standard error:  $y_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$.
+\\
+
+\pkg{Rgbp} includes this dataset and can be called by typing \code{data(schools)} on \proglang{R}.
+
+\subsection{Poisson: 31 Hospital Data}
+This dataset is about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The Table 2 contains a few rows of this dataset.
+\begin{center}
+Table 2: The last four hospitals' data among 31 hospitals
+\\
+~
+\\
+\begin{tabular}{|c|c|c|}
+\hline
+Hospital Number & Number of Deaths & Number of Trials\\
+\hline
+28 & 25 & 914\\
+\hline
+29 & 20 & 940\\
+\hline
+30 & 35 & 1193\\
+\hline
+31 & 27 & 1340\\
+\hline
+\end{tabular}
+\end{center}
+~
+
+Considering the type of data, it will make sense to assume the number of deaths in each hospital has independent Poisson distribution with unknown parameter: $z_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can also be interpreted as an exposure (not necessarily an interger).
+\\
+
+This dataset is also included in the package and can be called by \code{data(hospital)} on \proglang{R}.
+
+\subsection{Binomial: 18 Baseball Data}
+This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). The first four rows of this dataset is described in the following table.
+\begin{center}
+Table 3: The first four players' data among 18 players
+\\
+~
+\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+Player Name & Number of Hits & Number of At-Bats &League\\
+\hline
+Roberto Clemente & 18 & 45 & National\\
+\hline
+Frank Robinson & 17 & 45 & American\\
+\hline
+Frank Howard & 16 & 45 & American\\
+\hline
+Jay Johnstone & 15 & 45 & American\\
+\hline
+\end{tabular}
+\end{center}
+~
+
+The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats: $z_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$.
+\\
+
+This dataset is also a part of the package and can be called on \proglang{R} by \code{data(baseball)}.
+
+\section[Multi-level Structure]{Multi-level Structure}
+Hierarchical model is a very powerful tool to (justification of hierarchical model for hierarchical data??)
+\\
+
+\code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multi-level models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
+\\
+
+ 
+\subsection[Normal-Normal]{Normal-Normal}
+\code{gbp} can construct a two-level Normal-Normal hierarchical model on the 8 school data. For reference,  $\sigma^{2}_{j}$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th school in the dataset.
+\begin{displaymath}
+y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, \sigma^{2}_{j}),
+\end{displaymath}
+\begin{displaymath}
+\mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
+\end{displaymath}
+
+where $\mu_{0j} =x_{j}'\beta,~j=1, \ldots, 8$, and a paramter with a zero sub-index represents it is a mean parameter of the prior (second-level) distribution. Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
+\begin{displaymath}
+\mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})\sigma^{2}_{j}),
+\end{displaymath}
+where $B_{j}\equiv\frac{\sigma^{2}_{j}}{\sigma^{2}_{j} + A},~j=1, \ldots, 8$ is called a shrinkages and we will explain it in the following section.
+
+\subsection[Poisson-Gamma]{Poisson-Gamma}
+\code{gbp} is also able to build a Poisson-Gamma multi-level model on the 31 hospital data. Note that a constant multiplied to the notation representing Gamma distribution is a scale and a square bracket below indicates [mean, variance] of distribution.
+\begin{displaymath}
+z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
+\end{displaymath}
+\begin{displaymath}
+\lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(\lambda_{0j}r)\sim \textrm{Gamma}[\lambda_{0j}, ~\frac{\lambda_{0j}}{r}],
+\end{displaymath}
+
+where $\log(\lambda_{0j}) =x_{j}'\beta$, and $j=1, \ldots, 31$. Immediate posterior distribution of this Poisson-Gamma model is
+\begin{displaymath}
+\lambda_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + z_{j})\sim\textrm{Gamma}[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}}],
+\end{displaymath}
+
+where $\lambda^{\ast}_{j} \equiv (1-B_{j})(\frac{z_{j}}{n_{j}}) + B_{j}\lambda_{0j},~\textrm{and}~ B_{j}\equiv \frac{r}{r+n_{j}},~ j=1, \ldots, 31$. 
+
+\subsection[Binomial-Beta]{Binomial-Beta}
+Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of distribution.
+\begin{displaymath}
+z_{j} \vert p_{0j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
+\end{displaymath}
+\begin{displaymath}
+p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta}[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1}],
+\end{displaymath}
+
+where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta~\textrm{and}~j=1, \ldots, 18$. Then posterior distribution is
+\begin{displaymath}
+p_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\textrm{Beta}(rp_{0j}+z_{j},~r(1-p_{0j})+n_{j}-z_{j})\sim\textrm{Beta}\bigg[p^{\ast}_{j},~ \frac{p^{\ast}_{j}(1-p^{\ast}_{j})}{r+n_{j}+1}\bigg],
+\end{displaymath}
+where $p^{\ast}_{j}\equiv(1-B_{j})(\frac{z_{j}}{n_{j}})+B_{j}p_{0j},~ \textrm{and}~ B_{j}\equiv\frac{r}{r+n_{j}}$, $j=1,\ldots,18$.
+
+
+\subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
+Hyper-prior distribution indicates a distribution of the second-level parameters, which plays an important role in deriving a full posterior distribution of all the parameters. \code{gbp} sets a non-informative distribution on second-level parameters to let the data speak more about their estimation.
+\begin{displaymath}
+\beta \sim \textrm{flat on}~ \mathbf{R}^{m},~~A ~(\textrm{or}~ \frac{1}{r})\sim \textrm{Unif}(0, \infty),
+\end{displaymath}
+
+where $m$ is the number of regression coefficients. For $\beta$, it is reasonable choice to take flat (non-informative) distribution because the information about location gets informative as number of groups increases. Another flat prior on the hyper-prameter $A$ (or $1/r$) that we suggest here will guarantee a posterior propriety under the moderate conditions and will give users a good repeated sampling property.
+\\
+
+
+
+\section[Estimation]{Estimation}
+\subsection[Shrinkage Estimation]{Shrinkage Estimation}
+Estimating shrinkage is a key part of our work because as we can see posterior mean is a linear function of shrinkage and posterior variance is also a linear (Gaussian), quadratic (Poisson), or cubic (Binomial) function of shrinkage. Once we estimate it, we can approximate the posterior moments given only data, for example, $E(\mu_{j}\vert \textbf{y})$ for Gaussian model.
+\subsection[ADM]{Adjustment for Density Maximization}
+When it comes to estimating a shrinkage, we can notice that it is a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv\frac{\sigma^{2}}{\sigma^{2}+A}=B_{j}(A)$ for Gaussian and $B_{j}\equiv\frac{r}{r+n_{j}}=B_{j}(r)$ for Poisson and Binomial models.
+\\
+
+In this case, one way is to obtain an MLE of the variance component with its asymptotic Normal distribution and to use Delta method for asymptotic Normal distribution of shrinkage. But is the Normal approximation a good approximation for shrinkage that takes on values between 0 and 1?
+\\
+
+Here Adjustment for Density Maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage, which the authors believe is a much better approximation for it, and estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$.
+
+\subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Moment Matching}
+After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution (given only data) by matching two moments with its parameters. The reason we use `reasonable' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $p_{j}\vert \textrm{data}$ has also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
+
+\section[Method Check]{Method Check}
+\subsection{Unbiased Coverage Probability}
+\subsection{Rao-Blackwellized Coverage Probability}
+\section[Example]{Example}
+\subsection[Known Prior Mean]{Known Prior Mean}
+Using 10 hospital data with PR
+\subsection[Unknown Prior Mean and No Covariate]{Unknown Prior Mean and No Covariate}
+Using 8 school data with GR
+\subsection[Unknown Prior Mean and One Covariate]{Unknown Prior Mean and One Covariate}
+Using 18 baseball data with BR
+
+\section[Discussion]{Discussion}
 
 \section[acknowledgments]{Acknowledgments}
 
+\section[Reference]{Reference}
+Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its Generalizations. \emph{Journal of the American Statistical Association}. \textbf{70}. 311-319.
+\\
+Rubin, D. B. (1981). Estimation in parallel randomized
+  experiments. \emph{Journal of Educational Statistics}. \textbf{6}. 377-401.
+\\
+Morris, C. and Tang, R. (2011). Estimating Random Effects via Adjustment for Density Maximization. \emph{Statistical Science}. \textbf{26}. 271-287.
+\\
+Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \textbf{27}. 115-134.
+\\
 
 
 \end{document}
