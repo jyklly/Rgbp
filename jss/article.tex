@@ -76,88 +76,38 @@
 This package is intended to fit a multi-level model on the group-level (or unit-level) data in which each group-level (or unit-level) observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible datasets.
 
 \subsection{Normal: 8 Schools' Data}
-Education Testing Service conducted randomized experiments in eight separate schools and obtained this dataset. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) obtained after an analysis of covariance adjustment (Rubin, 1981).
-\begin{center}
-Table 1: The first four schools' data among 8 schools
-\\
-~
-\\
-\begin{tabular}{|c|c|c|}
-\hline
-School & Estimated Coaching Effect & Standard Error\\
-\hline
-A & 28 & 15\\
-\hline
-B & 8 & 10\\
-\hline
-C & -3 & 16\\
-\hline
-D & 7 & 11\\
-\hline
-\end{tabular}
-\end{center}
-~
+Education Testing Service conducted randomized experiments in eight separate schools and obtained this dataset. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of eight schools obtained after an analysis of covariance adjustment (Rubin, 1981).
+\begin{CodeChunk}
+\begin{CodeInput}
+R> y  <- c(28,  8, -3,  7, -1,  1, 18, 12)
+R> se <- c(15, 10, 16, 11,  9, 11, 10, 18)
+\end{CodeInput}
+\end{CodeChunk}
 
-In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each (group-level) coaching effect is distributed as independent Normal distribution with unknown mean and known standard error:  $y_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$.
-\\
-
-\pkg{Rgbp} includes this dataset and can be called by typing \code{data(schools)} on \proglang{R}.
+In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each (group-level) coaching effect is distributed as independent Normal distribution with unknown mean and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this dataset and can be called by typing `\code{R> data(schools)}' on \proglang{R}.
 
 \subsection{Poisson: 31 Hospital Data}
-This dataset is about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The Table 2 contains a few rows of this dataset.
-\begin{center}
-Table 2: The last four hospitals' data among 31 hospitals
-\\
-~
-\\
-\begin{tabular}{|c|c|c|}
-\hline
-Hospital Number & Number of Deaths & Number of Trials\\
-\hline
-28 & 25 & 914\\
-\hline
-29 & 20 & 940\\
-\hline
-30 & 35 & 1193\\
-\hline
-31 & 27 & 1340\\
-\hline
-\end{tabular}
-\end{center}
-~
+This dataset is about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The below code is an example of input based on the last ten hospital data.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> z <- c( 14,   9,  15,  13,  35,  26,  25,  20,   35,   27)
+R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
+\end{CodeInput}
+\end{CodeChunk}
 
-Considering the type of data, it will make sense to assume the number of deaths in each hospital has independent Poisson distribution with unknown parameter: $z_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can also be interpreted as an exposure (not necessarily an interger).
-\\
 
-This dataset is also included in the package and can be called by \code{data(hospital)} on \proglang{R}.
+Considering the type of data, it will make sense to assume the number of deaths in each hospital has independent Poisson distribution with unknown parameter: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can also be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
 
 \subsection{Binomial: 18 Baseball Data}
-This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). The first four rows of this dataset is described in the following table.
-\begin{center}
-Table 3: The first four players' data among 18 players
-\\
-~
-\\
-\begin{tabular}{|c|c|c|c|}
-\hline
-Player Name & Number of Hits & Number of At-Bats &League\\
-\hline
-Roberto Clemente & 18 & 45 & National\\
-\hline
-Frank Robinson & 17 & 45 & American\\
-\hline
-Frank Howard & 16 & 45 & American\\
-\hline
-Jay Johnstone & 15 & 45 & American\\
-\hline
-\end{tabular}
-\end{center}
-~
-
-The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats: $z_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$.
-\\
-
-This dataset is also a part of the package and can be called on \proglang{R} by \code{data(baseball)}.
+This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or the American league (0). The code below shows a way to make inputs using the first 10 players.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11)
+R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+R> x <- c( 1,  0,  0,  0,  0,  0,  1,  0,  1,  1) 
+\end{CodeInput}
+\end{CodeChunk}
+The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This dataset is also a part of the package and can be called on \proglang{R} by `\code{R> data(baseball)}'.
 
 \section[Multi-level Structure]{Multi-level Structure}
 Hierarchical model is a very powerful tool to (justification of hierarchical model for hierarchical data??)
@@ -237,10 +187,12 @@ In this case, one way is to obtain an MLE of the variance component with its asy
 
 Here Adjustment for Density Maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage, which the authors believe is a much better approximation for it, and estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$.
 
-\subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Moment Matching}
-After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution (given only data) by matching two moments with its parameters. The reason we use `reasonable' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $p_{j}\vert \textrm{data}$ has also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
+\subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
+After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution given only data, \emph{i.e.}, ($\mu_{j}\vert \textrm{data}$), ($\lambda_{j}\vert \textrm{data}$), or ($p_{j}\vert \textrm{data}$), by matching two moments with its parameters. The reason we said `reasonablely approximates' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $(p_{j}\vert \textrm{data})$ has also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
 
 \section[Method Check]{Method Check}
+
+\subsection{Pseudo-data Generation Process}
 \subsection{Unbiased Coverage Probability}
 \subsection{Rao-Blackwellized Coverage Probability}
 \section[Example]{Example}
