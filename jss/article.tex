@@ -126,7 +126,7 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, \sigma^{2}_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} =x_{j}'\beta,~j=1, \ldots, 8$, and a paramter with a zero sub-index represents it is a mean parameter of the prior (second-level) distribution. Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
+where $\mu_{0j} =x_{j}'\beta,~j=1, \ldots, 8$, and $x_{j}$ is $j$-th school's covariate vector ($m\times 1$). Also, $m$ is the number of regression coefficients, which is just 1 for an intercept term if there is no covariate. For reference, a paramter with a zero subscript represents a mean parameter of the prior (second-level) distribution. Also,  Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
 \begin{equation}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})\sigma^{2}_{j}),
 \end{equation}
