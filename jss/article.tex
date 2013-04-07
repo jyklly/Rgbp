@@ -119,56 +119,56 @@ Hierarchical model is a very powerful tool to (justification of hierarchical mod
  
 \subsection[Normal-Normal]{Normal-Normal}
 \code{gbp} can construct a two-level Normal-Normal hierarchical model on the 8 school data. For reference,  $\sigma^{2}_{j}$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th school in the dataset.
-\begin{displaymath}
+\begin{equation}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, \sigma^{2}_{j}),
-\end{displaymath}
-\begin{displaymath}
+\end{equation}
+\begin{equation}
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
-\end{displaymath}
+\end{equation}
 
 where $\mu_{0j} =x_{j}'\beta,~j=1, \ldots, 8$, and a paramter with a zero sub-index represents it is a mean parameter of the prior (second-level) distribution. Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
-\begin{displaymath}
+\begin{equation}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})\sigma^{2}_{j}),
-\end{displaymath}
+\end{equation}
 where $B_{j}\equiv\frac{\sigma^{2}_{j}}{\sigma^{2}_{j} + A},~j=1, \ldots, 8$ is called a shrinkages and we will explain it in the following section.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma}
 \code{gbp} is also able to build a Poisson-Gamma multi-level model on the 31 hospital data. Note that a constant multiplied to the notation representing Gamma distribution is a scale and a square bracket below indicates [mean, variance] of distribution.
-\begin{displaymath}
+\begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
-\end{displaymath}
-\begin{displaymath}
+\end{equation}
+\begin{equation}
 \lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(\lambda_{0j}r)\sim \textrm{Gamma}[\lambda_{0j}, ~\frac{\lambda_{0j}}{r}],
-\end{displaymath}
+\end{equation}
 
 where $\log(\lambda_{0j}) =x_{j}'\beta$, and $j=1, \ldots, 31$. Immediate posterior distribution of this Poisson-Gamma model is
-\begin{displaymath}
+\begin{equation}
 \lambda_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + z_{j})\sim\textrm{Gamma}[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}}],
-\end{displaymath}
+\end{equation}
 
 where $\lambda^{\ast}_{j} \equiv (1-B_{j})(\frac{z_{j}}{n_{j}}) + B_{j}\lambda_{0j},~\textrm{and}~ B_{j}\equiv \frac{r}{r+n_{j}},~ j=1, \ldots, 31$. 
 
 \subsection[Binomial-Beta]{Binomial-Beta}
 Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of distribution.
-\begin{displaymath}
+\begin{equation}
 z_{j} \vert p_{0j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
-\end{displaymath}
-\begin{displaymath}
+\end{equation}
+\begin{equation}
 p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta}[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1}],
-\end{displaymath}
+\end{equation}
 
 where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta~\textrm{and}~j=1, \ldots, 18$. Then posterior distribution is
-\begin{displaymath}
+\begin{equation}
 p_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\textrm{Beta}(rp_{0j}+z_{j},~r(1-p_{0j})+n_{j}-z_{j})\sim\textrm{Beta}\bigg[p^{\ast}_{j},~ \frac{p^{\ast}_{j}(1-p^{\ast}_{j})}{r+n_{j}+1}\bigg],
-\end{displaymath}
+\end{equation}
 where $p^{\ast}_{j}\equiv(1-B_{j})(\frac{z_{j}}{n_{j}})+B_{j}p_{0j},~ \textrm{and}~ B_{j}\equiv\frac{r}{r+n_{j}}$, $j=1,\ldots,18$.
 
 
 \subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
 Hyper-prior distribution indicates a distribution of the second-level parameters, which plays an important role in deriving a full posterior distribution of all the parameters. \code{gbp} sets a non-informative distribution on second-level parameters to let the data speak more about their estimation.
-\begin{displaymath}
+\begin{equation}
 \beta \sim \textrm{flat on}~ \mathbf{R}^{m},~~A ~(\textrm{or}~ \frac{1}{r})\sim \textrm{Unif}(0, \infty),
-\end{displaymath}
+\end{equation}
 
 where $m$ is the number of regression coefficients. For $\beta$, it is reasonable choice to take flat (non-informative) distribution because the information about location gets informative as number of groups increases. Another flat prior on the hyper-prameter $A$ (or $1/r$) that we suggest here will guarantee a posterior propriety under the moderate conditions and will give users a good repeated sampling property.
 \\
@@ -197,11 +197,21 @@ Like the two sides of the same coin, checking a statistical model always comes w
 There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $(z_{j}\vert \beta, r)\sim\textrm{Negative-Binomial}$, for Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 \\
 
-Once we are sure that the hierarchical modeling can add a huge value on our research, the next natural quetsion will be about the validity of interval estimates. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point.
+Once we are sure that the hierarchical modeling can add a huge value on our research, the next natural quetsion will be about the validity of interval estimates. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
 
 \subsection{Pseudo-data Generation Process}
+Figure 1 will be helpful to understand this process. As we can see in (8), the distribution of each true parameter ($p_{j},~j=1,\ldots, 18$) depends on two hyper-parameters, $r$ and $\beta_{(m\times1)}$, where $m$ is the number of regression coefficients. Once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\textbf{p}_{(18\times1)}$'s, \emph{i.e.}, $\{\textbf{p}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$. Then, we can also generate $\{\textbf{z}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ given each $p_{ij},$ where $i$ indicates $i$-th pseudo-dataset and $j$ does $j$-th player. Next, \code{coverage} fits the Binomial hierarchical model 500 times to obtain 500*18 interval estimates. Taking the first player as an example, we have 500 pairs of ($z_{i1}$, $p_{i1}$), $j=1,\ldots, 500$ and 500 interval estimates.
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=5cm]{process.png}
+\caption{Pseudo-data generating process}
+\end{center}
+\end{figure}
+
 \subsection{Unbiased Coverage Probability}
+Based on the generated pseudo-datasets, let's define an indicator variable, $I_{ij}$, which is 1 if $j$-th interval estimate from $i$-th pseudo-dataset includes $p_{ij}$ and 0 otherwise. One way to estimate the coverage probability is to take average over those indicator variables. We call it an unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first player.
 \subsection{Rao-Blackwellized Coverage Probability}
+Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$) as the Rao-Blackwellized coverage probability, where $r$ and $\beta$ were fixed at first (see 5.1). This expectation is the same as P$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where $\hat{p}_{ij, low}$ and $\hat{p}_{ij, upp}$ are interval estimates (numeric values). We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ is the Beta distribution in (9). For instance, the first player's Rao-Blackwellized coverage probability can be estimated by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
 \section[Example]{Example}
 \subsection[Known Prior Mean]{Known Prior Mean}
 Using 10 hospital data with PR
