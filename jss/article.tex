@@ -197,7 +197,8 @@ Like the two sides of the same coin, checking a statistical model always comes w
 There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $(z_{j}\vert \beta, r)\sim\textrm{Negative-Binomial}$, for Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 \\
 
-The other model justification process is the method check.
+Once we are sure that the hierarchical modeling can add a huge value on our research, the next natural quetsion will be about the validity of interval estimates. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point.
+
 \subsection{Pseudo-data Generation Process}
 \subsection{Unbiased Coverage Probability}
 \subsection{Rao-Blackwellized Coverage Probability}
