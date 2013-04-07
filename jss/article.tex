@@ -99,8 +99,7 @@ R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 Considering the type of data, it will make sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can also be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
 
 \subsection{Binomial: 18 Baseball Data}
-This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or the American league (0). The code below shows a way to make inputs using the first 10 players. One covariate is an indicator variable which is 1 if a player was in the National league and 0 if American league.
-\begin{CodeChunk}
+This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or in the American league (0). The code below shows a way to make inputs using the first 10 players. \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11)
 R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
@@ -110,10 +109,7 @@ R> x <- c( 1,  0,  0,  0,  0,  0,  1,  0,  1,  1)
 The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown parameter $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This dataset is also a part of the package and can be called on \proglang{R} by `\code{R> data(baseball)}'.
 
 \section[Multi-level Structure]{Multi-level Structure}
-Hierarchical model is a very powerful tool to (justification of hierarchical model for hierarchical data??)
-\\
-
-\code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multi-level models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
+Multi-level model is a very powerful tool for explaining the hierarchical sturucture in data, for example, with student-level, school-level, and district-level information. \code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multi-level models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
 \\
 
  
@@ -126,11 +122,11 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, \sigma^{2}_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} =x_{j}'\beta,~j=1, \ldots, 8$, and $x_{j}$ is $j$-th school's covariate vector ($m\times 1$). Also, $m$ is the number of regression coefficients, which is just 1 for an intercept term if there is no covariate. For reference, a paramter with a zero subscript represents a mean parameter of the prior (second-level) distribution. Also,  Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
+where $\mu_{0j} =x^{T}_{j}\beta,~j=1, \ldots, 8$, $x_{j}$ is $j$-th school's covariate vector ($1\times m$), and $m$ is the number of regression coefficients which is just 1 for an intercept term if there is no covariate. For reference, a paramter with a zero subscript, $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution. Also,  Based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution. 
 \begin{equation}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})\sigma^{2}_{j}),
 \end{equation}
-where $B_{j}\equiv\frac{\sigma^{2}_{j}}{\sigma^{2}_{j} + A},~j=1, \ldots, 8$ is called a shrinkages and we will explain it in the following section.
+where $B_{j}\equiv\frac{\sigma^{2}_{j}}{\sigma^{2}_{j} + A},~j=1, \ldots, 8$, is called a shrinkages.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma}
 \code{gbp} is also able to build a Poisson-Gamma multi-level model on the 31 hospital data. Note that a constant multiplied to the notation representing Gamma distribution is a scale and a square bracket below indicates [mean, variance] of distribution.
@@ -177,7 +173,7 @@ where $m$ is the number of regression coefficients. For $\beta$, it is reasonabl
 
 \section[Estimation]{Estimation}
 \subsection[Shrinkage Estimation]{Shrinkage Estimation}
-Estimating shrinkage is a key part of our work because as we can see posterior mean is a linear function of shrinkage and posterior variance is also a linear (Gaussian), quadratic (Poisson), or cubic (Binomial) function of shrinkage. Once we estimate it, we can approximate the posterior moments given only data, for example, $E(\mu_{j}\vert \textbf{y})$ for Gaussian model.
+Estimating shrinkage is a key part of our work because as we can see the posterior means in (3), (6), and (9) are a linear function of shrinkage and the posterior variances are also a linear (Gaussian), quadratic (Poisson), or cubic (Binomial) function of shrinkage. Once we estimate it, we can approximate the posterior moments given only data by Adam's law, for example, $E(\mu_{j}\vert \textbf{y})=E(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$ for Gaussian model and by Eve's law, for instance, $Var(\mu_{j}\vert \textbf{y})=E(Var(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$
 \subsection[ADM]{Adjustment for Density Maximization}
 When it comes to estimating a shrinkage, we can notice that it is a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv\frac{\sigma^{2}}{\sigma^{2}+A}=B_{j}(A)$ for Gaussian and $B_{j}\equiv\frac{r}{r+n_{j}}=B_{j}(r)$ for Poisson and Binomial models.
 \\
@@ -185,10 +181,10 @@ When it comes to estimating a shrinkage, we can notice that it is a function of 
 In this case, one way is to obtain an MLE of the variance component with its asymptotic Normal distribution and to use Delta method for asymptotic Normal distribution of shrinkage. But is the Normal approximation a good approximation for shrinkage that takes on values between 0 and 1?
 \\
 
-Here Adjustment for Density Maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage, which the authors believe is a much better approximation for it, and estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$.
+Here the adjustment for density maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage, which the authors believe is a much better approximation for it, and estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$.
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution given only data, \emph{i.e.}, ($\mu_{j}\vert \textrm{data}$), ($\lambda_{j}\vert \textrm{data}$), or ($p_{j}\vert \textrm{data}$), by matching two moments with its parameters. The reason we said `reasonablely approximates' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $(p_{j}\vert \textrm{data})$ has also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
+After estimating two posterior moments, \code{gbp} reasonably approximates posterior distribution given only data, \emph{i.e.}, ($\mu_{j}\vert \textrm{data}$), ($\lambda_{j}\vert \textrm{data}$), or ($p_{j}\vert \textrm{data}$), by matching two moments with its parameters. The reason we said `reasonablely approximates' is that it is hard to find a closed form of posterior distribution given only data unless it is a Gaussian model. So, we assumed $(p_{j}\vert \textrm{data})$ had also Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textrm{data})$ and $Var(p_{j}\vert \textrm{data})$, with two parameters, $a_{1}$ and $a_{0}$, of this Beta distribution. 
 
 \section[Method Check]{Method Check}
 Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a checking process, we usually go back to the fitting process and come back to checking process iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
@@ -209,7 +205,7 @@ Figure 1 will be helpful to understand this process. As we can see in (8), the d
 \end{figure}
 
 \subsection{Unbiased Coverage Probability}
-Based on the generated pseudo-datasets, let's define an indicator variable, $I_{ij}$, which is 1 if $j$-th interval estimate from $i$-th pseudo-dataset includes $p_{ij}$ and 0 otherwise. One way to estimate the coverage probability is to take average over those indicator variables. We call it an unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first player.
+Based on the generated pseudo-datasets, let's define an indicator variable, $I_{ij}$, which is 1 if $j$-th interval estimate from $i$-th pseudo-dataset includes $p_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking average over these indicator variables. We call it an unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first player.
 \subsection{Rao-Blackwellized Coverage Probability}
 Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$) as the Rao-Blackwellized coverage probability, where $r$ and $\beta$ were fixed at first (see 5.1). This expectation is the same as P$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where $\hat{p}_{ij, low}$ and $\hat{p}_{ij, upp}$ are interval estimates (numeric values). We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ is the Beta distribution in (9). For instance, the first player's Rao-Blackwellized coverage probability can be estimated by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
 \section[Example]{Example}
