@@ -75,7 +75,7 @@
 \section[Feasible Data Types]{Three Feasible Types of Data }
 This package is intended to fit a multi-level model on the group-level (or unit-level) data in which each group-level (or unit-level) observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible datasets.
 
-\subsection{Normal: 8 Schools' Data}
+\subsection{Normal: 8 School Data}
 Education Testing Service conducted randomized experiments in eight separate schools and obtained this dataset. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of eight schools obtained after an analysis of covariance adjustment (Rubin, 1981).
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -96,10 +96,11 @@ R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 \end{CodeChunk}
 
 
-Considering the type of data, it will make sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can also be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
+Considering the type of data, it makes sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
 
 \subsection{Binomial: 18 Baseball Data}
-This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or in the American league (0). The code below shows a way to make inputs using the first 10 players. \begin{CodeChunk}
+This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or in the American league (0). The code below shows a way to make inputs using the first 10 players. If we have more than one covariate, for example, \code{x1} and \code{x2}, then `\code{R> x <- cbind(x1, x2)}' will be the right input of the \code{gbp} function.
+\begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11)
 R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
@@ -109,7 +110,7 @@ R> x <- c( 1,  0,  0,  0,  0,  0,  1,  0,  1,  1)
 The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown parameter $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This dataset is also a part of the package and can be called on \proglang{R} by `\code{R> data(baseball)}'.
 
 \section[Multi-level Structure]{Multi-level Structure}
-Multi-level model is a very powerful tool for explaining the hierarchical sturucture in data, for example, with student-level, school-level, and district-level information. \code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multi-level models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
+Our multi-level models, also called conditionally independent hierarchical models (Kass and Steffey, 1989), is a very powerful tool for exploring the hierarchical sturucture in data. For example, we can think about the nation-level hierarchy (bigger population) for 8 schools, the state-level hierarchy for 31 hospitals, and the league-level hierarchy for 18 baseball players. \code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multi-level models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
 \\
 
  
@@ -129,7 +130,7 @@ where $\mu_{0j} =x^{T}_{j}\beta,~j=1, \ldots, 8$, $x_{j}$ is $j$-th school's cov
 where $B_{j}\equiv\frac{\sigma^{2}_{j}}{\sigma^{2}_{j} + A},~j=1, \ldots, 8$, is called a shrinkages.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma}
-\code{gbp} is also able to build a Poisson-Gamma multi-level model on the 31 hospital data. Note that a constant multiplied to the notation representing Gamma distribution is a scale and a square bracket below indicates [mean, variance] of distribution.
+\code{gbp} is also able to build a Poisson-Gamma multi-level model on the 31 hospital data. Note that a constant multiplied to the notation representing Gamma distribution below is a scale and a square bracket below indicates [mean, variance] of distribution.
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
@@ -193,10 +194,10 @@ Like the two sides of the same coin, checking a statistical model always comes w
 There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $(z_{j}\vert \beta, r)\sim\textrm{Negative-Binomial}$, for Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 \\
 
-Once we are sure that the hierarchical modeling can add a huge value on our research, the next natural quetsion will be about the validity of interval estimates. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
+Once we are sure that the hierarchical modeling can be appropriate for our data, the following quetsion will be about the validity of interval estimates. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
 
 \subsection{Pseudo-data Generation Process}
-Figure 1 will be helpful to understand this process. As we can see in (8), the distribution of each true parameter ($p_{j},~j=1,\ldots, 18$) depends on two hyper-parameters, $r$ and $\beta_{(m\times1)}$, where $m$ is the number of regression coefficients. Once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\textbf{p}_{(18\times1)}$'s, \emph{i.e.}, $\{\textbf{p}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$. Then, we can also generate $\{\textbf{z}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ given each $p_{ij},$ where $i$ indicates $i$-th pseudo-dataset and $j$ does $j$-th player. Next, \code{coverage} fits the Binomial hierarchical model 500 times to obtain 500*18 interval estimates. Taking the first player as an example, we have 500 pairs of ($z_{i1}$, $p_{i1}$), $j=1,\ldots, 500$ and 500 interval estimates.
+Figure 1 will be helpful to understand this process. As we can see in (8), the distribution of each true parameter ($p_{j},~j=1,\ldots, 18$) depends on two hyper-parameters, $r$ and $\beta_{(m\times1)}$, where $m$ is the number of regression coefficients. Once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\textbf{p}_{(18\times1)}$'s, \emph{i.e.}, $\{\textbf{p}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$. Then, we can also generate $\{\textbf{z}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ given each $p_{ij},$ where $i$ indicates $i$-th pseudo-dataset and $j$ does $j$-th player. Next, \code{coverage} fits the Binomial hierarchical model 500 times on $\{(\textbf{z}^{(i)}_{(18\times1)}, \textbf{n}_{(18 \times 1)}),~i=1, \ldots, 500\}$ to obtain 500*18 interval estimates. Taking the first player as an example, we have 500 pairs of ($z_{i1}$, $p_{i1}$), $j=1,\ldots, 500$, and 500 interval estimates.
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=5cm]{process.png}
@@ -207,7 +208,7 @@ Figure 1 will be helpful to understand this process. As we can see in (8), the d
 \subsection{Unbiased Coverage Probability}
 Based on the generated pseudo-datasets, let's define an indicator variable, $I_{ij}$, which is 1 if $j$-th interval estimate from $i$-th pseudo-dataset includes $p_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking average over these indicator variables. We call it an unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first player.
 \subsection{Rao-Blackwellized Coverage Probability}
-Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$) as the Rao-Blackwellized coverage probability, where $r$ and $\beta$ were fixed at first (see 5.1). This expectation is the same as P$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where $\hat{p}_{ij, low}$ and $\hat{p}_{ij, upp}$ are interval estimates (numeric values). We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ is the Beta distribution in (9). For instance, the first player's Rao-Blackwellized coverage probability can be estimated by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
+Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$) as the Rao-Blackwellized coverage probability, where $r$ and $\beta$ were fixed at first (see 5.1). This expectation is the same as P$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where $\hat{p}_{ij, low}$ and $\hat{p}_{ij, upp}$ are interval estimates (numeric values). We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ in (9). Then, we can estimate the first player's coverage probability by Rao-Blackwellized coverage probability, for instance, $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
 \section[Example]{Example}
 \subsection[Known Prior Mean]{Known Prior Mean}
 Using 10 hospital data with PR
