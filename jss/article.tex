@@ -211,18 +211,34 @@ Based on the generated pseudo-datasets, let's define an indicator variable, $I_{
 \subsection{Rao-Blackwellized Coverage Probability}
 Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$), where $r$ and $\beta$ were fixed at first (see 5.1) and $z_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where ($\hat{p}_{ij, low}$, $\hat{p}_{ij, upp}$) is $j$-th player's interval estimates (numeric values) on the $i$-th dataset. We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ in (9). Then, we can estimate the first player's coverage probability, for instance, by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
 \section[Example]{Example}
-\subsection[Known Prior Mean]{Known Prior Mean}
+\subsection[Known Second-level Mean]{Known Second-level Mean}
+What are the true rates, $\lambda_{j},~j=1,\ldots, 31$, governing the death-rates, $z_{j} / n_{j}$, of those 31 hospitals?
+
+We will use 31 hospital dataset that we introduced in 2.2. First of all, can we imagine a bigger population-level hierarchy? In other words, can we consider the true parameters as sampled from a bigger population distribution governing those parameters? In some cases, we might have information about the mean of the second-level. If we think about the 31 hospital dataset, 
+As we said, we have data about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The below code is an example of input based on the last ten hospital data.
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{hospital1.png}
-\caption{Coverage and Interval Plots of \code{R> plot(p)}}
+\caption{Shrinkage and interval plots of 31 hospitals in NY}
 \end{center}
 \end{figure}
 
-\subsection[Unknown Prior Mean and No Covariate]{Unknown Prior Mean and No Covariate}
-Using 8 school data with GR
-\subsection[Unknown Prior Mean and One Covariate]{Unknown Prior Mean and One Covariate}
-Using 18 baseball data with BR
+\subsection[Unknown Second-level Mean and No Covariate]{Unknown Second-level Mean and No Covariate}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.3]{school1.png}
+\caption{Shrinkage and interval plots of 8 schools}
+\end{center}
+\end{figure}
+
+\subsection[Unknown Second-level Mean and One Covariate]{Unknown Prior Mean and One Covariate}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.3]{baseball1.png}
+\caption{Shrinkage and interval plots of 18 baseball players}
+\end{center}
+\end{figure}
 
 \section[Discussion]{Discussion}
 
