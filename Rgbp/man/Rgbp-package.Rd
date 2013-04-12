@@ -16,7 +16,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     Main functions: \tab \code{\link{gbp}}, \code{\link{coverage}}\cr
   }
 
-  This package borrows Bayesian machine to build a multilevel model (random-effect mixed model) and evaluates it via frequentist repeated sampling procedure (we call it method check). It will be useful for those who want to build a hierarchical model on their datasets; for Bayesian who want to see a preliminary result before constructing their full-Bayesian hierarchical models and want to check whether the result of their full-Bayesian hierarchical modeling is reasonable after modeling; for frequentist who want to build a random-effect mixed model with good repeated sampling property.
+This package uses Bayesian machinery to estimate a two-level model (a random-effects mixed model) and allows for a check of its frequentist properties via a repeated sampling procedure (which we call a "method check"). It is found that even in small samples our procedure yields good frequency properties. Also, this package will be useful for Bayesians who want to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model. For frequentists, it will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
 
 }
 \author{
