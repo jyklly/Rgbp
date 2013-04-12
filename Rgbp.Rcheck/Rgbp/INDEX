@@ -1,0 +1,11 @@
+Rgbp                    Bayesian Hierarchical Modeling and Frequentist
+                        Method Check
+baseball                Baseball Data
+coverage                Estimating Coverage Probability
+gbp                     Fitting Bayesian Hierarchical Models
+hospital                Thirty-one Hospital Data
+plot.gbp                Drawing Shrinkage and Posterior Interval Plots
+print.gbp               Displaying 'gbp' Class
+print.summary.gbp       Displaying 'summary.gbp' Class
+schools                 Eight Schools Data
+summary.gbp             Summarizing Estimation Result
