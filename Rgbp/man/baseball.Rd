@@ -8,14 +8,13 @@
 }
 
 \description{
-  Batting averages of 18 major league players through their first 45 official at bats of the 1970 season.\cr
-  These batting averages were published weekly in the New York Times, and by April 26, 1970.
+  Batting averages of 18 major league players through their first 45 official at bats of the 1970 season. These batting averages were published weekly in the New York Times, and by April 26, 1970.
 }
 
 \usage{data(baseball)}
 
 \format{
-  A data set of 18 players with 10 covariates:
+  A data set of 18 players with 12 covariates:
   \describe{
     \item{\code{FirstName}}{each player's first name}
     \item{\code{LastName}}{each player's last name}
@@ -27,6 +26,7 @@
     \item{\code{SeasonAt.Bats}}{number of times batted over the whole season}
     \item{\code{SeasonHits}}{each player's number of hits over the whole season}
     \item{\code{SeasonAverage}}{batting averages over the whole season}
+    \item{\code{League}}{1 if a player is in the National league}
     \item{\code{League}}{1 if a player is in the National league}
   }
 }
