@@ -109,12 +109,6 @@
   \item{average.coverageU}{
     average value over \code{coverageU}.
   }
-  \item{minimum.coverageRB}{
-    minimum value among \code{coverageRB}.
-  }
-  \item{minimum.coverageU}{
-    minimum value among \code{coverageU}.
-  }
   \item{raw.resultRB}{
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
   }

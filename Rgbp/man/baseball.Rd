@@ -27,7 +27,7 @@
     \item{\code{SeasonHits}}{each player's number of hits over the whole season}
     \item{\code{SeasonAverage}}{batting averages over the whole season}
     \item{\code{League}}{1 if a player is in the National league}
-    \item{\code{League}}{1 if a player is in the National league}
+    \item{\code{Position}}{each player's position}
   }
 }
 
@@ -40,7 +40,7 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
   data(baseball)
   z <- baseball$Hits
   n <- baseball$At.Bats
-  x <- ifelse(baseball$League == "NL", 1, 0)
+  x <- ifelse(baseball$Position == "fielder", 1, 0)
 
 
   ###############################################################################

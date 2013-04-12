@@ -322,11 +322,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   # average coverage probability
   result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
-  min.cov <- round(min(result), 3)
 
   result2 <- round(rowMeans(coverageU, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
-  min.cov2 <- round(min(result2), 3)
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
@@ -341,29 +339,25 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
                              "Blue Dotted Line: (Unbiased)",
                              paste("A =", round(A, 2)), 
                              paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
-                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
                              "Blue Dotted Line: (Unbiased)",
                              paste("r =", round(r, 2)), 
                              paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
-                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     }
   } else {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
                              "Blue Dotted Line: (Unbiased)",
                              paste("A =", round(A, 2)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"), 
-                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
                              "Blue Dotted Line: (Unbiased)",
                              paste("r =", round(r, 2)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")"),
-                             paste("MinCoverage =", min.cov, "(", min.cov2, ")")))
+                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     }
   }
 
@@ -371,7 +365,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   # print output
   output <- list(coverageRB = result, coverageU = result2, 
                  average.coverageRB = avr.cov, average.coverageU = avr.cov2, 
-                 minimum.coverageRB = min.cov, minimum.coverageU = min.cov2, 
                  raw.resultRB = coverageRB, raw.resultU = coverageU)
   return(output)
 }
