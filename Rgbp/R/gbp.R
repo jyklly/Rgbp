@@ -275,6 +275,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   po.sd <- x$post.sd
   po.low <- x$post.intv.low
   po.upp <- x$post.intv.upp
+  xlabel <- "Indices (Groups) by the order of data input"
 
   if (sort == TRUE) {
     temp.data <- as.data.frame(cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp))
@@ -297,7 +298,6 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   index <- 1 : length(se)
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
-  xlabel <- "Indices (Groups) by the order of data input"
 
   par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
   

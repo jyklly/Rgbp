@@ -212,7 +212,13 @@ Based on the generated pseudo-datasets, let's define an indicator variable, $I_{
 Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$), where $r$ and $\beta$ were fixed at first (see 5.1) and $z_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where ($\hat{p}_{ij, low}$, $\hat{p}_{ij, upp}$) is $j$-th player's interval estimates (numeric values) on the $i$-th dataset. We can calculated this probability exactly because we know the distribution of $(p_{ij} \vert z_{ij}, r, \beta)$ in (9). Then, we can estimate the first player's coverage probability, for instance, by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$.
 \section[Example]{Example}
 \subsection[Known Prior Mean]{Known Prior Mean}
-Using 10 hospital data with PR
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.3]{hospital1.png}
+\caption{Coverage and Interval Plots of \code{R> plot(p)}}
+\end{center}
+\end{figure}
+
 \subsection[Unknown Prior Mean and No Covariate]{Unknown Prior Mean and No Covariate}
 Using 8 school data with GR
 \subsection[Unknown Prior Mean and One Covariate]{Unknown Prior Mean and One Covariate}
