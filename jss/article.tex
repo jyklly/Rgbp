@@ -96,15 +96,15 @@ R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 \end{CodeChunk}
 
 
-Considering the type of data, it makes sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j}), ~j=1, \ldots, 31,$ where $n_{j}$ can be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
+Considering the type of data, it makes sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ where $n_{j}$ can be interpreted as an exposure (not necessarily an interger). This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
 
 \subsection{Binomial: 18 Baseball Data}
-This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one binary covariate indicating whether a player was in the National league (1) or in the American league (0). The code below shows a way to make inputs using the first 10 players. If we have more than one covariate, for example, \code{x1} and \code{x2}, then `\code{R> x <- cbind(x1, x2)}' will be the right input of the \code{gbp} function.
+This dataset contains information about batting averages of 18 major league players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has two covariates, League and Position, showing in which league and in which position each player was. In this paper, we will use Position for a tutorial purpose. For convenience, we transform this variable into a binary indicator, which is 1 if a player was a outfielder and 0 otherwise. The code below shows a way to make inputs. If we have more than one covariate, for example, \code{x1} and \code{x2}, then `\code{R> x <- cbind(x1, x2)}' will be the right input of the \code{gbp} function.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11)
-R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
-R> x <- c( 1,  0,  0,  0,  0,  0,  1,  0,  1,  1) 
+R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+R> x <- c( 1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0) 
 \end{CodeInput}
 \end{CodeChunk}
 The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown parameter $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This dataset is also a part of the package and can be called on \proglang{R} by `\code{R> data(baseball)}'.
