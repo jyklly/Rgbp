@@ -20,13 +20,13 @@ print.gbp <- function(x, sort = TRUE, ...) {
     if (x$model == "gr") {
       temp <- data.frame(obs.mean = x$sample.mean, se = x$se, x = cova, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     } else {
       temp <- data.frame(obs.mean = x$sample.mean, n = x$se, x = cova, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     }
 
   } else if (any(is.na(x$prior.mean)) & identical(x$X, NA)) { 
@@ -35,13 +35,13 @@ print.gbp <- function(x, sort = TRUE, ...) {
     if (x$model == "gr") {
       temp <- data.frame(obs.mean = x$sample.mean, se = x$se, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     } else {
       temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     }
 
 
@@ -49,13 +49,13 @@ print.gbp <- function(x, sort = TRUE, ...) {
     if (x$model == "gr") {
       temp <- data.frame(obs.mean = x$sample.mean, se = x$se, 
                          prior.mean = x$prior.mean, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     } else {
       temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean, shrinkage = x$shrinkage, 
-                         intv.low = x$post.intv.low, post.mean = x$post.mean, 
-                         intv.upp = x$post.intv.upp, post.sd = x$post.sd)
+                         low.intv = x$post.intv.low, post.mean = x$post.mean, 
+                         upp.intv = x$post.intv.upp, post.sd = x$post.sd)
     }
   }
   
@@ -87,13 +87,13 @@ summary.gbp <- function(object, ...) {
     if (object$model == "gr") {
       temp <- data.frame(obs.mean = object$sample.mean, se = object$se, x = cova, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     } else {
       temp <- data.frame(obs.mean = object$sample.mean, n = object$se, x = cova, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     }
 
   } else if (any(is.na(object$prior.mean)) & identical(object$X, NA)) { 
@@ -102,13 +102,13 @@ summary.gbp <- function(object, ...) {
     if (object$model == "gr") {
       temp <- data.frame(obs.mean = object$sample.mean, se = object$se, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     } else {
       temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     }
 
 
@@ -116,13 +116,13 @@ summary.gbp <- function(object, ...) {
     if (object$model == "gr") {
       temp <- data.frame(obs.mean = object$sample.mean, se = object$se, 
                          prior.mean = object$prior.mean, shrinkage = object$shrinkage, 
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     } else {
       temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean, shrinkage = object$shrinkage,
-                         intv.low = object$post.intv.low, post.mean = object$post.mean, 
-                         intv.upp = object$post.intv.upp, post.sd = object$post.sd)
+                         low.intv = object$post.intv.low, post.mean = object$post.mean, 
+                         upp.intv = object$post.intv.upp, post.sd = object$post.sd)
     }
   }
 
