@@ -202,10 +202,10 @@ summary.gbp <- function(object, ...) {
   temp.mean <- colMeans(temp)
   
   if (object$model == "gr") {
-    tamp.mean[2] <- round(tamp.mean[2], 1)
+    temp.mean[2] <- round(temp.mean[2], 1)
     summary.table[, 2] <- round(summary.table[, 2], 1)
   } else {
-    tamp.mean[2] <- round(tamp.mean[2])
+    temp.mean[2] <- round(temp.mean[2])
     summary.table[, 2] <- round(summary.table[, 2])
   }
 
