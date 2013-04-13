@@ -67,9 +67,9 @@ print.gbp <- function(x, sort = TRUE, ...) {
   temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
   temp <- round(temp, 3)
   if (x$model == "gr") {
-    temp[, 2] <- round(temp.mean[, 2], 1)
+    temp[, 2] <- round(temp[, 2], 1)
   } else {
-    temp[, 2] <- round(temp.mean[, 2])
+    temp[, 2] <- round(temp[, 2])
   }
 
   cat("Summary for whole observations: \n")
