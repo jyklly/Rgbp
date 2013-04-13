@@ -24,7 +24,7 @@
 }
 \value{
   \code{print(gbp.object)} will display:
-  \item{sample.mean}{sample mean of each group}
+  \item{obs.mean}{sample mean of each group}
   \item{se}{if Gaussian data, standard error of each group}
   \item{n}{if Binomial or Poisson data, total number of trials of each group}
   \item{X}{a covariate vector or matrix if designated. NA if not}

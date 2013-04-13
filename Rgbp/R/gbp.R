@@ -18,12 +18,12 @@ print.gbp <- function(x, sort = TRUE, ...) {
 	colnames(cova) <- paste(1 : dim(cova)[2])
     
     if (x$model == "gr") {
-      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, x = cova, 
+      temp <- data.frame(obs.mean = x$sample.mean, se = x$se, x = cova, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, x = cova, 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, x = cova, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -33,12 +33,12 @@ print.gbp <- function(x, sort = TRUE, ...) {
   # if there are neither prior.mean and X assigned
 
     if (x$model == "gr") {
-      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, 
+      temp <- data.frame(obs.mean = x$sample.mean, se = x$se, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -47,12 +47,12 @@ print.gbp <- function(x, sort = TRUE, ...) {
 
   } else if (!any(is.na(x$prior.mean))) {
     if (x$model == "gr") {
-      temp <- data.frame(sample.mean = x$sample.mean, se = x$se, 
+      temp <- data.frame(obs.mean = x$sample.mean, se = x$se, 
                          prior.mean = x$prior.mean, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(sample.mean = x$sample.mean, n = x$se, 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -64,7 +64,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
   }
 
   temp.mean <- colMeans(temp)
-  temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "== Mean =="))
+  temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
 
   cat("Summary for whole observations: \n")
   cat("\n")
@@ -79,12 +79,12 @@ summary.gbp <- function(object, ...) {
 	colnames(cova) <- paste(1 : dim(cova)[2])
     
     if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, x = cova, 
+      temp <- data.frame(obs.mean = object$sample.mean, se = object$se, x = cova, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, x = cova, 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, x = cova, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -94,12 +94,12 @@ summary.gbp <- function(object, ...) {
   # if there are neither prior.mean and X assigned
 
     if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, 
+      temp <- data.frame(obs.mean = object$sample.mean, se = object$se, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -108,12 +108,12 @@ summary.gbp <- function(object, ...) {
 
   } else if (!any(is.na(object$prior.mean))) {
     if (object$model == "gr") {
-      temp <- data.frame(sample.mean = object$sample.mean, se = object$se, 
+      temp <- data.frame(obs.mean = object$sample.mean, se = object$se, 
                          prior.mean = object$prior.mean, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(sample.mean = object$sample.mean, n = object$se, 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean, shrinkage = object$shrinkage,
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -124,55 +124,55 @@ summary.gbp <- function(object, ...) {
 
   if (min(object$se) == max(object$se)) {  # if se or n are all the same
 
-    temp2 <- temp[order(temp$sample.mean), ]
+    temp2 <- temp[order(temp$obs.mean), ]
 
     if (length(object$se) %% 2) {  # if number of groups is odd
       summary.table <- temp2[c(1, (dim(temp2)[1] + 1) / 2, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
-        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                      "Group w/ median(sample.mean)", 
-                                      "Group w/ max(sample.mean)")
+        row.names(summary.table) <- c("Unit w/ min(obs.mean)", 
+                                      "Unit w/ median(obs.mean)", 
+                                      "Unit w/ max(obs.mean)")
       } else {  # if there are more than one median
-        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                     paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
-                                     "Group w/ max(sample.mean)")
+        row.names(summary.table) <- c("Unit w/ min(obs.mean)", 
+                                     paste("Unit w/ median(obs.mean)", 1 : number.of.medians, sep = ""),
+                                     "Unit w/ max(obs.mean)")
       }
     } else {  # if number of groups is even
       summary.table <- temp2[c(1, dim(temp2)[1] / 2, dim(temp2)[1] / 2 + 1, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
-        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                      "Group w/ median(sample.mean)", 
-                                      "Group w/ max(sample.mean)")
+        row.names(summary.table) <- c("Unit w/ min(obs.mean)", 
+                                      "Unit w/ median(obs.mean)", 
+                                      "Unit w/ max(obs.mean)")
       } else {  # if there are more than one median
-        row.names(summary.table) <- c("Group w/ min(sample.mean)", 
-                                     paste("Group w/ median(sample.mean)", 1 : number.of.medians, sep = ""),
-                                     "Group w/ max(sample.mean)")
+        row.names(summary.table) <- c("Unit w/ min(obs.mean)", 
+                                     paste("Unit w/ median(obs.mean)", 1 : number.of.medians, sep = ""),
+                                     "Unit w/ max(obs.mean)")
       }
     }
   } else { # if n or se are different from each group
 
-    temp2 <- temp[order(temp[, 2], temp$sample.mean), ]
+    temp2 <- temp[order(temp[, 2], temp$obs.mean), ]
 
     if (length(object$se) %% 2) {  # if number of groups is odd
       summary.table <- temp2[c(1, (dim(temp2)[1] + 1) / 2, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (object$model == "gr") {
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Group w/ min(se)", "Group w/ median(se)", "Group w/ max(se)")
+          row.names(summary.table) <- c("Unit w/ min(se)", "Unit w/ median(se)", "Unit w/ max(se)")
         } else {
-          row.names(summary.table) <- c("Group w/ min(se)", 
-                                       paste("Group w/ median(se)", 1 : number.of.medians, sep = ""),
-                                       "Group w/ max(se)")
+          row.names(summary.table) <- c("Unit w/ min(se)", 
+                                       paste("Unit w/ median(se)", 1 : number.of.medians, sep = ""),
+                                       "Unit w/ max(se)")
         }
       } else {  # if model is not "gr"
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Group w/ min(n)", "Group w/ median(n)", "Group w/ max(n)")
+          row.names(summary.table) <- c("Unit w/ min(n)", "Unit w/ median(n)", "Unit w/ max(n)")
         } else {
-          row.names(summary.table) <- c("Group w/ min(n)", 
-                                       paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
-                                       "Group w/ max(n)")
+          row.names(summary.table) <- c("Unit w/ min(n)", 
+                                       paste("Unit w/ median(n)", 1 : number.of.medians, sep = ""),
+                                       "Unit w/ max(n)")
         }
       }
 
@@ -181,19 +181,19 @@ summary.gbp <- function(object, ...) {
       number.of.medians <- dim(summary.table)[1] - 2
       if (object$model == "gr") {
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Group w/ min(se)", "Group w/ median(se)", "Group w/ max(se)")
+          row.names(summary.table) <- c("Unit w/ min(se)", "Unit w/ median(se)", "Unit w/ max(se)")
         } else {
-          row.names(summary.table) <- c("Group w/ min(se)", 
-                                       paste("Group w/ median(se)", 1 : number.of.medians, sep = ""),
-                                       "Group w/ max(se)")
+          row.names(summary.table) <- c("Unit w/ min(se)", 
+                                       paste("Unit w/ median(se)", 1 : number.of.medians, sep = ""),
+                                       "Unit w/ max(se)")
         }
       } else {  # if model is not "gr"
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Group w/ min(n)", "Group w/ median(n)", "Group w/ max(n)")
+          row.names(summary.table) <- c("Unit w/ min(n)", "Unit w/ median(n)", "Unit w/ max(n)")
         } else {
-          row.names(summary.table) <- c("Group w/ min(n)", 
-                                       paste("Group w/ median(n)", 1 : number.of.medians, sep = ""),
-                                       "Group w/ max(n)")
+          row.names(summary.table) <- c("Unit w/ min(n)", 
+                                       paste("Unit w/ median(n)", 1 : number.of.medians, sep = ""),
+                                       "Unit w/ max(n)")
         }
       }
     }
@@ -201,7 +201,7 @@ summary.gbp <- function(object, ...) {
 
   temp.mean <- colMeans(temp)
   summary.table <- data.frame(rbind(summary.table, temp.mean), 
-                              row.names = c(rownames(summary.table), "Means over all groups"))
+                              row.names = c(rownames(summary.table), "Overall Mean"))
 
 
   post.mode.alpha <- object$a.new
