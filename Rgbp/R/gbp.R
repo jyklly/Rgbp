@@ -23,7 +23,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(obs.mean = x$sample.mean, n = round(x$se), x = cova, 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, x = cova, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -38,7 +38,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(obs.mean = x$sample.mean, n = round(x$se), 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean.hat, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -52,7 +52,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
     } else {
-      temp <- data.frame(obs.mean = x$sample.mean, n = round(x$se), 
+      temp <- data.frame(obs.mean = x$sample.mean, n = x$se, 
                          prior.mean = x$prior.mean, shrinkage = x$shrinkage, 
                          intv.low = x$post.intv.low, post.mean = x$post.mean, 
                          intv.upp = x$post.intv.upp, post.sd = x$post.sd)
@@ -84,7 +84,7 @@ summary.gbp <- function(object, ...) {
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(obs.mean = object$sample.mean, n = round(object$se), x = cova, 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, x = cova, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -99,7 +99,7 @@ summary.gbp <- function(object, ...) {
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(obs.mean = object$sample.mean, n = round(object$se), 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean.hat, shrinkage = object$shrinkage, 
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -113,7 +113,7 @@ summary.gbp <- function(object, ...) {
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
     } else {
-      temp <- data.frame(obs.mean = object$sample.mean, n = round(object$se), 
+      temp <- data.frame(obs.mean = object$sample.mean, n = object$se, 
                          prior.mean = object$prior.mean, shrinkage = object$shrinkage,
                          intv.low = object$post.intv.low, post.mean = object$post.mean, 
                          intv.upp = object$post.intv.upp, post.sd = object$post.sd)
@@ -200,9 +200,17 @@ summary.gbp <- function(object, ...) {
   }
 
   temp.mean <- colMeans(temp)
+  
+  if (object$model == "gr") {
+    tamp.mean[2] <- round(tamp.mean[2], 1)
+    summary.table[, 2] <- round(summary.table[, 2], 1)
+  } else {
+    tamp.mean[2] <- round(tamp.mean[2])
+    summary.table[, 2] <- round(summary.table[, 2])
+  }
+
   summary.table <- data.frame(rbind(summary.table, temp.mean), 
                               row.names = c(rownames(summary.table), "Overall Mean"))
-
 
   post.mode.alpha <- object$a.new
   post.sd.alpha <- sqrt(object$a.var)
