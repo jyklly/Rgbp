@@ -313,7 +313,18 @@ R> plot(p)
 The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. And note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square at the crossing point of the first two lines indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
 \\
 
-The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior mean (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). Although the fist interval does not include the observed sample mean, it can happen by chance considering these are 95\% intervals. Overall, this plot shows that as the sample size increases (size of dots) and as the posterior mean gets close to 0, the length of interval gets shorter.
+The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior mean (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). But the most important information from this plot would be the range of each hospital's true death rate. Overall, as the sample size increases (size of dots) and as the posterior mean gets close to 0, the length of interval gets shorter, which the formula of posterior variance (6) implies. Although the fist interval does not include the observed sample mean, it can happen by chance considering these are 95\% intervals. Then, how reliable are these intervals? The method check will answer it.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> coverage(p, nsim = 10000)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 6cm]{hospital3.png}
+\end{center}
+\end{figure}
+We generated 10,000 pseudo-datasets and estimated coverage probabilities in two ways, unbiased estimates (blue dashed line) and Rao-Blackwellized estimates. 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
 \begin{figure}[h]
 \begin{center}
