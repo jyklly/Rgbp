@@ -31,7 +31,6 @@
   \item{prior.mean}{numeric if entered, NA if not entered}
   \item{prior.mean.hat}{estimate of prior mean by a regression if prior mean is not assigned a priori. The variable name on the display will be "prior.mean."}
   \item{shrinkage}{shrinkage estimate of each group (adjusted posterior mean)}
-  \item{sd.shrinkage}{posterior standard deviation shrinkage}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval}
   \item{post.mean}{posterior mean of each group}
   \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval}
