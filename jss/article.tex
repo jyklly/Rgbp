@@ -230,51 +230,63 @@ R> p
 \begin{CodeOutput}
 Summary for whole observations: 
 
-         obs.mean        n prior.mean shrinkage intv.low post.mean intv.upp post.sd
-1           0.045   67.000       0.02     0.834    0.011     0.024    0.042   0.008
-2           0.029   68.000       0.02     0.832    0.010     0.022    0.038   0.007
-3           0.024  210.000       0.02     0.616    0.011     0.021    0.035   0.006
-4           0.043  256.000       0.02     0.568    0.017     0.030    0.046   0.008
-5           0.033  269.000       0.02     0.556    0.015     0.026    0.041   0.007
-6           0.044  274.000       0.02     0.551    0.018     0.031    0.047   0.008
-7           0.043  278.000       0.02     0.548    0.018     0.030    0.047   0.007
-8           0.014  295.000       0.02     0.533    0.008     0.017    0.029   0.005
-9           0.029  347.000       0.02     0.492    0.014     0.024    0.038   0.006
-10          0.037  349.000       0.02     0.491    0.017     0.029    0.043   0.007
-11          0.039  358.000       0.02     0.484    0.018     0.030    0.045   0.007
-12          0.018  396.000       0.02     0.459    0.010     0.019    0.030   0.005
-13          0.028  431.000       0.02     0.438    0.015     0.024    0.037   0.006
-14          0.025  441.000       0.02     0.433    0.013     0.023    0.035   0.005
-15          0.027  477.000       0.02     0.414    0.015     0.024    0.036   0.006
-16          0.045  484.000       0.02     0.410    0.023     0.035    0.050   0.007
-17          0.030  494.000       0.02     0.405    0.016     0.026    0.039   0.006
-18          0.022  501.000       0.02     0.402    0.012     0.021    0.032   0.005
-19          0.028  505.000       0.02     0.400    0.015     0.025    0.036   0.005
-20          0.020  540.000       0.02     0.384    0.012     0.020    0.031   0.005
-21          0.028  563.000       0.02     0.374    0.016     0.025    0.037   0.005
-22          0.024  593.000       0.02     0.362    0.014     0.022    0.033   0.005
-23          0.015  602.000       0.02     0.358    0.010     0.017    0.026   0.004
-24          0.024  629.000       0.02     0.348    0.014     0.023    0.033   0.005
-25          0.020  636.000       0.02     0.346    0.012     0.020    0.030   0.005
-26          0.048  729.000       0.02     0.316    0.027     0.039    0.053   0.007
-27          0.031  849.000       0.02     0.284    0.019     0.028    0.038   0.005
-28          0.027  914.000       0.02     0.269    0.017     0.025    0.035   0.005
-29          0.021  940.000       0.02     0.264    0.014     0.021    0.030   0.004
-30          0.029 1193.000       0.02     0.220    0.020     0.027    0.036   0.004
-31          0.020 1340.000       0.02     0.201    0.014     0.020    0.027   0.003
-colMeans    0.029  517.032       0.02     0.438    0.015     0.025    0.037   0.006
+         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+1           0.045   67       0.02     0.834    0.011     0.024    0.042   0.008
+2           0.029   68       0.02     0.832    0.010     0.022    0.038   0.007
+3           0.024  210       0.02     0.616    0.011     0.021    0.035   0.006
+4           0.043  256       0.02     0.568    0.017     0.030    0.046   0.008
+5           0.033  269       0.02     0.556    0.015     0.026    0.041   0.007
+6           0.044  274       0.02     0.551    0.018     0.031    0.047   0.008
+7           0.043  278       0.02     0.548    0.018     0.030    0.047   0.007
+8           0.014  295       0.02     0.533    0.008     0.017    0.029   0.005
+9           0.029  347       0.02     0.492    0.014     0.024    0.038   0.006
+10          0.037  349       0.02     0.491    0.017     0.029    0.043   0.007
+11          0.039  358       0.02     0.484    0.018     0.030    0.045   0.007
+12          0.018  396       0.02     0.459    0.010     0.019    0.030   0.005
+13          0.028  431       0.02     0.438    0.015     0.024    0.037   0.006
+14          0.025  441       0.02     0.433    0.013     0.023    0.035   0.005
+15          0.027  477       0.02     0.414    0.015     0.024    0.036   0.006
+16          0.045  484       0.02     0.410    0.023     0.035    0.050   0.007
+17          0.030  494       0.02     0.405    0.016     0.026    0.039   0.006
+18          0.022  501       0.02     0.402    0.012     0.021    0.032   0.005
+19          0.028  505       0.02     0.400    0.015     0.025    0.036   0.005
+20          0.020  540       0.02     0.384    0.012     0.020    0.031   0.005
+21          0.028  563       0.02     0.374    0.016     0.025    0.037   0.005
+22          0.024  593       0.02     0.362    0.014     0.022    0.033   0.005
+23          0.015  602       0.02     0.358    0.010     0.017    0.026   0.004
+24          0.024  629       0.02     0.348    0.014     0.023    0.033   0.005
+25          0.020  636       0.02     0.346    0.012     0.020    0.030   0.005
+26          0.048  729       0.02     0.316    0.027     0.039    0.053   0.007
+27          0.031  849       0.02     0.284    0.019     0.028    0.038   0.005
+28          0.027  914       0.02     0.269    0.017     0.025    0.035   0.005
+29          0.021  940       0.02     0.264    0.014     0.021    0.030   0.004
+30          0.029 1193       0.02     0.220    0.020     0.027    0.036   0.004
+31          0.020 1340       0.02     0.201    0.014     0.020    0.027   0.003
+colMeans    0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
 \end{CodeOutput}
+\end{CodeChunk}
+For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' to list the above output by the order of data input. `\code{R> p}' will automatically sort the output by the increasing order of $n_{j}$. 
+\\
+
+The output contains information about sample mean (\code{obs.mean}), total number of trials (\code{n}), prior mean ($\lambda_{0}$), shrinkage, lower interval, posterior mean ($E(\lambda_{j}\vert \textbf{z})$), upper interval, and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{z})$).
+\\
+
+As we can see in (6), the posterior mean ($(1-B_{j})y_{j} + B_{j}\lambda_{0}$) is a linear function of shrinkage ($\equiv r / (r + n_{j})$), locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information; if the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. 
+\\
+
+A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it selectively displays estimation result of hospitals with minimum, median, and maximum values of $n_{j}$. Also, more specific estimation results, such as estimation result of $\alpha=\log(1/r)$, will follow. Note that if we fit a regression when we do not know the second-level mean unlike this example, the regression summary will appear.
+\begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
 \end{CodeInput}
 \begin{CodeOutput}
 Main summary:
 
-                  obs.mean        n prior.mean shrinkage intv.low post.mean intv.upp post.sd
-Unit w/ min(n)       0.045   67.000       0.02     0.834    0.011     0.024    0.042   0.008
-Unit w/ median(n)    0.045  484.000       0.02     0.410    0.023     0.035    0.050   0.007
-Unit w/ max(n)       0.020 1340.000       0.02     0.201    0.014     0.020    0.027   0.003
-Overall Mean         0.029  517.032       0.02     0.438    0.015     0.025    0.037   0.006
+                  obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+Unit w/ min(n)       0.045   67       0.02     0.834    0.011     0.024    0.042   0.008
+Unit w/ median(n)    0.045  484       0.02     0.410    0.023     0.035    0.050   0.007
+Unit w/ max(n)       0.020 1340       0.02     0.201    0.014     0.020    0.027   0.003
+Overall Mean         0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
 
 
 Second-level Variance Component Estimation Summary:
@@ -284,13 +296,24 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 1          -5.818         0.411
 \end{CodeOutput}
 \end{CodeChunk}
+Since estimated $\alpha$ is -5.818, we can easily calculate $r=\textrm{exp}(5.818)=336$, which will be helpful for understanding how each shrinkage of hospital was determined by comparing this value to the amount of observed information ($n_{j}$).
+\\
+
+But bunch of numbers can sometimes distract us from the important point. In this sense, we also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(p)
+\end{CodeInput}
+\end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{hospital1.png}
-\caption{Shrinkage and interval plots of 31 hospitals in NY}
 \end{center}
 \end{figure}
+The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. And note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square at the crossing point of the first two lines indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
+\\
 
+The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior mean (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). Although the fist interval does not include the observed sample mean, it can happen by chance considering these are 95\% intervals. Overall, this plot shows that as the sample size increases (size of dots) and as the posterior mean gets close to 0, the length of interval gets shorter.
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
 \begin{figure}[h]
 \begin{center}
