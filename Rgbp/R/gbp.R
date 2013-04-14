@@ -72,7 +72,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
     temp[, 2] <- round(temp[, 2])
   }
 
-  cat("Summary for whole observations: \n")
+  cat("Summary for whole units: \n")
   cat("\n")
   print(temp)
 }

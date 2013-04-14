@@ -67,7 +67,7 @@ Loading required package: mnormt
 >     g
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
@@ -80,7 +80,7 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 3           -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
@@ -93,13 +93,13 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     summary(g)
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage intv.low post.mean
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0      8.168     0.408  -13.297     2.737
 Unit w/ median(se)1     1.00 11.0      8.168     0.507  -13.027     4.633
 Unit w/ median(se)2     7.00 11.0      8.168     0.507   -8.780     7.592
 Unit w/ max(se)        12.00 18.0      8.168     0.734  -10.208     9.189
 Overall Mean            8.75 12.5      8.168     0.552   -9.163     8.168
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       16.692   7.634
 Unit w/ median(se)1   20.131   8.441
 Unit w/ median(se)2   23.602   8.257
@@ -141,7 +141,7 @@ beta0    8.168 5.73 1.425 0.154
 >     g
 Summary for whole observations: 
 
-         obs.mean   se   X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 5           -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018   17.670
 2            8.00 10.0  0.0      8.198     0.381   -8.151     8.076   24.255
 7           18.00 10.0  1.0      8.324     0.381   -1.593    14.314   32.320
@@ -164,7 +164,7 @@ colMeans  10.015
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se   X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           28.00 15.0 -1.0      8.073     0.581   -5.142    16.429   43.404
 2            8.00 10.0  0.0      8.198     0.381   -8.151     8.076   24.255
 3           -3.00 16.0  1.0      8.324     0.612  -20.053     3.927   23.930
@@ -187,13 +187,13 @@ colMeans  10.015
 >     summary(g)
 Main summary:
 
-                    obs.mean   se   X1 prior.mean shrinkage intv.low post.mean
+                    obs.mean   se   X1 prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018
 Unit w/ median(se)1     1.00 11.0  0.0      8.198     0.427  -14.510     4.073
 Unit w/ median(se)2     7.00 11.0  2.0      8.450     0.427  -11.295     7.619
 Unit w/ max(se)        12.00 18.0  2.0      8.450     0.666  -14.829     9.636
 Overall Mean            8.75 12.5  0.5      8.261     0.476  -11.339     8.261
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       17.670   8.353
 Unit w/ median(se)1   20.755   8.978
 Unit w/ median(se)2   26.198   9.562
@@ -236,7 +236,7 @@ beta1    0.126 5.698 0.022 0.982
 >     g
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0          8     0.478  -11.516     3.303   15.419   6.866
 2            8.00 10.0          8     0.531   -5.426     8.000   21.426   6.850
 7           18.00 10.0          8     0.531    0.123    12.693   28.613   7.275
@@ -249,7 +249,7 @@ colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0          8     0.718    0.595    13.642   34.604   8.948
 2            8.00 10.0          8     0.531   -5.426     8.000   21.426   6.850
 3           -3.00 16.0          8     0.743  -13.448     5.176   19.275   8.380
@@ -262,13 +262,13 @@ colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     summary(g)
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage intv.low post.mean
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0          8     0.478  -11.516     3.303
 Unit w/ median(se)1     1.00 11.0          8     0.578  -10.701     5.045
 Unit w/ median(se)2     7.00 11.0          8     0.578   -6.642     7.578
 Unit w/ max(se)        12.00 18.0          8     0.786   -6.767     8.858
 Overall Mean            8.75 12.5          8     0.618   -6.723     8.037
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       15.419   6.866
 Unit w/ median(se)1   18.120   7.343
 Unit w/ median(se)2   21.407   7.151
@@ -350,7 +350,7 @@ $raw.resultU
 >     b
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
 2           0.378 45      0.267     0.622    0.218     0.309    0.408   0.049
 3           0.356 45      0.267     0.622    0.213     0.300    0.396   0.047
@@ -373,7 +373,7 @@ colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
 2           0.378 45      0.267     0.622    0.218     0.309    0.408   0.049
 3           0.356 45      0.267     0.622    0.213     0.300    0.396   0.047
@@ -396,13 +396,13 @@ colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     summary(b)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.267     0.622    0.144     0.225
 Unit w/ median(obs.mean)1    0.244 45      0.267     0.622    0.180     0.258
 Unit w/ median(obs.mean)2    0.244 45      0.267     0.622    0.180     0.258
 Unit w/ max(obs.mean)        0.400 45      0.267     0.622    0.222     0.317
 Overall Mean                 0.265 45      0.267     0.622    0.185     0.266
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.318   0.044
 Unit w/ median(obs.mean)1    0.345   0.042
 Unit w/ median(obs.mean)2    0.345   0.042
@@ -444,7 +444,7 @@ beta0   -1.012 0.1 -10.153     0
 >     b
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.269     0.594    0.218     0.322    0.436
 2           0.378 45 0.000      0.267     0.594    0.217     0.312    0.415
 3           0.356 45 0.000      0.267     0.594    0.212     0.303    0.403
@@ -487,7 +487,7 @@ colMeans   0.047
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.269     0.594    0.218     0.322    0.436
 2           0.378 45 0.000      0.267     0.594    0.217     0.312    0.415
 3           0.356 45 0.000      0.267     0.594    0.212     0.303    0.403
@@ -530,13 +530,13 @@ colMeans   0.047
 >     summary(b)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 1.000      0.269     0.594    0.133
 Unit w/ median(obs.mean)1    0.244 45 1.000      0.269     0.594    0.171
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.269     0.594    0.171
 Unit w/ max(obs.mean)        0.400 45 1.000      0.269     0.594    0.218
 Overall Mean                 0.265 45 0.278      0.268     0.594    0.180
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.223    0.328   0.050
 Unit w/ median(obs.mean)1     0.259    0.358   0.048
 Unit w/ median(obs.mean)2     0.259    0.358   0.048
@@ -579,7 +579,7 @@ beta1    0.003 0.228  0.012  0.99
 >     b
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
 2           0.378 45      0.265      0.65    0.224     0.304    0.391   0.043
 3           0.356 45      0.265      0.65    0.218     0.297    0.382   0.042
@@ -602,7 +602,7 @@ colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
 2           0.378 45      0.265      0.65    0.224     0.304    0.391   0.043
 3           0.356 45      0.265      0.65    0.218     0.297    0.382   0.042
@@ -625,13 +625,13 @@ colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     summary(b)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.265      0.65    0.156     0.227
 Unit w/ median(obs.mean)1    0.244 45      0.265      0.65    0.186     0.258
 Unit w/ median(obs.mean)2    0.244 45      0.265      0.65    0.186     0.258
 Unit w/ max(obs.mean)        0.400 45      0.265      0.65    0.230     0.312
 Overall Mean                 0.265 45      0.265      0.65    0.191     0.265
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.306   0.038
 Unit w/ median(obs.mean)1    0.337   0.039
 Unit w/ median(obs.mean)2    0.337   0.039
@@ -670,7 +670,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     p
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
 2           0.378 45      0.268     0.717    0.208     0.299    0.407   0.051
 3           0.356 45      0.268     0.717    0.205     0.293    0.396   0.049
@@ -693,7 +693,7 @@ colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
 2           0.378 45      0.268     0.717    0.208     0.299    0.407   0.051
 3           0.356 45      0.268     0.717    0.205     0.293    0.396   0.049
@@ -716,13 +716,13 @@ colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     summary(p)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.268     0.717    0.156     0.236
 Unit w/ median(obs.mean)1    0.244 45      0.268     0.717    0.183     0.262
 Unit w/ median(obs.mean)2    0.244 45      0.268     0.717    0.183     0.262
 Unit w/ max(obs.mean)        0.400 45      0.268     0.717    0.211     0.305
 Overall Mean                 0.265 45      0.268     0.717    0.186     0.267
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.333   0.045
 Unit w/ median(obs.mean)1    0.353   0.044
 Unit w/ median(obs.mean)2    0.353   0.044
@@ -770,7 +770,7 @@ beta0   -1.319 0.08 -16.522     0
 >     p
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.271     0.692    0.204     0.311    0.440
 2           0.378 45 0.000      0.269     0.692    0.206     0.302    0.416
 3           0.356 45 0.000      0.269     0.692    0.203     0.296    0.405
@@ -813,7 +813,7 @@ colMeans   0.050
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.271     0.692    0.204     0.311    0.440
 2           0.378 45 0.000      0.269     0.692    0.206     0.302    0.416
 3           0.356 45 0.000      0.269     0.692    0.203     0.296    0.405
@@ -856,13 +856,13 @@ colMeans   0.050
 >     summary(p)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 1.000      0.271     0.692    0.143
 Unit w/ median(obs.mean)1    0.244 45 1.000      0.271     0.692    0.171
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.271     0.692    0.171
 Unit w/ max(obs.mean)        0.400 45 1.000      0.271     0.692    0.204
 Overall Mean                 0.265 45 0.278      0.269     0.692    0.180
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.236    0.352   0.054
 Unit w/ median(obs.mean)1     0.263    0.374   0.052
 Unit w/ median(obs.mean)2     0.263    0.374   0.052
@@ -905,7 +905,7 @@ beta1    0.001 0.181   0.007 0.995
 >     p
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
 2           0.378 45      0.265     0.741    0.211     0.294    0.391   0.046
 3           0.356 45      0.265     0.741    0.208     0.288    0.381   0.044
@@ -928,7 +928,7 @@ colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
 2           0.378 45      0.265     0.741    0.211     0.294    0.391   0.046
 3           0.356 45      0.265     0.741    0.208     0.288    0.381   0.044
@@ -951,13 +951,13 @@ colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     summary(p)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.265     0.741    0.164     0.237
 Unit w/ median(obs.mean)1    0.244 45      0.265     0.741    0.190     0.260
 Unit w/ median(obs.mean)2    0.244 45      0.265     0.741    0.190     0.260
 Unit w/ max(obs.mean)        0.400 45      0.265     0.741    0.213     0.300
 Overall Mean                 0.265 45      0.265     0.741    0.192     0.265
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.322   0.040
 Unit w/ median(obs.mean)1    0.341   0.039
 Unit w/ median(obs.mean)2    0.341   0.039
@@ -1019,7 +1019,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >   b
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.310     0.715    0.248     0.335    0.429
 2           0.378 45 1.000      0.310     0.715    0.244     0.329    0.420
 3           0.356 45 1.000      0.310     0.715    0.240     0.323    0.411
@@ -1062,7 +1062,7 @@ colMeans   0.041
 >   print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.310     0.715    0.248     0.335    0.429
 2           0.378 45 1.000      0.310     0.715    0.244     0.329    0.420
 3           0.356 45 1.000      0.310     0.715    0.240     0.323    0.411
@@ -1105,13 +1105,13 @@ colMeans   0.041
 >   summary(b)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 0.000      0.233     0.715    0.140
 Unit w/ median(obs.mean)1    0.244 45 0.000      0.233     0.715    0.166
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.310     0.715    0.210
 Unit w/ max(obs.mean)        0.400 45 1.000      0.310     0.715    0.248
 Overall Mean                 0.265 45 0.444      0.267     0.715    0.191
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.211    0.292   0.039
 Unit w/ median(obs.mean)1     0.237    0.315   0.038
 Unit w/ median(obs.mean)2     0.291    0.379   0.043
@@ -1142,7 +1142,7 @@ beta1    0.389 0.187  2.074 0.038
 >   p
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.312     0.776    0.239     0.331    0.439
 2           0.378 45 1.000      0.312     0.776    0.236     0.327    0.431
 3           0.356 45 1.000      0.312     0.776    0.233     0.322    0.424
@@ -1185,7 +1185,7 @@ colMeans   0.044
 >   print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.312     0.776    0.239     0.331    0.439
 2           0.378 45 1.000      0.312     0.776    0.236     0.327    0.431
 3           0.356 45 1.000      0.312     0.776    0.233     0.322    0.424
@@ -1228,13 +1228,13 @@ colMeans   0.044
 >   summary(p)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 0.000      0.235     0.776    0.145
 Unit w/ median(obs.mean)1    0.244 45 0.000      0.235     0.776    0.165
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.312     0.776    0.211
 Unit w/ max(obs.mean)        0.400 45 1.000      0.312     0.776    0.239
 Overall Mean                 0.265 45 0.444      0.269     0.776    0.189
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.217    0.303   0.040
 Unit w/ median(obs.mean)1     0.237    0.322   0.040
 Unit w/ median(obs.mean)2     0.297    0.397   0.048
@@ -1553,7 +1553,7 @@ $raw.resultU
 >     g
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
@@ -1566,7 +1566,7 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 3           -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
@@ -1579,13 +1579,13 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     summary(g)
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage intv.low post.mean
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0      8.168     0.408  -13.297     2.737
 Unit w/ median(se)1     1.00 11.0      8.168     0.507  -13.027     4.633
 Unit w/ median(se)2     7.00 11.0      8.168     0.507   -8.780     7.592
 Unit w/ max(se)        12.00 18.0      8.168     0.734  -10.208     9.189
 Overall Mean            8.75 12.5      8.168     0.552   -9.163     8.168
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       16.692   7.634
 Unit w/ median(se)1   20.131   8.441
 Unit w/ median(se)2   23.602   8.257
@@ -1627,7 +1627,7 @@ beta0    8.168 5.73 1.425 0.154
 >     g
 Summary for whole observations: 
 
-         obs.mean   se   X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 5           -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018   17.670
 2            8.00 10.0  0.0      8.198     0.381   -8.151     8.076   24.255
 7           18.00 10.0  1.0      8.324     0.381   -1.593    14.314   32.320
@@ -1650,7 +1650,7 @@ colMeans  10.015
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se   X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           28.00 15.0 -1.0      8.073     0.581   -5.142    16.429   43.404
 2            8.00 10.0  0.0      8.198     0.381   -8.151     8.076   24.255
 3           -3.00 16.0  1.0      8.324     0.612  -20.053     3.927   23.930
@@ -1673,13 +1673,13 @@ colMeans  10.015
 >     summary(g)
 Main summary:
 
-                    obs.mean   se   X1 prior.mean shrinkage intv.low post.mean
+                    obs.mean   se   X1 prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018
 Unit w/ median(se)1     1.00 11.0  0.0      8.198     0.427  -14.510     4.073
 Unit w/ median(se)2     7.00 11.0  2.0      8.450     0.427  -11.295     7.619
 Unit w/ max(se)        12.00 18.0  2.0      8.450     0.666  -14.829     9.636
 Overall Mean            8.75 12.5  0.5      8.261     0.476  -11.339     8.261
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       17.670   8.353
 Unit w/ median(se)1   20.755   8.978
 Unit w/ median(se)2   26.198   9.562
@@ -1722,7 +1722,7 @@ beta1    0.126 5.698 0.022 0.982
 >     g
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0          8     0.478  -11.516     3.303   15.419   6.866
 2            8.00 10.0          8     0.531   -5.426     8.000   21.426   6.850
 7           18.00 10.0          8     0.531    0.123    12.693   28.613   7.275
@@ -1735,7 +1735,7 @@ colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0          8     0.718    0.595    13.642   34.604   8.948
 2            8.00 10.0          8     0.531   -5.426     8.000   21.426   6.850
 3           -3.00 16.0          8     0.743  -13.448     5.176   19.275   8.380
@@ -1748,13 +1748,13 @@ colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     summary(g)
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage intv.low post.mean
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0          8     0.478  -11.516     3.303
 Unit w/ median(se)1     1.00 11.0          8     0.578  -10.701     5.045
 Unit w/ median(se)2     7.00 11.0          8     0.578   -6.642     7.578
 Unit w/ max(se)        12.00 18.0          8     0.786   -6.767     8.858
 Overall Mean            8.75 12.5          8     0.618   -6.723     8.037
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       15.419   6.866
 Unit w/ median(se)1   18.120   7.343
 Unit w/ median(se)2   21.407   7.151
@@ -1836,7 +1836,7 @@ $raw.resultU
 >     b
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
 2           0.378 45      0.267     0.622    0.218     0.309    0.408   0.049
 3           0.356 45      0.267     0.622    0.213     0.300    0.396   0.047
@@ -1859,7 +1859,7 @@ colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
 2           0.378 45      0.267     0.622    0.218     0.309    0.408   0.049
 3           0.356 45      0.267     0.622    0.213     0.300    0.396   0.047
@@ -1882,13 +1882,13 @@ colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     summary(b)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.267     0.622    0.144     0.225
 Unit w/ median(obs.mean)1    0.244 45      0.267     0.622    0.180     0.258
 Unit w/ median(obs.mean)2    0.244 45      0.267     0.622    0.180     0.258
 Unit w/ max(obs.mean)        0.400 45      0.267     0.622    0.222     0.317
 Overall Mean                 0.265 45      0.267     0.622    0.185     0.266
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.318   0.044
 Unit w/ median(obs.mean)1    0.345   0.042
 Unit w/ median(obs.mean)2    0.345   0.042
@@ -1930,7 +1930,7 @@ beta0   -1.012 0.1 -10.153     0
 >     b
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.269     0.594    0.218     0.322    0.436
 2           0.378 45 0.000      0.267     0.594    0.217     0.312    0.415
 3           0.356 45 0.000      0.267     0.594    0.212     0.303    0.403
@@ -1973,7 +1973,7 @@ colMeans   0.047
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.269     0.594    0.218     0.322    0.436
 2           0.378 45 0.000      0.267     0.594    0.217     0.312    0.415
 3           0.356 45 0.000      0.267     0.594    0.212     0.303    0.403
@@ -2016,13 +2016,13 @@ colMeans   0.047
 >     summary(b)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 1.000      0.269     0.594    0.133
 Unit w/ median(obs.mean)1    0.244 45 1.000      0.269     0.594    0.171
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.269     0.594    0.171
 Unit w/ max(obs.mean)        0.400 45 1.000      0.269     0.594    0.218
 Overall Mean                 0.265 45 0.278      0.268     0.594    0.180
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.223    0.328   0.050
 Unit w/ median(obs.mean)1     0.259    0.358   0.048
 Unit w/ median(obs.mean)2     0.259    0.358   0.048
@@ -2065,7 +2065,7 @@ beta1    0.003 0.228  0.012  0.99
 >     b
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
 2           0.378 45      0.265      0.65    0.224     0.304    0.391   0.043
 3           0.356 45      0.265      0.65    0.218     0.297    0.382   0.042
@@ -2088,7 +2088,7 @@ colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
 2           0.378 45      0.265      0.65    0.224     0.304    0.391   0.043
 3           0.356 45      0.265      0.65    0.218     0.297    0.382   0.042
@@ -2111,13 +2111,13 @@ colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     summary(b)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.265      0.65    0.156     0.227
 Unit w/ median(obs.mean)1    0.244 45      0.265      0.65    0.186     0.258
 Unit w/ median(obs.mean)2    0.244 45      0.265      0.65    0.186     0.258
 Unit w/ max(obs.mean)        0.400 45      0.265      0.65    0.230     0.312
 Overall Mean                 0.265 45      0.265      0.65    0.191     0.265
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.306   0.038
 Unit w/ median(obs.mean)1    0.337   0.039
 Unit w/ median(obs.mean)2    0.337   0.039
@@ -2156,7 +2156,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     p
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
 2           0.378 45      0.268     0.717    0.208     0.299    0.407   0.051
 3           0.356 45      0.268     0.717    0.205     0.293    0.396   0.049
@@ -2179,7 +2179,7 @@ colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
 2           0.378 45      0.268     0.717    0.208     0.299    0.407   0.051
 3           0.356 45      0.268     0.717    0.205     0.293    0.396   0.049
@@ -2202,13 +2202,13 @@ colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     summary(p)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.268     0.717    0.156     0.236
 Unit w/ median(obs.mean)1    0.244 45      0.268     0.717    0.183     0.262
 Unit w/ median(obs.mean)2    0.244 45      0.268     0.717    0.183     0.262
 Unit w/ max(obs.mean)        0.400 45      0.268     0.717    0.211     0.305
 Overall Mean                 0.265 45      0.268     0.717    0.186     0.267
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.333   0.045
 Unit w/ median(obs.mean)1    0.353   0.044
 Unit w/ median(obs.mean)2    0.353   0.044
@@ -2256,7 +2256,7 @@ beta0   -1.319 0.08 -16.522     0
 >     p
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.271     0.692    0.204     0.311    0.440
 2           0.378 45 0.000      0.269     0.692    0.206     0.302    0.416
 3           0.356 45 0.000      0.269     0.692    0.203     0.296    0.405
@@ -2299,7 +2299,7 @@ colMeans   0.050
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n    X1 prior.mean shrinkage intv.low post.mean intv.upp
+         obs.mean  n    X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.000      0.271     0.692    0.204     0.311    0.440
 2           0.378 45 0.000      0.269     0.692    0.206     0.302    0.416
 3           0.356 45 0.000      0.269     0.692    0.203     0.296    0.405
@@ -2342,13 +2342,13 @@ colMeans   0.050
 >     summary(p)
 Main summary:
 
-                          obs.mean  n    X1 prior.mean shrinkage intv.low
+                          obs.mean  n    X1 prior.mean shrinkage low.intv
 Unit w/ min(obs.mean)        0.156 45 1.000      0.271     0.692    0.143
 Unit w/ median(obs.mean)1    0.244 45 1.000      0.271     0.692    0.171
 Unit w/ median(obs.mean)2    0.244 45 1.000      0.271     0.692    0.171
 Unit w/ max(obs.mean)        0.400 45 1.000      0.271     0.692    0.204
 Overall Mean                 0.265 45 0.278      0.269     0.692    0.180
-                          post.mean intv.upp post.sd
+                          post.mean upp.intv post.sd
 Unit w/ min(obs.mean)         0.236    0.352   0.054
 Unit w/ median(obs.mean)1     0.263    0.374   0.052
 Unit w/ median(obs.mean)2     0.263    0.374   0.052
@@ -2391,7 +2391,7 @@ beta1    0.001 0.181   0.007 0.995
 >     p
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
 2           0.378 45      0.265     0.741    0.211     0.294    0.391   0.046
 3           0.356 45      0.265     0.741    0.208     0.288    0.381   0.044
@@ -2414,7 +2414,7 @@ colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
 2           0.378 45      0.265     0.741    0.211     0.294    0.391   0.046
 3           0.356 45      0.265     0.741    0.208     0.288    0.381   0.044
@@ -2437,13 +2437,13 @@ colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     summary(p)
 Main summary:
 
-                          obs.mean  n prior.mean shrinkage intv.low post.mean
+                          obs.mean  n prior.mean shrinkage low.intv post.mean
 Unit w/ min(obs.mean)        0.156 45      0.265     0.741    0.164     0.237
 Unit w/ median(obs.mean)1    0.244 45      0.265     0.741    0.190     0.260
 Unit w/ median(obs.mean)2    0.244 45      0.265     0.741    0.190     0.260
 Unit w/ max(obs.mean)        0.400 45      0.265     0.741    0.213     0.300
 Overall Mean                 0.265 45      0.265     0.741    0.192     0.265
-                          intv.upp post.sd
+                          upp.intv post.sd
 Unit w/ min(obs.mean)        0.322   0.040
 Unit w/ median(obs.mean)1    0.341   0.039
 Unit w/ median(obs.mean)2    0.341   0.039
@@ -2506,7 +2506,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     g
 Summary for whole observations: 
 
-         obs.mean  se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 31           1.14 0.6      0.018     0.352   -0.254     0.746    1.823   0.529
 30          -0.21 0.7      0.018     0.381   -1.169    -0.123    0.903   0.529
 29           0.96 0.7      0.018     0.436   -0.548     0.550    1.739   0.582
@@ -2542,7 +2542,7 @@ colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
 2           -0.22 2.8      0.018     0.915   -1.648    -0.002    1.628   0.836
 3            0.58 1.6      0.018     0.777   -1.326     0.144    1.687   0.768
@@ -2578,12 +2578,12 @@ colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     summary(g)
 Main summary:
 
-                   obs.mean  se prior.mean shrinkage intv.low post.mean
+                   obs.mean  se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        1.14 0.6      0.018     0.352   -0.254     0.746
 Unit w/ median(se)    -2.15 1.0      0.018     0.599   -2.426    -0.850
 Unit w/ max(se)       -2.07 2.8      0.018     0.916   -1.883    -0.157
 Overall Mean          -0.12 1.2      0.018     0.614   -1.346     0.018
-                   intv.upp post.sd
+                   upp.intv post.sd
 Unit w/ min(se)       1.823   0.529
 Unit w/ median(se)    0.463   0.736
 Unit w/ max(se)       1.423   0.842
@@ -2612,7 +2612,7 @@ beta0    0.018 0.243 0.076  0.94
 >     b
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.913    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.772    0.018     0.027    0.039   0.006
@@ -2648,7 +2648,7 @@ colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.913    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.772    0.018     0.027    0.039   0.006
@@ -2684,12 +2684,12 @@ colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     summary(b)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.914    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.595    0.025     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.347    0.017     0.023
 Overall Mean         0.029  517      0.029     0.609    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.030   0.004
@@ -2718,7 +2718,7 @@ beta0    -3.53 0.064 -55.225     0
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.917    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.781    0.018     0.027    0.039   0.006
@@ -2754,7 +2754,7 @@ colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     p
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.917    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.781    0.018     0.027    0.039   0.006
@@ -2790,12 +2790,12 @@ colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     summary(p)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.918    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.608    0.024     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.359    0.017     0.023
 Overall Mean         0.029  517      0.029     0.620    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.031   0.004
@@ -2905,7 +2905,7 @@ beta0   -3.559 0.062 -57.091     0
 >     g
 Summary for whole observations: 
 
-         obs.mean  se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 31           1.14 0.6      0.018     0.352   -0.254     0.746    1.823   0.529
 30          -0.21 0.7      0.018     0.381   -1.169    -0.123    0.903   0.529
 29           0.96 0.7      0.018     0.436   -0.548     0.550    1.739   0.582
@@ -2941,7 +2941,7 @@ colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     print(g, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean  se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
 2           -0.22 2.8      0.018     0.915   -1.648    -0.002    1.628   0.836
 3            0.58 1.6      0.018     0.777   -1.326     0.144    1.687   0.768
@@ -2983,7 +2983,7 @@ colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     b
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.913    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.772    0.018     0.027    0.039   0.006
@@ -3019,7 +3019,7 @@ colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     print(b, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.913    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.772    0.018     0.027    0.039   0.006
@@ -3061,7 +3061,7 @@ colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     p
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.917    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.781    0.018     0.027    0.039   0.006
@@ -3097,7 +3097,7 @@ colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     print(p, sort = FALSE)
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
 2           0.029   68      0.029     0.917    0.018     0.029    0.042   0.006
 3           0.024  210      0.029     0.781    0.018     0.027    0.039   0.006
@@ -3167,12 +3167,12 @@ colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     summary(g)
 Main summary:
 
-                   obs.mean  se prior.mean shrinkage intv.low post.mean
+                   obs.mean  se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        1.14 0.6      0.018     0.352   -0.254     0.746
 Unit w/ median(se)    -2.15 1.0      0.018     0.599   -2.426    -0.850
 Unit w/ max(se)       -2.07 2.8      0.018     0.916   -1.883    -0.157
 Overall Mean          -0.12 1.2      0.018     0.614   -1.346     0.018
-                   intv.upp post.sd
+                   upp.intv post.sd
 Unit w/ min(se)       1.823   0.529
 Unit w/ median(se)    0.463   0.736
 Unit w/ max(se)       1.423   0.842
@@ -3199,12 +3199,12 @@ beta0    0.018 0.243 0.076  0.94
 >     summary(b)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.914    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.595    0.025     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.347    0.017     0.023
 Overall Mean         0.029  517      0.029     0.609    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.030   0.004
@@ -3231,12 +3231,12 @@ beta0    -3.53 0.064 -55.225     0
 >     summary(p)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.918    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.608    0.024     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.359    0.017     0.023
 Overall Mean         0.029  517      0.029     0.620    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.031   0.004
@@ -3287,7 +3287,7 @@ beta0   -3.559 0.062 -57.091     0
 >   g
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
@@ -3300,7 +3300,7 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >   print(g, sort = TRUE)
 Summary for whole observations: 
 
-         obs.mean   se prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
 2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
 7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
@@ -3313,13 +3313,13 @@ colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >   summary(g)
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage intv.low post.mean
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        -1.00  9.0      8.168     0.408  -13.297     2.737
 Unit w/ median(se)1     1.00 11.0      8.168     0.507  -13.027     4.633
 Unit w/ median(se)2     7.00 11.0      8.168     0.507   -8.780     7.592
 Unit w/ max(se)        12.00 18.0      8.168     0.734  -10.208     9.189
 Overall Mean            8.75 12.5      8.168     0.552   -9.163     8.168
-                    intv.upp post.sd
+                    upp.intv post.sd
 Unit w/ min(se)       16.692   7.634
 Unit w/ median(se)1   20.131   8.441
 Unit w/ median(se)2   23.602   8.257
@@ -3376,12 +3376,12 @@ beta0    8.168 5.73 1.425 0.154
 >     summary(g)
 Main summary:
 
-                   obs.mean  se prior.mean shrinkage intv.low post.mean
+                   obs.mean  se prior.mean shrinkage low.intv post.mean
 Unit w/ min(se)        1.14 0.6      0.018     0.352   -0.254     0.746
 Unit w/ median(se)    -2.15 1.0      0.018     0.599   -2.426    -0.850
 Unit w/ max(se)       -2.07 2.8      0.018     0.916   -1.883    -0.157
 Overall Mean          -0.12 1.2      0.018     0.614   -1.346     0.018
-                   intv.upp post.sd
+                   upp.intv post.sd
 Unit w/ min(se)       1.823   0.529
 Unit w/ median(se)    0.463   0.736
 Unit w/ max(se)       1.423   0.842
@@ -3408,12 +3408,12 @@ beta0    0.018 0.243 0.076  0.94
 >     summary(b)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.914    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.595    0.025     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.347    0.017     0.023
 Overall Mean         0.029  517      0.029     0.609    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.030   0.004
@@ -3440,12 +3440,12 @@ beta0    -3.53 0.064 -55.225     0
 >     summary(p)
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
 Unit w/ min(n)       0.045   67      0.029     0.918    0.019     0.030
 Unit w/ median(n)    0.045  484      0.029     0.608    0.024     0.035
 Unit w/ max(n)       0.020 1340      0.029     0.359    0.017     0.023
 Overall Mean         0.029  517      0.029     0.620    0.019     0.028
-                  intv.upp post.sd
+                  upp.intv post.sd
 Unit w/ min(n)       0.044   0.006
 Unit w/ median(n)    0.048   0.006
 Unit w/ max(n)       0.031   0.004
@@ -3470,7 +3470,7 @@ beta0   -3.559 0.062 -57.091     0
 > ### * <FOOTER>
 > ###
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.778 0.183 11.985 0 0 
+Time elapsed:  11.713 0.182 11.927 0 0 
 > grDevices::dev.off()
 null device 
           1 

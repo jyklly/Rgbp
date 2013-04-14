@@ -199,7 +199,7 @@ Like the two sides of the same coin, checking a statistical model always comes w
 There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a multi-level modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $z_{j}\vert \beta, r\sim\textrm{Negative-Binomial}$, on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 \\
 
-Once we are sure that the hierarchical modeling can be appropriate for our data, the following quetsion will be about the validity of interval estimates, the final product of this multi-level modeling. ``Does the confidence interval obtained via this Bayesian model-fitting process achieve pre-specified 100($1-\alpha$)\% confidence level for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
+Once we are sure that the hierarchical modeling can be appropriate for our data, the following quetsion will be about the validity of interval estimates, the final product of this multi-level modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
 
 \subsection{Pseudo-data Generation Process}
 Figure 1 will be helpful to understand this process. As we can see in (8), the distribution of each true batting average ($p_{j},~j=1,\ldots, 18$) depends on two hyper-parameters, $r$ and $\beta_{(m\times1)}$, where $m$ is the number of regression coefficients. So, once we fix these hyper-parameters at specific values, we can generate true batting averages. Suppose we sampled 500 $\mathbf{p}_{(18\times1)}$'s, \emph{i.e.}, $\{\mathbf{p}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (8), where $r$ and $\beta$ are given. Then, we can also generate $\{\mathbf{z}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ given each $p_{ij},$ where $i$ indicates $i$-th pseudo-dataset and $j$ does $j$-th player. Next, \code{coverage} fits the Binomial hierarchical model 500 times on $\{(\mathbf{z}^{(i)}_{(18\times1)}, \mathbf{n}_{(18 \times 1)}),~i=1, \ldots, 500\}$ to obtain 500$\times$18 interval estimates.  After this generating process, as for the first player, we will have 500 pairs of ($z_{i1}$, $p_{i1}$) and 500 interval estimates, ($\hat{p}_{i1, low}, \hat{p}_{i1, upp}$), $i=1, \ldots, 500$.
@@ -235,7 +235,7 @@ R> p
 \begin{CodeOutput}
 Summary for whole observations: 
 
-         obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67       0.02     0.834    0.011     0.024    0.042   0.008
 2           0.029   68       0.02     0.832    0.010     0.022    0.038   0.007
 3           0.024  210       0.02     0.616    0.011     0.021    0.035   0.006
@@ -270,16 +270,16 @@ Summary for whole observations:
 colMeans    0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
 \end{CodeOutput}
 \end{CodeChunk}
-For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' to list the above output by the order of data input. `\code{R> p}' will automatically sort the output by the increasing order of $n_{j}$. 
+For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of $n_{j}$. 
 \\
 
-The output contains information about sample mean (\code{obs.mean}), total number of trials (\code{n}), prior mean ($\lambda_{0}$), shrinkage, lower interval, posterior mean ($E(\lambda_{j}\vert \textbf{z})$), upper interval, and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{z})$).
+The output contains information about sample mean (\code{obs.mean}), caseload (\code{n}), known prior mean ($\lambda_{0}$), shrinkage ($B_{j}$), lower interval, posterior mean ($E(\lambda_{j}\vert \textbf{z})$), upper interval, and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{z})$).
 \\
 
-As we can see in (6), the posterior mean ($(1-B_{j})y_{j} + B_{j}\lambda_{0}$) is a linear function of shrinkage ($\equiv r / (r + n_{j})$), locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information; if the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. 
+As we can see in (6), the posterior mean ($(1-B_{j})y_{j} + B_{j}\lambda_{0}$) is a linear function of shrinkage ($\equiv r / (r + n_{j})$), locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output; as caseload increases, shrinkage decreases, depending less on the prior information.
 \\
 
-A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it selectively displays estimation result of hospitals with minimum, median, and maximum values of $n_{j}$. Also, more specific estimation results, such as estimation result of $\alpha=\log(1/r)$, will follow. Note that if we fit a regression when we do not know the second-level mean unlike this example, the regression summary will appear.
+A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a regression model and the summary of regression fit will appear.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
@@ -304,7 +304,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 Since estimated $\alpha$ is -5.818, we can easily calculate $r=\textrm{exp}(5.818)=336$, which will be helpful for understanding how each shrinkage of hospital was determined by comparing this value to the amount of observed information ($n_{j}$).
 \\
 
-But bunch of numbers can sometimes distract us from the important point. In this sense, we also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.
+We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(p)
@@ -315,21 +315,36 @@ R> plot(p)
 \includegraphics[scale=0.3]{hospital1.png}
 \end{center}
 \end{figure}
-The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. And note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square at the crossing point of the first two lines indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
+The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
 \\
 
-The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior mean (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). But the most important information from this plot would be the range of each hospital's true death rate. Overall, as the sample size increases (size of dots) and as the posterior mean gets close to 0, the length of interval gets shorter, which the formula of posterior variance (6) implies. Although the fist interval does not include the observed sample mean, it can happen by chance considering these are 95\% intervals. Then, how reliable are these intervals? The method check will answer it.
+Intuitively, the result of multi-level modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose sample means ($z_{j} / n_{j}$) are 0 and 0.01 and caseloads ($n_{j}$) are 1 and 100 each. Do you believe that the former hospital is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge their true death rate per exposure with just one caseload. Though somewhat extreme, this is what happens for the two left-most hostpitals on the first plot and this is why hierarchical modeling is a reasonable choice for this dataset.
+\\
+
+The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). Overall, as the caseload (size of dots) increases towards the right and as the posterior mean gets closer to 0, the length of interval gets shorter, which the formula of posterior variance in (6) implies. But the most important information from this plot would be the visualized range of each hospital's true death rate per exposure. 
+\\
+
+This plot can add one more valuable point, which we could not have noticed, to the previous plot based mostly on point estimates. Let's look at the 8th and the 31st hospitals on the graph. The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates. (Could you regard this 31st hospital as a possible candidate before you observe this plot?)
+\\
+
+Also it reveals that the 23rd hospital whose estimated true rate was the smallest has also the smallest upper bound. If you are a risk-avoider, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
+\\
+
+Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The method check below will answer this question.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> coverage(p, nsim = 10000)
+R> pcv <- coverage(p, nsim = 10000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 6cm]{hospital3.png}
+\includegraphics[width = 5.5cm]{hospital3.png}
 \end{center}
 \end{figure}
-We generated 10,000 pseudo-datasets and estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the overall average coverage rate is 0.951 based on both estimation methods. Finally, this method check showed that the interval estimates from our hierarchical modeling (with Bayesian framework) on this dataset had a very good repeated sampling property.
+This \code{coverage} function generated 10,000 pseudo-datasets assuming the estimated $r~(=336.37)$ as a given value. For reference, we can try any other value of $r$, for example $r=200$, by replacing above code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+\\
+
+It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 based on both estimation methods. Finally, this method check showed that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property, achieving pre-specified 95\% confidence level.
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
 \begin{figure}[h]
