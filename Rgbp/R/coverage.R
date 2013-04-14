@@ -333,7 +333,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
        xlab = paste("Unit_j", ", ", "j = 1, ...,", n.units), 
        main = "Estimated Coverage Probability for Each Unit",
        lwd = 3, lty = 1)
-  abline(h = 0.95)
+  abline(h = gbp.object$Alpha)
   points(1 : length(gbp.object$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
   if (is.na(gbp.object$prior.mean)){
     if (gbp.object$model == "gr") {
