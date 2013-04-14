@@ -328,7 +328,7 @@ Intuitively, the result of multi-level modeling makes more sense than that of na
 The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). Overall, as the caseload (size of dots) increases towards the right and as the posterior mean gets closer to 0, the length of interval gets shorter, which the formula of posterior variance in (6) implies. But the most important information from this plot would be the visualized range of each hospital's true death rate per exposure. 
 \\
 
-This plot can add one more valuable point, which we could not have noticed, to the previous plot based mostly on point estimates. Let's look at the 8th and the 31st hospitals on the graph. The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates. (Could you regard this 31st hospital as a possible candidate before you observe this plot?)
+This plot can add one more valuable point, which we could not have noticed, to the previous plot based mostly on point estimates. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates. (Could you regard this 31st hospital as a possible candidate before you observe this plot?)
 \\
 
 Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-avoider, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
@@ -350,7 +350,7 @@ R> pcv <- coverage(p, nsim = 10000)
 It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 from the Rao-Blackwellized estimate and 0.95 from the unbiased estimate. Finally, this method check proved that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property, achieving pre-specified 95\% confidence level.
 \\
 
-For reference, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> gbp(z, n, Alpha = 0.9, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
+For reference, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
 \\
 
 Morris and Christiansen (1995) also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
@@ -413,25 +413,38 @@ beta0    8.168 5.73 1.425 0.154
 \end{CodeOutput}
 \end{CodeChunk}
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=0.3]{school1.png}
-\caption{Shrinkage and interval plots of 8 schools}
-\end{center}
-\end{figure}
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[scale=0.3]{school1.png}
+%\caption{Shrinkage and interval plots of 8 schools}
+%\end{center}
+%\end{figure}
 
-\begin{CodeChunk}
-\begin{CodeInput}
-R> gcv <- coverage(g, nsim = 10000)
-\end{CodeInput}
-\end{CodeChunk}
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width = 5.5cm]{school2.png}
-\end{center}
-\end{figure}
+%\begin{CodeChunk}
+%\begin{CodeInput}
+%R> gcv <- coverage(g, nsim = 10000)
+%\end{CodeInput}
+%\end{CodeChunk}
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width = 5.5cm]{school2.png}
+%\end{center}
+%\end{figure}
 
 \subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Prior Mean and One Covariate}
+In this example, suppose you read the New York Times published on 26 April 1970. One article in this magazine covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then, you became interested in their batting averages over the remaining season. How could you predict? For reference, the dataset  \code{baseball} has each player's batting average over the remaining season. 
+\\
+
+First of all, the independent Binomial distribution given a true batting average of each player (see (7)) seems an appropriate probability distribution describing the uncertainty in this dataset. Assuming this distribution, we know that the sample mean (MLE) has many nice properties, one of which is uniformly minimum variance unbiased estimator (UMVUE), and is the simplest way to estimate their true batting averages. Can we say this is the best way to predict their batting averages?
+\\
+
+Efron and Morris (1975) said ``no,'' and suggested James-Stein estimator, making each players' sample mean shrink towards an estimated mean of the second-level prior distribution. They showed that this estimator was more than three times efficient than the sample mean under squared error loss. On top of that, a few years later Morris (1983) introduced interval estimates that could successfully catch the batting averages over the remaining season, which the MLE and its interval estimate could not.
+\\
+
+Our hierarchical modeling is a sequel to these researches, which can add one more unique value. Suppose you strongly believe that the outfielder's batting averages should be different from other positions' ones, not giving a credit to the assumption that all players' batting averages shrink towards the same mean. Instead, you want to assume two different prior distributions for outfielders and others, within which sharing information  and regressing toward the mean occur. Our hierarhcical modeling provides a way to incorporate such information (covariate) seamlessly into the second-level hierarchy.
+\\
+
+To be specific, it assumes there are one second-level hierarchy for outfielders and the other one for other positions. And it views true batting averages of outfielders as sampled from the former distribution and those of other positions from the latter.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> b <- gbp(z, n, x, model = "br")
@@ -462,7 +475,13 @@ Summary for whole units:
 colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.041
 \end{CodeOutput}
 \end{CodeChunk}
+Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.31 and 0.23. Also note that shrinkage estimates are the same for all players. It makes sense because shrinkage ($B_{j}\equiv r / (r+n_{j})$) is determined by the relative amount of information between the first-level and the second-level hierarchies. The fact that all players have the same amount of observed information ($n_{j}=45$) and the estimated $r=\textrm{exp}(4.727)=113$ from below summary tell why the estimated shrinkage is 0.715.
+\\
 
+As for the point estimates, we calculated squared error losses, $\sum_{j=1}^{18}(p_{j, remaining}-\hat{p}_{j})^{2}$, for three estimators, James-Stein (JS), ours, and sample mean. These values were 0.027, 0.031, and 0.086 each. Ours could not beat the JS that shrank all sample means towards one common estimated prior mean. But ours, which provides a more flexible way to model these data, was not much worse than JS and way better than sample mean under the squared error loss.
+\\
+
+One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is one factor that determines posterior variance because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has highest value when the posterior mean is 0.5. Intuitively, it makes sense. If the probability of hit is 0.1, we can easily expect less hits. But if probability is 0.5, we are less certain whehter the at-bat would more likely lead to a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(b)
@@ -499,12 +518,28 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
+This summary also includes the result of logistic regression fit because we did not know prior means in advance so that we had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two different prior distributions distinguishing outfielders from others was significantly different, supporting our assumption.
+\\
+
+Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different places. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. It also means that the seemingly two lines crossing over others were actually three lines. 
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(b)
+\end{CodeInput}
+\end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{baseball1.png}
-\caption{Shrinkage and interval plots of 18 baseball players}
 \end{center}
 \end{figure}
+
+The following 95\% interval plot shows us range of true batting average for each player. Note that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out.
+\\
+
+Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level.
+\\
+
+Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 100000)}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -532,16 +567,19 @@ R> bcv <- coverage(b, nsim = 10000)
 Empirical Bayes Models).'' \emph{Journal of the American Statistical Association}. \textbf{84}. 717-726.
 \\
 
-4. Morris, C. and Christiansen, C. (1995). ``Hierarchical Models for Ranking and for Identifying Ex- tremes, With Application,'' in \emph{Bayesian Statistics 5}, eds. J. Bernardo, J. Berger, A. Dawid, and A. Smith, New York: Oxford University Press, pp. 277-296.
+4. Morris, C. (1983). ``Parametric Empirical Bayes Inference: Theory and Applications.'' \emph{Journal of the American Statistical Association}. \textbf{78}. 47-55.
 \\
 
-5. Morris, C. and Tang, R. (2011). ``Estimating Random Effects via Adjustment for Density Maximization.'' \emph{Statistical Science}. \textbf{26}. 271-287.
+5. Morris, C. and Christiansen, C. (1995). ``Hierarchical Models for Ranking and for Identifying Ex- tremes, With Application,'' in \emph{Bayesian Statistics 5}, eds. J. Bernardo, J. Berger, A. Dawid, and A. Smith, New York: Oxford University Press, pp. 277-296.
 \\
 
-6. Morris, C. and Lysy, M. (2012). ``Shrinkage Estimation in Multilevel Normal Models.'' \emph{Statistical Science}. \textbf{27}. 115-134.
+6. Morris, C. and Tang, R. (2011). ``Estimating Random Effects via Adjustment for Density Maximization.'' \emph{Statistical Science}. \textbf{26}. 271-287.
 \\
 
-7. Rubin, D. B. (1981). ``Estimation in parallel randomized
+7. Morris, C. and Lysy, M. (2012). ``Shrinkage Estimation in Multilevel Normal Models.'' \emph{Statistical Science}. \textbf{27}. 115-134.
+\\
+
+8. Rubin, D. B. (1981). ``Estimation in parallel randomized
   experiments.'' \emph{Journal of Educational Statistics}. \textbf{6}. 377-401.
 \\
 
