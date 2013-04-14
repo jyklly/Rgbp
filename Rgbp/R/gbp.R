@@ -298,9 +298,9 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     po.low <- temp.data[, 6]
     po.upp <- temp.data[, 7]
     if (x$model == "gr") {
-      xlabel <- "Units sorted by the order of se"
+      xlabel <- "Units sorted by the increasing order of se"
     } else {
-      xlabel <- "Units sorted by the order of n"
+      xlabel <- "Units sorted by the increasing order of n"
     }
   }
 
