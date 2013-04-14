@@ -343,7 +343,8 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xlabel, ylab = expression(theta),
-       main = "100*Alpha% Intervals", cex = log(se + 2) / cx, col = 2, pch = 19)
+       main = paste(100 * x$Alpha, "% Interval Estimates"), 
+       cex = log(se + 2) / cx, col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
     lines(rep(index[j], 2), c(po.low[j], po.upp[j]), lwd = 0.5)
   })

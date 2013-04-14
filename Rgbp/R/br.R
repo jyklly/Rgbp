@@ -350,6 +350,6 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95){
                  prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
                  post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
                  beta.new = a.res$beta.new, beta.var = a.res$beta.var,
-                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var)
+                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha)
   output
 }
