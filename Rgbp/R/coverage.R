@@ -328,8 +328,10 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
+  n.units <- length(gbp.object$se)
   plot(1 : length(gbp.object$se), result, ylim = c(0.7, 1), type = "l", col = 2, ylab = "",
-       xlab = "Group_i, i = 1, ..., k", main = "Estimated Coverage Probability for Each Group",
+       xlab = paste("Unit_j", ", ", "j = 1, ...,", n.units), 
+       main = "Estimated Coverage Probability for Each Unit",
        lwd = 3, lty = 1)
   abline(h = 0.95)
   points(1 : length(gbp.object$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
