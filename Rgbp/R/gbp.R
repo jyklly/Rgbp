@@ -304,7 +304,6 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     }
   }
 
-  cx <- (mean(log(se + 2)) + min(log(se + 2))) / 2
   index <- 1 : length(se)
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
@@ -344,13 +343,13 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xlabel, ylab = expression(theta),
        main = paste(100 * x$Alpha, "% Interval Estimates"), 
-       cex = log(se + 2) / cx, col = 2, pch = 19)
+       col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
     lines(rep(index[j], 2), c(po.low[j], po.upp[j]), lwd = 0.5)
   })
   points(index, po.low, cex = 1.5, pch = "-")
   points(index, po.upp, cex = 1.5, pch = "-")
-  points(index, y, cex = log(se + 2) / cx)
+  points(index, y)
   if (length(unique(pr.m)) == 1) {
     abline(h = pr.m, col = 4)
   } else {
