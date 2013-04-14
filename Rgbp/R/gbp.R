@@ -66,10 +66,15 @@ print.gbp <- function(x, sort = TRUE, ...) {
   temp.mean <- colMeans(temp)
   temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
   temp <- round(temp, 3)
+
   if (x$model == "gr") {
     temp[, 2] <- round(temp[, 2], 1)
   } else {
     temp[, 2] <- round(temp[, 2])
+  }
+
+  if (any(is.na(x$prior.mean)) & !identical(x$X, NA)) {
+    temp[, 3] <- round(temp[, 3], 2)
   }
 
   cat("Summary for whole units: \n")

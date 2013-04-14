@@ -285,12 +285,17 @@ R> summary(p)
 \begin{CodeOutput}
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage intv.low post.mean intv.upp post.sd
-Unit w/ min(n)       0.045   67       0.02     0.834    0.011     0.024    0.042   0.008
-Unit w/ median(n)    0.045  484       0.02     0.410    0.023     0.035    0.050   0.007
-Unit w/ max(n)       0.020 1340       0.02     0.201    0.014     0.020    0.027   0.003
-Overall Mean         0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
+                  obs.mean    n prior.mean shrinkage low.intv post.mean
+Unit w/ min(n)       0.045   67       0.02     0.834    0.011     0.024
+Unit w/ median(n)    0.045  484       0.02     0.410    0.023     0.035
+Unit w/ max(n)       0.020 1340       0.02     0.201    0.014     0.020
+Overall Mean         0.029  517       0.02     0.438    0.015     0.025
 
+                  upp.intv post.sd
+                     0.042   0.008
+                     0.050   0.007
+                     0.027   0.003
+                     0.037   0.006
 
 Second-level Variance Component Estimation Summary:
 alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
@@ -310,9 +315,10 @@ R> plot(p)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.3]{hospital1.png}
+\includegraphics[scale=0.25]{hospital1.png}
 \end{center}
 \end{figure}
+
 The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
 \\
 
@@ -328,7 +334,8 @@ This plot can add one more valuable point, which we could not have noticed, to t
 Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-avoider, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 \\
 
-Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The method check below will answer this question.
+Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method check will answer this question. The \code{coverage} function below generates 10,000 pseudo-datasets assuming the estimated $r~(=336.37)$ as a given value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv <- coverage(p, nsim = 10000)
@@ -339,14 +346,73 @@ R> pcv <- coverage(p, nsim = 10000)
 \includegraphics[width = 5.5cm]{hospital2.png}
 \end{center}
 \end{figure}
-This \code{coverage} function generated 10,000 pseudo-datasets assuming the estimated $r~(=336.37)$ as a given value. For reference, we can try any other value of $r$, for example $r=200$, by replacing above code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+
+It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 from the Rao-Blackwellized estimate and 0.95 from the unbiased estimate. Finally, this method check proved that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property, achieving pre-specified 95\% confidence level.
 \\
 
-It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 based on both estimation methods. Finally, this method check showed that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property, achieving pre-specified 95\% confidence level.
+For reference, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> gbp(z, n, Alpha = 0.9, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
 \\
 
-Morris and Christiansen (1995) also look into this ranking problem, taking shrinkage into account.
+Morris and Christiansen (1995) also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
+\\
+
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
+\begin{CodeChunk}
+\begin{CodeInput}
+R> g <- gbp(y, se, model = "gr")
+R> g
+\end{CodeInput}
+\begin{CodeOutput}
+Summary for whole units: 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
+2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
+7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
+4            7.00 11.0      8.168     0.507   -8.780     7.592   23.602   8.257
+6            1.00 11.0      8.168     0.507  -13.027     4.633   20.131   8.441
+1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
+3           -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
+8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
+colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> summary(g)
+\end{CodeInput}
+\begin{CodeOutput}
+Main summary:
+
+                    obs.mean   se prior.mean shrinkage low.intv post.mean
+Unit w/ min(se)        -1.00  9.0      8.168     0.408  -13.297     2.737
+Unit w/ median(se)1     1.00 11.0      8.168     0.507  -13.027     4.633
+Unit w/ median(se)2     7.00 11.0      8.168     0.507   -8.780     7.592
+Unit w/ max(se)        12.00 18.0      8.168     0.734  -10.208     9.189
+Overall Mean            8.75 12.5      8.168     0.552   -9.163     8.168
+
+                     upp.intv post.sd
+                       16.692   7.634
+                       20.131   8.441
+                       23.602   8.257
+                       29.939  10.227
+                       25.723   8.900
+
+Second-level Variance Component Estimation Summary:
+alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
+
+  post.mode.alpha post.sd.alpha
+1           4.768         1.139
+
+
+Regression Summary:
+
+      estimate   se z.val p.val
+beta0    8.168 5.73 1.425 0.154
+\end{CodeOutput}
+\end{CodeChunk}
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{school1.png}
@@ -354,11 +420,100 @@ Morris and Christiansen (1995) also look into this ranking problem, taking shrin
 \end{center}
 \end{figure}
 
+\begin{CodeChunk}
+\begin{CodeInput}
+R> gcv <- coverage(g, nsim = 10000)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 5.5cm]{school2.png}
+\end{center}
+\end{figure}
+
 \subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Prior Mean and One Covariate}
+\begin{CodeChunk}
+\begin{CodeInput}
+R> b <- gbp(z, n, x, model = "br")
+R> b
+\end{CodeInput}
+\begin{CodeOutput}
+Summary for whole units: 
+
+         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429   0.046
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420   0.045
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411   0.044
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403   0.043
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396   0.042
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341   0.041
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331   0.040
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323   0.039
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315   0.038
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379   0.043
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375   0.044
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375   0.044
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302   0.038
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297   0.038
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292   0.039
+colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.041
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> summary(b)
+\end{CodeInput}
+\begin{CodeOutput}
+Main summary:
+
+                          obs.mean  n   X1 prior.mean shrinkage low.intv
+Unit w/ min(obs.mean)        0.156 45 0.00      0.233     0.715    0.140
+Unit w/ median(obs.mean)1    0.244 45 0.00      0.233     0.715    0.166
+Unit w/ median(obs.mean)2    0.244 45 1.00      0.310     0.715    0.210
+Unit w/ max(obs.mean)        0.400 45 1.00      0.310     0.715    0.248
+Overall Mean                 0.265 45 0.44      0.267     0.715    0.191
+
+                         post.mean upp.intv post.sd
+                             0.211    0.292   0.039
+                             0.237    0.315   0.038
+                             0.291    0.379   0.043
+                             0.335    0.429   0.046
+                             0.267    0.351   0.041
+
+Second-level Variance Component Estimation Summary:
+alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
+
+  post.mode.alpha post.sd.alpha
+1          -4.727         0.957
+
+
+Regression Summary:
+
+      estimate    se  z.val p.val
+beta0   -1.194 0.131 -9.129 0.000
+beta1    0.389 0.187  2.074 0.038
+\end{CodeOutput}
+\end{CodeChunk}
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{baseball1.png}
 \caption{Shrinkage and interval plots of 18 baseball players}
+\end{center}
+\end{figure}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> bcv <- coverage(b, nsim = 10000)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 5.5cm]{baseball2.png}
 \end{center}
 \end{figure}
 
