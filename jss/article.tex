@@ -441,10 +441,7 @@ First of all, the independent Binomial distribution given a true batting average
 Efron and Morris (1975) said ``no,'' and suggested James-Stein estimator, making each players' sample mean shrink towards an estimated mean of the second-level prior distribution. They showed that this estimator was more than three times efficient than the sample mean under squared error loss. On top of that, a few years later Morris (1983) introduced interval estimates that could successfully catch the batting averages over the remaining season, which the MLE and its interval estimate could not.
 \\
 
-Our hierarchical modeling is a sequel to these researches, which can add one more unique value. Suppose you strongly believe that the outfielder's batting averages should be different from other positions' ones, not giving a credit to the assumption that all players' batting averages shrink towards the same mean. Instead, you want to assume two different prior distributions for outfielders and others, within which sharing information  and regressing toward the mean occur. Our hierarhcical modeling provides a way to incorporate such information (covariate) seamlessly into the second-level hierarchy.
-\\
-
-To be specific, it assumes there are one second-level hierarchy for outfielders and the other one for other positions. And it views true batting averages of outfielders as sampled from the former distribution and those of other positions from the latter.
+Our hierarchical modeling is a sequel to these researches, which can add one more unique value. Suppose you strongly believe that the outfielder's batting averages should be different from other positions' ones, not giving a credit to the assumption that all players' batting averages shrink towards the same mean. Instead, you want to assume two different second-level hierarchies for outfielders and for other positions, within each of which sharing information and regressing toward the mean (RTTM) occur. This perspective considers true batting averages of outfielders as sampled from the one and those of other positions from the other. Our multi-level modeling provides a way to incorporate such information (covariate) seamlessly into the second-level hierarchy.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> b <- gbp(z, n, x, model = "br")
@@ -481,7 +478,7 @@ Our model reflects on the additional information, \emph{i.e.}, indicator covaria
 As for the point estimates, we calculated squared error losses, $\sum_{j=1}^{18}(p_{j, remaining}-\hat{p}_{j})^{2}$, for three estimators, James-Stein (JS), ours, and sample mean. These values were 0.027, 0.031, and 0.086 each. Ours could not beat the JS that shrank all sample means towards one common estimated prior mean. But ours, which provides a more flexible way to model these data, was not much worse than JS and way better than sample mean under the squared error loss.
 \\
 
-One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is one factor that determines posterior variance because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has highest value when the posterior mean is 0.5. Intuitively, it makes sense. If the probability of hit is 0.1, we can easily expect less hits. But if probability is 0.5, we are less certain whehter the at-bat would more likely lead to a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
+One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is one factor that determines posterior variance because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(b)
@@ -518,10 +515,10 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-This summary also includes the result of logistic regression fit because we did not know prior means in advance so that we had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two different prior distributions distinguishing outfielders from others was significantly different, supporting our assumption.
+This summary also includes the result of logistic regression fit because we did not know prior means in advance so that we had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two different prior distributions distinguishing outfielders from other positions were significantly different, supporting our assumption. The positive sign of $\hat{\beta}_{1}$ reflects on the first five players, outfielders, whose observed batting averages were higher than others.
 \\
 
-Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different places. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. It also means that the seemingly two lines crossing over others were actually three lines. 
+Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.31 and 0.23. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. It also means that the seemingly two lines crossing over others were actually three lines. 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(b)
@@ -539,7 +536,7 @@ The following 95\% interval plot shows us range of true batting average for each
 Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level.
 \\
 
-Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 100000)}.
+Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
