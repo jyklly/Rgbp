@@ -125,9 +125,9 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 
 where $\mu_{0j} =x^{T}_{j}\beta,~j=1, \ldots, 8$, $x_{j}$ is $j$-th school's covariate vector ($m\times 1$), and $m$ is the number of regression coefficients. Note that if there is no covariate then $x_{j, (1\times1)}=1$ for an intercept term and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a paramter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Also,  based on this conjugate prior distribution, it is easy to derive corresponding posterior distribution, which is the same as (1) $\times$ (2) up to a normalizing constant.
 \begin{equation}
-\mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})\sigma^{2}_{j}),
+\mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})V_{j}),
 \end{equation}
-where $B_{j}\equiv\sigma^{2}_{j}/(\sigma^{2}_{j} + A),~j=1, \ldots, 8$, are called shrinkages.
+where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, 8$, are called shrinkages.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma}
 \code{gbp} is also able to build a Poisson-Gamma multilevel model on the 31 hospital data. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket below indicates [mean, variance] of distribution. And for notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ for all $j$.
@@ -176,7 +176,7 @@ where $m$ is the number of regression coefficients. For $\beta$, it is reasonabl
 Estimating shrinkage is a key part of our hierarchical modeling. As we can see in (3), (6), and (9), the posterior means are a linear function of shrinkage and the posterior variances are also a linear (Gaussian), quadratic (Poisson), or cubic (Binomial) function of shrinkage. It implies that we cannot obtain $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ without appropriate shrinkage estimation.
 
 \subsection[ADM]{Adjustment for Density Maximization}
-When it comes to estimating a shrinkage, we can notice that it is a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv\sigma^{2}/(\sigma^{2}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models.
+When it comes to estimating a shrinkage, we can notice that it is a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models.
 \\
 
 In this case, the most common way is to obtain an MLE of the variance component with its asymptotic Normality and then to use Delta method for asymptotic Normal distribution of shrinkage, \emph{i.e.}, $\hat{B}_{j, MLE}=B_{j}(\hat{A}_{MLE})$. But is the Normal approximation a good approximation for shrinkage that takes on a value between 0 and 1? If it is, why do we fit a logistic regression, such as logit($p$) = $x^{T}\beta$, instead of fitting a linear regression, $p = x^{T}\beta+\epsilon$?
