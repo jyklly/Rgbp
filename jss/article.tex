@@ -75,18 +75,18 @@
 \section[Feasible Data Types]{Three Feasible Types of Data }
 This package is intended to fit a multilevel model on the group-level (or unit-level) data in which each group-level (or unit-level) observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible datasets.
 
-\subsection{Normal: 8 School Data}
+\subsection{Normal: 8 Schools Data}
 Education Testing Service conducted randomized experiments in eight separate schools and obtained this dataset. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of eight schools obtained after an analysis of covariance adjustment (Rubin, 1981).
 \begin{CodeChunk}
 \begin{CodeInput}
-R> y  <- c(28,  8, -3,  7, -1,  1, 18, 12)
-R> se <- c(15, 10, 16, 11,  9, 11, 10, 18)
+R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
+R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
 \end{CodeInput}
 \end{CodeChunk}
 
-In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each (group-level) coaching effect is distributed as independent Normal distribution given the unknown mean $\mu_{j}$ and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this dataset and can be called by typing `\code{R> data(schools)}' on \proglang{R}.
+In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each (group-level) coaching effect is distributed as an independent Normal distribution given the unknown mean $\mu_{j}$ and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this dataset and can be called by typing `\code{R> data(schools)}' on \proglang{R}.
 
-\subsection{Poisson: 31 Hospital Data}
+\subsection{Poisson: 31 Hospitals Data}
 This dataset is about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The below code is an example of input based on the last ten hospital data.
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -98,8 +98,8 @@ R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 
 Considering the type of data, it makes sense to assume the number of deaths in each hospital has independent Poisson distribution given the unknown true rate parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ where $n_{j}$ can be interpreted as an exposure (not necessarily an interger) and $\lambda_{j}$ as a true death rate per exposure. This dataset is also included in the package and can be called by `\code{R> data(hospital)}' on \proglang{R}.
 
-\subsection{Binomial: 18 Baseball Data}
-This dataset contains information about batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has two covariates, League and Position, showing in which league and in which position each player was playing. In this paper, we will use Position for a tutorial purpose. For convenience, we transform this variable into a binary indicator, which is 1 if a player was a outfielder and 0 otherwise. The code below shows a way to make inputs. If we have more than one covariate, for example, \code{x1} and \code{x2}, then `\code{R> x <- cbind(x1, x2)}' will be the right input of the \code{gbp} function.
+\subsection{Binomial: 18 Baseball Players Data}
+This dataset contains information about batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season (Efron and Morris, 1975). Also, it has one covariate, Position, showing in which position each player was playing. For convenience, we transform this variable into a binary indicator, which is 1 if a player was a outfielder and 0 otherwise. The code below shows a way to make inputs. If we have more than one covariate, for example, \code{x1} and \code{x2}, then `\code{R> x <- cbind(x1, x2)}' will be the right input of the \code{gbp} function.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
@@ -115,9 +115,9 @@ Our multilevel model, also called a conditionally independent hierarchical model
 
  
 \subsection[Normal-Normal]{Normal-Normal}
-\code{gbp} can construct a two-level Normal-Normal hierarchical model on the 8 school data. For reference,  $\sigma^{2}_{j}$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th school in the dataset.
+\code{gbp} can construct a two-level Normal-Normal hierarchical model on the 8 school data. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th school in the dataset.
 \begin{equation}
-y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, \sigma^{2}_{j}),
+y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \end{equation}
 \begin{equation}
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
@@ -182,7 +182,7 @@ When it comes to estimating a shrinkage, we can notice that it is a function of 
 In this case, the most common way is to obtain an MLE of the variance component with its asymptotic Normality and then to use Delta method for asymptotic Normal distribution of shrinkage, \emph{i.e.}, $\hat{B}_{j, MLE}=B_{j}(\hat{A}_{MLE})$. But is the Normal approximation a good approximation for shrinkage that takes on a value between 0 and 1? If it is, why do we fit a logistic regression, such as logit($p$) = $x^{T}\beta$, instead of fitting a linear regression, $p = x^{T}\beta+\epsilon$?
 \\
 
-Here the adjustment for density maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage because this distribution is also defined between 0 and 1. In the end, ADM  estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without any trouble that MLE can cause. Please refer to Morris and Tang (2011) for more apparent advantages of ADM.
+Here the adjustment for density maximization (Morris and Tang, 2011), called ADM, comes. It assumes the Beta distribution for shrinkage because this distribution is also defined between 0 and 1. In the end, ADM  estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without any trouble that MLE can cause. Refer to Morris and Tang (2011) for additional apparent advantages of ADM.
 \\
 
 Once we estimate these two moments of shrinkage, we can also estimate the posterior moments given only data. Taking the Normal model as an example,  $E(\mu_{j}\vert \textbf{y})=E(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$ by Adam's law and $Var(\mu_{j}\vert \textbf{y})=E(Var(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$ by Eve's law. Note that both $E(\mu_{j}\vert \textbf{y}, r, A)$ and $Var(\mu_{j}\vert \textbf{y}, r, A)$ are a function of shrinkage in (3) and Adam's and Eve's laws are taking conditional expectation and variance over them given data.
@@ -197,7 +197,7 @@ Like the two sides of the same coin, checking a statistical model always comes w
 There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific dataset. One possible question is, ``Can this dataset benefit from such a multilevel modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $z_{j}\vert \beta, r\sim\textrm{Negative-Binomial}$, on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 \\
 
-Once we are sure that the hierarchical modeling can be appropriate for our data, the following quetsion will be about the validity of interval estimates, the final product of this multilevel modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to assure this point. From now on, all the explanations will be based on the Binomial model.
+Once we are sure that the hierarchical modeling can be appropriate for our data, the following quetsion will be about the validity of interval estimates, the final product of this multilevel modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to check this point. From now on, all the explanations will be based on the Binomial model.
 
 \subsection{Pseudo-data Generation Process}
 Figure 1 will be helpful to understand this process. As we can see in (8), the distribution of each true batting average ($p_{j},~j=1,\ldots, 18$) depends on two hyper-parameters, $r$ and $\beta_{(m\times1)}$, where $m$ is the number of regression coefficients. So, once we fix these hyper-parameters at specific values, we can generate true batting averages. Suppose we sampled 500 $\mathbf{p}_{(18\times1)}$'s, \emph{i.e.}, $\{\mathbf{p}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (8), where $r$ and $\beta$ are given. Then, we can also generate $\{\mathbf{z}^{(i)}_{(18\times1)},~i=1, \ldots, 500\}$ given each $p_{ij},$ where $i$ indicates $i$-th pseudo-dataset and $j$ does $j$-th player. Next, \code{coverage} fits the Binomial hierarchical model 500 times on $\{(\mathbf{z}^{(i)}_{(18\times1)}, \mathbf{n}_{(18 \times 1)}),~i=1, \ldots, 500\}$ to obtain 500$\times$18 interval estimates.  After this generating process, as for the first player, we will have 500 pairs of ($z_{i1}$, $p_{i1}$) and 500 interval estimates, $\{(\hat{p}_{i1, low}, ~\hat{p}_{i1, upp}$), $i=1, \ldots, 500\}$.
@@ -208,10 +208,10 @@ Figure 1 will be helpful to understand this process. As we can see in (8), the d
 \end{center}
 \end{figure}
 
-\subsection{Unbiased Coverage Probability}
+\subsection{Simple Unbiased Estimates of Coverage Probabilities}
 Based on the generated pseudo-datasets, let's define an indicator variable, $I_{ij}$, which is 1 if $j$-th player's interval estimate from $i$-th pseudo-dataset includes $p_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking average over these indicator variables. We call it an unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first player.
 
-\subsection{Rao-Blackwellized Coverage Probability}
+\subsection{Rao-Blackwellized Unbiased estimates of Coverage Probabilities}
 Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}, r, \beta$), where $r$ and $\beta$ were given at first (see 5.1) and $z_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where ($\hat{p}_{ij, low}$, $\hat{p}_{ij, upp}$) is $j$-th player's interval estimates on the $i$-th dataset. We can calculate this probability  because we know the distribution of $p_{ij} \vert z_{ij}, r, \beta$ in (9). Note that conditioning on $z_{ij}$ is equivalent to conditioning on $\mathbf{z}$ because we know $r$ and $\beta$. Then, we can estimate the first player's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$, which is more accurate than the previous one.
 
 \section[Example]{Example}
@@ -219,7 +219,7 @@ Based on the definition of Rao-Blackwellization, we define $E(I_{ij}\vert z_{ij}
 Suppose you live in the New York state (NY) and have been suffering from severe coronary heart disease (hopefully not). If you are supposed to receive the coronary artery bypass graft (CABG) surgery soon, you might want to find the most famous hospital for dealing with such a surgery. On top of that, if you can figure out each hospital's abililty to handle this surgery, it will be useful for your decision to choose a hospital.
 \\
 
-For this purpose, you gathered data of 31 hospitals in NY composed of the number of deaths within a month of CABG surgeries and total number of patients receiving CABG surgeries in each hospital. In addition, while you were looking for such information, suppose you could know that the  state-level death rate per exposure of this surgery in the past ten years was 0.02. 
+For this purpose, you gathered data of 31 hospitals in NY composed of the number of deaths within a month of CABG surgeries and total number of patients receiving CABG surgeries in each hospital. In addition, while you were looking for such information, suppose one knew that the state-level death rate per exposure of this surgery in the past ten years was 0.02. 
 \\
 
 The multilevel modeling that assumes a bigger population-level hierarchy will be insightful in this problem. Here, we presume a state-level (NY) hierarchy governing the true death rates of CABG surgery of all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution whose mean is 0.02. For reference, a model check can be useful for evaluating the validity of such a view point (Christiansen and Morris, 1996). 
@@ -275,7 +275,7 @@ For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\c
 The output contains information about sample mean (\code{obs.mean}), caseload (\code{n}), known prior mean ($\lambda_{0}$), shrinkage ($B_{j}$), lower interval, posterior mean ($E(\lambda_{j}\vert \textbf{z})$), upper interval, and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{z})$).
 \\
 
-As we can see in (6), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output; as caseload increases, shrinkage decreases, depending less on the prior information.
+As we can see in (6), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output; as caseload increases, shrinkage decreases, depending less on the prior distribution.
 \\
 
 A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a regression model and the summary of regression fit will appear.
@@ -305,7 +305,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 1          -5.818         0.411
 \end{CodeOutput}
 \end{CodeChunk}
-Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which will be helpful for understanding how each shrinkage was determined by comparing this value to the amount of observed information ($n_{j}$).
+Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which will be helpful for understanding how each shrinkage was determined by comparing this value to the observed sample sizes, $n_{j}$.
 \\
 
 We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.

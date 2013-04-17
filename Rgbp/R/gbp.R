@@ -77,7 +77,16 @@ print.gbp <- function(x, sort = TRUE, ...) {
     temp[, 3] <- round(temp[, 3], 2)
   }
 
-  cat("Summary for whole units: \n")
+  if (sort == TRUE) {
+    if (x$model == "gr") {
+      cat("Summary for each unit (sorted by se): \n")
+    } else {
+      cat("Summary for each unit (sorted by n): \n")
+    }
+  } else {
+    cat("Summary for each unit: \n")
+  }
+
   cat("\n")
   print(temp)
 }
