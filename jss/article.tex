@@ -533,7 +533,7 @@ R> plot(b)
 The following 95\% interval plot shows us range of true batting average for each player. Note that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out.
 \\
 
-Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level. 
+Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence interval. 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv <- coverage(b, nsim = 10000)
@@ -566,7 +566,7 @@ R> abline(h = 0.95)
 \end{center}
 \end{figure}
 
-This graphs shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence level. Considering that our model is approximating the true distribution of shrinkage by ADM (Morris and Tang, 2011), this lack of 0.4\% might not be a severe defect of our model. The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
+This graphs shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Considering that our model is approximating the true distribution of shrinkage by ADM (Morris and Tang, 2011), this lack of 0.4\% might not be a severe defect of our model. The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 \\
 
 \section[Discussion]{Discussion}
