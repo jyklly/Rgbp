@@ -577,7 +577,7 @@ R> bcv <- coverage(b, nsim = 10000)
 The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence interval. 
 \\
 
-However, achieving at least 95\% coverage at specific true values of ($r$ and $\beta$) does not mean that our model has good repeated sampling property. So, as we did in other examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
+However, achieving at least 95\% coverage at specific true values of ($r$ and $\beta$) does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
