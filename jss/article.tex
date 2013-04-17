@@ -533,7 +533,7 @@ R> plot(b)
 The following 95\% interval plot shows us range of true batting average for each player. Note that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out.
 \\
 
-Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level.
+Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level. 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv <- coverage(b, nsim = 10000)
@@ -545,7 +545,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. This adjustment option is helpful for checking coverage probability varying true parameter values. Using this option, we drew Rao-Blackwellized coverage estimates varying only true shrinkage from 0.01 to 0.99.
+Next, we will check whether the estimated coverage probabilities are at least 95\% varying the true shrinkage values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. Using this adjustment option, we drew Rao-Blackwellized coverage estimates varying true shrinkage values from 0.01 to 0.99, fixing $\beta$ as estimated values.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> shr <- seq(0.01, 0.99, by = 0.05)
@@ -554,17 +554,20 @@ R> cov.save <- sapply (1 : length(r.trial), function(i){
 R>               coverage(b, A.or.r = r.trial[i], reg.coef = c(-1.194, 0.389), 
 R>                        covariates = x1, nsim = 500)$average.coverageRB
 R>             })
-R> plot(shr, cov.save, type = "l", ylim = c(0.8, 1), xlab = "Shrinkage", 
-R>      ylab = "Rao-Blackwellized Coverage Estimate", lwd = 3, col = 2)
+R> plot(shr, cov.save, type = "l", ylim = c(0.8, 1), xlab = "Shrinkage",
+R>      ylab ="", main = "Rao-Blackwellized Coverage Estimate", lwd = 3,
+R>      col = 2)
 R> abline(h = 0.95)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 5.5cm]{baseball2.png}
+\includegraphics[width = 5.5cm]{baseball4.png}
 \end{center}
 \end{figure}
 
+This graphs shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence level. Considering that our model is approximating the true distribution of shrinkage by ADM (Morris and Tang, 2011), this lack of 0.4\% might not be a severe defect of our model. The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
+\\
 
 \section[Discussion]{Discussion}
 
