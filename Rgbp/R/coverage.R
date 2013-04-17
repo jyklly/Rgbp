@@ -43,11 +43,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "br")
+                   gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, X, model = "br")
+                   gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br")
+                   gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
                  }
 
           a1 <- r * p0 + sim.z[, i]
@@ -94,11 +94,12 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (!missing(reg.coef) & missing(covariates)) {
-                   gbp(sim.z[, i], n, model = "br")
+                   gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
                  } else if (!missing(reg.coef) & !missing(covariates)) {
-                   gbp(sim.z[, i], n, covariates, model = "br")
+                   gbp(sim.z[, i], n, covariates, model = "br", Alpha = gbp.object$Alpha)
                  } else if (!missing(mean.PriorDist)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br")
+                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
+                       Alpha = gbp.object$Alpha)
                  }
           a1 <- r * p0 + sim.z[, i]
           a0 <- r * (1 - p0) + n - sim.z[, i]
@@ -145,11 +146,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "pr")
+                   gbp(sim.z[, i], n, model = "pr", Alpha = gbp.object$Alpha)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, X, model = "pr")
+                   gbp(sim.z[, i], n, X, model = "pr", Alpha = gbp.object$Alpha)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "pr")
+                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "pr", Alpha = gbp.object$Alpha)
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -197,11 +198,12 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (missing(mean.PriorDist) & missing(covariates)) {
-                   gbp(sim.z[, i], n, model = "pr")
+                   gbp(sim.z[, i], n, model = "pr", Alpha = gbp.object$Alpha)
                  } else if (missing(mean.PriorDist) & !missing(covariates)) {
-                   gbp(sim.z[, i], n, covariates, model = "pr")
+                   gbp(sim.z[, i], n, covariates, model = "pr", Alpha = gbp.object$Alpha)
                  } else if (missing(reg.coef)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "pr")
+                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "pr", 
+                       Alpha = gbp.object$Alpha)
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -248,11 +250,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.y[, i], se)
+                   gbp(sim.y[, i], se, Alpha = gbp.object$Alpha)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.y[, i], se, X)
+                   gbp(sim.y[, i], se, X, Alpha = gbp.object$Alpha)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.y[, i], se, mean.PriorDist = mu0)
+                   gbp(sim.y[, i], se, mean.PriorDist = mu0, Alpha = gbp.object$Alpha)
                  }
           postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
           postsd <- sqrt(se^2 * (A / (se^2 + A)))
@@ -298,11 +300,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (!missing(reg.coef) & missing(covariates)) {
-                   gbp(sim.y[, i], se)
+                   gbp(sim.y[, i], se, Alpha = gbp.object$Alpha)
                  } else if (!missing(reg.coef) & !missing(covariates)) {
-                   gbp(sim.y[, i], se, covariates)
+                   gbp(sim.y[, i], se, covariates, Alpha = gbp.object$Alpha)
                  } else if (!missing(mean.PriorDist)) {
-                   gbp(sim.y[, i], se, mean.PriorDist = mean.PriorDist)
+                   gbp(sim.y[, i], se, mean.PriorDist = mean.PriorDist, Alpha = gbp.object$Alpha)
                  }
           postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
           postsd <- sqrt(se^2 * (A / (se^2 + A)))
