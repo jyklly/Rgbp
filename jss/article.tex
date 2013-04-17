@@ -534,10 +534,6 @@ The following 95\% interval plot shows us range of true batting average for each
 \\
 
 Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence level.
-\\
-
-Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}.
-
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv <- coverage(b, nsim = 10000)
@@ -548,6 +544,27 @@ R> bcv <- coverage(b, nsim = 10000)
 \includegraphics[width = 5.5cm]{baseball2.png}
 \end{center}
 \end{figure}
+
+Also, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. This adjustment option is helpful for checking coverage probability varying true parameter values. Using this option, we drew Rao-Blackwellized coverage estimates varying only true shrinkage from 0.01 to 0.99.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> shr <- seq(0.01, 0.99, by = 0.05)
+R> r.trial <- mean(n) * shr / (1 - shr)
+R> cov.save <- sapply (1 : length(r.trial), function(i){
+R>               coverage(b, A.or.r = r.trial[i], reg.coef = c(-1.194, 0.389), 
+R>                        covariates = x1, nsim = 500)$average.coverageRB
+R>             })
+R> plot(shr, cov.save, type = "l", ylim = c(0.8, 1), xlab = "Shrinkage", 
+R>      ylab = "Rao-Blackwellized Coverage Estimate", lwd = 3, col = 2)
+R> abline(h = 0.95)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 5.5cm]{baseball2.png}
+\end{center}
+\end{figure}
+
 
 \section[Discussion]{Discussion}
 
