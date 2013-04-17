@@ -373,7 +373,7 @@ R>             })
 \end{center}
 \end{figure}
 
-We plotted \code{cov.save} on \code{shr}, connecting dots. This plot shows that the estimated shrinkages are at least 0.947 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that our model is approximating the true distribution of shrinkage by ADM (see 4.2). Considering this point, we finally conclude that the interval estimates from the suggested multilevel modeling on this particular dataset has a very good repeated sampling property.
+We plotted \code{cov.save} on \code{shr}, connecting dots (coverage probabilities). This plot shows that the estimated shrinkages are at least 0.947 (under 95\% only at one shrinkage value, 0.01) on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that our model is approximating the true distribution of shrinkage by ADM (see 4.2). Considering it, we finally conclude that the interval estimates from the suggested multilevel modeling on this particular dataset has a very good repeated sampling property.
 \\
 
 The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
