@@ -546,6 +546,8 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{figure}
 
 Next, we will check whether the estimated coverage probabilities are at least 95\% varying the true shrinkage values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. Using this adjustment option, we drew Rao-Blackwellized coverage estimates varying true shrinkage values from 0.01 to 0.99, fixing $\beta$ as estimated values.
+\\
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> shr <- seq(0.01, 0.99, by = 0.05)
