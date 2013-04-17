@@ -335,6 +335,10 @@ Also it reveals that the 23rd hospital, whose estimated true rate was the smalle
 \\
 
 Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method check will answer this question. The \code{coverage} function below generates 10,000 pseudo-datasets assuming the estimated $r~(=336.37)$ as a given value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+\\
+
+Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
+\\
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -347,10 +351,35 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{center}
 \end{figure}
 
-It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 from the Rao-Blackwellized estimate and 0.95 from the unbiased estimate. Finally, this method check proved that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property, achieving pre-specified 95\% confidence level.
+It estimated coverage probabilities by unbiased estimates (a blue dashed line) and Rao-Blackwellized estimates (a red line). Both lines are indistingishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.951 from the Rao-Blackwellized estimate and 0.95 from the unbiased estimate. 
 \\
 
-For reference, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
+These numbers are encouraging, but achieving at least 95\% coverage at one specific true value does not mean that our model has good repeated sampling property. We need to check whether coverage probabilities are at least 0.95 when the true parameter value ($r$) varies.
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> shr <- seq(0.01, 0.99, length.out = 20)
+R> r.trial <- mean(n) * shr / (1 - shr)
+R> cov.save <- sapply (1 : length(r.trial), function(i){
+R>               coverage(p, A.or.r = r.trial[i], mean.PriorDist = 0.02, 
+R>                        nsim = 500)$average.coverageRB
+R>             })
+R> plot(shr, cov.save, type = "l", ylim = c(0.8, 1), xlab = "Shrinkage",
+R>      ylab ="", main = "Rao-Blackwellized Coverage Estimate", lwd = 3,
+R>      col = 2)
+R> abline(h = 0.95)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 5.5cm]{hospital3.png}
+\end{center}
+\end{figure}
+
+This plot shows that the estimated shrinkages are at least 0.947 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that our model is approximating the true distribution of shrinkage by ADM (see 4.2). Considering this point, we finally conclude that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property.
+\\
+
+The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 \\
 
 Morris and Christiansen (1995) also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
@@ -517,8 +546,6 @@ beta1    0.389 0.187  2.074 0.038
 
 This summary also includes the result of logistic regression fit because we did not know prior means in advance so that we had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two different prior distributions distinguishing outfielders from other positions were significantly different, supporting our assumption. The positive sign of $\hat{\beta}_{1}$ reflects on the first five players, outfielders, whose observed batting averages were higher than others.
 \\
-
-Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.31 and 0.23. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. It also means that the seemingly two lines crossing over others were actually three lines. 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(b)
@@ -530,10 +557,11 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-The following 95\% interval plot shows us range of true batting average for each player. Note that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out.
+Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.31 and 0.23. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. It also means that the seemingly two lines crossing over others were actually three lines. 
 \\
 
-Then, how much can we trust these interval estimates? The method check will answer it. The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence interval. 
+The 95\% interval plot shows us range of true batting average for each player. Note that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out. Then, how much can we trust these interval estimates? The following method check will answer it. 
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv <- coverage(b, nsim = 10000)
@@ -545,8 +573,11 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-Next, we will check whether the estimated coverage probabilities are at least 95\% varying the true shrinkage values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. Using this adjustment option, we drew Rao-Blackwellized coverage estimates varying true shrinkage values from 0.01 to 0.99, fixing $\beta$ as estimated values.
+
+The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence interval. 
 \\
+
+However, achieving at least 95\% coverage at specific true values of ($r$ and $\beta$) does not mean that our model has good repeated sampling property. So, as we did in 6.1, we will see at least in terms of varying $r$ whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -568,7 +599,10 @@ R> abline(h = 0.95)
 \end{center}
 \end{figure}
 
-This graphs shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Considering that our model is approximating the true distribution of shrinkage by ADM (Morris and Tang, 2011), our model still has a good repeated sampling property. The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
+This plot shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Considering that our model is approximating the true distribution of shrinkage by ADM (see 4.2), we finally conclude that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property.
+\\
+
+The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 \\
 
 \section[Discussion]{Discussion}
