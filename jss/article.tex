@@ -379,7 +379,7 @@ R> abline(h = 0.95)
 This plot shows that the estimated shrinkages are at least 0.947 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that our model is approximating the true distribution of shrinkage by ADM (see 4.2). Considering this point, we finally conclude that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property.
 \\
 
-The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
+The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 \\
 
 Morris and Christiansen (1995) also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
@@ -577,7 +577,7 @@ R> bcv <- coverage(b, nsim = 10000)
 The plot seems to indicate overcoverage. The estimated overall coverage probability is 0.974 based on the unbiased estimator and 0.973 based on the Rao-Blackwellization, at least satisfying the definition of the 95\% confidence interval. 
 \\
 
-However, achieving at least 95\% coverage at specific true values of ($r$ and $\beta$) does not mean that our model has good repeated sampling property. So, as we did in 6.1, we will see at least in terms of varying $r$ whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
+However, achieving at least 95\% coverage at specific true values of ($r$ and $\beta$) does not mean that our model has good repeated sampling property. So, as we did in other examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -599,7 +599,7 @@ R> abline(h = 0.95)
 \end{center}
 \end{figure}
 
-This plot shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Considering that our model is approximating the true distribution of shrinkage by ADM (see 4.2), we finally conclude that the interval estimates from the suggested multi-level modeling on this particular dataset has a very good repeated sampling property.
+This plot shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that even this result does not guarantee good repeated sampling property because $\beta$ was fixed. But, this result can definitely be an encouraging sign for our model's good repeated sampling property. 
 \\
 
 The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
