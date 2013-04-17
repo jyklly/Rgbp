@@ -550,7 +550,7 @@ Next, we will check whether the estimated coverage probabilities are at least 95
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> shr <- seq(0.01, 0.99, by = 0.05)
+R> shr <- seq(0.01, 0.99, length.out = 20)
 R> r.trial <- mean(n) * shr / (1 - shr)
 R> cov.save <- sapply (1 : length(r.trial), function(i){
 R>               coverage(b, A.or.r = r.trial[i], reg.coef = c(-1.194, 0.389), 
