@@ -457,6 +457,23 @@ beta0    8.168 5.73 1.425 0.154
 %\end{center}
 %\end{figure}
 
+%\begin{CodeChunk}
+%\begin{CodeInput}
+%R> shr <- seq(0.01, 0.99, length.out = 20)
+%R> A.trial <- mean(n) * (1 - shr) / shr
+%R> cov.save <- sapply (1 : length(A.trial), function(i){
+%R>               coverage(g, A.or.r = A.trial[i], reg.coef = 8.168, 
+%R>                        nsim = 500)$average.coverageRB
+%R>             })
+%\end{CodeInput}
+%\end{CodeChunk}
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width = 5.5cm]{school3.png}
+%\end{center}
+%\end{figure}
+
+
 \subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Prior Mean and One Covariate}
 In this example, suppose you read the New York Times published on 26 April 1970. One article in this magazine covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then, you became interested in their batting averages over the remaining season. How could you predict? For reference, the dataset  \code{baseball} has each player's batting average over the remaining season. 
 \\
@@ -582,7 +599,7 @@ R> shr <- seq(0.01, 0.99, length.out = 20)
 R> r.trial <- mean(n) * shr / (1 - shr)
 R> cov.save <- sapply (1 : length(r.trial), function(i){
 R>               coverage(b, A.or.r = r.trial[i], reg.coef = c(-1.194, 0.389), 
-R>                        covariates = x1, nsim = 500)$average.coverageRB
+R>                        covariates = x, nsim = 500)$average.coverageRB
 R>             })
 \end{CodeInput}
 \end{CodeChunk}
