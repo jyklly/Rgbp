@@ -59,7 +59,7 @@
 
   Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
-  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's} or accurately estimated \eqn{s_{j}'s}{s_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
+  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{V_{j}'s}{V_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
