@@ -65,7 +65,7 @@ Loading required package: mnormt
 > 
 >     g <- gbp(y, se)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
@@ -78,7 +78,7 @@ Summary for whole units:
 8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
@@ -139,7 +139,7 @@ beta0    8.168 5.73 1.425 0.154
 > 
 >     g <- gbp(y, se, x2, model = "gr")
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 5           -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018   17.670
@@ -162,7 +162,7 @@ colMeans     8.75 12.5  0.5      8.261     0.476  -11.339     8.261   27.961
 8         12.739
 colMeans  10.015
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           28.00 15.0 -1.0      8.073     0.581   -5.142    16.429   43.404
@@ -234,7 +234,7 @@ beta1    0.126 5.698 0.022 0.982
 > 
 >     g <- gbp(y, se, mean.PriorDist = 8)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0          8     0.478  -11.516     3.303   15.419   6.866
@@ -247,7 +247,7 @@ Summary for whole units:
 8           12.00 18.0          8     0.786   -6.767     8.858   26.078   8.363
 colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0          8     0.718    0.595    13.642   34.604   8.948
@@ -348,7 +348,7 @@ $raw.resultU
 > 
 >     b <- gbp(z, n, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
@@ -371,7 +371,7 @@ Summary for whole units:
 18          0.156 45      0.267     0.622    0.144     0.225    0.318   0.044
 colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
@@ -442,7 +442,7 @@ beta0   -1.012 0.1 -10.153     0
 > 
 >     b <- gbp(z, n, x1, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.269     0.594    0.218     0.322    0.436
@@ -485,7 +485,7 @@ colMeans    0.265 45 0.28      0.268     0.594    0.180     0.267    0.363
 18         0.050
 colMeans   0.047
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.269     0.594    0.218     0.322    0.436
@@ -577,7 +577,7 @@ beta1    0.003 0.228  0.012  0.99
 > 
 >     b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
@@ -600,7 +600,7 @@ Summary for whole units:
 18          0.156 45      0.265      0.65    0.156     0.227    0.306   0.038
 colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
@@ -668,7 +668,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 > 
 >     p <- gbp(z, n, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
@@ -691,7 +691,7 @@ Summary for whole units:
 18          0.156 45      0.268     0.717    0.156     0.236    0.333   0.045
 colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
@@ -768,7 +768,7 @@ beta0   -1.319 0.08 -16.522     0
 > 
 >     p <- gbp(z, n, x1, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.271     0.692    0.204     0.311    0.440
@@ -811,7 +811,7 @@ colMeans    0.265 45 0.28      0.269     0.692    0.180     0.268    0.374
 18         0.054
 colMeans   0.050
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.271     0.692    0.204     0.311    0.440
@@ -903,7 +903,7 @@ beta1    0.001 0.181   0.007 0.995
 > 
 >     p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
@@ -926,7 +926,7 @@ Summary for whole units:
 18          0.156 45      0.265     0.741    0.164     0.237    0.322   0.040
 colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
@@ -1017,7 +1017,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 > 
 >   b <- gbp(z, n, x, model = "br")
 >   b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
@@ -1060,7 +1060,7 @@ colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351
 18         0.039
 colMeans   0.041
 >   print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
@@ -1140,7 +1140,7 @@ beta1    0.389 0.187  2.074 0.038
 > 
 >   p <- gbp(z, n, x, model = "pr")
 >   p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.312     0.776    0.239     0.331    0.439
@@ -1183,7 +1183,7 @@ colMeans    0.265 45 0.44      0.269     0.776    0.189     0.268    0.361
 18         0.040
 colMeans   0.044
 >   print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.312     0.776    0.239     0.331    0.439
@@ -1551,7 +1551,7 @@ $raw.resultU
 > 
 >     g <- gbp(y, se)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
@@ -1564,7 +1564,7 @@ Summary for whole units:
 8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
@@ -1625,7 +1625,7 @@ beta0    8.168 5.73 1.425 0.154
 > 
 >     g <- gbp(y, se, x2, model = "gr")
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 5           -1.00  9.0 -1.0      8.073     0.333  -15.136     2.018   17.670
@@ -1648,7 +1648,7 @@ colMeans     8.75 12.5  0.5      8.261     0.476  -11.339     8.261   27.961
 8         12.739
 colMeans  10.015
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           28.00 15.0 -1.0      8.073     0.581   -5.142    16.429   43.404
@@ -1720,7 +1720,7 @@ beta1    0.126 5.698 0.022 0.982
 > 
 >     g <- gbp(y, se, mean.PriorDist = 8)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0          8     0.478  -11.516     3.303   15.419   6.866
@@ -1733,7 +1733,7 @@ Summary for whole units:
 8           12.00 18.0          8     0.786   -6.767     8.858   26.078   8.363
 colMeans     8.75 12.5          8     0.618   -6.723     8.037   23.118   7.647
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           28.00 15.0          8     0.718    0.595    13.642   34.604   8.948
@@ -1834,7 +1834,7 @@ $raw.resultU
 > 
 >     b <- gbp(z, n, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
@@ -1857,7 +1857,7 @@ Summary for whole units:
 18          0.156 45      0.267     0.622    0.144     0.225    0.318   0.044
 colMeans    0.265 45      0.267     0.622    0.185     0.266    0.357   0.044
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.267     0.622    0.222     0.317    0.421   0.051
@@ -1928,7 +1928,7 @@ beta0   -1.012 0.1 -10.153     0
 > 
 >     b <- gbp(z, n, x1, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.269     0.594    0.218     0.322    0.436
@@ -1971,7 +1971,7 @@ colMeans    0.265 45 0.28      0.268     0.594    0.180     0.267    0.363
 18         0.050
 colMeans   0.047
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.269     0.594    0.218     0.322    0.436
@@ -2063,7 +2063,7 @@ beta1    0.003 0.228  0.012  0.99
 > 
 >     b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
@@ -2086,7 +2086,7 @@ Summary for whole units:
 18          0.156 45      0.265      0.65    0.156     0.227    0.306   0.038
 colMeans    0.265 45      0.265      0.65    0.191     0.265    0.346   0.040
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265      0.65    0.230     0.312    0.401   0.044
@@ -2154,7 +2154,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 > 
 >     p <- gbp(z, n, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
@@ -2177,7 +2177,7 @@ Summary for whole units:
 18          0.156 45      0.268     0.717    0.156     0.236    0.333   0.045
 colMeans    0.265 45      0.268     0.717    0.186     0.267    0.364   0.045
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.268     0.717    0.211     0.305    0.418   0.053
@@ -2254,7 +2254,7 @@ beta0   -1.319 0.08 -16.522     0
 > 
 >     p <- gbp(z, n, x1, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.271     0.692    0.204     0.311    0.440
@@ -2297,7 +2297,7 @@ colMeans    0.265 45 0.28      0.269     0.692    0.180     0.268    0.374
 18         0.054
 colMeans   0.050
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
 1           0.400 45 1.00      0.271     0.692    0.204     0.311    0.440
@@ -2389,7 +2389,7 @@ beta1    0.001 0.181   0.007 0.995
 > 
 >     p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
@@ -2412,7 +2412,7 @@ Summary for whole units:
 18          0.156 45      0.265     0.741    0.164     0.237    0.322   0.040
 colMeans    0.265 45      0.265     0.741    0.192     0.265    0.350   0.041
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.400 45      0.265     0.741    0.213     0.300    0.402   0.048
@@ -2504,7 +2504,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 > 
 >     g <- gbp(y, se)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 31           1.14 0.6      0.018     0.352   -0.254     0.746    1.823   0.529
@@ -2540,7 +2540,7 @@ Summary for whole units:
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
 colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
@@ -2610,7 +2610,7 @@ beta0    0.018 0.243 0.076  0.94
 > 
 >     b <- gbp(z, n, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
@@ -2646,7 +2646,7 @@ Summary for whole units:
 31          0.020 1340      0.029     0.347    0.017     0.023    0.030   0.004
 colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
@@ -2716,7 +2716,7 @@ beta0    -3.53 0.064 -55.225     0
 > 
 >     p <- gbp(z, n, model = "pr")
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
@@ -2752,7 +2752,7 @@ Summary for whole units:
 31          0.020 1340      0.029     0.359    0.017     0.023    0.031   0.004
 colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
@@ -2903,7 +2903,7 @@ beta0   -3.559 0.062 -57.091     0
 > 
 >     g <- gbp(y, se)
 >     g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 31           1.14 0.6      0.018     0.352   -0.254     0.746    1.823   0.529
@@ -2939,7 +2939,7 @@ Summary for whole units:
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
 colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 >     print(g, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           -2.07 2.8      0.018     0.916   -1.883    -0.157    1.423   0.842
@@ -2981,7 +2981,7 @@ colMeans    -0.12 1.2      0.018     0.614   -1.346     0.018    1.368   0.692
 > 
 >     b <- gbp(z, n, model = "br")
 >     b
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
@@ -3017,7 +3017,7 @@ Summary for whole units:
 31          0.020 1340      0.029     0.347    0.017     0.023    0.030   0.004
 colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 >     print(b, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.914    0.019     0.030    0.044   0.006
@@ -3059,7 +3059,7 @@ colMeans    0.029  517      0.029     0.609    0.019     0.028    0.039   0.005
 > 
 >     p <- gbp(z, n, model = "pr")
 >     p
-Summary for whole units: 
+Summary for each unit (sorted by n): 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
@@ -3095,7 +3095,7 @@ Summary for whole units:
 31          0.020 1340      0.029     0.359    0.017     0.023    0.031   0.004
 colMeans    0.029  517      0.029     0.620    0.019     0.028    0.039   0.005
 >     print(p, sort = FALSE)
-Summary for whole units: 
+Summary for each unit: 
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
 1           0.045   67      0.029     0.918    0.019     0.030    0.044   0.006
@@ -3285,7 +3285,7 @@ beta0   -3.559 0.062 -57.091     0
 > 
 >   g <- gbp(y, se)
 >   g
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
@@ -3298,7 +3298,7 @@ Summary for whole units:
 8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 >   print(g, sort = TRUE)
-Summary for whole units: 
+Summary for each unit (sorted by se): 
 
          obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
 5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
@@ -3470,7 +3470,7 @@ beta0   -3.559 0.062 -57.091     0
 > ### * <FOOTER>
 > ###
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  13.366 0.213 15.955 0 0 
+Time elapsed:  11.741 0.166 12.034 0 0 
 > grDevices::dev.off()
 null device 
           1 
