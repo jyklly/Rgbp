@@ -35,7 +35,7 @@
 }
 
 \details{
-  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{V_{j}}{V_j} (=eqn{sigma^{2}/n_{j}}{sigma^2/n_j}) is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
+  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{V_{j}}{V_j} (=\eqn{\sigma^{2}/n_{j}}{\sigma^2/n_j}) is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset.
   \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, V_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, V_j)}
   \deqn{(\theta_{j}~ |~\mu_{0j}, ~A)~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}

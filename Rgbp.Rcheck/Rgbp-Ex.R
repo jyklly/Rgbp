@@ -31,8 +31,8 @@ flush(stderr()); flush(stdout())
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # One covariate: 1 if a player is in the National league
-  x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
 
   ################################################################
   # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
@@ -328,8 +328,8 @@ flush(stderr()); flush(stdout())
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # One covariate: 1 if a player is in the National league
-  x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
   
   #################################################################
   # Gaussian Regression Interactive Multi-level Modeling (GRIMM) #
@@ -527,12 +527,12 @@ flush(stderr()); flush(stdout())
   # Arbitrary covariate for schools data
   x2 <- rep(c(-1, 0, 1, 2), 2)
   
-  # Baseball data where z is Hits and n is AtBats
+  # baseball data where z is Hits and n is AtBats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # One covariate: 1 if a player is in the National league
-  x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
 
   ################################################################
   # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
