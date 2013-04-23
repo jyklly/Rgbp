@@ -321,14 +321,14 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   index <- 1 : length(se)
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
-
-  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3), las = 1, ps = 13,oma=c(0,5,0,0))
   
+  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.1, 1, 0.3), las = 1, ps = 13,oma=c(0,10,0,0))
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
   postlens <- po.sd / max(po.sd)
   xmin <- min(c(y, po.m, pr.m))
   xmax <- max(c(y, po.m, pr.m))
+  
   sunflowerplot(rep(4, length(y)) ~ y, ylim = c(-1, 5), xlim = c(xmin - abs(xmin) * 0.1, 
                 xmax + abs(xmax) * 0.1), yaxt = "n", col.lab = "white", main = "Shrinkage Plot", pch=1,cex=1)
   
@@ -370,16 +370,13 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     points(index, pr.m, col = 4, pch = "-", cex = 2)
   }
 
+  ## legend
   se.or.n <- switch(x$model, "gr" = "standard error", "br" = "n", "pr" = "n")
-  par(new=TRUE,mfrow=c(1,1))
-  par(xpd=NA)
+  par(new=TRUE,mfrow=c(1,1),oma=c(0,0,0,0))
   plot(1, type="n", axes=F, xlab="", ylab="")
-  legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
+    legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
          lwd = c(NA, NA, 2, 2, 2), 
          c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "crossover"),
-         seg.len = 0.5, bty = "n", inset = c(-0.175, 0))
- # legend("topleft", pch = c(19, 1, NA,NA), col = c(2, 1, 4,"darkviolet"), lwd = c(NA, NA, 2,2), c("posterior mean", "sample mean", "prior mean","se"), seg.len = 0.5, bty = "n")
-  par(xpd = FALSE)
-
+         seg.len = 0.5, bty = "n",xpd=TRUE)
 
 }

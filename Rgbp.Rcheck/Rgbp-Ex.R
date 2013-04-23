@@ -3,7 +3,7 @@ source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('Rgbp')
 
-base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+assign(".oldSearch", search(), pos = 'CheckExEnv')
 cleanEx()
 nameEx("Rgbp-package")
 ### * Rgbp-package
@@ -1053,7 +1053,7 @@ flush(stderr()); flush(stdout())
 
 ### * <FOOTER>
 ###
-base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***
