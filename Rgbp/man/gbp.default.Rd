@@ -35,9 +35,9 @@
 }
 
 \details{
-  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{\sigma^{2}_{j}}{\sigma_j^2} is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
+  \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{V_{j}}{V_j} (=\eqn{\sigma^{2}/n_{j}}{\sigma^2/n_j}) is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset.
-  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, V_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, V_j)}
   \deqn{(\theta_{j}~ |~\mu_{0j}, ~A)~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}
   \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
@@ -59,7 +59,7 @@
 
   Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
-  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{\sigma_{j}'s}{\sigma_j's} or accurately estimated \eqn{s_{j}'s}{s_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
+  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{V_{j}'s}{V_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
@@ -121,12 +121,12 @@
   # Arbitrary covariate for schools data
   x2 <- rep(c(-1, 0, 1, 2), 2)
   
-  # Baseball data where z is Hits and n is AtBats
+  # baseball data where z is Hits and n is AtBats
   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
 
-  # One covariate: 1 if a player is in the National league
-  x1 <- c(1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1)
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
 
   ################################################################
   # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
