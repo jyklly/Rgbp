@@ -322,7 +322,8 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
   
-  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.1, 1, 0.3), las = 1, ps = 13,oma=c(0,10,0,0))
+  par(mfrow = c(1, 2), xaxs = "r", yaxs = "r", mai = c(1, 0.3, 1, 0.3), las = 1, ps = 13,
+      oma = c(0, 8, 0, 0))
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
   postlens <- po.sd / max(po.sd)
@@ -372,7 +373,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   ## legend
   se.or.n <- switch(x$model, "gr" = "standard error", "br" = "n", "pr" = "n")
-  par(new=TRUE,mfrow=c(1,1),oma=c(0,0,0,0))
+  par(new = TRUE, mfrow = c(1, 1), oma = c(0, 0, 0, 0))
   plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
          lwd = c(NA, NA, 2, 2, 2), 
