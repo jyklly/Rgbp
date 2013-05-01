@@ -70,7 +70,7 @@
 
 \section[introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-\pkg{Rgbp} uses Bayesian machinery to estimate a two-level model (a random-effects mixed model) and allows for a check of its frequentist properties via a repeated sampling procedure (which we call a ``method check"). It is found that even in small samples our procedure yields good frequency properties. Also, this package will be useful for Bayesians who want to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model. For frequentists, it will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
+\pkg{Rgbp} uses Bayesian machinery to estimate a two-level model (a random-effects mixed model) and allows for a check of its frequentist properties via a repeated sampling procedure (which we call a ``method checking"). It is found that even in small samples our procedure yields good frequency properties. Also, this package will be useful for Bayesians who want to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model. For frequentists, it will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
 
 \section[Feasible Data Types]{Three Feasible Types of Data }
 This package is intended to fit a multilevel model on the group-level (or unit-level) data in which each group-level observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible data sets.
@@ -320,6 +320,7 @@ R> plot(p)
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.25]{hospital1.png}
+\caption{Shrinkage plot and 95\% interval plot}
 \end{center}
 \end{figure}
 
@@ -352,6 +353,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width = 5.5cm]{hospital2.png}
+\caption{Coverage plot via method checking}
 \end{center}
 \end{figure}
 
@@ -569,6 +571,7 @@ R> plot(b)
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.3]{baseball1.png}
+\caption{Shrinkage plot and 95\% interval plot}
 \end{center}
 \end{figure}
 
@@ -591,6 +594,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width = 5.5cm]{baseball2.png}
+\caption{Coverage plot via method checking}
 \end{center}
 \end{figure}
 
