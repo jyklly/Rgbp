@@ -30,7 +30,6 @@ This package uses Bayesian machinery to estimate a two-level model (a random-eff
 
 \examples{
 
-
   # Loading datasets
   data(schools)
   y <- schools$y

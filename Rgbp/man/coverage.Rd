@@ -1,7 +1,7 @@
 \name{coverage}
 \alias{coverage}
 \title{Estimating Coverage Probability}
-\description{\code{coverage} estimates Rao-Blackwellized and unbiased coverage probabilities.}
+\description{\code{coverage} estimates Rao-Blackwellized and simple unbiased coverage probabilities.}
 \usage{coverage(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, nsim = 10)}
 
 \arguments{
@@ -89,7 +89,7 @@
   from the prior distribution determined by designated values, \code{A.or.r} and \code{mean.PriorDist}.
   The \emph{i}-th Pseudo-datasets are generated based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
-  The unbiased estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
+  The simple unbiased estimator of coverage probability in \emph{j}-th group (or unit) is a sample mean of indicators over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
   \eqn{\theta_{ij}}{\theta_ij} that generated the observed value of the \emph{j}-th group in the 
   \emph{i}-th dataset.
 
@@ -101,7 +101,7 @@
     estimated Rao-Blackwellized coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{coverageU}{
-    estimated unbiased coverage probability for each group (or unit) averaged over all simulations.
+    estimated simple unbiased coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{average.coverageRB}{
     average value over \code{coverageRB}.

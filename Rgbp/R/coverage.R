@@ -340,13 +340,13 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   if (is.na(gbp.object$prior.mean)){
     if (gbp.object$model == "gr") {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Unbiased)",
+                             "Blue Dashed Line: (Simple Unbiased)",
                              paste("A =", round(A, 2)), 
                              paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
                              paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Unbiased)",
+                             "Blue Dashed Line: (Simple Unbiased)",
                              paste("r =", round(r, 2)), 
                              paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
                              paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
@@ -354,12 +354,12 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   } else {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Unbiased)",
+                             "Blue Dashed Line: (Simple Unbiased)",
                              paste("A =", round(A, 2)), 
                              paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
       legend("bottomleft", c("Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Unbiased)",
+                             "Blue Dashed Line: (Simple Unbiased)",
                              paste("r =", round(r, 2)), 
                              paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
     }
