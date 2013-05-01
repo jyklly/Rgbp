@@ -18,7 +18,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-
   # Loading datasets
   data(schools)
   y <- schools$y
