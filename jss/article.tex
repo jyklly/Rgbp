@@ -76,7 +76,7 @@
 This package is intended to fit a multilevel model on the group-level (or unit-level) data in which each group-level observation is believed to have the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible data sets.
 
 \subsection{Normal: 8 Schools}
-Education Testing Service conducted randomized experiments in eight separate schools and obtained this data set. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of eight schools obtained after an analysis of covariance adjustment (Rubin, 1981).
+Education Testing Service conducted randomized experiments in eight separate schools and obtained this data set. It contains the coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of eight schools (Rubin, 1981).
 \begin{CodeChunk}
 \begin{CodeInput}
 R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
@@ -84,7 +84,7 @@ R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
 \end{CodeInput}
 \end{CodeChunk}
 
-In the original paper, each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each school-level coaching effect is distributed as an independent Normal distribution given the unknown mean $\mu_{j}$ and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this data set and can be called by typing `\code{R> data(schools)}' on \proglang{R}.
+Each school's coaching effect has approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each school-level coaching effect is distributed as an independent Normal distribution given the unknown mean $\mu_{j}$ and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this data set and can be called by typing `\code{R> data(schools)}' on \proglang{R}.
 
 \subsection{Poisson: 31 Hospitals}
 This data set is about the medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 (Morris and Lysy, 2012). It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The below code is an example of input based on the last ten hospital data.
@@ -167,7 +167,7 @@ Hyper-prior distribution indicates a distribution of the second-level parameters
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. For $\beta$, it is reasonable choice to take flat (non-informative) distribution because information about the location gets plentiful as the number of groups increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) was chosen to bring a good repeated sampling property and for a posterior propriety under moderate conditions.
+where $m$ is the number of regression coefficients. As for $\beta$, it is reasonable choice to take flat (non-informative) distribution because information about the location gets plentiful as the number of groups increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) was chosen to bring a good repeated sampling property and for a posterior propriety under moderate conditions.
 \\
 
 \section[Estimation]{Estimation}
@@ -225,7 +225,7 @@ For this purpose, you gathered data of 31 hospitals in NY composed of the number
 The multilevel modeling that assumes a bigger population-level hierarchy will be insightful in this problem. Here, we presume a state-level (NY) hierarchy governing the true death rates of CABG surgery of all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution whose mean is 0.020. For reference, a model check can be useful for evaluating the validity of such a view point (Christiansen and Morris, 1996). 
 \\
 
-Assuming an additional hierarchy is reasonable, a model-fitting process begins.  Since the true death rate per exposure after CABG surgery might be small and the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital, the Poisson distribution would be our first choice to describe the uncertainty in our data. Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in 3.2 . For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
+Assuming an additional hierarchy is reasonable, a model-fitting process begins.  Since the true death rate per exposure after CABG surgery might be small and the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital, the Poisson distribution would be the first choice to describe the uncertainty in our data. Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in 3.2 . For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
 \begin{CodeChunk}
 \begin{CodeInput}
 R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "pr")
@@ -305,7 +305,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 1          -5.818         0.411
 \end{CodeOutput}
 \end{CodeChunk}
-Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. Note that $r$ can be interpreted as the amount of prior information, although we do not know its true value. So, \code{gbp} asked data how much credit they wanted to give to this hypothetical second-level hierarchy. $\hat{r}$ = 336 is the answer from the data. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. 
+Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. As mentioned before, $r$ can be interpreted as the amount of prior information, although we do not know its true value. So, \code{gbp} asked data how much credit they wanted to give to this hypothetical second-level hierarchy. $\hat{r}$ = 336 is the answer from the data. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. 
 \\
 
 For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because its observed amount of information (67) is far less than the amount of state-level information (336).
@@ -338,7 +338,7 @@ This interval plot can give us one more valuable insight, which we could not hav
 Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-avoider, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 \\
 
-Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method check will answer this question. The \code{coverage} function below generates 10,000 pseudo-data sets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method checking will answer this question. The \code{coverage} function below generates 10,000 pseudo-data sets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
 \\
 
 Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
@@ -519,10 +519,10 @@ colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.0
 Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that shrinkage estimates are the same for all players. It makes sense because shrinkage ($B_{j}\equiv r / (r+n_{j})$) is determined by the relative amount of information between the first-level and the second-level hierarchies. The fact that all players have the same amount of observed information ($n_{j}=45$) and $\hat{r}=\textrm{exp}(4.727)=113$ from below summary tell why the estimated shrinkage is 0.715 (=113 / (113 + 45)).
 \\
 
-For reference, we can run the Normal hierarchical model using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. For comparison, we calculated squared error losses, $\sum_{j=1}^{18}(p_{j, remaining}-\hat{p}_{j})^{2}$, using the estimates from the Binomial and Normal multilevel models and also using the sample mean (MLE). These values were 0.042, 0.043, and 0.086 each. Note that estimates from the Normal and Binomial models are twice better than MLE in terms of squared error loss. 
+For reference, we can run the Normal hierarchical model using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. For comparison, we calculated squared error losses, $\sum_{j=1}^{18}(p_{j, remaining}-\hat{p}_{j})^{2}$, where $p_{j, remaining}$ is each player's batting average over the remaining season and $\hat{p}_{j}$ is estimate from the Binomial and Normal multilevel models and from the sample mean (MLE) using the first 45 at-bats. These values were 0.042, 0.043, and 0.086 each, indicating that estimates from the Normal and Binomial models are twice better than MLE in terms of squared error loss. 
 \\
 
-One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is one factor that determines posterior variance because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
+One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is a critical factor that makes posterior variances different from each player because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(b)
@@ -559,7 +559,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-This summary also includes the result of logistic regression fit because we did not know prior means in advance so that we had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two different prior distributions distinguishing outfielders from other positions were significantly different, supporting our assumption. The positive sign of $\hat{\beta}_{1}$ reflects on the first five players, outfielders, whose observed batting averages were higher than others.
+This summary also includes the result of logistic regression fit because we did not know prior means in advance. We had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate (\code{beta1}). It shows that the two prior means distinguishing outfielders from other positions were significantly different, supporting your initial belief. The positive sign of $\hat{\beta}_{1}$ reflects on the first five players, outfielders, whose observed batting averages were higher than others.
 \\
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -572,13 +572,13 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. This symbol also means that the seemingly two lines crossing over others were actually three lines for those who were outfielders (10th, 14th, and 15th hitters) with observed batting averages far lower than the top five hitters.
+Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. This symbol also means that the seemingly two lines crossing over others were actually three lines for those who were outfielders (10th, 14th, and 15th hitters).
 \\
 
-Note that the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
+For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 \\
 
-The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their batting averages (sample mean) are far worse than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). The fact that their sample means are located at the lower part of their 95\% intervals supports this argument. So, their posterior means (red dots) can also be interpreted as their RTTM. 
+The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their batting averages (sample mean) are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). The fact that their sample means are located at the lower part of their 95\% intervals supports this argument. So, their posterior means (red dots) can also be interpreted as their RTTM. 
 \\
 
 One more thing to emphasize is that observed sample means are all within the interval estimates. And these interval estimates also catched the batting averages over the ramaining season successfully, although the result was left out. Then, how much can we trust these interval estimates? The following method check will answer it. 
@@ -594,7 +594,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-The meaning of putting the \code{gbp} object, \code{b}, without any additional argument in the above \code{coverage} function is to make this function regard the estimated values, such as $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values for generating pseudo-data sets. 
+The meaning of putting the \code{gbp} object, \code{b}, without any additional argument in the above \code{coverage} function is to make this function regard the estimated values, such as $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-data sets. 
 \\
 
 Finally, the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
