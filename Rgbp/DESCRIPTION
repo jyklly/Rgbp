@@ -8,4 +8,4 @@ Depends: sn
 Suggests: mnormt
 Description: Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gaussian, Binomial, and Poisson data and frequentist method check for good coverage probability.
 License: GPL-2
-BugReports: https://github.com/jyklly/gbp/issues
+BugReports: https://github.com/jyklly/Rgbp/issues
