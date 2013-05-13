@@ -56,6 +56,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
           coverageU[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -107,6 +108,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
           coverageU[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -159,6 +161,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
           coverageU[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -212,6 +215,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
           coverageU[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -262,6 +266,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
           coverageU[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
@@ -312,6 +317,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
           coverageU[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+
         }, error = function(x) {
                      print(c(i,"error"))
                    }, warning = function(x) {
