@@ -192,7 +192,7 @@ After estimating the two posterior moments, $E(p_{j}\vert \textbf{z})$ and $Var(
 %not sure we need this
 %To be specific, we assumed $p_{j}\vert \textbf{z}$ had another Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textbf{z})$ and $Var(p_{j}\vert \textbf{z})$, with two parameters, $a_{1}$ and $a_{0}$, of this assumed Beta distribution. 
 
-%TODO: Resume editing from here
+%TODO: Haven't proof read method checking section yet
 \section[Method Checking]{Method Checking}
 Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
 
@@ -217,6 +217,7 @@ Based on the generated pseudo-data sets, let's define an indicator variable, $I_
 \subsection{Rao-Blackwellized Unbiased estimates of Coverage Probabilities}
 Rao-Blackwellization improves accuracy of an unbiased estimator by taking conditional expectation given a sufficient statistic. Based on this idea, we define $E(I_{ij}\vert z_{ij}, r, \beta$), where $r$ and $\beta$ were given at first (see 5.1) and $z_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{p}_{ij, low}\le p_{ij} \le\hat{p}_{ij, upp}\vert z_{ij}, r, \beta)$, where ($\hat{p}_{ij, low}$, $\hat{p}_{ij, upp}$) is $j$-Ch player's interval estimates on the $i$-th data set. We can calculate this probability  because we know the distribution of $p_{ij} \vert z_{ij}, r, \beta$ in (9). Note that conditioning on $z_{ij}$ is equivalent to conditioning on $\mathbf{z}$ as long as $r$ and $\beta$ are known. Then, we can estimate the first player's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert z_{i1}, r, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
 
+%TODO: Proof read Hospital and Baseball examples
 \section[Examples]{Examples}
 \subsection[Known Second-level Mean]{31 Hospitals: Known Second-level Mean}
 Suppose you live in the New York state (NY) and have been suffering from severe coronary heart disease (hopefully not). If you are supposed to receive the coronary artery bypass graft (CABG) surgery soon, you might want to find the most famous hospital for dealing with such a surgery. On top of that, if you can figure out each hospital's ability to handle this surgery, it will be useful for your decision in choosing a hospital.
@@ -390,6 +391,8 @@ It estimated coverage probabilities by simple unbiased estimates (a blue dashed 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
 \begin{CodeChunk}
 \begin{CodeInput}
+R> data(schools)
+R> attach(schools)
 R> g <- gbp(y, se, model = "gr")
 R> g
 \end{CodeInput}
@@ -408,6 +411,20 @@ Summary for each unit (sorted by n):
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
+
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(g)
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.3]{school1.png}
+\caption{Shrinkage plot and 95\% interval plot for 8 schools}
+\end{center}
+\end{figure}
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -444,23 +461,19 @@ beta0    8.168 5.73 1.425 0.154
 \end{CodeOutput}
 \end{CodeChunk}
 
-%\begin{figure}[h]
-%\begin{center}
-%\includegraphics[scale=0.3]{school1.png}
-%\caption{Shrinkage and interval plots of 8 schools}
-%\end{center}
-%\end{figure}
 
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> gcv <- coverage(g, nsim = 10000)
-%\end{CodeInput}
-%\end{CodeChunk}
-%\begin{figure}[h]
-%\begin{center}
-%\includegraphics[width = 5.5cm]{school2.png}
-%\end{center}
-%\end{figure}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> gcv <- coverage(g, nsim = 10000)
+\end{CodeInput}
+\end{CodeChunk}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 5.5cm]{school2.png}
+\caption{Coverage plot via method checking for 8 schools}
+\end{center}
+\end{figure}
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
