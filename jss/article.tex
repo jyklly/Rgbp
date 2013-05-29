@@ -108,13 +108,12 @@ R> x <- c( 1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0
 \end{CodeChunk}
 The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown true batting average $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This data set is also a part of the package and can be called on \proglang{R} by `\code{data(baseball)}'.
 
-\section[Multilevel Structure]{Multilevel Structure}
-Our multilevel model, also called a conditionally independent hierarchical model \cite{1989}, is a very powerful tool for exploring the hierarchical structure in data. For example, we can think about a district-level hierarchy (bigger population) for 8 schools, the state-level hierarchy for 31 hospitals, and the position-level hierarchy for 18 baseball players. \code{gbp}, one of functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate prior distribution on the first-level parameter. Users can determine one of three types of multilevel models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their data sets. 
-\\
+\section[Multilevel Structure]{Multilevel Structure} \label{multilevel}
+A two-level or multilevel model, also called a conditionally independent hierarchical model \cite{1989}, is a very powerful tool for exploring the hierarchical structure in data. For example, in the 8 schools dataset, we can imagine that there exists a district-level hierarchy (bigger population) for 8 schools, the state-level hierarchy for 31 hospitals, and the position-level hierarchy for 18 baseball players. \code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate prior distribution on the first-level parameter. The \code{gbp} function allows users to choose one of three types of multilevel models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their data sets. 
 
  
 \subsection[Normal-Normal]{Normal-Normal}
-\code{gbp} can construct a two-level Normal-Normal hierarchical model on the 8 school data. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th school in the data set.
+The following is a general Normal-Normal hierarchical model. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group in the data set.
 \begin{equation}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \end{equation}
@@ -122,27 +121,27 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} =x^{T}_{j}\beta,~j=1, \ldots, 8$, $\beta$ and $A$ are unknown, $x_{j}$ is $j$-th school's covariate vector ($m\times 1$), and $m$ is the number of regression coefficients. Note that if there is no covariate then $x_{j}=1$ for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Also,  based on this conjugate prior distribution, it is easy to derive the corresponding posterior distribution, which is the same as the product of two distributions, (1) and (2), up to a normalizing constant.
-\begin{equation}
+where $~j=1, \ldots k$, $\mu_{0j} = \mathbf{x}^{T}_{j} \mathbf{\beta}$, $x_{j}$ is $j$-th group's covariate vector ($m\times 1$), $m$ is the number of regression coefficients and $\mathbf{\beta}$ and $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+\begin{equation} \label{normalpost}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})V_{j}),
 \end{equation}
-where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, 8$, are called shrinkages.
+where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma}
-\code{gbp} is also able to build a Poisson-Gamma multilevel model on the 31 hospital data. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket below indicates [mean, variance] of distribution. And for notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ for all $j$.
+\code{gbp} is also able to build a Poisson-Gamma multilevel model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket below indicates [mean, variance] of distribution. And for notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ for all $j$.
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
 \begin{equation}
-\lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(\lambda_{0j}r)\sim \textrm{Gamma}[\lambda_{0j}, ~\frac{\lambda_{0j}}{r}],
+\lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(\lambda_{0j}r)\sim \textrm{Gamma} \left[\lambda_{0j}, ~\frac{\lambda_{0j}}{r} \right],
 \end{equation}
 
-where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, 31$, with two unknown hyper-parameters, $r$ and $\beta$. Immediate posterior distribution of this Poisson-Gamma model is
-\begin{equation}
-\lambda_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + n_{j}y_{j})\sim\textrm{Gamma}[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}}],
+where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, k$, with two unknown hyper-parameters, $r$ and $\beta$. The posterior distribution of this Poisson-Gamma model is
+\begin{equation} \label{gammapost}
+\lambda_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + n_{j}y_{j})\sim\textrm{Gamma} \left[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}} \right],
 \end{equation}
 
-where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$,  $B_{j}\equiv r / (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1, \ldots, 31$. 
+where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$,  $B_{j}\equiv r / (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1, \ldots, k$. 
 
 \subsection[Binomial-Beta]{Binomial-Beta}
 Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of distribution.
@@ -150,51 +149,56 @@ Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Agai
 z_{j} \vert p_{j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
 \end{equation}
 \begin{equation}
-p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta}[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1}],
+p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta} \left[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1} \right],
 \end{equation}
 
-where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, 18$. Note that $r$ and $\beta$ are two unknown hyper-parameters. Then, corresponding posterior distribution is
-\begin{equation}
+where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, k$. Note that $r$ and $\beta$ are two unknown hyper-parameters. Then, corresponding posterior distribution is
+\begin{equation} \label{betapost}
 p_{j}\vert \textbf{z}, \beta, r \stackrel{ind}{\sim}\textrm{Beta}(rp_{0j}+n_{j}y_{j},~r(1-p_{0j})+n_{j}(1-y_{j}))\sim\textrm{Beta}\bigg[p^{\ast}_{j},~ \frac{p^{\ast}_{j}(1-p^{\ast}_{j})}{r+n_{j}+1}\bigg],
 \end{equation}
-where $p^{\ast}_{j}\equiv(1-B_{j})y_{j}+B_{j}p_{0j}$, $B_{j}\equiv r/ (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1,\ldots,18$.
+where $p^{\ast}_{j}\equiv(1-B_{j})y_{j}+B_{j}p_{0j}$, $B_{j}\equiv r/ (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1,\ldots,k$.
 
 
 \subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
-Hyper-prior distribution indicates a distribution of the second-level parameters, which plays an important role in deriving a full posterior distribution of all the parameters. \code{gbp} sets non-informative distributions on second-level parameters to let the data speak more about their estimation.
+In our examples the hyper-prior distribution is an assumed distribution on the second-level parameters and with the goal of objectivity in mind \code{gbp} assumes non-informative hyper-prior distributions.
 \begin{equation}
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, it is reasonable choice to take flat (non-informative) distribution because information about the location gets plentiful as the number of groups increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) was chosen to bring a good repeated sampling property and for a posterior propriety under moderate conditions.
-\\
+where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the location gets plentiful as the number of groups increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) was chosen for its good repeated sampling properties and for posterior propriety under moderate conditions.
+
 
 \section[Estimation]{Estimation}
 
 \subsection[Shrinkage Estimation]{Shrinkage Estimation}
-Estimating shrinkage is a key part of this hierarchical modeling. As we can see in (3), (6), and (9), the posterior means are a linear function of shrinkage and the posterior variances are also a linear (Gaussian), quadratic (Poisson), or cubic (Binomial) function of shrinkage. It implies that we cannot obtain $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ without appropriate shrinkage estimation.
+Estimating the shrinkage factors ($B_1, \ldots B_k$) is the key estimation problem with the hierarchical models \code{gbp} assumes. As we can see in \ref{normalpost}, \ref{gammapost}, and \ref{betapost}, the posterior means are a linear function of the shrinkage factors and the posterior variances are also linear (Gaussian), quadratic (Poisson), or cubic (Binomial) functions. A natural method then to estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ is to first estimate the shrinkage factors.
 
 \subsection[ADM]{Adjustment for Density Maximization}
-When it comes to estimating a shrinkage, we can notice that it is a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models.
-\\
+It is noted that the shrinkage factors ($B_1, \ldots B_k$) are a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models. Current popular methods of estimation via maximization (MLE or MAP) of these unknown shrinkage factors can result in estimates lying on the boundary of the parameter space. In the Normal-Normal model this situation typically arises when the variation within schools is greater than the variation between resulting in a parameter estimate of $\hat{A} = 0$. %TODO: Reference this! Maybe it's in the Lysy paper
 
-In this case, the most common way is to obtain an MLE of the variance component with its asymptotic Normality and then to use Delta method for asymptotic Normal distribution of shrinkage, \emph{i.e.}, $\hat{B}_{j, MLE}=B_{j}(\hat{A}_{MLE})$. But, is the Normal approximation a good approximation for shrinkage that takes on a value between 0 and 1? If it is, why do we fit a logistic regression, such as logit($p$) = $x^{T}\beta$, instead of fitting a linear regression, $p = x^{T}\beta+\epsilon$?
-\\
+To continue with a maximization based estimation procedure but to steer clear of aforementioned issues we make us of adjustment for density maximization (ADM) \cite{2011}. In general ADM is a procedure to obtain estimates of posterior moments via maximization if the underlying posterior can be approximated by a Pearson family. For our purposes we can approximate the posterior distribution of a shrinkage factor with the Beta distribution allowing us to finally obtain estimates the posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without any trouble that MLE can cause. Please refer to \cite{2011} for additional advantages of ADM.
 
-Here the adjustment for density maximization \cite{2011}, called ADM, comes. It assumes the Beta distribution for shrinkage because this distribution is also defined between 0 and 1. In the end, ADM  estimates its posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without any trouble that MLE can cause. Please refer to \cite{2011} for additional advantages of ADM.
-\\
 
-Once we estimate these two moments of shrinkage, we can also estimate the posterior moments given only data. Taking the Normal model as an example,  $E(\mu_{j}\vert \textbf{y})=E(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$ by Adam's law and $Var(\mu_{j}\vert \textbf{y})=E(Var(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})$ by Eve's law. Note that both $E(\mu_{j}\vert \textbf{y}, r, A)$ and $Var(\mu_{j}\vert \textbf{y}, r, A)$ are functions of shrinkage (see (3)) and Adam's and Eve's laws are taking conditional expectation and variance over them given data, $\textbf{y}$. Since we have already estimated $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$ via ADM, finally we can estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$.
+Once we estimate these two moments of shrinkage, we can also estimate the posterior moments given only the data. Taking the Normal-Normal model as an example we note the following identities
+\begin{eqnarray}
+E(\mu_{j}\vert \textbf{y}) & = & E(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y}) \\ 
+Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, r, A)\vert \textbf{y}).
+\end{eqnarray}  
+Note that both $E(\mu_{j}\vert \textbf{y}, r, A)$ and $Var(\mu_{j}\vert \textbf{y}, r, A)$ are functions of the shrinkage factors (\ref{normalpost}) and since we have already can estimate $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$ via ADM, we can finally estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$.
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating two posterior moments, $E(p_{j}\vert \textbf{z})$ and $Var(p_{j}\vert \textbf{z})$ for the Binomial model, \code{gbp} reasonably approximates a posterior distribution given data, \emph{i.e.}, $p_{j}\vert \textbf{z}$ (or $\mu_{j}\vert \textbf{y}$, $\lambda_{j}\vert \textbf{z}$), by matching these two moments with its parameters. To be specific, we assumed $p_{j}\vert \textbf{z}$ had another Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textbf{z})$ and $Var(p_{j}\vert \textbf{z})$, with two parameters, $a_{1}$ and $a_{0}$, of this assumed Beta distribution. 
+After estimating the two posterior moments, $E(p_{j}\vert \textbf{z})$ and $Var(p_{j}\vert \textbf{z})$, \code{gbp} reasonably approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. The Binomial-Beta model we approximate $p_{j}\vert \textbf{z}$ with a Beta distribution and for the Poisson-Gamma model we approximate $\lambda_{j}\vert \textbf{z}$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\mu_{j}\vert \textbf{y}$ with a skewed-t distribution. %TODO: should I put down the form of the skewed-t or just put a reference to it?
 
+%not sure we need this
+%To be specific, we assumed $p_{j}\vert \textbf{z}$ had another Beta($a_{1}$, $a_{0}$) distribution and matched two estimated moments, $E(p_{j}\vert \textbf{z})$ and $Var(p_{j}\vert \textbf{z})$, with two parameters, $a_{1}$ and $a_{0}$, of this assumed Beta distribution. 
+
+%TODO: Resume editing from here
 \section[Method Checking]{Method Checking}
-Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a checking process, we usually go back to the fitting process and come back to the checking process iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
-\\
+Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
 
-There are two kinds of model justification process; one is a model check and the other is a method check. The model check is for the justification of a hierarchical modeling on a specific data set. One possible question is, ``Can this data set benefit from such a multilevel modeling?'' Christiansen and Morris (1996) answered this question by using a mixture model, $z_{j}\vert \beta, r\sim\textrm{Negative-Binomial}$, on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
-\\
+
+There are two kinds of model justification processes; one is a model check and the other is a method check. The model check is for the justification of the model \ref{multilevel} on a specific data set. One possible question is, ``Can this data set benefit from such a multilevel modeling?'' \cite{1997} answered this question by using a mixture model, $z_{j}\vert \beta, r\sim\textrm{Negative-Binomial}$, on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
+
 
 Once we are sure that the hierarchical modeling can be appropriate for our data, the following question will be about the validity of interval estimates, the final product of this multilevel modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' Our answer is ``yes'' and \pkg{Rgbp} has a function to check this point. From now on, all the explanations will be based on the Binomial model because the idea is the same and can be easily applied to the other two models.
 
@@ -216,13 +220,13 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking condit
 \section[Examples]{Examples}
 \subsection[Known Second-level Mean]{31 Hospitals: Known Second-level Mean}
 Suppose you live in the New York state (NY) and have been suffering from severe coronary heart disease (hopefully not). If you are supposed to receive the coronary artery bypass graft (CABG) surgery soon, you might want to find the most famous hospital for dealing with such a surgery. On top of that, if you can figure out each hospital's ability to handle this surgery, it will be useful for your decision in choosing a hospital.
-\\
+
 
 For this purpose, you gathered data of 31 hospitals in NY composed of the number of deaths within a month of CABG surgeries and total number of patients receiving CABG surgeries in each hospital. In addition, while one looks for such information, suppose one knows that the state-level death rate per exposure of this surgery is 0.020. 
-\\
+
 
 The multilevel modeling that assumes a bigger population-level hierarchy will be insightful in this problem. Here, we presume a state-level (NY) hierarchy governing the true death rates of CABG surgery of all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution whose mean is 0.020. For reference, a model check can be useful for evaluating the validity of such a view point (Christiansen and Morris, 1996). 
-\\
+
 
 Assuming an additional hierarchy is reasonable, a model-fitting process begins.  Since the true death rate per exposure after CABG surgery might be small and the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital, the Poisson distribution would be the first choice to describe the uncertainty in our data. Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in 3.2 . For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
 \begin{CodeChunk}
@@ -269,13 +273,13 @@ colMeans    0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
 \end{CodeOutput}
 \end{CodeChunk}
 For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$). 
-\\
+
 
 The output contains information about sample mean (\code{obs.mean}), caseload (\code{n}), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower interval, posterior mean ($E(\lambda_{j}\vert \textbf{z})$), upper interval, and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{z})$).
-\\
+
 
 As we can see in (6), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the prior distribution.
-\\
+
 
 A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model and a summary of regression fit will appear.
 \begin{CodeChunk}
@@ -305,10 +309,10 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 \end{CodeOutput}
 \end{CodeChunk}
 Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. As mentioned before, $r$ can be interpreted as the amount of prior information, although we do not know its true value. So, \code{gbp} asked data how much credit they wanted to give to this hypothetical second-level hierarchy. $\hat{r}$ = 336 is the answer from the data. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. 
-\\
+
 
 For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because its observed amount of information (67) is far less than the amount of state-level information (336).
-\\
+
 
 We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.
 \begin{CodeChunk}
@@ -324,25 +328,24 @@ R> plot(p)
 \end{figure}
 
 The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly safest hospital among 31 hospitals in terms of the observed sample mean was not actually safer than the second safest hospital. Without this hierarchical modeling, we might have made a wrong decision in choosing a hospital.
-\\
+
 
 Intuitively, the result of multilevel modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose sample means ($z_{j} / n_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 1 and 1000 each. Do you believe that the former hospital, whose observed death rate is 0, is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just one caseload. Though somewhat extreme, this is what happened to the two left-most hospitals in the first plot and this is why hierarchical modeling is a reasonable choice for this data set.
-\\
+
 
 The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, if we want to draw this plot by the order of data input, \code{plot(p, sort = FALSE)} is a right adjustment. Overall, as the caseload increases towards the right and as the posterior mean gets closer to 0, the length of interval gets shorter, which the formula of posterior variance in (6) implies. 
-\\
+
 
 This interval plot can give us one more valuable insight, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates. (Could you regard this 31st hospital as a possible candidate before you observe this plot?)
-\\
+
 
 Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
-\\
+
 
 Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method checking will answer this question. The \code{coverage} function below generates 10,000 pseudo-data sets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
-\\
+
 
 Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.  Then, the function \code{coverage} will evaluate whether interval estimates achieve 90\% confidence level.
-\\
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -357,7 +360,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{figure}
 
 It estimated coverage probabilities by simple unbiased estimates (a blue dashed line) and Rao-Blackwellized unbiased estimates (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate and 0.951 from the simple unbiased estimate. Considering this result, we finally conclude that the interval estimates from the suggested multilevel modeling on this particular data set has nice repeated sampling property.
-\\
+
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
 
@@ -382,7 +385,7 @@ It estimated coverage probabilities by simple unbiased estimates (a blue dashed 
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 
 \cite{1995} also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
-\\
+
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
 \begin{CodeChunk}
@@ -478,13 +481,13 @@ beta0    8.168 5.73 1.425 0.154
 
 \subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Prior Mean and One Covariate}
 In this example, suppose you read the New York Times published on 26 April 1970. One article in this magazine covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then, you became interested in their batting averages over the remaining season. How could you predict? For reference, the data set  \code{baseball} has each player's batting average over the remaining season. 
-\\
+
 
 First of all, the independent Binomial distribution given a true batting average of each player (see (7)) seems an appropriate probability distribution describing the uncertainty in this data set. And we know that the sample mean (MLE) under this distribution is an uniformly minimum variance unbiased estimator (UMVUE) with nice asymptotic properties. It is also the simplest way to estimate their true batting averages. But can we say this is the best way to predict their batting averages?
-\\
+
 
 \cite{1975} said ``no,'' and suggested James-Stein estimator, making each players' sample mean shrink towards an estimated mean of the second-level prior distribution. They showed that this estimator was more than three times efficient than the sample mean under squared error loss. On top of that, a few years later \cite{1983} introduced interval estimates that could successfully catch the batting averages over the remaining season, which MLE and its interval estimate could not.
-\\
+
 
 Our hierarchical modeling is a sequel to these researches, which can add one more unique value. Suppose you strongly believe that the outfielder's batting averages are different from other positions' ones, not giving a credit to the assumption that all players' batting averages shrink towards the same mean. Instead, you want to assume two different second-level hierarchies for outfielders and for other positions, within each of which sharing information and regressing toward the mean (RTTM) occur. This perspective considers true batting averages of outfielders as sampled from the one and those of other positions from the other. Our multilevel modeling provides a way to incorporate such information (covariate) seamlessly into the second-level hierarchy.
 \begin{CodeChunk}
@@ -518,10 +521,10 @@ colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.0
 \end{CodeOutput}
 \end{CodeChunk}
 Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that shrinkage estimates are the same for all players. It makes sense because shrinkage ($B_{j}\equiv r / (r+n_{j})$) is determined by the relative amount of information between the first-level and the second-level hierarchies. The fact that all players have the same amount of observed information ($n_{j}=45$) and $\hat{r}=\textrm{exp}(4.727)=113$ from below summary tell why the estimated shrinkage is 0.715 (=113 / (113 + 45)).
-\\
+
 
 For reference, we can run the Normal hierarchical model using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. For comparison, we calculated squared error losses, $\sum_{j=1}^{18}(p_{j, remaining}-\hat{p}_{j})^{2}$, where $p_{j, remaining}$ is each player's batting average over the remaining season and $\hat{p}_{j}$ is estimate from the Binomial and Normal multilevel models and from the sample mean (MLE) using the first 45 at-bats. These values were 0.042, 0.043, and 0.086 each, indicating that estimates from the Normal and Binomial models are twice better than MLE in terms of squared error loss. 
-\\
+
 
 One more thing to note is that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is a critical factor that makes posterior variances different from each player because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 \begin{CodeChunk}
@@ -575,13 +578,13 @@ R> plot(b)
 \end{figure}
 
 Let's see shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper line, there are short red lines toward five directions. This symbol also means that the seemingly two lines crossing over others were actually three lines for those who were outfielders (10th, 14th, and 15th hitters).
-\\
+
 
 For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
-\\
+
 
 The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their batting averages (sample mean) are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). The fact that their sample means are located at the lower part of their 95\% intervals supports this argument. So, their posterior means (red dots) can also be interpreted as their RTTM. 
-\\
+
 
 One more thing to emphasize is that observed sample means are all within the interval estimates. And these interval estimates also covered the batting averages over the remaining season successfully, although the result was left out. Then, how much can we trust these interval estimates? The following method check will answer it. 
 
@@ -598,10 +601,10 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{figure}
 
 The meaning of putting the \code{gbp} object, \code{b}, without any additional argument in the above \code{coverage} function is to make this function regard the estimated values, such as $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-data sets. 
-\\
+
 
 Finally, the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
-\\
+
 
 %However, achieving at least 95\% coverage at specific true values of $r$ and $\beta$ does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
 

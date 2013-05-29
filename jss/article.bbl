@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -8,6 +8,14 @@
   \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Christiansen and Morris(1997)}]{1997}
+Christiansen CL, Morris CN (1997).
+\newblock \enquote{Hierarchical Poisson Regression Modeling.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{92}(438), pp. 618--632.
+\newblock ISSN 01621459.
+\newblock \urlprefix\url{http://www.jstor.org/stable/2965709}.
 
 \bibitem[{Efron and Morris(1975)}]{1975}
 Efron B, Morris C (1975).
