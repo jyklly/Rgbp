@@ -76,7 +76,7 @@
 \section[Feasible Data Types]{Three Feasible Types of Data }
 \pkg{Rgbp} is intended to fit a model where two levels of structure are assumed (unit and group levels). The model can be characterized by the distributional family assumed for the group level data and in the case of \pkg{Rgbp} this will be either the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible data sets that illustrate this fact.
 
-\subsection{Normal: 8 Schools}
+\subsection{Normal: 8 Schools} \label{8schooldata}
 The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \cite{1981}.
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -286,7 +286,7 @@ A function ``\code{summary}'' shows selective information on hospitals and more 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
-\end{CodeInput}
+\end{CodeInput}error:%20LaTeX%20Error:%20File%20`a4wide.sty'%20not%20found.
 \begin{CodeOutput}
 Main summary:
 
@@ -389,6 +389,17 @@ It estimated coverage probabilities by simple unbiased estimates (a blue dashed 
 
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
+As stated in \ref{8schooldata} the Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \cite{1981}.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
+R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
+\end{CodeInput}
+\end{CodeChunk}
+
+Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. Hence, we can use \code{gbp} to fit this hierarchical model:
+
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(schools)
@@ -411,7 +422,7 @@ Summary for each unit (sorted by n):
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-
+The output from \code{gbp} provides an easy to read summary of the results of the estimation. Here we see that the posterior mean estimates are simply a linear combination
 
 \begin{CodeChunk}
 \begin{CodeInput}
