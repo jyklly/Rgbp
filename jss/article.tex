@@ -64,7 +64,6 @@
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
@@ -286,7 +285,7 @@ A function ``\code{summary}'' shows selective information on hospitals and more 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
-\end{CodeInput}error:%20LaTeX%20Error:%20File%20`a4wide.sty'%20not%20found.
+\end{CodeInput}
 \begin{CodeOutput}
 Main summary:
 
@@ -397,7 +396,7 @@ R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
 \end{CodeInput}
 \end{CodeChunk}
 
-Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. Hence, we can use \code{gbp} to fit this hierarchical model:
+Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. Hence, we can use \code{gbp} to fit a Normal-Normal hierarchical model:
 
 
 \begin{CodeChunk}
@@ -422,7 +421,7 @@ Summary for each unit (sorted by n):
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-The output from \code{gbp} provides an easy to read summary of the results of the estimation. Here we see that the posterior mean estimates are simply a linear combination
+The output from \code{gbp} provides an easy to read summary of the results of the estimation. There seems to be little evidence 
 
 \begin{CodeChunk}
 \begin{CodeInput}
