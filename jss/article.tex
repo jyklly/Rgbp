@@ -657,9 +657,13 @@ Finally, the estimated average coverage probability is 0.973 based on the Rao-Bl
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion}
-\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios. The package provides ``method checking'' functionality to examine repeated sampling properties and provides 
+\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios. The package provides ``method checking'' functionality to examine repeated sampling properties and test that the method is valid at a particular parameter value.
 
-The estimation procedure utilizes Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model and frequentists, now have a procedure that will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
+In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
+
+Due to the fact that the estimation procedures in \pkg{Rgbp} rely on differentiation the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a full Bayesian model (via MCMC) would be computationally impractical.
+
+In short the \pkg{Rgbp} is an R package that utilizes Bayesian machinery to provide a method of estimating two-level hierarchical models from many families in a fast and computationally efficient manner.
 
 \section[acknowledgments]{Acknowledgments}
 
