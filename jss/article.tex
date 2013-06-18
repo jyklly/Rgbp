@@ -421,7 +421,7 @@ Summary for each unit (sorted by n):
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-The output from \code{gbp} provides an easy to read summary of the results of the estimation. There seems to be little evidence 
+The output from \code{gbp} provides an easy to read summary of the results of the estimation. From this there seems to be little evidence that the training provided much of an added benefit with every school's $95\%$ posterior interval containing 0. \pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in \ref{8schoolsplot}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -429,12 +429,14 @@ R> plot(g)
 \end{CodeInput}
 \end{CodeChunk}
 
-\begin{figure}[h]
+\begin{figure}[h] \label{8schoolsplot}
 \begin{center}
 \includegraphics[scale=0.3]{school1.png}
 \caption{Shrinkage plot and 95\% interval plot for 8 schools}
 \end{center}
 \end{figure}
+
+Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -472,18 +474,21 @@ beta0    8.168 5.73 1.425 0.154
 \end{CodeChunk}
 
 
+An integral part of fitting any model is to check the method of estimation. Namely we can generate new pseudo-data from our assumed model by fixing the hyper-parameter values ($A$ and $\mu_0$ in this example) at their estimates. It is then possible to simulate ``true'' $\theta_i$ for each group $i$ and re-fit the model many times to estimate the coverage probabilities of our procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> gcv <- coverage(g, nsim = 10000)
 \end{CodeInput}
 \end{CodeChunk}
-\begin{figure}[h]
+\begin{figure}[h] \label{schoolcoverage}
 \begin{center}
 \includegraphics[width = 5.5cm]{school2.png}
 \caption{Coverage plot via method checking for 8 schools}
 \end{center}
 \end{figure}
+
+As seen in \ref{schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
@@ -652,7 +657,10 @@ Finally, the estimated average coverage probability is 0.973 based on the Rao-Bl
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion}
-Bayes vs Freq, post.mean vs estimate, post.sd vs estimated standard error.
+\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios. The package provides ``method checking'' functionality to examine repeated sampling properties and provides 
+
+The estimation procedure utilizes Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model and frequentists, now have a procedure that will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
+
 \section[acknowledgments]{Acknowledgments}
 
 \bibliography{bibliography}
