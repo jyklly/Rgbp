@@ -310,7 +310,172 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
        post.intv.low = p.hat.low, post.intv.upp = p.hat.upp, prior.mean = p0.hat)
 }
 
-br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95){
+######
+BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
+
+  z <- given$z
+  n <- given$n
+  y <- given$sample.mean
+  x <- ini$x
+  k <- length(n)
+  a.ini <- ini$a.ini
+  b.ini <- ini$b.ini
+  m <- ncol(x)
+  a.new <- a.res$a.new
+  a.var <- a.res$a.var
+  b.new <- a.res$beta.new
+  b.var <- a.res$beta.var
+  df.IS = 4
+
+  BRLogLikUn <- function(a, b) {
+    # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
+    # when the descriptive second level mean is unknown.
+
+    p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+    t0 <- p0.hat * exp(-a)
+    t1 <- (1 - p0.hat) * exp(-a)
+    t2 <- exp(-a)
+    if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
+  BRDerivBeta <- function(a, b) {
+    # The first and second order derivatives of log likelihood with respect to beta
+    p <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+    q <- 1 - p
+    zap <- z + exp(-a) * p 
+    nzaq <- n - z + exp(-a) * q
+    ap <- exp(-a) * p 
+    aq <- exp(-a) * q
+    if (any(c(ap, aq, zap, nzaq) == 0)) {
+      vec[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
+      vec[tmp] <- (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) 
+                   + digamma(aq[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      vec <- (digamma(zap) - digamma(ap) - digamma(nzaq) + digamma(aq)) * exp(-a) * p * q
+    }
+    if (any(c(ap, aq, zap, nzaq) == 0)) {
+      diag[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
+      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+                    * exp(-a) * p[tmp] * q[tmp] 
+                    + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
+                    * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+                + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
+               (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
+                - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+    }
+    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
+    out
+  } 
+
+  BRDerivBeta2order <- function(a, b) {
+    # The second order derivatives of log likelihood with respect to beta
+    p <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+    q <- 1 - p
+    zap <- z + exp(-a) * p 
+    nzaq <- n - z + exp(-a) * q
+    ap <- exp(-a) * p 
+    aq <- exp(-a) * q
+    if (any(c(ap, aq, zap, nzaq) == 0)) {
+      diag[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
+      tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
+      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+                    * exp(-a) * p[tmp] * q[tmp] 
+                    + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
+                    * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
+    } else {
+      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+                + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
+               (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
+                - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
+    }
+    out <- t(x) %*% diag(as.numeric(diag)) %*% x
+    out
+  } 
+
+  BetaHatSubAlpha <- function(a) {
+    dif <- 1
+    eps <- 0.0001
+    n.iter <- 1
+    while (any(abs(dif) > eps)) { 
+      out <- BRDerivBeta(a, b.ini)
+      score <- out[, 1]
+      hessian <- out[, 2 : (m + 1)]
+      dif <- solve(hessian) %*% score
+      b.ini <- b.ini - dif
+      n.iter <- n.iter + 1
+      if (n.iter > 50) {
+        stop()  
+        print("Alpha estimate does not converge in Newton-Raphson")
+      }
+    }
+    list(beta.new = b.ini, beta.hessian = BRDerivBeta2order(a, b.ini))
+  }
+
+  SkewedNormal <- function(s) {
+    2 / trial.scale * dnorm(s, mean = a.new, sd = trial.scale) * 
+    pnorm(-3 * (s - a.new) / trial.scale)
+  }
+
+  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
+  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
+  a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
+                  scale = trial.scale, shape = -3)
+
+  beta.IS.temp <- sapply(1 : n.IS, function(t) { 
+                    BetaHatSubAlpha(a.IS[t])
+                  })
+
+  beta.IS.mean <- sapply(1 : n.IS, function(t) {
+                     beta.IS.temp[, t]$beta.new
+                   })
+
+  beta.IS.vCov <- sapply(1 : n.IS, function(t) {
+                     -solve(beta.IS.temp[, t]$beta.hessian)
+                  })
+
+  beta.IS <- sapply(1 : n.IS, function(t) {
+               beta.IS.mean[t] + sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS) * rt(1, df = df.IS)
+             })
+
+  beta.IS.den <- sapply(1 : n.IS, function(t) {
+    dt( (beta.IS[t] - beta.IS.mean[t]) / sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS), df = df.IS) /
+    sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS)
+  })
+
+  p0.IS <- exp(x %*% beta.IS) / (1 + exp(x %*% beta.IS))
+  a1.p.IS <- exp(-a.IS) * p0.IS + z
+  a0.p.IS <- exp(-a.IS) * (1 - p0.IS) + n - z
+  p.IS <- sapply(1 : n.IS, function(t) {
+            rbeta(k, a1.p.IS[, t], a0.p.IS[, t])
+          })  
+
+  ab.logpost <- sapply(1 : n.IS, function(t) { 
+                  BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
+                })
+
+  weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
+
+  index <- sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T)
+  
+  p.IS.resample <- p.IS[, index]
+
+
+  list(a.IS = a.IS, beta.IS = beta.IS, p0.IS = p0.IS, p.IS = p.IS.resample, weight = weight)
+}
+
+######
+br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, 
+               n.IS = 0, trial.scale = 2.5){
+
   # The main function of BRIMM
 
   if (missing(X)) {
@@ -335,21 +500,59 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95){
            } else {
              BRAlphaEst2ndLevelMeanKnown(given, ini)
            }
+######
+  if (n.IS == 0 ) {
+    B.res <- BRShrinkageEst(a.res, given)
 
-  B.res <- BRShrinkageEst(a.res, given)
+    if (is.na(prior.mean)) {
+      post.res <- BRPosteriorEst2ndLevelMeanUnknown(B.res, a.res, ini, given)
+    } else {
+      post.res <- BRPosteriorEst2ndLevelMeanKnown(B.res,given)
+    }
 
-  if (is.na(prior.mean)) {
-    post.res <- BRPosteriorEst2ndLevelMeanUnknown(B.res, a.res, ini, given)
+    output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+                   shrinkage = B.res$B.hat, sd.shrinkage = sqrt(B.res$var.B.hat), 
+                   post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
+                   prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
+                   post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
+                   beta.new = a.res$beta.new, beta.var = a.res$beta.var,
+                   intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha,
+                   weight = NA)
+    output
+######
   } else {
-    post.res <- BRPosteriorEst2ndLevelMeanKnown(B.res,given)
-  }
 
-  output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
-                 shrinkage = B.res$B.hat, sd.shrinkage = sqrt(B.res$var.B.hat), 
-                 post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
-                 prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
-                 post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
-                 beta.new = a.res$beta.new, beta.var = a.res$beta.var,
-                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha)
-  output
+    sampling.res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+
+    a <- sampling.res$a.IS
+    B <- sapply(1 : n.IS, function (t) {
+           exp(-a[t]) / (n + exp(-a[t]))
+         })
+    B.mean <- apply(B, 1, mean)
+    B.sd <- apply(B, 1, sd)
+    p.mean <- apply(sampling.res$p.IS, 1, mean)
+    p.sd <- apply(sampling.res$p.IS, 1, sd)
+    p0.mean <- apply(sampling.res$p0.IS, 1, mean)
+    
+    quan <- function (x) {
+      quantile(x, prob = c(0.025, 0.975))
+    }
+
+    intv <- apply(sampling.res$p.IS, 1, quan)
+
+    b.mean <- mean(sampling.res$beta.IS)
+    b.var <- var(sampling.res$beta.IS)
+
+    a.mean <- mean(sampling.res$a.IS)
+    a.var <- var(sampling.res$a.IS)  
+
+    output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+                   shrinkage = B.mean, sd.shrinkage = B.sd, 
+                   post.mean = p.mean, post.sd = p.sd, 
+                   prior.mean.hat = p0.mean, post.intv.low = intv[1, ], 
+                   post.intv.upp = intv[2, ], model="br", X = X, 
+                   beta.new = b.mean, beta.var = b.var, weight = sampling.res$weight,
+                   intercept = intercept, a.new = a.mean, a.var = a.var, Alpha = Alpha)
+    output
+  }
 }

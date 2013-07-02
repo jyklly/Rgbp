@@ -5,7 +5,9 @@
 \description{
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
-\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95)}
+
+\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95,
+                             n.IS = 0, trial.scale = 2.5)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -32,26 +34,34 @@
   \item{Alpha}{
     a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
   }
+
+  \item{n.IS}{
+    If \code{n.IS = 5000}, all the results will be based on 5000 importance samples. Default is 0.
+  }
+
+  \item{trial.scale}{
+    Scale in trial distribution where \eqn{\alpha} is sampled. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is 2.5.
+  }
 }
 
 \details{
   \code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{V_{j}}{V_j} (=\eqn{\sigma^{2}/n_{j}}{\sigma^2/n_j}) is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
   (or unit) in a dataset.
-  \deqn{(y_{j}~ |~ \theta_{j})~ \sim ~ indep~ N(\theta_{j}, V_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, V_j)}
-  \deqn{(\theta_{j}~ |~\mu_{0j}, ~A)~ \sim ~  indep~ N(\mu_{0j},~ A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}
-  \deqn{\mu_{0j}~ =~ x_{j}'\beta}{\mu0_j = x_j'\beta}
+  \deqn{(y_{j} | \theta_{j}) \sim  indep N(\theta_{j}, V_{j})}{(y_j | \theta_j)  ~ indep N(\theta_j, V_j)}
+  \deqn{(\theta_{j} |\mu_{0j}, A) \sim   indep N(\mu_{0j}, A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}
+  \deqn{\mu_{0j} = x_{j}'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model. A square bracket below indicates [mean, variance] of distribution, a constant multiplied to the notation representing Gamma distribution (Gam) is a scale, and \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}.
-  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
-  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~~ \frac{1}{r}Gam(r\mu_{0j})~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep  Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
-  \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
+  \deqn{(z_{j} | \theta_{j}) \sim  indep Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta_{j} | r, \mu_{0j}) \sim  indep \frac{1}{r}Gam(r\mu_{0j}) \sim  indep Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep  Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
+  \deqn{log(\mu_{0j}) = x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model. A square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}.
-  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
-  \deqn{(\theta_{j}~ |~ r, \mu_{0j})~ \sim ~ indep~ Beta(r\mu_{0j},~ r(1-\mu_{0j}))~ \sim ~ indep~ Beta[\mu_{0j},~ \mu_{0j}(1 - \mu_{0j})~ /~ (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
-  \deqn{logit(\mu_{0j})~ =~ x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
+  \deqn{(z_{j} | \theta_{j}) \sim  indep Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta_{j} | r, \mu_{0j}) \sim  indep Beta(r\mu_{0j}, r(1-\mu_{0j})) \sim  indep Beta[\mu_{0j}, \mu_{0j}(1 - \mu_{0j}) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{logit(\mu_{0j}) = x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
@@ -101,6 +111,7 @@
   \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
   \item{a.var}{posterior variance of \eqn{\alpha}}
   \item{Alpha}{confidence level based on which confidence interval is constructed }
+  \item{weight}{importance weights, if importance sampling is done}
 }
 
 \references{

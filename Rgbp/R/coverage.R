@@ -13,6 +13,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
     only.gbp.result <- FALSE
   }
 
+######
+  IS <- ifelse(gbp.object$weight != NA, 1, 0)
+
   # if model=BRIMM	
   if (gbp.object$model == "br") {
     if (only.gbp.result) {
@@ -42,13 +45,26 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
-                 } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha)
-                 } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
-                 }
+######
+          if(IS == 0) {
+            out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
+                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
+                     gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (!is.na(gbp.object$prior.mean)) {
+                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
+                   }
+          } else {
+            out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
+                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha,
+                         n.IS = length(gbp.object$weight))
+                   } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
+                     gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (!is.na(gbp.object$prior.mean)) {
+                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
+                   }
+          }
+
 
           a1 <- r * p0 + sim.z[, i]
           a0 <- r * (1 - p0) + n - sim.z[, i]
@@ -94,14 +110,28 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
       # 4. simulation
       for (i in 1 : nsim) {
         tryCatch({
-          out <- if (!missing(reg.coef) & missing(covariates)) {
-                   gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
-                 } else if (!missing(reg.coef) & !missing(covariates)) {
-                   gbp(sim.z[, i], n, covariates, model = "br", Alpha = gbp.object$Alpha)
-                 } else if (!missing(mean.PriorDist)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
-                       Alpha = gbp.object$Alpha)
-                 }
+######
+          if(IS == 0) {
+            out <- if (!missing(reg.coef) & missing(covariates)) {
+                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (!missing(reg.coef) & !missing(covariates)) {
+                     gbp(sim.z[, i], n, covariates, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (!missing(mean.PriorDist)) {
+                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
+                         Alpha = gbp.object$Alpha)
+                   }
+          } else {
+            out <- if (!missing(reg.coef) & missing(covariates)) {
+                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha, 
+                         n.IS = length(gbp.object$weight))
+                   } else if (!missing(reg.coef) & !missing(covariates)) {
+                     gbp(sim.z[, i], n, covariates, model = "br", Alpha = gbp.object$Alpha)
+                   } else if (!missing(mean.PriorDist)) {
+                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
+                         Alpha = gbp.object$Alpha)
+                   }
+          }
+
           a1 <- r * p0 + sim.z[, i]
           a0 <- r * (1 - p0) + n - sim.z[, i]
           low <- out$post.intv.low
