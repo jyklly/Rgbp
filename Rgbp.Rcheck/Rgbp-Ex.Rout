@@ -123,14 +123,18 @@ beta0    8.168 5.73 1.425 0.154
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -218,14 +222,18 @@ beta1    0.126 5.698 0.022 0.982
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 >  
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
+>     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -286,13 +294,17 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of A and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 $coverageRB
 [1] 1.000 0.998 0.999 0.998 0.997 0.923 0.998 0.999
 
@@ -426,34 +438,14 @@ beta0   -1.012 0.1 -10.153     0
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -581,34 +573,14 @@ beta1    0.389 0.187  2.074 0.038
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
+>     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -689,33 +661,13 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >   ##############################################################
 >   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
@@ -806,14 +758,18 @@ beta0   -1.319 0.08 -16.522     0
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 [1] "1"     "error"
 [1] "2"     "error"
 [1] "4"     "error"
@@ -947,14 +903,18 @@ beta1    0.284 0.154   1.848 0.065
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
+>     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -1035,13 +995,17 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 > 
 > 
@@ -1361,14 +1325,18 @@ beta1    0.284 0.154   1.848 0.065
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -1379,14 +1347,18 @@ beta1    0.284 0.154   1.848 0.065
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 >  
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
+>     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -1397,13 +1369,17 @@ beta1    0.284 0.154   1.848 0.065
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of A and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 $coverageRB
 [1] 1.000 0.998 0.999 0.998 0.997 0.923 0.998 0.999
 
@@ -1461,34 +1437,14 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -1499,34 +1455,14 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
+>     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -1537,33 +1473,13 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >   ###############################################################
 >   # Poisson Regression Interactive Multi-level Modeling (PRIMM) #
@@ -1578,14 +1494,18 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 [1] "1"     "error"
 [1] "2"     "error"
 [1] "4"     "error"
@@ -1602,14 +1522,18 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
+>     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -1620,13 +1544,17 @@ $raw.resultU
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 > 
 > 
@@ -1729,14 +1657,18 @@ beta0    8.168 5.73 1.425 0.154
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -1824,14 +1756,18 @@ beta1    0.126 5.698 0.022 0.982
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 >  
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of A,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
+>     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -1892,13 +1828,17 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     gcv <- coverage(g, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
 >     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of A and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 $coverageRB
 [1] 1.000 0.998 0.999 0.998 0.997 0.923 0.998 0.999
 
@@ -2032,34 +1972,14 @@ beta0   -1.012 0.1 -10.153     0
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ##################################################################################
 >     # If we have one covariate and do not know a mean of the prior distribution yet, #
@@ -2187,34 +2107,14 @@ beta1    0.389 0.187  2.074 0.038
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
+>     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -2295,33 +2195,13 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     bcv <- coverage(b, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
 >     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
-[1] "1"     "error"
-[1] "2"     "error"
-[1] "3"     "error"
-[1] "4"     "error"
-[1] "5"     "error"
-[1] "6"     "error"
-[1] "7"     "error"
-[1] "8"     "error"
-[1] "9"     "error"
-[1] "10"    "error"
 > 
 >   ##############################################################
 >   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
@@ -2412,14 +2292,18 @@ beta0   -1.319 0.08 -16.522     0
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r and 
->     ### of a regression coefficient (intercept), 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
 >     ### not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 [1] "1"     "error"
 [1] "2"     "error"
 [1] "4"     "error"
@@ -2553,14 +2437,18 @@ beta1    0.284 0.154   1.848 0.065
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
->     ### when we want to simulate pseudo datasets based on different values of r,
->     ### of regression coefficients, and of covariate, not using estimated values 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
 >     ### as true ones. Two values of reg.coef are for beta0 and beta1
->     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
+>     pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ################################################
 >     # If we know a mean of the prior distribution, #
@@ -2641,13 +2529,17 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 >     ### when we want to simulate pseudo datasets considering the estimated values 
 >     ### as true ones.
 >     pcv <- coverage(p, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 >     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
 >     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 > 
 >     ### when we want to simulate pseudo datasets based on different values of r and
->     ### of 2nd level mean as true ones, not using estimated values as true ones.
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
 >     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+Warning in is.na(gbp.object$weight) :
+  is.na() applied to non-(list or vector) of type 'NULL'
 > 
 > 
 > 
@@ -3649,7 +3541,7 @@ beta0   -3.559 0.062 -57.091     0
 > ### * <FOOTER>
 > ###
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.17 0.155 9.348 0 0 
+Time elapsed:  11.613 0.18 11.947 0 0 
 > grDevices::dev.off()
 null device 
           1 

@@ -2,20 +2,17 @@
 \alias{coverage}
 \title{Estimating Coverage Probability}
 \description{\code{coverage} estimates Rao-Blackwellized and simple unbiased coverage probabilities.}
-\usage{coverage(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, nsim = 10)}
+\usage{coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10)}
 
 \arguments{
   \item{gbp.object}{
     a resultant object of \code{gbp} function. 
   }
   \item{A.or.r}{
-    (optional) a numeric value of \emph{A} (details in the description below) for Gaussian data or of \emph{r} (details in the description below) for Binomial and Poisson data. Designating this argument should come with other arguments, for example, (\code{A.or.r}, \code{reg.coef}, \code{covariates} (if any)) or (\code{A.or.r}, \code{mean.PriorDist}).
+    (optional) a numeric value of \emph{A} (details in the description below) for Gaussian data or of \emph{r} (details in the description below) for Binomial and Poisson data. Designating this argument should come with other arguments, for example, (\code{A.or.r}, \code{reg.coef}) or (\code{A.or.r}, \code{mean.PriorDist}).
   }
   \item{reg.coef}{
     (optional) a (\emph{m} by 1) vector for regression coefficients, \eqn{\beta}, where \emph{m} is the number of regression coefficients including an intercept.
-  }
-  \item{covariates}{
-    (optional) a (\emph{k} by \emph{(m - 1)}) matrix of covariates without a column of ones for an intercept, where \emph{k} is the number of groups (or units) in a dataset.
   }
   \item{mean.PriorDist}{
     (optional) a numeric value for the mean of (second-level) prior distribution.
@@ -58,8 +55,8 @@
   Pseudo-data generating process starts from the second-level hierarchy to the first-level. \code{coverage} first generates true parameters (\eqn{\theta_{i}}{\theta_i}) for \emph{k} groups (units) at the second-level and then moves onto the first-level to simulate pseudo-data sets, \eqn{y_{i}}{y_i} for Gaussian or \eqn{z_{i}}{z_i} for Binomial and Poisson data, given previously generated true parameters (\eqn{\theta_{i}}{\theta_i}). 
 
   So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
-  \emph{A} (or \emph{r}), \eqn{\beta} (\code{reg.coef}), and \emph{X} (\code{covariates}) (if any), 
-  or \emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist}). From here, we have four options to run \code{coverage}.
+  (\emph{A} (or \emph{r}) and \eqn{\beta} (\code{reg.coef})) 
+  or (\emph{A} (or \emph{r}) and \eqn{\mu_{0}}{\mu0} (\code{mean.PriorDist})). From here, we have four options to run \code{coverage}.
 
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values in \code{b} 
@@ -69,18 +66,17 @@
   creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
   Second, \code{coverage} allows us to designate different true values in generating datasets, for example 
-  \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} assuming we do not have any covariates and 
+  \code{coverage(b, A.or.r = 15, reg.coef = 3, nsim = 100)} when we do not have any covariates and 
   do not know a mean of the prior distribution. One value designated in \code{reg.coef} will be used to calculate the mean of second-level distribution by \eqn{g(\mu_{0}) = \beta_{0} = 3}{g(\mu0) = \beta0 = 3}, where \emph{g} is a link function, \emph{i.e.}, \eqn{g(\mu_{0}) = \mu_{0}}{g(\mu0) = \mu0} for Gaussian, \eqn{g(\mu_{0}) = log(\mu_{0})}{g(\mu0) = log(\mu0)} for Poisson, and \eqn{g(\mu_{0}) = logit(\mu_{0})}{g(\mu0) = logit(\mu0)} for Binomial data. Then, \code{coverage} samples \eqn{\theta_{i}}{\theta_i} from the prior distribution determined by designated values, \code{A.or.r} 
   and \code{reg.coef} (only intercept term). Sampling \emph{i}-th pseudo-data is based on 
   \eqn{\theta_{i}}{\theta_i} just sampled.
 
   Third, \code{coverage} enables us to designate different true values in generating datasets like\cr 
-  \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), covariates = X, nsim = 100)} when we have one covariate
-  (can be more than one but \code{reg.coef} should reflect on the number of regression coefficients including
-  an intercept term) but we do not know what the mean of the prior distribution, \eqn{\mu_{0}}{\mu0}, is. For reference, a covariate matrix, \code{X} (a vector in this case because of one covariate assumed), should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
+  \code{coverage(b, A.or.r = 15, reg.coef = c(3, -1), nsim = 100)} when we have one covariate
+  (which can be more than one, then \code{reg.coef} should reflect on the number of regression coefficients including an intercept term) but we do not know what the mean of the prior distribution, \eqn{\mu_{0}}{\mu0}, is. For reference, a covariate matrix, \code{X} (a vector in this case because of one covariate assumed), should not include a column of ones for an intercept of the regression (which will be generated automatically) and the mean of prior distribution will be set as 
   \eqn{g(\mu_{0j}) = x_{j}'\beta}{g(\mu0_j) = x_j'\beta}, where \eqn{x_{j}'}{x_j'} is (1, \emph{j}-th row of \code{X}). Then, 
   \code{coverage} samples \eqn{\theta_{i}}{\theta_i} from the prior distribution 
-  determined by designated values, \code{A.or.r}, \code{reg.coef}, and \code{covariates}. 
+  determined by designated values, \code{A.or.r} and \code{reg.coef}. 
   Sampling \emph{i}-th pseudo-data is based on \eqn{\theta_{i}}{\theta_i} just sampled.
 
   Lastly, \code{coverage} provides us another way to designate different true values in generating datasets like
@@ -151,8 +147,8 @@
     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of A and 
-    ### of a regression coefficient (intercept), 
+    ### when we want to simulate pseudo datasets based on different values of A
+    ### and a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
 
@@ -169,10 +165,10 @@
     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of A,
-    ### of regression coefficients, and of covariate, not using estimated values 
+    ### when we want to simulate pseudo datasets based on different values of A
+    ### and regression coefficients, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
-    gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), covariates = x2, nsim = 10)  
+    gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
 
     ################################################
     # If we know a mean of the prior distribution, #
@@ -188,7 +184,7 @@
     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
 
     ### when we want to simulate pseudo datasets based on different values of A and
-    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    ### 2nd level mean as true ones, not using estimated values as true ones.
     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
 
   ################################################################
@@ -208,8 +204,8 @@
     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of r and 
-    ### of a regression coefficient (intercept), 
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
 
@@ -226,10 +222,10 @@
     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of r,
-    ### of regression coefficients, and of covariate, not using estimated values 
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and regression coefficients, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
-    bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), covariates = x1, nsim = 10)  
+    bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
 
     ################################################
     # If we know a mean of the prior distribution, #
@@ -245,7 +241,7 @@
     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
 
     ### when we want to simulate pseudo datasets based on different values of r and
-    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    ### 2nd level mean as true ones, not using estimated values as true ones.
     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
   ###############################################################
@@ -265,8 +261,8 @@
     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of r and 
-    ### of a regression coefficient (intercept), 
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and a regression coefficient (intercept), 
     ### not using estimated values as true ones.
     pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
 
@@ -283,10 +279,10 @@
     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
-    ### when we want to simulate pseudo datasets based on different values of r,
-    ### of regression coefficients, and of covariate, not using estimated values 
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and regression coefficients, not using estimated values 
     ### as true ones. Two values of reg.coef are for beta0 and beta1
-    pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), covariates = x1, nsim = 10)  
+    pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), nsim = 10)  
 
     ################################################
     # If we know a mean of the prior distribution, #
@@ -302,7 +298,7 @@
     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
 
     ### when we want to simulate pseudo datasets based on different values of r and
-    ### of 2nd level mean as true ones, not using estimated values as true ones.
+    ### 2nd level mean as true ones, not using estimated values as true ones.
     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
 
 }

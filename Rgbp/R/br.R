@@ -326,7 +326,6 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   b.new <- a.res$beta.new
   b.var <- a.res$beta.var
   df.IS = 4
-  n.IS <- n.IS + 1
 
   BRLogLikUn <- function(a, b) {
     # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
@@ -481,7 +480,7 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
 
   weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
 
-  index <- sample(1 : n.IS, n.IS - 1, prob = weight / sum(weight), replace = T)
+  index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
   
   p.IS.resample <- p.IS[, index]
 
@@ -557,7 +556,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
 
     intv <- apply(sampling.res$p.IS, 1, quan)
 
-    if (X == NA) {
+    if (dim(ini$x)[2] == 1) {
       b.mean <- mean(sampling.res$beta.IS)
       b.var <- var(sampling.res$beta.IS)
     } else {
