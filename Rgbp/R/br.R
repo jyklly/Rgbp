@@ -311,7 +311,7 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
 }
 
 ######
-BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
+BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
 
   z <- given$z
   n <- given$n
@@ -421,13 +421,13 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
 
   SkewedNormal <- function(s) {
     2 / trial.scale * dnorm(s, mean = a.new, sd = trial.scale) * 
-    pnorm(-3 * (s - a.new) / trial.scale)
+    pnorm(trial.shape * (s - a.new) / trial.scale)
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
+  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = trial.shape)
   a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
-                  scale = trial.scale, shape = -3)
+                  scale = trial.scale, shape = trial.shape)
 
   beta.IS.temp <- sapply(1 : n.IS, function(t) { 
                     BetaHatSubAlpha(a.IS[t])
@@ -454,6 +454,10 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
     ab.logpost <- sapply(1 : n.IS, function(t) { 
                     BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
                   })
+
+    ab.logpost <- ab.logpost / sum(ab.logpost)
+    p0.IS <- sapply(1 : n.IS, function(t) { exp(x * beta.IS[t]) / (1 + exp(x * beta.IS[t]))})
+
   } else {
     beta.IS <- sapply(1 : n.IS, function(t) {
       rmt(1, mean = beta.IS.mean[, t], S = matrix(beta.IS.vCov[, t], nrow = m) * (df.IS - 2) / df.IS,
@@ -468,9 +472,12 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
     ab.logpost <- sapply(1 : n.IS, function(t) { 
                     BRLogLikUn(a.IS[t], beta.IS[, t]) + a.IS[t]
                   })
+
+    ab.logpost <- ab.logpost / sum(ab.logpost)
+    p0.IS <- sapply(1 : n.IS, function(t) { exp(x %*% beta.IS[, t]) / (1 + exp(x %*% beta.IS[, t]))})
+
   }
 
-  p0.IS <- exp(x %*% beta.IS) / (1 + exp(x %*% beta.IS))
   p.IS <- sapply(1 : n.IS, function(t) {
             a1.p.IS <- exp(-a.IS)[t] * p0.IS[, t] + z
             a0.p.IS <- exp(-a.IS)[t] * (1 - p0.IS[, t]) + n - z
@@ -480,13 +487,13 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
 
   index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
-  
+
   p.IS.resample <- p.IS[, index]
 
   list(a.IS = a.IS, beta.IS = beta.IS, p0.IS = p0.IS, p.IS = p.IS.resample, weight = weight)
 }
 
-BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
+BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
 
   z <- given$z
   n <- given$n
