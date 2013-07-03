@@ -463,8 +463,8 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
     })
 
     beta.IS.den <- sapply(1 : n.IS, function(t) {
-      dmt(beta.IS[, t], mean = beta.IS.mean[, t], S = matrix(beta.IS.vCov[, t], nrow = m) * 
-          (df.IS - 2) / df.IS, df = df.IS)
+      ch <- chol(matrix(beta.IS.vCov[, t], ncol = m) * (df.IS - 2) / df.IS)
+      dmt(beta.IS[, t], mean = beta.IS.mean[, t], S = t(ch) %*% ch, df = df.IS)
     })
 
     ab.logpost <- sapply(1 : n.IS, function(t) { 
