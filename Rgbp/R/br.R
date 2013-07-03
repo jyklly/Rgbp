@@ -420,8 +420,7 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
   }
 
   SkewedNormal <- function(s) {
-    2 / trial.scale * dnorm(s, mean = a.new, sd = trial.scale) * 
-    pnorm(-3 * (s - a.new) / trial.scale)
+    dsn(s, location = a.new, scale = trial.scale, shape = -3)  
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
