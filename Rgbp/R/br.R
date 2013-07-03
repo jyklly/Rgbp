@@ -421,13 +421,13 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
 
   SkewedNormal <- function(s) {
     2 / trial.scale * dnorm(s, mean = a.new, sd = trial.scale) * 
-    pnorm(trial.shape * (s - a.new) / trial.scale)
+    pnorm(-3 * (s - a.new) / trial.scale)
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = trial.shape)
+  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
   a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
-                  scale = trial.scale, shape = trial.shape)
+                  scale = trial.scale, shape = -3)
 
   beta.IS.temp <- sapply(1 : n.IS, function(t) { 
                     BetaHatSubAlpha(a.IS[t])
