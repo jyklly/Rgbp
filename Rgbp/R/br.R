@@ -325,7 +325,6 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   a.var <- a.res$a.var
   b.new <- a.res$beta.new
   b.var <- a.res$beta.var
-  df.IS = 4
 
   BRLogLikUn <- function(a, b) {
     # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
@@ -472,10 +471,10 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   }
 
   p0.IS <- exp(x %*% beta.IS) / (1 + exp(x %*% beta.IS))
-  a1.p.IS <- exp(-a.IS) * p0.IS + z
-  a0.p.IS <- exp(-a.IS) * (1 - p0.IS) + n - z
   p.IS <- sapply(1 : n.IS, function(t) {
-            rbeta(k, a1.p.IS[, t], a0.p.IS[, t])
+            a1.p.IS <- exp(-a.IS)[t] * p0.IS[, t] + z
+            a0.p.IS <- exp(-a.IS)[t] * (1 - p0.IS[, t]) + n - z
+            rbeta(k, a1.p.IS, a0.p.IS)
           })  
 
   weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
@@ -485,6 +484,59 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   p.IS.resample <- p.IS[, index]
 
   list(a.IS = a.IS, beta.IS = beta.IS, p0.IS = p0.IS, p.IS = p.IS.resample, weight = weight)
+}
+
+BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
+
+  z <- given$z
+  n <- given$n
+  y <- given$sample.mean
+  k <- length(n)
+  p0 <- given$prior.mean
+  a.ini <- ini$a.ini
+  a.new <- a.res$a.new
+  a.var <- a.res$a.var
+
+  BRLogLikKn <- function(a) {
+
+    t0 <- p0 * exp(-a)
+    t1 <- (1 - p0) * exp(-a)
+    t2 <- exp(-a)
+    if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
+  SkewedNormal <- function(s) {
+    2 / trial.scale * dnorm(s, mean = a.new, sd = trial.scale) * 
+    pnorm(-3 * (s - a.new) / trial.scale)
+  }
+
+  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
+  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
+  a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
+                  scale = trial.scale, shape = -3)
+
+  a.logpost <- sapply(1 : n.IS, function(t) { 
+                    BRLogLikKn(a.IS[t]) + a.IS[t]
+                  })
+
+  p.IS <- sapply(1 : n.IS, function(t) {
+            a1.p.IS <- exp(-a.IS)[t] * p0 + z
+            a0.p.IS <- exp(-a.IS)[t] * (1 - p0) + n - z
+            rbeta(k, a1.p.IS, a0.p.IS)
+          })  
+
+  weight <- exp(a.logpost) / a.IS.den
+
+  index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
+  
+  p.IS.resample <- p.IS[, index]
+
+  list(a.IS = a.IS, p.IS = p.IS.resample, weight = weight)
 }
 
 ######
@@ -538,7 +590,11 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
 ######
   } else {
 
-    sampling.res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+    if (is.na(prior.mean)) {
+      sampling.res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+    } else {
+      sampling.res <- BRIS2ndLevelMeanKnown(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
+    }
 
     a <- sampling.res$a.IS
     B <- sapply(1 : n.IS, function (t) {
@@ -548,7 +604,12 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
     B.sd <- apply(B, 1, sd)
     p.mean <- apply(sampling.res$p.IS, 1, mean)
     p.sd <- apply(sampling.res$p.IS, 1, sd)
-    p0.mean <- apply(sampling.res$p0.IS, 1, mean)
+
+    if (is.na(prior.mean)) {
+      p0.mean <- apply(sampling.res$p0.IS, 1, mean)
+    } else {
+      p0.mean <- given$prior.mean
+    }
     
     quan <- function (x) {
       quantile(x, prob = c(0.025, 0.975))
@@ -556,12 +617,17 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
 
     intv <- apply(sampling.res$p.IS, 1, quan)
 
-    if (dim(ini$x)[2] == 1) {
-      b.mean <- mean(sampling.res$beta.IS)
-      b.var <- var(sampling.res$beta.IS)
+    if (is.na(prior.mean)) {
+      if (dim(ini$x)[2] == 1) {
+        b.mean <- mean(sampling.res$beta.IS)
+        b.var <- var(sampling.res$beta.IS)
+      } else {
+        b.mean <- apply(sampling.res$beta.IS, 1, mean)
+        b.var <- apply(sampling.res$beta.IS, 1, var)
+      }
     } else {
-      b.mean <- apply(sampling.res$beta.IS, 1, mean)
-      b.var <- apply(sampling.res$beta.IS, 1, var)
+        b.mean <- NA
+        b.var <- NA
     }
 
     a.mean <- mean(sampling.res$a.IS)

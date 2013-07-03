@@ -6,6 +6,7 @@ BRAlphaEst2ndLevelMeanKnown	gbp-internal
 BRInitialValue2ndLevelMeanKnown	gbp-internal
 BRInitialValue2ndLevelMeanUnknown	gbp-internal
 BRIS	gbp-internal
+BRIS2ndLevelMeanKnown	gbp-internal
 BRPosteriorEst2ndLevelMeanKnown	gbp-internal
 BRPosteriorEst2ndLevelMeanUnknown	gbp-internal
 BRShrinkageEst	gbp-internal

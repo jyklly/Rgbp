@@ -66,7 +66,8 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
                      gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha,
                          n.IS = length(gbp.object$weight))
                    } else if (!is.na(gbp.object$prior.mean)) {
-                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha, 
+                         n.IS = length(gbp.object$weight))
                    }
           }
 
@@ -134,7 +135,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
                          n.IS = length(gbp.object$weight))
                    } else if (!missing(mean.PriorDist)) {
                      gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
-                         Alpha = gbp.object$Alpha)
+                         Alpha = gbp.object$Alpha, n.IS = length(gbp.object$weight))
                    }
           }
 
