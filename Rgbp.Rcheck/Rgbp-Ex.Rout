@@ -3541,7 +3541,7 @@ beta0   -3.559 0.062 -57.091     0
 > ### * <FOOTER>
 > ###
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.726 0.198 12.957 0 0 
+Time elapsed:  11.602 0.182 11.807 0 0 
 > grDevices::dev.off()
 null device 
           1 

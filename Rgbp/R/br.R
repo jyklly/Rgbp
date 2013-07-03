@@ -454,7 +454,6 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
                     BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
                   })
 
-    ab.logpost <- ab.logpost / sum(ab.logpost)
     p0.IS <- sapply(1 : n.IS, function(t) { exp(x * beta.IS[t]) / (1 + exp(x * beta.IS[t]))})
 
   } else {
@@ -472,7 +471,6 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
                     BRLogLikUn(a.IS[t], beta.IS[, t]) + a.IS[t]
                   })
 
-    ab.logpost <- ab.logpost / sum(ab.logpost)
     p0.IS <- sapply(1 : n.IS, function(t) { exp(x %*% beta.IS[, t]) / (1 + exp(x %*% beta.IS[, t]))})
 
   }
