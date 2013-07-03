@@ -14,7 +14,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, covariates, mean.PriorDist, n
   }
 
 ######
-  IS <- ifelse(gbp.object$weight != NA, 1, 0)
+  if (sum(is.na(gbp.object$weight)) == 1) {
+    IS <- FALSE
+  } else {
+    IS <- TRUE
+  }
 
   # if model=BRIMM	
   if (gbp.object$model == "br") {

@@ -326,6 +326,7 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
   b.new <- a.res$beta.new
   b.var <- a.res$beta.var
   df.IS = 4
+  n.IS <- n.IS + 1
 
   BRLogLikUn <- function(a, b) {
     # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
@@ -442,14 +443,34 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
                      -solve(beta.IS.temp[, t]$beta.hessian)
                   })
 
-  beta.IS <- sapply(1 : n.IS, function(t) {
-               beta.IS.mean[t] + sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS) * rt(1, df = df.IS)
-             })
+  if(m == 1) {
+    beta.IS <- sapply(1 : n.IS, function(t) {
+                 beta.IS.mean[t] + sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS) * rt(1, df = df.IS)
+               })
 
-  beta.IS.den <- sapply(1 : n.IS, function(t) {
-    dt( (beta.IS[t] - beta.IS.mean[t]) / sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS), df = df.IS) /
-    sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS)
-  })
+    beta.IS.den <- sapply(1 : n.IS, function(t) {
+      dt( (beta.IS[t] - beta.IS.mean[t]) / sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS), df = df.IS) /
+      sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS)
+    })
+
+    ab.logpost <- sapply(1 : n.IS, function(t) { 
+                    BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
+                  })
+  } else {
+    beta.IS <- sapply(1 : n.IS, function(t) {
+      rmt(1, mean = beta.IS.mean[, t], S = matrix(beta.IS.vCov[, t], nrow = m) * (df.IS - 2) / df.IS,
+          df = df.IS)
+    })
+
+    beta.IS.den <- sapply(1 : n.IS, function(t) {
+      dmt(beta.IS[, t], mean = beta.IS.mean[, t], S = matrix(beta.IS.vCov[, t], nrow = m) * 
+          (df.IS - 2) / df.IS, df = df.IS)
+    })
+
+    ab.logpost <- sapply(1 : n.IS, function(t) { 
+                    BRLogLikUn(a.IS[t], beta.IS[, t]) + a.IS[t]
+                  })
+  }
 
   p0.IS <- exp(x %*% beta.IS) / (1 + exp(x %*% beta.IS))
   a1.p.IS <- exp(-a.IS) * p0.IS + z
@@ -458,16 +479,11 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 4) {
             rbeta(k, a1.p.IS[, t], a0.p.IS[, t])
           })  
 
-  ab.logpost <- sapply(1 : n.IS, function(t) { 
-                  BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
-                })
-
   weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
 
-  index <- sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T)
+  index <- sample(1 : n.IS, n.IS - 1, prob = weight / sum(weight), replace = T)
   
   p.IS.resample <- p.IS[, index]
-
 
   list(a.IS = a.IS, beta.IS = beta.IS, p0.IS = p0.IS, p.IS = p.IS.resample, weight = weight)
 }
@@ -502,6 +518,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
            }
 ######
   if (n.IS == 0 ) {
+
     B.res <- BRShrinkageEst(a.res, given)
 
     if (is.na(prior.mean)) {
@@ -540,18 +557,25 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
 
     intv <- apply(sampling.res$p.IS, 1, quan)
 
-    b.mean <- mean(sampling.res$beta.IS)
-    b.var <- var(sampling.res$beta.IS)
+    if (X == NA) {
+      b.mean <- mean(sampling.res$beta.IS)
+      b.var <- var(sampling.res$beta.IS)
+    } else {
+      b.mean <- apply(sampling.res$beta.IS, 1, mean)
+      b.var <- apply(sampling.res$beta.IS, 1, var)
+    }
 
     a.mean <- mean(sampling.res$a.IS)
     a.var <- var(sampling.res$a.IS)  
+
+    weight <- as.numeric(sampling.res$weight / sum(sampling.res$weight))
 
     output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
                    shrinkage = B.mean, sd.shrinkage = B.sd, 
                    post.mean = p.mean, post.sd = p.sd, 
                    prior.mean.hat = p0.mean, post.intv.low = intv[1, ], 
                    post.intv.upp = intv[2, ], model="br", X = X, 
-                   beta.new = b.mean, beta.var = b.var, weight = sampling.res$weight,
+                   beta.new = b.mean, beta.var = b.var, weight = weight,
                    intercept = intercept, a.new = a.mean, a.var = a.var, Alpha = Alpha)
     output
   }
