@@ -481,7 +481,7 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
             rbeta(k, a1.p.IS, a0.p.IS)
           })  
 
-  weight <- exp(ab.logpost) / beta.IS.den / a.IS.den
+  weight <- exp(ab.logpost - max(ab.logpost)) / beta.IS.den / a.IS.den
 
   index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
 
