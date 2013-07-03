@@ -644,7 +644,7 @@ For reference, the observed sample mean among outfielders is 0.308 and that amon
 The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their batting averages (sample mean) are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). The fact that their sample means are closer to the lower part of their 95\% intervals supports this argument. So, their posterior means (red dots) can also be interpreted as their RTTM. 
 
 
-Then, how much can we trust these interval estimates? The following method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. 
+Then, how much can we trust these interval estimates? The following method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. For reference, if we want to try different true parameters, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 10000)} instead of below one.
 
 \begin{CodeChunk}
 \begin{CodeInput}
