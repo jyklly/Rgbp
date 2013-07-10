@@ -22,7 +22,7 @@ PRInitialValue2ndLevelMeanUnknown <- function(given) {
     stop()
   } else if (identical(x.ini, NA) & given$intercept) {
     x <- matrix(1, length(y), 1)
-    b.ini <- mean(y)
+    b.ini <- log(mean(y))
   } else if (!identical(x.ini, NA) & given$intercept) {
     x.ini <- as.matrix(x.ini)
     xname <- paste("x.ini[, ", 1 : ncol(x.ini), "]", sep = "")

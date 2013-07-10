@@ -589,7 +589,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
                    post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
                    beta.new = a.res$beta.new, beta.var = a.res$beta.var,
                    intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha,
-                   weight = NA)
+                   weight = NA, p = NA)
     output
 ######
   } else {
@@ -644,7 +644,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
                    post.mean = p.mean, post.sd = p.sd, 
                    prior.mean.hat = p0.mean, post.intv.low = intv[1, ], 
                    post.intv.upp = intv[2, ], model="br", X = X, 
-                   beta.new = b.mean, beta.var = b.var, weight = weight,
+                   beta.new = b.mean, beta.var = b.var, weight = weight, p = sampling.res$p.IS,
                    intercept = intercept, a.new = a.mean, a.var = a.var, Alpha = Alpha)
     output
   }
