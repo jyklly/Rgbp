@@ -209,12 +209,13 @@ Once we make sure that the hierarchical modeling can be appropriate for our data
 From now on, the explanation will be based on Normal-Normal model because the idea can be easily applied to the other two models.
 
 \subsection{Pseudo-data Generation Process}
-Figure 1 will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\mathbf{\mu}_{(k\times1)}$'s, \emph{i.e.}, $\{\mathbf{\mu}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (2), where $A$ and $\beta$ are given. Then, we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each $\mu_{ij},$ where $i$ indicates the $i$-th pseudo-dataset and $j$ does the $j$-th group. 
+Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\mathbf{\mu}_{(k\times1)}$'s, \emph{i.e.}, $\{\mathbf{\mu}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (2), where $A$ and $\beta$ are given. Then, we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each $\mu_{ij},$ where $i$ indicates the $i$-th pseudo-dataset and $j$ does the $j$-th group. 
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=5cm]{process.png}
 \caption{Pseudo-data generating process}
+\label{fig:pseudo}
 \end{center}
 \end{figure}
 
@@ -347,10 +348,11 @@ R> plot(p)
 \begin{center}
 \includegraphics[scale=0.25]{hospital1.png}
 \caption{Shrinkage plot and 95\% interval plot}
+\label{fig:hospshr}
 \end{center}
 \end{figure}
 
-The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio was not actually safer than seemingly the second safest hospital. 
+In Figure \ref{fig:hospshr} The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio was not actually safer than seemingly the second safest hospital. 
 
 
 Intuitively, the result of multilevel modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose sample means ($z_{j} / n_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 1 and 1000 each. Do you believe that the former hospital, whose observed death rate is 0, is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just one caseload. Though somewhat extreme, this is what happened to the two left-most hospitals in the first plot and this is why hierarchical modeling is a reasonable choice for this dataset.
@@ -376,10 +378,10 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h] 
-\label{fig:hospital_coverage}
 \begin{center}
 \includegraphics[width = 5.5cm]{hospital2.png}
 \caption{Coverage plot via method checking}
+\label{fig:hospital_coverage}
 \end{center}
 \end{figure}
 
@@ -446,7 +448,7 @@ Summary for each unit (sorted by se):
 colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-The output from \code{gbp} provides an easy way to read summary of the results of the estimation. From this there seems to be little evidence that the training provided much of an added benefit with every school's $95\%$ posterior interval containing 0. \pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in \ref{8schoolsplot}.
+The output from \code{gbp} provides an easy way to read summary of the results of the estimation. From this there seems to be little evidence that the training provided much of an added benefit with every school's $95\%$ posterior interval containing 0. \pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -454,10 +456,11 @@ R> plot(g)
 \end{CodeInput}
 \end{CodeChunk}
 
-\begin{figure}[h] \label{8schoolsplot}
+\begin{figure}[h] 
 \begin{center}
 \includegraphics[scale=0.3]{school1.png}
 \caption{Shrinkage plot and 95\% interval plot for 8 schools}
+\label{fig:8schoolsplot}
 \end{center}
 \end{figure}
 
@@ -510,11 +513,11 @@ R> gcv <- coverage(g, nsim = 10000)
 \begin{center}
 \includegraphics[width = 5.5cm]{school2.png}
 \caption{Coverage plot via method checking for 8 schools}
+\label{fig:schoolcoverage}
 \end{center}
-\label{schoolcoverage}
 \end{figure}
 %TODO: wrong reference. you mean 'As seen in Figure 5' below?
-As seen in \ref{schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
@@ -637,13 +640,14 @@ R> plot(b)
 \begin{center}
 \includegraphics[scale=0.3]{baseball1.png}
 \caption{Shrinkage plot and 95\% interval plot}
+\label{fig:baseball}
 \end{center}
 \end{figure}
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). So, their posterior means (red dots) can be interpreted as their RTTM. 
+In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
 Then, how much can we trust these interval estimates? The following method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. For reference, if we want to try different true parameters, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 10000)} instead of below one.
@@ -657,10 +661,11 @@ R> bcv <- coverage(b, nsim = 10000)
 \begin{center}
 \includegraphics[width = 5.5cm]{baseball2.png}
 \caption{Coverage plot via method checking}
+\label{fig:baseball2}
 \end{center}
 \end{figure}
 
-Finally, the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
+Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
 
 
 %However, achieving at least 95\% coverage at specific true values of $r$ and $\beta$ does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
