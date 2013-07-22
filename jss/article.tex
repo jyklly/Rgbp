@@ -16,7 +16,7 @@
 
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an R package that utilizes Bayesian machinery to provide a method of estimating two-level hierarchical models (also called random-effects mixed models) for Normal, Poisson, and Binomial data in a fast and computationally efficient manner. Good frequency property is another feature of \pkg{Rgbp}, which can be validated via its repeated sampling procedure called ``method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have strong points of both sides, working well in small samples and yielding good coverage probabilities for its interval estimates.}
+\pkg{Rgbp} is an R package that utilizes Bayesian machinery to provide a method of estimating two-level hierarchical models (also called random-effects mixed models) for Normal, Poisson, and Binomial data in a fast and computationally efficient manner. The method leads to good frequency properties that can be validated via its repeated sampling procedure called ``method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable both sides of the aisle, working well in small samples and yielding good coverage probabilities for its interval estimates.}
 \Keywords{hierarchical model, multilevel model, random effects mixed model, method checking, coverage probability, Normal, Poisson, Binomial,  shrinkage, \proglang{R}}
 \Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
 %% at least one keyword must be supplied
@@ -112,10 +112,10 @@ This package will be useful for frequentists and Bayesians alike. Bayesians are 
 \section[Multilevel Structure]{Multilevel Structure} \label{multilevel}
 A two-level or multilevel model, also called a conditionally independent hierarchical model \citep{1989}, is a very powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
-\code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate prior distribution on the first-level parameter. The \code{gbp} function allows users to choose one of three types of multilevel models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta, based on their datasets. 
+\code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate prior distribution on the first-level parameter. The \code{gbp} function allows users to choose one of three types of multilevel models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
 \subsection[Normal-Normal]{Normal-Normal}
-The following is a general Normal-Normal hierarchical model. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
+The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
 \begin{equation}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \end{equation}
@@ -162,12 +162,12 @@ where $p^{\ast}_{j}\equiv(1-B_{j})y_{j}+B_{j}p_{0j}$, $B_{j}\equiv r/ (r+n_{j})$
 
 
 \subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
-The hyper-prior distribution is an assumed distribution on the second-level parameters and with the goal of objectivity in mind \code{gbp} assumes non-informative hyper-prior distributions.
+The hyper-prior distribution is an assumed distribution on the second-level parameters. With the goal of objectivity in mind \code{gbp} assumes the following non-informative hyper-prior distributions:
 \begin{equation}
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the location gets plentiful as the number of groups (\emph{k}) increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) was chosen for its good repeated sampling properties and for posterior propriety under moderate conditions.
+where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the location gets plentiful as the number of groups (\emph{k}) increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) is chosen for its good repeated sampling properties and for posterior propriety under moderate conditions.
 
 
 \section[Estimation]{Estimation}
@@ -189,7 +189,7 @@ Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, \beta, A)\vert
 Note that both $E(\mu_{j}\vert \textbf{y}, \beta, A)$ and $Var(\mu_{j}\vert \textbf{y}, \beta, A)$ are linear functions of the shrinkage factors as specified in (\ref{normalpost}) and since we can estimate $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$ via ADM, we can finally estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$.
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate $p_{j}\vert \textbf{z}$ with a Beta distribution and for the Poisson-Gamma model we approximate $\lambda_{j}\vert \textbf{z}$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\mu_{j}\vert \textbf{y}$ with a skewed-t distribution. 
+After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate $p_{j}\vert \textbf{z}$ with a Beta distribution and for the Poisson-Gamma model we approximate $\lambda_{j}\vert \textbf{z}$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\mu_{j}\vert \textbf{y}$ with a skewed-Normal distribution. 
 
 %TODO: should I put down the form of the skewed-t or just put a reference to it? 
 
@@ -198,13 +198,13 @@ After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{
 
 %TODO: Haven't proof read method checking section yet
 \section[Method Checking]{Method Checking}
-Like the two sides of the same coin, checking a statistical model always comes with fitting a model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
+Like the two sides of the same coin, checking a statistical model comes hand in hand with fitting the model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
 
 
 There are two kinds of model justification processes; one is a model checking and the other is a method checking. The model checking is for the justification of the multilevel model on a specific dataset. One possible question is, ``Can this dataset benefit from such a multilevel modeling?'' \cite{1997} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 
 
-Once we make sure that the hierarchical modeling can be appropriate for our data, the following question will be about the validity of interval estimates, the final product of this multilevel modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' \pkg{Rgbp} has a function called \code{coverage} to answer this question and it comprises of two parts, generating peudo-dataset and estimating coverage probability.
+Once we make sure that the hierarchical modeling can be appropriate for our data, the following question will be about the validity of interval estimates, the final product of this multilevel modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' \pkg{Rgbp} has a function called \code{coverage} to answer this question and it comprises of two parts, generating pseudo-dataset and estimating coverage probability.
 
 From now on, the explanation will be based on Normal-Normal model because the idea can be easily applied to the other two models.
 
@@ -219,10 +219,10 @@ Figure 1 will be helpful to understand this process. As we can see in (\ref{norm
 \end{figure}
 
 \subsection{Coverage Estimation Process}
-Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 peudo-datasets in order to obtain 500$\times k$ interval estimates.  
+Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates.  
 
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking average over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
+Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking averages over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
 
 \subsubsection{Rao-Blackwellized Unbiased estimates of Coverage Probabilities}
 Rao-Blackwellization improves accuracy of an unbiased estimator by taking conditional expectation given a sufficient statistic. Based on this idea, we define $E(I_{ij}\vert y_{ij}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{\mu}_{ij, low}\le \mu_{ij} \le\hat{\mu}_{ij, upp}\vert y_{ij}, A, \beta)$, where ($\hat{\mu}_{ij, low}$, $\hat{\mu}_{ij, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu_{ij} \vert y_{ij}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y_{ij}$ is equivalent to conditioning on $\mathbf{y}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert y_{i1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
@@ -234,7 +234,7 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking condit
 Suppose a person living in the New York state (NY) has been suffering from severe coronary heart disease. If this person is supposed to receive the coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for dealing with such a surgery. On top of that, if this person can figure out each hospital's ability to handle this surgery, it will be useful for choosing a hospital.
 
 
-For this purpose, this person gathered data of 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. The following code is an example of input based on the last ten hospital data.
+For this purpose, data was gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. The following code is an example of input based on the last ten hospital data.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c( 14,   9,  15,  13,  35,  26,  25,  20,   35,   27)
@@ -375,14 +375,15 @@ Also, \code{gbp} can give us interval estimates with different confidence level,
 R> pcv <- coverage(p, nsim = 10000)
 \end{CodeInput}
 \end{CodeChunk}
-\begin{figure}[h]
+\begin{figure}[h] 
+\label{fig:hospital_coverage}
 \begin{center}
 \includegraphics[width = 5.5cm]{hospital2.png}
 \caption{Coverage plot via method checking}
 \end{center}
 \end{figure}
 
-It estimated coverage probabilities by simple unbiased estimates (a blue dashed line) and Rao-Blackwellized unbiased estimates (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
+In \ref{fig:hospital_coverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
 
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
@@ -407,7 +408,7 @@ It estimated coverage probabilities by simple unbiased estimates (a blue dashed 
 
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 
-\cite{1995} also looked into a similar ranking problem in hierarchical modeling, taking shrinkage into account.
+It is noted that \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
@@ -505,11 +506,12 @@ An integral part of fitting any model is to check the method of estimation. Name
 R> gcv <- coverage(g, nsim = 10000)
 \end{CodeInput}
 \end{CodeChunk}
-\begin{figure}[h] \label{schoolcoverage}
+\begin{figure}[h] 
 \begin{center}
 \includegraphics[width = 5.5cm]{school2.png}
 \caption{Coverage plot via method checking for 8 schools}
 \end{center}
+\label{schoolcoverage}
 \end{figure}
 %TODO: wrong reference. you mean 'As seen in Figure 5' below?
 As seen in \ref{schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.

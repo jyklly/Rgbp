@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{7}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -42,15 +42,6 @@ Morris C, Tang R (2011).
 \newblock \emph{Statistical Science}, \textbf{26}(2), pp. 271--287.
 \newblock ISSN 08834237.
 \newblock \urlprefix\url{http://www.jstor.org/stable/23059992}.
-
-\bibitem[{Morris(1983)}]{1983}
-Morris CN (1983).
-\newblock \enquote{Parametric Empirical Bayes Inference: Theory and
-  Applications.}
-\newblock \emph{Journal of the American Statistical Association},
-  \textbf{78}(381), pp. 47--55.
-\newblock ISSN 01621459.
-\newblock \urlprefix\url{http://www.jstor.org/stable/2287098}.
 
 \bibitem[{Morris and Christiansen(1995)}]{1995}
 Morris CN, Christiansen C (1995).
