@@ -225,7 +225,7 @@ Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseud
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
 Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking averages over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
 
-\subsubsection{Rao-Blackwellized Unbiased estimates of Coverage Probabilities}
+\subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
 Rao-Blackwellization improves accuracy of an unbiased estimator by taking conditional expectation given a sufficient statistic. Based on this idea, we define $E(I_{ij}\vert y_{ij}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{\mu}_{ij, low}\le \mu_{ij} \le\hat{\mu}_{ij, upp}\vert y_{ij}, A, \beta)$, where ($\hat{\mu}_{ij, low}$, $\hat{\mu}_{ij, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu_{ij} \vert y_{ij}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y_{ij}$ is equivalent to conditioning on $\mathbf{y}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert y_{i1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
 
 
@@ -381,11 +381,11 @@ R> pcv <- coverage(p, nsim = 10000)
 \begin{center}
 \includegraphics[width = 5.5cm]{hospital2.png}
 \caption{Coverage plot via method checking}
-\label{fig:hospital_coverage}
+\label{fig:hospitalcoverage}
 \end{center}
 \end{figure}
 
-In \ref{fig:hospital_coverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
+In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
 
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
@@ -516,7 +516,7 @@ R> gcv <- coverage(g, nsim = 10000)
 \label{fig:schoolcoverage}
 \end{center}
 \end{figure}
-%TODO: wrong reference. you mean 'As seen in Figure 5' below?
+
 As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
 
 %\begin{CodeChunk}
