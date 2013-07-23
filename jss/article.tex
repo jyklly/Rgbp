@@ -6,8 +6,8 @@
 
 %% almost as usual
 \author{Joseph Kelly\\Harvard University \And 
-             Carl Morris\\ Harvard University\And
-             Hyungsuk Tak\\Harvard University }
+             Hyungsuk Tak\\Harvard University\And
+             Carl Morris\\ Harvard University}
 \title{\pkg{Rgbp}: An R Package for Hierarchical Modeling and Method Checking}
 
 %% for pretty printing and a nice hypersummary also set:
@@ -40,18 +40,17 @@
   E-mail: \email{kelly2@fas.harvard.edu}\\
   URL: \url{http://www.people.fas.harvard.edu/~kelly2/}\\
 
+  Hyungsuk Tak\\
+  Department of Statistics\\
+  Harvard University\\
+  1 Oxford Street, Cambridge, MA\\
+  E-mail: \email{tak@fas.harvard.edu}\\
+
   Carl Morris\\
   Department of Statistics\\
   Harvard University\\
   1 Oxford Street, Cambridge, MA\\
   E-mail: \email{morris@fas.harvard.edu}\\
-
-  Hyungsuk Tak\\
-  Department of Statistics\\
-  Harvard University\\
-  1 Oxford Street, Cambridge, MA\\
-  E-mail: \email{hyungsuk.tak@gmail.com}\\
-
 }
 
 %% It is also possible to add a telephone and fax number
@@ -223,7 +222,7 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates.  
 
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking averages over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\bar{I}_{1}=\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
+Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking averages over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
 
 \subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
 Rao-Blackwellization improves accuracy of an unbiased estimator by taking conditional expectation given a sufficient statistic. Based on this idea, we define $E(I_{ij}\vert y_{ij}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{\mu}_{ij, low}\le \mu_{ij} \le\hat{\mu}_{ij, upp}\vert y_{ij}, A, \beta)$, where ($\hat{\mu}_{ij, low}$, $\hat{\mu}_{ij, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu_{ij} \vert y_{ij}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y_{ij}$ is equivalent to conditioning on $\mathbf{y}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert y_{i1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
