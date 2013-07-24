@@ -115,10 +115,10 @@ A two-level or multilevel model, also called a conditionally independent hierarc
  
 \subsection[Normal-Normal]{Normal-Normal}
 The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
-\begin{equation}
+\begin{equation}\label{normalobs}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \end{equation}
-\begin{equation}
+\begin{equation}\label{normalprior}
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
@@ -208,7 +208,7 @@ Once we make sure that the hierarchical modeling can be appropriate for our data
 From now on, the explanation will be based on Normal-Normal model because the idea can be easily applied to the other two models.
 
 \subsection{Pseudo-data Generation Process}
-Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we sampled 500 $\mathbf{\mu}_{(k\times1)}$'s, \emph{i.e.}, $\{\mathbf{\mu}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (2), where $A$ and $\beta$ are given. Then, we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each $\mu_{ij},$ where $i$ indicates the $i$-th pseudo-dataset and $j$ does the $j$-th group. 
+Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we generated 500 {\boldmath $\mu$}$_{(k\times1)}$'s, \emph{i.e.}, \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (\ref{normalprior}), where $A$ and $\beta$ are given. Then using (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}, $ where $i$ indicates the $i$-th simulation. 
 
 \begin{figure}[h]
 \begin{center}
@@ -219,13 +219,13 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \end{figure}
 
 \subsection{Coverage Estimation Process}
-Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates.  
+Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  And then within each group, it will check simply how often the interval estimates include true parameters, or calculate Rao-Blackwellized coverage estimate. 
 
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I_{ij}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu_{ij}$ and 0 otherwise. One way to estimate the coverage probability is taking averages over these indicator variables. We call it a simple unbiased coverage probability estimate. For example, $\sum_{i=1}^{500}I_{i1}/500$ is the estimated coverage probability for the first group.
+Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. One way to estimate the coverage probability is taking a sample mean of these indicator variables within each group (averaging over all $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ possible under given $A$ and $\beta$. We call it a simple unbiased estimate of coverage probability. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group, averaging over all $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500$, possible under the fixed $A$ and $\beta$. As the number of pseudo-datasets increases, this simple estimate will converge to $P(\mu_{1}\in(\hat{\mu}_{1,~low},~\hat{\mu}_{1,~upp}) \vert A, \beta)$.
 
 \subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking conditional expectation given a sufficient statistic. Based on this idea, we define $E(I_{ij}\vert y_{ij}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y_{ij}$ is a sufficient statistic. This expectation is the same as Pr$(\hat{\mu}_{ij, low}\le \mu_{ij} \le\hat{\mu}_{ij, upp}\vert y_{ij}, A, \beta)$, where ($\hat{\mu}_{ij, low}$, $\hat{\mu}_{ij, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu_{ij} \vert y_{ij}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y_{ij}$ is equivalent to conditioning on $\mathbf{y}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I_{i1}\vert y_{i1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
+Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we define $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y^{(i)}_{j}$ is a sufficient statistic of the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
 
 
 
