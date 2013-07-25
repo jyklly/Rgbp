@@ -166,7 +166,7 @@ The hyper-prior distribution is an assumed distribution on the second-level para
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the location gets plentiful as the number of groups (\emph{k}) increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) is chosen for its good repeated sampling properties and for posterior propriety under moderate conditions.
+where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the second-level mean gets plentiful as the number of groups (\emph{k}) increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) is chosen for its good repeated sampling properties and for posterior propriety under moderate conditions.
 
 
 \section[Estimation]{Estimation}
@@ -188,7 +188,7 @@ Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, \beta, A)\vert
 Note that both $E(\mu_{j}\vert \textbf{y}, \beta, A)$ and $Var(\mu_{j}\vert \textbf{y}, \beta, A)$ are linear functions of the shrinkage factors as specified in (\ref{normalpost}) and since we can estimate $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$ via ADM, we can finally estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$.
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate $p_{j}\vert \textbf{z}$ with a Beta distribution and for the Poisson-Gamma model we approximate $\lambda_{j}\vert \textbf{z}$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\mu_{j}\vert \textbf{y}$ with a skewed-Normal distribution. 
+After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, \emph{i.e.} $\pi(p_{j}\vert \textbf{y})$, with a Beta distribution and for the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \textbf{y})$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \textbf{y})$ with a skewed-Normal distribution. 
 
 %TODO: should I put down the form of the skewed-t or just put a reference to it? 
 
@@ -222,10 +222,10 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  And then within each group, it will check simply how often the interval estimates include true parameters, or calculate Rao-Blackwellized coverage estimate. 
 
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. One way to estimate the coverage probability is taking a sample mean of these indicator variables within each group (averaging over all $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ possible under given $A$ and $\beta$. We call it a simple unbiased estimate of coverage probability. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group, averaging over all $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500$, possible under the fixed $A$ and $\beta$. As the number of pseudo-datasets increases, this simple estimate will converge to $P(\mu_{1}\in(\hat{\mu}_{1,~low},~\hat{\mu}_{1,~upp}) \vert A, \beta)$.
+Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. One way to estimate the coverage probability is taking a sample mean of these indicator variables within each group, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ under fixed $A$ and $\beta$. We call it a simple unbiased estimate of coverage probability. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group, accounting for possible $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given specific $A$ and $\beta$. As the number of pseudo-datasets increases, this simple estimate will converge to the true coverage probability given $A$ and $\beta$.
 
 \subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we define $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ were given at first (see 4.1) and $y^{(i)}_{j}$ is a sufficient statistic of the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)/500$, which is also unbiased but more accurate than the previous simple estimator.
+Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we define $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ were given at first and $y^{(i)}_{j}$ is a sufficient statistic of the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we can estimate the first group's coverage probability by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but more accurate than the previous simple estimator.
 
 
 
@@ -301,13 +301,13 @@ colMeans    0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
 For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$). 
 
 
-The output contains information about sample mean ($y_{j}$), caseload ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower bound of interval estimate ($\hat{\lambda}_{low}$), posterior mean ($\hat{\lambda}=E(\lambda_{j}\vert \textbf{y})$), upper bound of interval estimate ($\hat{\lambda}_{upp}$), and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{y})$).
+The output contains information about observed death ratio ($y_{j}$), caseload ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower bound of interval estimate ($\hat{\lambda}_{j, low}$), posterior mean ($\hat{\lambda}=E(\lambda_{j}\vert \textbf{y})$), upper bound of interval estimate ($\hat{\lambda}_{j, upp}$), and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (6), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the second level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the second level information.
 
 
-A function ``\code{summary}'' shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model and a summary of regression fit will appear.
+A function \code{summary} shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model and a summary of regression fit will appear.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
@@ -337,7 +337,7 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because its observed amount of information (67) is far less than the amount of state-level information (336).
 
 
-We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function `\code{plot}' is exactly for this purpose.
+We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function \code{plot} is exactly for this purpose.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(p)
@@ -351,10 +351,10 @@ R> plot(p)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} The regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio was not actually safer than seemingly the second safest hospital. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
 
 
-Intuitively, the result of multilevel modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose sample means ($z_{j} / n_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 1 and 1000 each. Do you believe that the former hospital, whose observed death rate is 0, is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just one caseload. Though somewhat extreme, this is what happened to the two left-most hospitals in the first plot and this is why hierarchical modeling is a reasonable choice for this dataset.
+Intuitively, the result of multilevel modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose observed death ratios ($y_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 1 and 1000 each. Do you believe that the former hospital, whose observed death rate is 0, is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just one caseload. Though somewhat extreme, this is what happened to the two left-most hospitals in the first plot and this is why hierarchical modeling is a reasonable choice for this dataset.
 
 
 The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, if we want to draw this plot by the order of data input, \code{plot(p, sort = FALSE)} is the right adjustment. 
@@ -369,7 +369,7 @@ Also it reveals that the 23rd hospital, whose estimated true rate was the smalle
 Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method checking will answer this question. The \code{coverage} function below generates 10,000 pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
 
 
-Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.  Then, the below code will evaluate whether interval estimates achieve 90\% confidence level.
+Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.'  Then, the below code will evaluate whether interval estimates achieve 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -379,7 +379,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \begin{figure}[h] 
 \begin{center}
 \includegraphics[width = 5.5cm]{hospital2.png}
-\caption{Coverage plot via method checking}
+\caption{Coverage plot via method checking for 31 hospitals}
 \label{fig:hospitalcoverage}
 \end{center}
 \end{figure}
@@ -535,7 +535,7 @@ As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ coverage probabili
 %\end{figure}
 
 
-\subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Prior Mean and One Covariate}
+\subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Second-level Mean and One Covariate}
 %The New York Times published on 26 April 1970 covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then we became interested in their batting averages over the remaining season. 
 
 The following dataset from the New York Times published on 26 April 1970 contains information on the batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}. In addition one covariate relating to the position of each player was observed and for illustrative purposes, we transform this variable into a binary indicator (1 if a player was an outfielder and 0 otherwise).
@@ -628,7 +628,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -646,7 +646,7 @@ R> plot(b)
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal line). So, their posterior means (red dots) can be interpreted as their RTTM. 
+In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
 Then, how much can we trust these interval estimates? The following method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. For reference, if we want to try different true parameters, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 10000)} instead of below one.
@@ -659,7 +659,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width = 5.5cm]{baseball2.png}
-\caption{Coverage plot via method checking}
+\caption{Coverage plot via method checking for 18 players}
 \label{fig:baseball2}
 \end{center}
 \end{figure}
@@ -690,7 +690,7 @@ Finally, in Figure \ref{fig:baseball2}, we see that the estimated average covera
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion}
-\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios. The package provides ``method checking'' functionality to examine repeated sampling properties and test that the method is valid at a particular parameter value.
+\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios. The package provides ``method checking'' functionality to examine repeated sampling properties and test that the method is valid at a wide range of parameter values.
 
 In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
