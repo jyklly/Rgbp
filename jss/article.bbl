@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{10}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -35,6 +35,19 @@ Kass RE, Steffey D (1989).
 \newblock ISSN 01621459.
 \newblock \urlprefix\url{http://www.jstor.org/stable/2289653}.
 
+\bibitem[{Lee and Pawitan(2006)}]{hglm2006}
+Lee Y NJA, Pawitan Y (2006).
+\newblock \emph{Generalized linear models with random effects: a unified
+  analysis via h-likelihood}.
+\newblock Chapman \& Hall/ CRC, New York.
+
+\bibitem[{Morris(1988)}]{carl1988}
+Morris C (1988).
+\newblock \enquote{Approximating Posterior Distributions and Posterior
+  Moments.}
+\newblock In DMHLDV Bernardo JM, AFM Smith (eds.), \emph{Bayesian Statistics
+  3}, pp. 327--344. Oxford University Press.
+
 \bibitem[{Morris and Tang(2011)}]{2011}
 Morris C, Tang R (2011).
 \newblock \enquote{Estimating Random Effects via Adjustment for Density
@@ -54,6 +67,14 @@ Morris CN, Christiansen C (1995).
 Morris CN, Lysy M (2012).
 \newblock \enquote{Shrinkage Estimation in Multilevel Normal Models.}
 \newblock \emph{Statistical Science}, \textbf{27}(1), 115--134.
+
+\bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2010)R{\"o}nneg{\aa}rd, Shen, and
+  Alam}]{hglm2010}
+R{\"o}nneg{\aa}rd L, Shen X, Alam M (2010).
+\newblock \enquote{hglm: A Package for Fitting Hierarchical Generalized Linear
+  Models.}
+\newblock \emph{The R Journal}, \textbf{2}(2), 20--28.
+\newblock ISSN 20734859.
 
 \bibitem[{Rubin(1981)}]{1981}
 Rubin DB (1981).
