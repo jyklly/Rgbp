@@ -260,7 +260,7 @@ Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma co
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(hospital)
-R> z <- hospital$z
+R> z <- hospital$d
 R> n <- hospital$n
 R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "pr")
 R> p
@@ -389,7 +389,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
+In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property. For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
@@ -521,7 +521,7 @@ R> gcv <- coverage(g, nsim = 10000)
 \end{center}
 \end{figure}
 
-As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
@@ -669,7 +669,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
+Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. As for the running time, it took 243 seconds for MacBook Pro equipped with a 2.3 GHz dual-core Interl i5 CPU to execute 10,000 simulations.
 
 
 %However, achieving at least 95\% coverage at specific true values of $r$ and $\beta$ does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
@@ -702,7 +702,8 @@ In addition to good frequency properties Bayesians will be able to use the packa
 Due to the fact that the estimation procedures in \pkg{Rgbp} rely on differentiation the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a full Bayesian model (via MCMC) would be computationally impractical.
 
 \section[acknowledgments]{Acknowledgments}
-The authors would like to thank Phil Everson and the 2012 class of Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+The authors would like to thank Phil Everson, Cindy Christiansen, and the 2012 class of Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+
 \bibliography{bibliography}
 
 \end{document}
