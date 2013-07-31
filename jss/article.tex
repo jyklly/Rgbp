@@ -16,8 +16,8 @@
 
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable both sides of the aisle, working well in small samples and yielding good coverage probabilities for its interval estimates.}
-\Keywords{hierarchical model, multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, gaussian, poisson, binomial,  shrinkage}
+\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
+\Keywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage}
 \Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
 %% at least one keyword must be supplied
 
@@ -71,7 +71,7 @@
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 \pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010}, producing point and interval estiates of the true parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
-This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model and frequentists, now have a procedure that will provide confidence intervals of a conjugate hierarchical generalized llinear model with good repeated sampling properties.
+This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model. Frequentists will have a procedure that meets or exceeds their confidence specification and repeated sampling.
 
 
 %\section[Feasible Data Types]{Three Feasible Types of Data }
@@ -110,11 +110,11 @@ This package will be useful for frequentists and Bayesians alike. Bayesians are 
 %The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown true batting average $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This data set is also a part of the package and can be called on \proglang{R} by `\code{data(baseball)}'.
 
 \section[Multilevel Structure]{Multilevel Structure} \label{multilevel}
-A two-level or multilevel model, also called a conditionally independent hierarchical model \citep{1989}, is a very powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state.
+A two-level or multilevel model, also called a conditionally independent hierarchical model \citep{1989}, is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
-\code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level hierarchy has a distribution of observed data and second-level (bigger population hierarchy) has a conjugate distribution on the first-level parameter. The \code{gbp} function allows users to choose one of three types of multilevel models, such as Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
+\code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level parameters. The \code{gbp} function allows users to choose one of three types of multilevel models, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
-\subsection[Normal-Normal]{Normal-Normal (`g'=Gaussian data)}
+\subsection[Normal-Normal]{Normal-Normal (``g''=Gaussian data)}
 The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
 \begin{equation}\label{normalobs}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
@@ -129,12 +129,12 @@ where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}$, $j=1, \ldots k$, $x_{j}$ is the $j$
 \end{equation}
 where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages.
 
-\subsection[Poisson-Gamma]{Poisson-Gamma (`p'=Poisson data)}
-\code{gbp} is also able to build a Poisson-Gamma multilevel model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of distribution. And for notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimates of $\lambda_{j}$, where $j=1, \ldots, k$.
+\subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}
+\code{gbp} is also able to build a Poisson-Gamma multilevel model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$, where $j=1, \ldots, k$.
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
-\begin{equation}
+\begin{equation}\label{gammaprior}
 \lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(r\lambda_{0j})\sim \textrm{Gamma} \left[\lambda_{0j}, ~\frac{\lambda_{0j}}{r} \right],
 \end{equation}
 
@@ -145,8 +145,11 @@ where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, k$, with two unknown hype
 
 where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$,  $B_{j}\equiv r / (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1, \ldots, k$. 
 
-\subsection[Binomial-Beta]{Binomial-Beta (`b'=Binomial data)}
-Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of distribution.
+
+Note that the variance in (\ref{gammaprior}) is linear in the mean, whereas a slightly different Poisson-Gamma specification \citep{1997} has been used elsewhere e.g. that makes the variance in (\ref{gammaprior}) quardratic.
+
+\subsection[Binomial-Beta]{Binomial-Beta (``b''=Binomial data)}
+Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of a distribution.
 \begin{equation}
 z_{j} \vert p_{j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
 \end{equation}
@@ -154,7 +157,7 @@ z_{j} \vert p_{j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
 p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta} \left[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1} \right],
 \end{equation}
 
-where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, k$ and $r$ and $\beta$ are two unknown hyper-parameters. Then corresponding posterior distribution given unknown $(r, \beta)$ is
+where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, k$ and $r$ and $\beta$ are two unknown hyper-parameters. Then corresponding posterior distribution given  $r$ and $\beta)$ is
 \begin{equation} \label{betapost}
 p_{j}\vert \textbf{y}, \beta, r \stackrel{ind}{\sim}\textrm{Beta}(rp_{0j}+n_{j}y_{j},~r(1-p_{0j})+n_{j}(1-y_{j}))\sim\textrm{Beta}\bigg[p^{\ast}_{j},~ \frac{p^{\ast}_{j}(1-p^{\ast}_{j})}{r+n_{j}+1}\bigg],
 \end{equation}
@@ -162,34 +165,37 @@ where $p^{\ast}_{j}\equiv(1-B_{j})y_{j}+B_{j}p_{0j}$, $B_{j}\equiv r/ (r+n_{j})$
 
 
 \subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
-Our hyper-prior distribution is an assumed distribution on the second-level parameters. With the goal of objectivity in mind \code{gbp} assumes the following non-informative hyper-prior distributions:
+A hyper-prior distribution is a distribution assigned to the second-level parameters. With the goal of objectivity in mind our choice for hyper priors with \code{gbp} assumes the following non-informative hyper-prior distributions:
 \begin{equation}
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, it is a reasonable choice to assume a flat (non-informative) distribution because information about the second-level mean gets plentiful as the number of groups (\emph{k}) increases. The next flat prior distribution of the second-level variance component $A$ (or $1/r$) is chosen for its good repeated sampling properties for point and interval estimates of the true parameters $\{\mu_{j}\}$, $\{\lambda_{j}\}$, or $\{p_{j}\}$ over 2-level model, and for posterior propriety under moderate conditions \citep{2011}.
+where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of the true parameters $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Unif($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
+
 
 
 \section[Estimation]{Estimation}
 
 \subsection[Shrinkage Estimation]{Shrinkage Estimation}
-Estimating the shrinkage factors ($B_1, \ldots, B_k$) is the key estimation problem with the hierarchical models \code{gbp} assumes. As we can see in (\ref{normalpost}), (\ref{gammapost}), and (\ref{betapost}), the posterior means are a linear function of the shrinkage factors ($B_{j}$) and the posterior variances are also linear (Gaussian), quadratic (Poisson), or cubic (Binomial) functions. A natural method then to estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ is to first estimate the shrinkage factors.
+Estimating the shrinkage factors ($B_1, \ldots, B_k$) is the key estimation problem with the hierarchical models \code{gbp} assumes. As we can see in (\ref{normalpost}), (\ref{gammapost}), and (\ref{betapost}), the posterior means are a linear function of the shrinkage factors ($B_{j}$) and the posterior variances are linear (Gaussian), quadratic (Poisson), and  approximately cubic (Binomial) functions of $B_{j}$. A natural method then to estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ is to first estimate the shrinkage factors.
 
 \subsection[ADM]{Approximation via Adjustment for Density Maximization}
-It is noted that the shrinkage factors ($B_1, \ldots B_k$) are a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models. Current popular methods of estimation via maximization (MLE or MAP) of these unknown shrinkage factors can result in estimates lying on the boundary of the parameter space. In the Normal-Normal model this situation typically arises when the within-group variation is greater than the between-group variation resulting in a parameter estimate of $\hat{A} = 0$ \citep{2012}.
+It is noted that the shrinkage factors ($B_1, \ldots B_k$) are a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models. A common approach to approximate the distribution of $B_{j}$ is to find its MLE $\hat{B}_{j}(\hat{A}_{MLE})$ (or  $\hat{B}_{j}(\hat{r}_{MLE})$) and to use its asymptotic Normality. But MLE can result in estimates lying on the boundary of the parameter space, and its asymptotic Gaussian distribution is defined on $(-\infty, \infty)$ whereas $B_{j}$ is bounded between 0 and 1.
 
-To continue with a maximization-based estimation procedure but to steer clear of aforementioned issues we make use of adjustment for density maximization (ADM) \citep{1997, carl1988, 2011}. In general ADM is a procedure to obtain estimates of posterior moments via maximization if the underlying posterior can be approximated by a Pearson family. For our purposes we can approximate the posterior distribution of a shrinkage factor with the Beta distribution allowing us to finally obtain estimates of the posterior moments, \emph{i.e.}, $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without any trouble that MLE can cause. See \cite{2011} for additional advantages of ADM.
+To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of adjustment for density maximization (ADM) \citep{carl1988, 1997, 2011}. For our purposes we approximate the posterior distribution of a shrinkage factor with a Beta distribution, which allows us to finally obtain estimates of the posterior moments, \emph{i.e.}  of $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without the boundary issues that MLE encounters. See \cite{2011}.
+>>>>>>> 3c705aa06ceadc1c8ebef0446e4039dc98866b97
 
+\subsection[Posterior Moment Estimation]{Posterior Moment Estimation}
 
-Once we estimate these two moments of shrinkage, we can also estimate the posterior moments given only the data ($\textbf{y}$). Taking the Normal-Normal model as an example we note the following identities
+Using the posterior mean and variance estimates of $B_{j}$, \pkg{Rgbp} estimates the posterior mean and variance of true parameters given only the data ($\textbf{y}$). Taking the Normal-Normal model as an example, it estimates $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ by the following identities
 \begin{eqnarray}
 E(\mu_{j}\vert \textbf{y}) & = & E(E(\mu_{j}\vert \textbf{y}, \beta, A)\vert \textbf{y}), \\
-Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, \beta, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, \beta, A)\vert \textbf{y}).
+Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, \beta, A)\vert \textbf{y})+Var(E(\mu_{j}\vert \textbf{y}, \beta, A)\vert \textbf{y}),
 \end{eqnarray}  
-Note that both $E(\mu_{j}\vert \textbf{y}, \beta, A)$ and $Var(\mu_{j}\vert \textbf{y}, \beta, A)$ are linear functions of the shrinkage factors as specified in (\ref{normalpost}) and since we can estimate $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$ via ADM, we can finally estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$.
+where both $E(\mu_{j}\vert \textbf{y}, \beta, A)$ and $Var(\mu_{j}\vert \textbf{y}, \beta, A)$ are linear functions of the shrinkage factors as specified in (\ref{normalpost}).
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, \emph{i.e.} $\pi(p_{j}\vert \textbf{y})$, with a Beta distribution and for the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \textbf{y})$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \textbf{y})$ with a skewed-Normal distribution. 
+After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, $\pi(p_{j}\vert \textbf{y})$, with a Beta distribution and for the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \textbf{y})$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \textbf{y})$ with a skewed-Normal distribution. 
 
 %TODO: should I put down the form of the skewed-t or just put a reference to it? 
 
@@ -223,10 +229,10 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  And then within each group, it will check simply how often the interval estimates include true parameters, or calculate Rao-Blackwellized coverage estimate. 
 
 \subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. This provides a simple unbiased estimate of the $k$ coverage probabilities. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group ($j=1$), accounting for possible $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given a specific $(A, \beta)$. As the number of pseudo-datasets increases, this simple estimate converges to the true coverage probability of the first group given $A$ and $\beta$.
+Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. This provides a simple unbiased estimate of the $k$ coverage probabilities. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given a specific $(A, \beta)$. As the number of pseudo-datasets increases, this simple estimate converges to the true coverage probability of the first group given $A$ and $\beta$.
 
 \subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we define $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we estimate the first group's coverage probability by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
+Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we estimate the first group's coverage probability by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
 
 
 
@@ -235,7 +241,7 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking a cond
 Suppose a person living in the New York state (NY) has been suffering from severe coronary heart disease. If this person is supposed to receive the coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for dealing with such a surgery. On top of that, if this person can figure out each hospital's ability to handle this surgery, it will be useful for choosing a hospital. 
 
 
-For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. Using these data, \pkg{Rgbp} provides point and interval estimates of the true death ratio for each hospital so that one can choose the safest hospital. The following code is an example of input based on the last ten hospital data ($j=22, 23, \ldots, 31$).
+For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. Using these data, \pkg{Rgbp} provides point and interval estimates of the true death ratio for each hospital so that one can choose the safest hospital. The following code is an example of input based on the last ten hospital data ($j=22, 23, \ldots, 31$). Throughout this paper, the symbol `\code{R>}' represents a command prompt that you should not type on \proglang{R}.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c( 14,   9,  15,  13,  35,  26,  25,  20,   35,   27)
@@ -256,7 +262,7 @@ Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma co
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(hospital)
-R> z <- hospital$z
+R> z <- hospital$d
 R> n <- hospital$n
 R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "pr")
 R> p
@@ -305,7 +311,7 @@ For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\c
 The output contains information about observed death ratio ($y_{j}$), caseload ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower bound of interval estimate ($\hat{\lambda}_{j, low}$), posterior mean ($\hat{\lambda}=E(\lambda_{j}\vert \textbf{y})$), upper bound of interval estimate ($\hat{\lambda}_{j, upp}$), and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the second level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the second-level information.
 
 
 A function \code{summary} shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model and a summary of regression fit will appear.
@@ -385,7 +391,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property.
+In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property. For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
@@ -517,7 +523,7 @@ R> gcv <- coverage(g, nsim = 10000)
 \end{center}
 \end{figure}
 
-As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ coverage probability was achieved for each group in this example.
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
@@ -665,7 +671,7 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
+Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. As for the running time, it took 243 seconds for MacBook Pro equipped with a 2.3 GHz dual-core Interl i5 CPU to execute 10,000 simulations.
 
 
 %However, achieving at least 95\% coverage at specific true values of $r$ and $\beta$ does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
@@ -698,7 +704,8 @@ In addition to good frequency properties Bayesians will be able to use the packa
 Due to the fact that the estimation procedures in \pkg{Rgbp} rely on differentiation the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a full Bayesian model (via MCMC) would be computationally impractical.
 
 \section[acknowledgments]{Acknowledgments}
-The authors would like to thank Phil Everson and the 2012 class of Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+The authors would like to thank Phil Everson, Cindy Christiansen, and the 2012 class of Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+
 \bibliography{bibliography}
 
 \end{document}

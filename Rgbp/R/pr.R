@@ -286,7 +286,7 @@ pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
                  post.mean = post.res$post.mean, post.sd = post.res$post.sd, 
                  prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
                  post.intv.upp = post.res$post.intv.upp, model = "pr", X = X, 
-                 beta.new = a.res$beta.new, beta.var = a.res$beta.var, 
+                 beta.new = a.res$beta.new, beta.var = a.res$beta.var, weight = NA,
                  intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha)
   output
 }
