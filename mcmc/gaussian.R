@@ -1,4 +1,14 @@
 library(rstan)
+library(parallel)
+
+args <- commandArgs(TRUE)
+if (length(args)==0){
+  s <- 1
+} else {
+  s <- as.numeric(args[1])
+}
+print(paste("Core number",s, "started at", date()))
+
 
 rstan_schools <- function(y, sigma){
   schools_code <- '
@@ -31,11 +41,9 @@ rstan_schools <- function(y, sigma){
   return(fit)
 }
 
-coverage.ind <- function(low,upp,true){
-  as.numeric((low < true) & (upp > true))
-}
-
 schools.sim <- function(i,mu0,A,k,sigma){
+  out = NULL
+  try({
   ##sim true theta
   theta <- rnorm(k, mu0, sqrt(A))
   y <- rnorm(k, theta, sigma)
@@ -58,7 +66,9 @@ schools.sim <- function(i,mu0,A,k,sigma){
   ##calc coverage
   coverage.ind <- as.numeric((theta.25 < theta) & (theta.975 > theta))
   coverage.RB <- pnorm(theta.975, postmean, postsd) - pnorm(theta.25, postmean, postsd)
-  return(list(coverage.ind = coverage.ind, coverage.RB = coverage.RB))
+out <- list(coverage.ind = coverage.ind, coverage.RB = coverage.RB)
+})
+  return(out)
 }
 
 ##true values
@@ -66,6 +76,8 @@ mu0 <- 8.168
 A <- 117.71
 k <- 8
 sigma <- c(9, 10, 10, 11, 11, 15, 16, 18)
-nits <- 1000
+##nits <- 1000
 
-out <- mclapply(nits, schools.sim, mu0 = mu0, A = A, k = k, sigma = sigma, mc.cores = 4)
+## out <- mclapply(1:nits, schools.sim, mu0 = mu0, A = A, k = k, sigma = sigma, mc.cores = 3)
+out <- schools.sim(s, mu0 = mu0, A = A, k = k, sigma = sigma)
+save(out, file=paste("output/mcmcout",s,".RData", sep = ""))
