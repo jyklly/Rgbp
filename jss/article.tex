@@ -1,5 +1,8 @@
 \documentclass[article]{jss}
 
+%%uncomment line below for double-spacing
+%%\linespread{2}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -238,10 +241,9 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking a cond
 
 \section[Examples]{Examples}
 \subsection[Known Second-level Mean]{31 Hospitals: Known Second-level Mean}
-Suppose a person living in the New York state (NY) has been suffering from severe coronary heart disease. If this person is supposed to receive the coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for dealing with such a surgery. On top of that, if this person can figure out each hospital's ability to handle this surgery, it will be useful for choosing a hospital. 
+In this example we take the perspective of a person living in the state of New York (NY) and has been suffering from severe coronary heart disease. If this person is supposed to receive a coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for dealing with such a surgery.
 
-
-For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. Using these data, \pkg{Rgbp} provides point and interval estimates of the true death ratio for each hospital so that one can choose the safest hospital. The following code is an example of input based on the last ten hospital data ($j=22, 23, \ldots, 31$). Throughout this paper, the symbol `\code{R>}' represents a command prompt that you should not type on \proglang{R}.
+For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. Using these data, \pkg{Rgbp} provides point and interval estimates of the true death ratio for each hospital so that one can choose the most reliable hospital. The following code is an example of input based on the last ten hospital data ($j=22, 23, \ldots, 31$). Throughout this paper, the symbol `\code{R>}' represents a command prompt that you should not type on \proglang{R}.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c( 14,   9,  15,  13,  35,  26,  25,  20,   35,   27)
@@ -249,13 +251,12 @@ R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 \end{CodeInput}
 \end{CodeChunk}
 
-In addition, while one looks for such information, suppose one knows that the state-level death rate per exposure of this surgery is 0.020. 
+There are two extreme perspectives that the patient could take in this example. The first being that each hospital is identical in their ability to undertake CABG surgeries, in which case the choice of hospitals is irrelevant and the data could be pooled in order to estimate the death rate. The second, is that the hospitals are totally unrelated in which case the death rate estimate for each hospital would only be a function of the observed data for that particular hospital. These hospitals, however, are all subject to the same rules and regulations enforced by the federal and state governments and that there is likely similarities between hospitals. As such, a multilevel model seems to be a reasonable approach. 
 
 
-The multilevel modeling that assumes a bigger population-level hierarchy will be insightful in this problem. Here, we presume a state-level (NY) hierarchy governing the true death rates ($\lambda$) of CABG surgery of all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution whose mean is 0.020. 
+The patient can then presume a state-level (NY) hierarchy governing the true death rates ($\lambda$) of CABG surgery for all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution. In this example it is assumed that the true state-level death rate is known to be 0.020. 
 
-
-Assuming an additional hierarchy is reasonable, a model-fitting process begins.  We know the true death rate per exposure after CABG surgery might be small and the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital. Then the independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be the first choice to describe the uncertainty in these data. Note that caseload  ($n_{j}$) can be interpreted as an exposure, which is not necessarily an integer.
+As the state-level death rate is small we can conclude that the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital. Thus, the independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data. Note that caseload  ($n_{j}$) can be interpreted as an exposure, which is not necessarily an integer.
 
 
 Next, \code{gbp} will help us fit the Poisson multilevel model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in the section 2.2. For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
@@ -311,10 +312,10 @@ For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\c
 The output contains information about observed death ratio ($y_{j}$), caseload ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower bound of interval estimate ($\hat{\lambda}_{j, low}$), posterior mean ($\hat{\lambda}=E(\lambda_{j}\vert \textbf{y})$), upper bound of interval estimate ($\hat{\lambda}_{j, upp}$), and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a linear function of shrinkage, $B_{j}\equiv r / (r + n_{j})$, locating between the sample mean and prior mean ($\lambda_{0}=0.02$). It makes sense because $r$ can be interpreted as the amount of prior information and $n_{j}$ as the amount of observed information. If the second level has more information than the first level, then the sample mean shrinks towards the prior mean more than 50\%. This point is clear in the above output because, as caseload increases, shrinkage decreases, depending less on the second-level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.02$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree of prior and observed information respectively. If the second level has more information than the first level, then the estimator will shrink towards the prior mean more than 50\%. This is clear in this example because, as caseload increases, shrinkage decreases, depending less on the second-level information.
 
 
-A function \code{summary} shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the estimation result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model and a summary of regression fit will appear.
+A function \code{summary} shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
@@ -341,10 +342,11 @@ alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
 1          -5.818         0.411
 \end{CodeOutput}
 \end{CodeChunk}
-Since estimated $\alpha$ is -5.818, we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because its observed amount of information (67) is far less than the amount of state-level information (336).
+From the output of \code{Rgbp} we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because the observed amount of information (67) is far less than the amount of state-level information (336).
 
 
-We also need a graphical summary that can give us valuable insight buried in pile of numbers and a function \code{plot} is exactly for this purpose.
+To obtain a graphical summary the function \code{plot} can be used, as seen in \ref{fig:hospshr}.
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(p)
@@ -361,22 +363,24 @@ R> plot(p)
 In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
 
 
-Intuitively, the result of multilevel modeling makes more sense than that of naive sample mean. For example, suppose there are two hospitals, whose observed death ratios ($y_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 10 and 1000 each. Do you believe that the former hospital, whose observed death rate is 0, is better than the latter and are you going to choose the former hospital? Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just ten caseloads. Though somewhat extreme, this is what happened to the two left-most hospitals in the first plot and this is why hierarchical modeling is a reasonable choice for this dataset.
+Multilevel modeling gives the patient the ability to borrow information across groups. For example, suppose there are two hospitals, whose observed death ratios ($y_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 10 and 1000 each. Treating the hospitals as unrelated, the patient may conclude that the former hospital, whose observed death rate is 0, is superior than the latter. Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just ten caseloads.
 
 
-The estimated 95\% intervals are displayed on the right-side plot. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, if we want to draw this plot by the order of data input, \code{plot(p, sort = FALSE)} is the right adjustment. 
+In Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, to draw this plot by the order of data input the command, \code{plot(p, sort = FALSE)}, can be used.
 
 
-This interval plot can give us one more valuable insight, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
+From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
+
+% This interval plot provides one more valuable insight, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
 
 
-Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
+% Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
 
-Then, how reliable are these intervals? Does our procedure to generate interval estimates have good repeated sampling property? The following method checking will answer this question. The \code{coverage} function below generates 10,000 pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing below code with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
 
 
-Also, \code{gbp} can give us interval estimates with different confidence level, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.'  Then, the below code will evaluate whether interval estimates achieve 90\% confidence level.
+Also, \code{gbp} can provide interval estimates with different confidence levels, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.'  Then, the below code will evaluate whether interval estimates achieve the 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -391,7 +395,7 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates from the suggested multilevel modeling on this particular dataset have nice repeated sampling property. For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
+In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are practically indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates for this particular dataset have a good repeated sampling property. For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
 %These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
