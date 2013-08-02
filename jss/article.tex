@@ -605,13 +605,11 @@ Summary for each unit (sorted by n):
 colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.041
 \end{CodeOutput}
 \end{CodeChunk}
-Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that shrinkage estimates are the same for all players. It makes sense because shrinkage ($B_{j}\equiv r / (r+n_{j})$) is determined solely by the relative amount of information between the first-level and the second-level hierarchies. The fact that all players have the same amount of observed information ($n_{j}=45$) and $\hat{r}=\textrm{exp}(4.727)=113$ from below summary tell why the estimated shrinkage is 0.715 (=113 / (113 + 45)).
-
+Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($B_{j}\equiv r / (r+n_{j})$ = $\equiv exp(4.727) / (exp(4.727)+45)$ = 0.715).
 
 %Note that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is a critical factor that makes posterior variances different from each player because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 
-The below summary includes the result of logistic regression fit because we did not know prior means in advance. We had to estimate them via this logistic regression model. Let's look at the p-value of the indicator covariate. It shows that the two prior means distinguishing outfielders from other positions were significantly different (p-value = 0.038), supporting our initial belief. The positive sign of $\hat{\beta}_{1}$ indicates that the mean batting average for all the outfielders tends to be higher than that for those in the other positions.
-
+In problems where a covariate is present \code{gbp} provides a regression summary (in this example logistic regression)
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(b)
@@ -647,6 +645,8 @@ beta0   -1.194 0.131 -9.129 0.000
 beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
+
+We see that the two prior means distinguishing outfielders from other positions were significantly different (p-value = 0.038), supporting our initial belief. The positive sign of $\hat{\beta}_{1}$ indicates that the mean batting average for all the outfielders tends to be higher than that for those in the other positions.
 
 Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.310 and 0.233. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
