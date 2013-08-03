@@ -2,7 +2,7 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{Bayesian Hierarchical Modeling and Frequentist Method Check}
+\title{Gaussian, Poisson, and Binomial Hierarchical Modeling}
 \description{
 Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gaussian, Binomial, and Poisson data and frequentist method check for good coverage probability.
 }
@@ -16,8 +16,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     Main functions: \tab \code{\link{gbp}}, \code{\link{coverage}}\cr
   }
 
-This package uses Bayesian machinery to estimate a two-level model (a random-effects mixed model) and allows for a check of its frequentist properties via a repeated sampling procedure (which we call a "method check"). It is found that even in small samples our procedure yields good frequency properties. Also, this package will be useful for Bayesians who want to see a non-informative reference point before and after constructing their full-Bayesian hierarchical model. For frequentists, it will provide confidence intervals of a random-effect mixed model with good repeated sampling properties.
-
+\code{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking.  It is found that such Bayesian-frequentist reconciliation allows \code{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
 }
 \author{
   Joseph Kelly, Carl Morris, and Hyungsuk Tak

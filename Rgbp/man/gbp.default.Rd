@@ -1,7 +1,7 @@
 \name{gbp}			
 \alias{gbp}
 \alias{gbp.default}
-\title{Fitting Bayesian Hierarchical Models}
+\title{Fitting Gaussian, Poisson, and Binomial Hierarchical Models}
 \description{
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
