@@ -96,19 +96,19 @@
   \item{coverageRB}{
     estimated Rao-Blackwellized coverage probability for each group (or unit) averaged over all simulations.
   }
-  \item{coverageU}{
+  \item{coverageS}{
     estimated simple unbiased coverage probability for each group (or unit) averaged over all simulations.
   }
   \item{average.coverageRB}{
     average value over \code{coverageRB}.
   }
-  \item{average.coverageU}{
+  \item{average.coverageS}{
     average value over \code{coverageU}.
   }
   \item{raw.resultRB}{
     all the Rao-Blackwellized coverage probabilities for every group and for every simulation.
   }
-  \item{raw.resultU}{
+  \item{raw.resultS}{
     all the values of indicators for every group and for every simulation.
   }
 }

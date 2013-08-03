@@ -410,8 +410,8 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
 
 
   # print output
-  output <- list(coverageRB = result, coverageU = result2, 
-                 average.coverageRB = avr.cov, average.coverageU = avr.cov2, 
-                 raw.resultRB = coverageRB, raw.resultU = coverageU)
+  output <- list(coverageRB = result, coverageS = result2, 
+                 average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
+                 raw.resultRB = coverageRB, raw.resultS = coverageU)
   return(output)
 }
