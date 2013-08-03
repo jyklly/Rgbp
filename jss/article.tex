@@ -252,6 +252,8 @@ or
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(hospitals)
+R> z <- hospitals$d
+R> n <- hospitals$n
 \end{CodeInput}
 \end{CodeChunk}
 
@@ -268,9 +270,6 @@ As the state-level death rate is small we can conclude that the caseload ($n_{j}
 Next, \code{gbp} will help us fit the Poisson hierarchical model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in the section 2.2. For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
 \begin{CodeChunk}
 \begin{CodeInput}
-R> data(hospital)
-R> z <- hospital$d
-R> n <- hospital$n
 R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "pr")
 R> p
 \end{CodeInput}
@@ -716,10 +715,10 @@ Finally, in Figure \ref{fig:baseball2}, we see that the estimated average covera
 
 In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-Due to the fact that the estimation procedures in \pkg{Rgbp} rely on differentiation the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a full Bayesian model (via MCMC) would be computationally impractical.
+Due to the fact that the estimation procedures in \pkg{Rgbp} rely on derivatives, the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a full Bayesian model (via MCMC) would be computationally impractical.
 
 \section[acknowledgments]{Acknowledgments}
-The authors would like to thank Phil Everson, Cindy Christiansen, and the 2012 class of Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+The authors thank Prof Phil Everson of Swarthmore and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
 
 \bibliography{bibliography}
 
