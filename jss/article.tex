@@ -270,7 +270,7 @@ As the state-level death rate is small we can conclude that the caseload ($n_{j}
 Next, \code{gbp} will help us fit the Poisson hierarchical model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in the section 2.2. For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression (see section 3.2).
 \begin{CodeChunk}
 \begin{CodeInput}
-R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "pr")
+R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "poisson")
 R> p
 \end{CodeInput}
 \begin{CodeOutput}
@@ -489,7 +489,7 @@ Due to the nature of the test each school's coaching effect has an approximately
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(schools)
-R> g <- gbp(y, se, model = "gr")
+R> g <- gbp(y, se, model = "gaussian")
 R> g
 \end{CodeInput}
 \begin{CodeOutput}
@@ -649,7 +649,7 @@ Suppose, also, that we observed a covariate indicating whether each player is an
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> b <- gbp(z, n, x, model = "br")
+R> b <- gbp(z, n, x, model = "binomial")
 R> b
 \end{CodeInput}
 \begin{CodeOutput}
