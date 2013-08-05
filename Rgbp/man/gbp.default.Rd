@@ -6,8 +6,8 @@
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 
-\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gr", intercept = TRUE, Alpha = 0.95,
-                             n.IS = 0, trial.scale = 2.5)}
+\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gaussian", intercept = TRUE, 
+                             Alpha = 0.95, n.IS = 0, trial.scale = 2.5)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -24,8 +24,8 @@
     distribution, if you know this value a priori.
   }
   \item{model}{
-    a character string indicating which hierarchical model to fit. "gr" for Gaussian data, "br" for Binomial, 
-    and "pr" for Poisson. Default is "gr"
+    a character string indicating which hierarchical model to fit. "gaussian" for Gaussian data, 
+    "poisson" for Poisson, and "binomial" for Binomial. Default is "gaussian"
   }
   \item{intercept}{
     \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
@@ -74,11 +74,11 @@
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
   know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning none of two
-  optional arguments, such as "\code{gbp(z, n, model = "br")}", will lead to a correct model. \code{gbp} 
+  optional arguments, such as "\code{gbp(z, n, model = "binomial")}", will lead to a correct model. \code{gbp} 
   will automatically fit a regression with only an intercept term to estimate a common mean of the prior
   distribution (exchangeability).
 
-  The second situation is when we have covariate(s) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning a matrix, \emph{X}, each column of which corresponds to one covariate, such as "\code{gbp(z, n, X, model = "pr")}", will lead to a correct model. Default of \code{gbp} is to fit a regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability will hold in this case.
+  The second situation is when we have covariate(s) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. In this case, assigning a matrix, \emph{X}, each column of which corresponds to one covariate, such as "\code{gbp(z, n, X, model = "poisson")}", will lead to a correct model. Default of \code{gbp} is to fit a regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability will hold in this case.
 
   The last case is when we know a mean of the prior distribution (\eqn{\mu_{0}}{\mu0}) a priori. Now, we do
   not need to estimate regression coefficients at all because we know a true value of \eqn{\mu_{0}}{\mu0} (strong assumption).
@@ -103,7 +103,7 @@
   \item{post.sd}{posterior standard deviation of each group}
   \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
   \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
-  \item{model}{"gr" for Gaussian, "br" for Binomial, and "pr" for Poisson data}
+  \item{model}{"gaussian" for Gaussian, "poisson" for Poisson, and "binomial" for Binomial data}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{beta.new}{regression coefficient estimates}
   \item{beta.var}{estimated variance matrix of regression coefficient}
@@ -120,7 +120,7 @@
 }
 
 \author{
-  Joseph Kelly, Carl Morris, and Hyungsuk Tak
+  Joseph Kelly, Hyungsuk Tak, and Carl Morris
 }
 \examples{
 
@@ -147,7 +147,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    g <- gbp(y, se)
+    g <- gbp(y, se, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -170,7 +170,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    g <- gbp(y, se, x2, model = "gr")
+    g <- gbp(y, se, x2, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -193,7 +193,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    g <- gbp(y, se, mean.PriorDist = 8)
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -219,7 +219,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    b <- gbp(z, n, model = "br")
+    b <- gbp(z, n, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -242,7 +242,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    b <- gbp(z, n, x1, model = "br")
+    b <- gbp(z, n, x1, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -265,7 +265,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -291,7 +291,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    p <- gbp(z, n, model = "pr")
+    p <- gbp(z, n, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)
@@ -314,7 +314,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    p <- gbp(z, n, x1, model = "pr")
+    p <- gbp(z, n, x1, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)
@@ -337,7 +337,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)

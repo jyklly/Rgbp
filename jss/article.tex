@@ -382,14 +382,14 @@ From the output provided by \code{gbp} it can be seen that a reasonable choice o
 % Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
 
-When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 10000)}.
+When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 1000)}.
 
 
 Also, \code{gbp} can provide interval estimates with different confidence levels, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "pr")}.'  Then, the below code will evaluate whether interval estimates achieve the 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> pcv <- coverage(p, nsim = 10000)
+R> pcv <- coverage(p, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h] 
@@ -400,8 +400,51 @@ R> pcv <- coverage(p, nsim = 10000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage} we see two estimated coverage probabilities: a simple unbiased estimate (a blue dashed line) and an Rao-Blackwellized unbiased estimate (a red line). Both lines are practically indistinguishable from the horizontal line at 0.95 and the estimated overall average coverage rate is 0.950 from the Rao-Blackwellized estimate. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling.
+In Figure \ref{fig:hospitalcoverage} we see three lines; one is a red line connecting Rao-Blackwellized unbiased estimates for 31 hospitals; another is a dashed blue line connecting simple unbiased estimates for those hospitals; a black horizontal line indicating the confidence level, 0.95. 
 
+The estimated overall average coverage rate is 0.950 from both Rao-Blackwellized and simple unbiased estimates. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that this estimate depends on the given true value of $r$ and the assumption that the model is true.
+
+If we want to check average Rao-Blackwellized unbiased estimates of coverage rate for each hospital, the following code gives us 31 estimates.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> pcv$coverageRB
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.950 0.950 0.950 0.951 0.950 0.950 0.951 0.950 0.950 0.950 0.951 0.951 
+[13] 0.950 0.950 0.950 0.950 0.951 0.950 0.950 0.950 0.950 0.951 0.950 0.950 
+[25] 0.951 0.950 0.951 0.950 0.951 0.951 0.950
+\end{CodeOutput}
+\end{CodeChunk}
+
+As for average simple unbiased estimates of coverage rate for each hospital, we can type the code below to obtain 31 estimates. 
+\begin{CodeChunk}
+\begin{CodeInput}
+R> pcv$coverageS
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.949 0.953 0.946 0.955 0.957 0.939 0.956 0.957 0.944 0.952 0.956 0.955 
+[13] 0.949 0.957 0.948 0.954 0.951 0.934 0.956 0.943 0.959 0.952 0.949 0.964 
+[25] 0.949 0.953 0.941 0.938 0.941 0.956 0.951
+\end{CodeOutput}
+\end{CodeChunk}
+
+The last thing to mention is the accuracy of Rao-Blackwellized unbiased estimates compared to that of simple one. Taking the first hospital as an example, we can calculate the sample variance of 1,000 Rao-Blackwellized unbiased estimates for the first hospital and that of 1,000 simple ones by typing following code. For reference, \code{raw.resultRB} and \code{raw.resultS} in \code{pcv} contains all the individual simulation results.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> var(pcv$raw.resultRB[1, ])
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.002031225
+\end{CodeOutput}
+\begin{CodeInput}
+R> var(pcv$raw.resultS[1, ])
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.04844745
+\end{CodeOutput}
+\end{CodeChunk}
+
+It shows that Rao-Blackwellized unbiased estimate is about 24 times more accurate than simple one. Also, as the number of simulation increases (for example 10,000), the zig-zagging blue line will be closer to the red line.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
@@ -446,7 +489,6 @@ Due to the nature of the test each school's coaching effect has an approximately
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(schools)
-R> attach(schools)
 R> g <- gbp(y, se, model = "gr")
 R> g
 \end{CodeInput}
@@ -523,7 +565,7 @@ An integral part of fitting any model is to check the method of estimation. Name
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> gcv <- coverage(g, nsim = 10000)
+R> gcv <- coverage(g, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h] 
@@ -534,7 +576,38 @@ R> gcv <- coverage(g, nsim = 10000)
 \end{center}
 \end{figure}
 
-As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. 
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Here, all the coverage estimates depend on the given true values of $A$ and $\beta_{0}$, and the assumption that the model is true.
+
+Average Rao-Blackwellized unbiased estimates of coverage rate for each school can be seen as below.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> gcv$coverageRB
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.966 0.957 0.966 0.962 0.960 0.961 0.960 0.969
+\end{CodeOutput}
+\end{CodeChunk}
+
+As for average simple unbiased estimates of coverage rate for each school, 
+\begin{CodeChunk}
+\begin{CodeInput}
+R> gcv$coverageS
+\end{CodeInput}
+\begin{CodeOutput}
+[1] 0.970 0.943 0.957 0.968 0.956 0.969 0.961 0.976
+\end{CodeOutput}
+\end{CodeChunk}
+
+Finally  when it comes to the first school,  Rao-Blackwellized unbiased estimate is about 24 times more accurate than simple one. It is based on the ratio of the sample variances of individual 1,000 estimates from two approaches.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> var(pcv$raw.resultS[1, ]) / var(pcv$raw.resultRB[1, ])
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 23.85134
+\end{CodeOutput}
+\end{CodeChunk}
+
 
 % For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
 
@@ -668,11 +741,11 @@ R> plot(b)
 In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
-Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. For reference, if we want to try different true parameters, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 10000)} instead of below one.
+Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values when it generates pseudo-datasets will answer it. For reference, if we want to try different true parameters, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of below one.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> bcv <- coverage(b, nsim = 10000)
+R> bcv <- coverage(b, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h]
@@ -683,8 +756,40 @@ R> bcv <- coverage(b, nsim = 10000)
 \end{center}
 \end{figure}
 
-Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.973 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. 
+Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.972 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. Each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is true.
 
+
+The average Rao-Blackwellized unbiased estimates of coverage rate for each player follows.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> bcv$coverageRB
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.972 0.972 0.973 0.972 0.972 0.970 0.974 0.972 0.973 0.973 0.973 0.970 
+[13] 0.972 0.972 0.973 0.972 0.973 0.972
+\end{CodeOutput}
+\end{CodeChunk}
+
+And also average simple unbiased estimates of coverage rate for each player can be obtained.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> bcv$coverageS
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.969 0.967 0.973 0.980 0.970 0.974 0.965 0.976 0.969 0.972 0.980 0.972 
+[13] 0.957 0.969 0.972 0.982 0.978 0.984
+\end{CodeOutput}
+\end{CodeChunk}
+
+Finally,  we see that Rao-Blackwellized unbiased estimate for the first player is about 26 times more accurate than simple one. It is based on the ratio of the sample variances of individual estimates from two approaches.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> var(bcv$raw.resultS[1, ]) / var(bcv$raw.resultRB[1, ])
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 25.64346
+\end{CodeOutput}
+\end{CodeChunk}
 % As for the running time, it took 243 seconds for MacBook Pro equipped with a 2.3 GHz dual-core Interl i5 CPU to execute 10,000 simulations.
 
 

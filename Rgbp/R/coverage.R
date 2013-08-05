@@ -5,7 +5,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   coverageRB <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
-  coverageU <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
+  coverageS <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
   if (missing(A.or.r)) {
     only.gbp.result <- TRUE
@@ -77,7 +77,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
-          coverageU[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -144,7 +144,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
-          coverageU[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -197,7 +197,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
-          coverageU[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -251,7 +251,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
-          coverageU[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -302,7 +302,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
-          coverageU[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -353,7 +353,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           low <- out$post.intv.low
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
-          coverageU[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
+          coverageS[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -368,13 +368,13 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
 
-  result2 <- round(rowMeans(coverageU, na.rm = TRUE), 3)
+  result2 <- round(rowMeans(coverageS, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
   n.units <- length(gbp.object$se)
-  plot(1 : length(gbp.object$se), result, ylim = c(0.7, 1), type = "l", col = 2, ylab = "",
+  plot(1 : length(gbp.object$se), result, ylim = c(0.6, 1), type = "l", col = 2, ylab = "",
        xlab = paste("Unit_j", ", ", "j = 1, ...,", n.units), 
        main = "Estimated Coverage Probability for Each Unit",
        lwd = 3, lty = 1)
@@ -382,29 +382,41 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   points(1 : length(gbp.object$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
   if (is.na(gbp.object$prior.mean)){
     if (gbp.object$model == "gr") {
-      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+      legend("bottomleft", c(paste("Model: Gaussian"), 
+                             "Red Line: Rao-Blackwellized",
                              "Blue Dashed Line: (Simple)",
-                             paste("A =", round(A, 2)), 
-                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("# of Simulation per Unit: ", nsim),
+                             paste("Given True A =", round(A, 2)), 
+                             paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
-      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+      modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
+      legend("bottomleft", c(paste("Model: ", modelspec), 
+                             "Red Line: Rao-Blackwellized",
                              "Blue Dashed Line: (Simple)",
-                             paste("r =", round(r, 2)), 
-                             paste("beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("# of Simulation per Unit: ", nsim),
+                             paste("Given True r =", round(r, 2)), 
+                             paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
+                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
     }
   } else {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
-      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+      legend("bottomleft", c(paste("Model: Gaussian"),
+                             "Red Line: Rao-Blackwellized",
                              "Blue Dashed Line: (Simple)",
-                             paste("A =", round(A, 2)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("# of Simulation per Unit: ", nsim),
+                             paste("Given True A =", round(A, 2)), 
+                             paste("Known Prior Mean: ", round(gbp.object$prior.mean, 2)), 
+                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
     } else {
-      legend("bottomleft", c("Red Line: Rao-Blackwellized",
+      modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
+      legend("bottomleft", c(paste("Model: ", modelspec), 
+                             "Red Line: Rao-Blackwellized",
                              "Blue Dashed Line: (Simple)",
-                             paste("r =", round(r, 2)), 
-                             paste("AvgCoverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("# of Simulation per Unit: ", nsim),
+                             paste("Given True r =", round(r, 2)), 
+                             paste("Known Prior Mean: ", round(gbp.object$prior.mean, 2)), 
+                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
     }
   }
 
@@ -412,6 +424,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   # print output
   output <- list(coverageRB = result, coverageS = result2, 
                  average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
-                 raw.resultRB = coverageRB, raw.resultS = coverageU)
+                 raw.resultRB = coverageRB, raw.resultS = coverageS)
   return(output)
 }

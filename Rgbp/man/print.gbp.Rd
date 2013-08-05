@@ -18,7 +18,7 @@
 }
 \details{
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
-  \code{b} like "\code{b <- gbp(z, n, model = "br")}", the argument \code{x} is supposed to be \code{b}.
+  \code{b} like "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
 
   We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
 }
@@ -37,7 +37,7 @@
   \item{post.sd}{posterior standard deviation of each group}
 }
 \author{
-  Joseph Kelly, Carl Morris, and Hyungsuk Tak
+  Joseph Kelly, Hyungsuk Tak, and Carl Morris
 }
 
 \examples{
@@ -57,7 +57,7 @@
     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
     ###############################################################
 
-    g <- gbp(y, se)
+    g <- gbp(y, se, model = "gaussian")
     g
     print(g, sort = FALSE)
 
@@ -65,7 +65,7 @@
     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
     ###############################################################
 
-    b <- gbp(z, n, model = "br")
+    b <- gbp(z, n, model = "binomial")
     b
     print(b, sort = FALSE)
 
@@ -73,7 +73,7 @@
     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
     ##############################################################
 
-    p <- gbp(z, n, model = "pr")
+    p <- gbp(z, n, model = "poisson")
     p
     print(p, sort = FALSE)
 

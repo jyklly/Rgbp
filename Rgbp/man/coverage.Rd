@@ -24,7 +24,7 @@
 
 \details{
   As for the argument \code{gbp.object}, if the result of \code{gbp} is designated to 
-  \code{b}, for example \cr "\code{b <- gbp(z, n, model = "br")}", the argument \code{gbp.object} indicates this \code{b}.
+  \code{b}, for example \cr "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{gbp.object} indicates this \code{b}.
 
   Data generating process is based on a second-level hierarchical model. The first-level hierarchy is 
   a distribution of observed data and the second-level is a conjugate prior distribution 
@@ -138,7 +138,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    g <- gbp(y, se)
+    g <- gbp(y, se, model = "gaussian")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -156,7 +156,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    g <- gbp(y, se, x2, model = "gr")
+    g <- gbp(y, se, x2, model = "gaussian")
  
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -174,7 +174,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    g <- gbp(y, se, mean.PriorDist = 8)
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -195,7 +195,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    b <- gbp(z, n, model = "br")
+    b <- gbp(z, n, model = "binomial")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -213,7 +213,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    b <- gbp(z, n, x1, model = "br")
+    b <- gbp(z, n, x1, model = "binomial")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -231,7 +231,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -252,7 +252,7 @@
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    p <- gbp(z, n, model = "pr")
+    p <- gbp(z, n, model = "poisson")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -270,7 +270,7 @@
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    p <- gbp(z, n, x1, model = "pr")
+    p <- gbp(z, n, x1, model = "poisson")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -288,7 +288,7 @@
     # If we know a mean of the prior distribution, #
     ################################################
 
-    p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
 
     ### when we want to simulate pseudo datasets considering the estimated values 
     ### as true ones.
@@ -307,6 +307,6 @@
 Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}. 618-632.
 }
 
-\author{Joseph Kelly, Carl Morris, and Hyungsuk Tak}
+\author{Joseph Kelly, Hyungsuk Tak, and Carl Morris}
 
 \keyword{methods}

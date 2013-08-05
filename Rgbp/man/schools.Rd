@@ -28,23 +28,6 @@ Rubin, D. B. (1981). \emph{Estimation in parallel randomized
 
 \examples{
   data(schools)
-  y <- schools$y
-  se <- schools$se
-
-  ###################################################################################
-  # We do not have any covariates and do not know a mean of the prior distribution. #
-  ###################################################################################
-
-  ###############################################################
-  # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
-  ###############################################################
-
-  g <- gbp(y, se)
-  g
-  print(g, sort = TRUE)
-  summary(g)
-  plot(g)
-
 }
 
 \keyword{datasets}

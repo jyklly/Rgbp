@@ -4,7 +4,7 @@
 \docType{package}
 \title{Gaussian, Poisson, and Binomial Hierarchical Modeling}
 \description{
-Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gaussian, Binomial, and Poisson data and frequentist method check for good coverage probability.
+Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeling and frequency method checking for Gaussian, Binomial, and Poisson data.
 }
 \details{
   \tabular{ll}{
@@ -19,7 +19,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
 \code{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking.  It is found that such Bayesian-frequentist reconciliation allows \code{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
 }
 \author{
-  Joseph Kelly, Carl Morris, and Hyungsuk Tak
+  Joseph Kelly, Hyungsuk Tak, and Carl Morris
 
   Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
 }
@@ -52,7 +52,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    g <- gbp(y, se)
+    g <- gbp(y, se, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -75,7 +75,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    g <- gbp(y, se, x2, model = "gr")
+    g <- gbp(y, se, x2, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -98,7 +98,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we know a mean of the prior distribution, #
     ################################################
 
-    g <- gbp(y, se, mean.PriorDist = 8)
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
     g
     print(g, sort = FALSE)
     summary(g)
@@ -124,7 +124,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    b <- gbp(z, n, model = "br")
+    b <- gbp(z, n, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -147,7 +147,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    b <- gbp(z, n, x1, model = "br")
+    b <- gbp(z, n, x1, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -170,7 +170,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we know a mean of the prior distribution, #
     ################################################
 
-    b <- gbp(z, n, mean.PriorDist = 0.265, model = "br")
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
@@ -196,7 +196,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    p <- gbp(z, n, model = "pr")
+    p <- gbp(z, n, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)
@@ -219,7 +219,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we have one covariate and do not know a mean of the prior distribution yet, #
     ##################################################################################
 
-    p <- gbp(z, n, x1, model = "pr")
+    p <- gbp(z, n, x1, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)
@@ -242,7 +242,7 @@ Bayesian-frequentist reconciliation via Bayesian hierarchical modeling for Gauss
     # If we know a mean of the prior distribution, #
     ################################################
 
-    p <- gbp(z, n, mean.PriorDist = 0.265, model = "pr")
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
     p
     print(p, sort = FALSE)
     summary(p)

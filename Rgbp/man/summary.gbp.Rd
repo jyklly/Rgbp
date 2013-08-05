@@ -43,21 +43,21 @@
     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
     ###############################################################
 
-    g <- gbp(y, se)
+    g <- gbp(y, se, model = "gaussian")
     summary(g)
 
     ###############################################################
     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
     ###############################################################
 
-    b <- gbp(z, n, model = "br")
+    b <- gbp(z, n, model = "binomial")
     summary(b)
 
     ##############################################################
     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
     ##############################################################
 
-    p <- gbp(z, n, model = "pr")
+    p <- gbp(z, n, model = "poisson")
     summary(p)
 
 }

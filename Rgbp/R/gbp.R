@@ -1,15 +1,15 @@
 ######
 gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.IS, trial.scale) UseMethod("gbp")
 ######
-gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gr", 
+gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
                         n.IS = 0, trial.scale = 2.5) {
 ######
   res <- switch(model, 
-           gr = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept), 
-           br = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
-                   n.IS = n.IS, trial.scale = trial.scale), 
-           pr = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
+       gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept), 
+       binomial = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
+                     n.IS = n.IS, trial.scale = trial.scale), 
+       poisson = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
   res

@@ -36,39 +36,7 @@ Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its G
 }
 
 \examples{
-
   data(baseball)
-  z <- baseball$Hits
-  n <- baseball$At.Bats
-  x <- ifelse(baseball$Position == "fielder", 1, 0)
-
-
-  ###############################################################################
-  # We do have one covariates and do not know a mean of the prior distribution. #
-  ###############################################################################
-
-  ###############################################################
-  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
-  ###############################################################
-
-  b <- gbp(z, n, x, model = "br")
-  b
-  print(b, sort = FALSE)
-  summary(b)
-  plot(b)
-  plot(b, sort = FALSE)
-
-  ##############################################################
-  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
-  ##############################################################
-
-  p <- gbp(z, n, x, model = "pr")
-  p
-  print(p, sort = FALSE)
-  summary(p)
-  plot(p)
-  plot(p, sort = FALSE)
-
 }
 
 \keyword{datasets}
