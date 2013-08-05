@@ -19,13 +19,13 @@ rstan_schools <- function(y, sigma){
   }
   parameters {
     real mu; 
-    real<lower=0> tau;
+    real<lower=0> tausq;
     real eta[J];
   }
   transformed parameters {
     real theta[J];
     for (j in 1:J)
-      theta[j] <- mu + tau * eta[j];
+      theta[j] <- mu + sqrt(tausq) * eta[j];
   }
   model {
     eta ~ normal(0, 1);
