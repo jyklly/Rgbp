@@ -52,21 +52,21 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
 ######
           if(IS == 0) {
             out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha)
                    } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, X, model = "binomial", Alpha = gbp.object$Alpha)
                    } else if (!is.na(gbp.object$prior.mean)) {
-                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "binomial", Alpha = gbp.object$Alpha)
                    }
           } else {
             out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha,
+                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                          n.IS = length(gbp.object$weight))
                    } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, X, model = "br", Alpha = gbp.object$Alpha,
+                     gbp(sim.z[, i], n, X, model = "binomial", Alpha = gbp.object$Alpha,
                          n.IS = length(gbp.object$weight))
                    } else if (!is.na(gbp.object$prior.mean)) {
-                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "br", Alpha = gbp.object$Alpha, 
+                     gbp(sim.z[, i], n, mean.PriorDist = p0, model = "binomial", Alpha = gbp.object$Alpha, 
                          n.IS = length(gbp.object$weight))
                    }
           }
@@ -119,22 +119,22 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
 ######
           if(IS == 0) {
             out <- if (!missing(reg.coef) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha)
                    } else if (!missing(reg.coef) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, gbp.object$X, model = "br", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha)
                    } else if (!missing(mean.PriorDist)) {
-                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
+                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
                          Alpha = gbp.object$Alpha)
                    }
           } else {
             out <- if (!missing(reg.coef) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "br", Alpha = gbp.object$Alpha, 
+                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha, 
                          n.IS = length(gbp.object$weight))
                    } else if (!missing(reg.coef) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, gbp.object$X, model = "br", Alpha = gbp.object$Alpha,
+                     gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
                          n.IS = length(gbp.object$weight))
                    } else if (!missing(mean.PriorDist)) {
-                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "br", 
+                     gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
                          Alpha = gbp.object$Alpha, n.IS = length(gbp.object$weight))
                    }
           }
@@ -185,11 +185,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "pr", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, model = "poisson", Alpha = gbp.object$Alpha)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, X, model = "pr", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, X, model = "poisson", Alpha = gbp.object$Alpha)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "pr", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "poisson", Alpha = gbp.object$Alpha)
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -238,11 +238,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (missing(mean.PriorDist) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "pr", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, model = "poisson", Alpha = gbp.object$Alpha)
                  } else if (missing(mean.PriorDist) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, gbp.object$X, model = "pr", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, gbp.object$X, model = "poisson", Alpha = gbp.object$Alpha)
                  } else if (missing(reg.coef)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "pr", 
+                   gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "poisson", 
                        Alpha = gbp.object$Alpha)
                  }
           

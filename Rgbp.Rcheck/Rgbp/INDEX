@@ -1,8 +1,9 @@
-Rgbp                    Bayesian Hierarchical Modeling and Frequentist
-                        Method Check
+Rgbp                    Gaussian, Poisson, and Binomial Hierarchical
+                        Modeling
 baseball                Baseball Data
 coverage                Estimating Coverage Probability
-gbp                     Fitting Bayesian Hierarchical Models
+gbp                     Fitting Gaussian, Poisson, and Binomial
+                        Hierarchical Models
 hospital                Thirty-one Hospital Data
 plot.gbp                Drawing Shrinkage and Posterior Interval Plots
 print.gbp               Displaying 'gbp' Class
