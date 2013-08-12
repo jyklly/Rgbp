@@ -4,9 +4,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   # Rao-Blackwellized criterion
   coverageRB <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
-  # coverage probability based on prior distribution
-  coveragePrior <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
-
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
   coverageS <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
 
@@ -83,7 +80,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
           coverageS[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pbeta(upp, r * p0, r * (1 - p0)) - pbeta(low, r * p0, r * (1 - p0))
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -132,7 +128,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
         r <- A.or.r
       } else if (!missing(A.or.r) & !missing(reg.coef) & missing(mean.PriorDist)) {
         if (!identical(gbp.object$prior.mean, NA)) {
-          print("reg.coef cannot be designated because there is no covariate.")
+          print("reg.coef cannot be designated because second-level mean is known in the gbp object to begin with.")
           stop()
         } else if (identical(gbp.object$prior.mean, NA)) {
           if (identical(gbp.object$X, NA)) {
@@ -215,7 +211,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pbeta(upp, a1, a0) - pbeta(low, a1, a0)
           coverageS[, i] <- ifelse(low <= sim.p[, i] & sim.p[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pbeta(upp, r * p0, r * (1 - p0)) - pbeta(low, r * p0, r * (1 - p0))
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -270,7 +265,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
           coverageS[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pgamma(upp, r * lambda0, r) - pgamma(low, r * lambda0, r)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -319,7 +313,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
         r <- A.or.r
       } else if (!missing(A.or.r) & !missing(reg.coef) & missing(mean.PriorDist)) {
         if (!identical(gbp.object$prior.mean, NA)) {
-          print("reg.coef cannot be designated because there is no covariate.")
+          print("reg.coef cannot be designated because second-level mean is known in the gbp object to begin with.")
           stop()
         } else if (identical(gbp.object$prior.mean, NA)) {
           if (identical(gbp.object$X, NA)) {
@@ -375,7 +369,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pgamma(upp, sh, rt) - pgamma(low, sh, rt)
           coverageS[, i] <- ifelse(low <= sim.lambda[, i] & sim.lambda[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pgamma(upp, r * lambda0, r) - pgamma(low, r * lambda0, r)
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -428,7 +421,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
           coverageS[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pnorm(upp, mu0, sqrt(A)) - pgamma(low, mu0, sqrt(A))
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -477,7 +469,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
         A <- A.or.r
       } else if (!missing(A.or.r) & !missing(reg.coef) & missing(mean.PriorDist)) {
         if (!identical(gbp.object$prior.mean, NA)) {
-          print("reg.coef cannot be designated because there is no covariate.")
+          print("reg.coef cannot be designated because second-level mean is known in the gbp object to begin with.")
           stop()
         } else if (identical(gbp.object$prior.mean, NA)) {
           if (identical(gbp.object$X, NA)) {
@@ -533,7 +525,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
           upp <- out$post.intv.upp
           coverageRB[, i] <- pnorm(upp, postmean, postsd) - pnorm(low, postmean, postsd)
           coverageS[, i] <- ifelse(low <= sim.mu[, i] & sim.mu[, i] <= upp, 1, 0)
-          coveragePrior[, i] <- pnorm(upp, mu0, sqrt(A)) - pgamma(low, mu0, sqrt(A))
 
         }, error = function(x) {
                      print(c(i,"error"))
@@ -644,6 +635,6 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   # print output
   output <- list(coverageRB = result, coverageS = result2, 
                  average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
-                 raw.resultRB = coverageRB, raw.resultS = coverageS, raw.resultPr = coveragePrior)
+                 raw.resultRB = coverageRB, raw.resultS = coverageS)
   return(output)
 }
