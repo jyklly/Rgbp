@@ -81,14 +81,13 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ## calculate CIs using skewed normal
   ## TODO: use apply not loop
-  snparam <- matrix(nrow=length(thetahat),ncol=3)
-  skewedmat <- c()
-  for(i in 1:length(thetahat)){    
-    snparam[i,] <- gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94)))
-    row <- c(qsn((1-Alpha)/2,snparam[i,1],snparam[i,2],snparam[i,3]),thetahat[i],qsn(1-(1-Alpha)/2,snparam[i,1],snparam[i,2],snparam[i,3]))
-    skewedmat <- rbind(skewedmat,row)
-  }
-  skewedmat <- as.matrix(skewedmat)
+  tmp <- lapply(1:length(thetahat), function(i){
+    snparam <- gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94)))
+    row <- c(qsn((1-Alpha)/2,snparam),thetahat[i],qsn(1-(1-Alpha)/2,snparam))
+    return(row)
+  })
+  skewedmat <- as.matrix(do.call("rbind", tmp))
+
   
   ## return output
   ## TODO: discuss with Tak and sync output

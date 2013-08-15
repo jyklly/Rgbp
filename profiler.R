@@ -1,0 +1,6 @@
+library(Rgbp)
+data(schools)
+Rprof("gr.out")
+lapply(1:1000,function(x){gbp(schools$y, schools$se)})
+Rprof(NULL)
+summaryRprof("gr.out")
