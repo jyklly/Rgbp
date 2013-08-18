@@ -430,20 +430,20 @@ R> pcv$coverageS
 One more thing to mention is the accuracy of Rao-Blackwellized unbiased estimates compared to that of simple ones. Taking the first hospital as an example, we can calculate the sample variance of 1,000 Rao-Blackwellized unbiased estimates for the first hospital and that of 1,000 simple ones by typing following code. For reference, \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual simulation results.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> var(pcv$raw.resultRB[1, ])
+R> var(pcv$raw.resultRB[1, ]) / 1000
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.002031225
+ [1] 0.000002031225
 \end{CodeOutput}
 \begin{CodeInput}
-R> var(pcv$raw.resultS[1, ])
+R> var(pcv$raw.resultS[1, ]) / 1000
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.04844745
+ [1] 0.00004844745
 \end{CodeOutput}
 \end{CodeChunk}
 
-It shows that Rao-Blackwellized unbiased estimate is about 24 times more accurate than simple one. Also, as the number of simulation increases (for example 10,000), the zig-zagging blue line will be closer to the red line.
+It shows that Rao-Blackwellized unbiased estimate is about 24 times more accurate than simple one. Also, as the number of simulation increases, the zig-zagging blue line is expected to be closer to the red line.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
