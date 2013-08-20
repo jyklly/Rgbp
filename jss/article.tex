@@ -72,7 +72,7 @@
 
 \section[introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010}, producing point and interval estiates of the true parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
+\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of the true parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
 This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model. Frequentists will have a procedure that meets or exceeds their confidence specification and repeated sampling.
 
@@ -113,7 +113,7 @@ This package will be useful for frequentists and Bayesians alike. Bayesians are 
 %The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown true batting average $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This data set is also a part of the package and can be called on \proglang{R} by `\code{data(baseball)}'.
 
 \section[Hierarchical Structure]{Hierarchical Structure} \label{hierarchical}
-A two-level or multilevel model, also called a conditionally independent hierarchical model \citep{1989}, is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
+A two-level or multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
 \code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level parameters. The \code{gbp} function allows users to choose one of three types of hierarchical models, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
@@ -133,7 +133,7 @@ where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}$, $j=1, \ldots k$, $x_{j}$ is the $j$
 where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages.
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
-\code{gbp} is also able to build a Poisson-Gamma hierarchical model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$, where $j=1, \ldots, k$.
+\code{gbp} is also able to build a Poisson-Gamma hierarchical model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group.
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
@@ -146,7 +146,7 @@ where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, k$, with two unknown hype
 \lambda_{j}\vert \textbf{y}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + n_{j}y_{j})\sim\textrm{Gamma} \left[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}} \right],
 \end{equation}
 
-where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$,  $B_{j}\equiv r / (r+n_{j})$, and $y_{j}\equiv z_{j} / n_{j}$, $j=1, \ldots, k$. 
+where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$ and   $B_{j}\equiv r / (r+n_{j})$ for $j=1, \ldots, k$. 
 
 
 Note that the variance in (\ref{gammaprior}) is linear in the mean, whereas a slightly different Poisson-Gamma specification \citep{1997} has been used elsewhere e.g. that makes the variance in (\ref{gammaprior}) quadratic.
@@ -185,7 +185,7 @@ Estimating the shrinkage factors ($B_1, \ldots, B_k$) is the key estimation prob
 \subsection[ADM]{Approximation via Adjustment for Density Maximization}\label{ADM}
 It is noted that the shrinkage factors ($B_1, \ldots B_k$) are a function of the second-level variance component, \emph{i.e.}, $B_{j}\equiv V_{j}/(V_{j}+A)=B_{j}(A)$ for Gaussian and $B_{j}\equiv r/(r+n_{j})=B_{j}(r)$ for Poisson and Binomial models. A common approach to approximate the distribution of $B_{j}$ is to find its MLE $\hat{B}_{j}(\hat{A}_{MLE})$ (or  $\hat{B}_{j}(\hat{r}_{MLE})$) and to use its asymptotic Normality. But its asymptotic Gaussian distribution is defined on $(-\infty, \infty)$ whereas $B_{j}$ is bounded between 0 and 1, and MLE can result in estimates lying on the boundary of the parameter space.
 
-To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of adjustment for density maximization (ADM) \citep{carl1988, 1997, 2011}. For our purposes we approximate the posterior distribution of a shrinkage factor with a Beta distribution, which allows us to finally obtain estimates of the posterior moments, \emph{i.e.}  of $E(B_{j}\vert\textrm{data})$ and $Var(B_{j}\vert\textrm{data})$, without the boundary issues that MLE encounters. See \cite{2011}.
+To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of adjustment for density maximization (ADM) \citep{carl1988, 1997, 2011}. For our purposes we approximate the posterior distribution of a shrinkage factor with a Beta distribution, which allows us to finally obtain estimates of the posterior moments, \emph{i.e.}  of $E(B_{j}\vert\textbf{y})$ and $Var(B_{j}\vert\textbf{y})$, where the notation $\textbf{y}$ represents observed data, without the boundary issues that MLE encounters. See \cite{2011}.
 
 \subsection[Posterior Moment Estimation]{Posterior Moment Estimation}
 
@@ -203,7 +203,7 @@ After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{
 Like the two sides of the same coin, checking a statistical model comes hand in hand with fitting the model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
 
 
-There are two kinds of model justification processes; one is a model checking and the other is a method checking. The model checking is for the justification of the hierarchical model on a specific dataset. One possible question is, ``Can this dataset benefit from such a hierarchical modeling?'' \cite{1997} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
+There are two kinds of model justification processes; one is a model checking and the other is a method checking. The model checking is for the justification of the hierarchical model on a specific dataset. One possible question is, ``Can this dataset benefit from such a hierarchical modeling?'' \cite{modelchecking1996} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
 
 
 Once we make sure that the hierarchical modeling can be appropriate for our data, the following question will be about the validity of interval estimates, the final product of this hierarchical modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' \pkg{Rgbp} has a function called \code{coverage} to answer this question and it comprises of two parts, generating pseudo-datasets and estimating coverage probabilities.
@@ -258,10 +258,14 @@ R> n <- hospitals$n
 \end{CodeChunk}
 
 
-There are two extreme perspectives that the patient could take in this example. The first being that each hospital is identical in their ability to undertake CABG surgeries, in which case the choice of hospitals is irrelevant and the data could be pooled in order to estimate the death rate. The second, is that the hospitals are totally unrelated in which case the death rate estimate for each hospital would only be a function of the observed data for that particular hospital. These hospitals, however, are all subject to the same rules and regulations enforced by the federal and state governments and that there is likely similarities between hospitals. As such, a hierarchical model seems to be a reasonable approach. 
+There are two extreme perspectives that the patient could take in this example. The first is that each hospital is identical in their ability to undertake CABG surgeries, in which case the choice of hospitals is irrelevant and the data could be pooled in order to estimate the common death rate for all hospitals (complete pooling). The second, is that the hospitals are totally unrelated in which case the death rate estimate for each hospital would only be a function of the observed data for that particular hospital (no pooling). 
 
 
-The patient can then presume a state-level (NY) hierarchy governing the true death rates ($\lambda$) of CABG surgery for all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution. In this example it is assumed that the true state-level death rate is known to be 0.020. 
+However, in reality, these hospitals are neither completely the same nor different. For example, doctor' ability and experience for dealing with such a surgery vary according to each hospital. At the same time, these hospitals are all subject to the same rules and regulations enforced by the federal and state governments. The hierarchical model provides a happy medium accounting for such a difference and similarity altogether (partial pooling).
+
+
+The patient can then presume a state-level (NY) hierarchy governing the true death rates ($\lambda$) of CABG surgery for all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution. In this example it is assumed that the mean of such state-level death rate distribution is known to be 0.020 ($\lambda_{0}$). 
+
 
 As the state-level death rate is small we can conclude that the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital. Thus, the independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data. Note that caseload  ($n_{j}$) can be interpreted as an exposure, which is not necessarily an integer.
 
@@ -367,21 +371,23 @@ R> plot(p)
 In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
 
 
-Hierarchical modeling gives the patient the ability to borrow information across groups. For example, suppose there are two hospitals, whose observed death ratios ($y_{j}$) are 0 and 0.001 and caseloads ($n_{j}$) are 10 and 1000 each. Treating the hospitals as unrelated, the patient may conclude that the former hospital, whose observed death rate is 0, is superior than the latter. Borrowing information from state-level hierarchy seems reasonable for the former hospital because it is hard to judge its true death rate per exposure with just ten caseloads.
+Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death ratios ($y_{j}$, $j=8, 23$) are 0.014 and 0.015 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death ratios may lead to an unfair comparison because the latter hospital handled more than twice caseloads. \pkg{Rgbp} accounts for this caseload difference, making the estimate of true death rate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.02) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
 
 
-In Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, to draw this plot by the order of data input the command, \code{plot(p, sort = FALSE)}, can be used.
+In Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, to draw this plot by the order of data input the command, \code{plot(p, sort = FALSE)}, can be used. 
+
+This interval plot confirms that the 23rd hospital has the lowest upper bound for the true death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for the true death rate is lower than the 8th hospital's one.
 
 
-From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow relatively less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
+%From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow relatively less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
 
-% This interval plot provides one more valuable insight, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
+%provides one more point, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
 
 
 % Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
 
-When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 1000)}.
+Then, how reliable are these intervals? Does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 1000)}.
 
 
 Also, \code{gbp} can provide interval estimates with different confidence levels, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "poisson")}.'  Then, the below code will evaluate whether interval estimates achieve the 90\% confidence level.
@@ -401,7 +407,7 @@ R> pcv <- coverage(p, nsim = 1000)
 
 In Figure \ref{fig:hospitalcoverage} we see three lines; one is a red line connecting Rao-Blackwellized unbiased estimates for 31 hospitals; another is a dashed blue line connecting simple unbiased estimates for those hospitals; the other is a black horizontal line indicating the confidence level, 0.95. 
 
-The estimated overall average coverage rate is 0.950 from both Rao-Blackwellized and simple unbiased estimates. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$ and the assumption that the model is true.
+The estimated overall average coverage rate across all the hospitals is 0.950 from both Rao-Blackwellized and simple unbiased estimates. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$ and the assumption that the model is true.
 
 If we want to check average Rao-Blackwellized unbiased estimates for each hospital, the following code gives us such estimates.
 \begin{CodeChunk}
@@ -607,7 +613,7 @@ R> gcv$coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-All the individual simulation results are saved in \code{pcv$raw.resultRB} and \code{pcv$raw.resultS}, in which each row is about each school.
+All the individual simulation results are saved in \code{gcv$raw.resultRB} and \code{gcv$raw.resultS}, in which each row is about each school.
 
 
 % For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
@@ -650,11 +656,7 @@ R> x <- ifelse(baseball$Position == "fielder", 1, 0)
 \end{CodeInput}
 \end{CodeChunk}
 
-Conditioning on the true batting average for each player we assume that the at-bats are independent and therefore, $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to estimate point and interval estimates of the true batting average, $p_{j}$, for each player. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
-
-
-
-Suppose, also, that we observed a covariate indicating whether each player is an outfielder or not. It is reasonable to assume that the batting averages for outfielders are different from non-outfielders and therefore we assume different second-level hierarchies for outfielders and for other positions. Within each of which information is shared and regression towards the mean (RTTM) occurs. \code{gbp} provides a way to incorporate such information (position) seamlessly into the second-level hierarchy.
+Conditioning on the true batting average for each player we assume that the at-bats are independent and therefore, $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to estimate point and interval estimates of the true batting average, $p_{j}$, for each player, considering additional information on whether the player is an outfielder or not. \code{gbp} provides a way to incorporate such information seamlessly into the second-level hierarchy so that information is shared and regression towards the mean (RTTM) occurs within outfielders and non-outfielders separately. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
 
 
 \begin{CodeChunk}
@@ -728,7 +730,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-We see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038), supporting our initial belief. The positive sign of $\hat{\beta}_{1}$ indicates that the mean batting average for all the outfielders tends to be higher than that for those in the other positions.
+We see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all the outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
 
 Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
@@ -751,7 +753,7 @@ R> plot(b)
 In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
-Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of below one.
+Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values for example 100 for $r$ and (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of below one.
 
 \begin{CodeChunk}
 \begin{CodeInput}
