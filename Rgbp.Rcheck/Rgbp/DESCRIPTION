@@ -9,4 +9,4 @@ Suggests: mnormt
 Description: Rgbp is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking. It is found that such Bayesian-frequentist reconciliation allows Rgbp to have attributes desirable both sides of the aisle, working well in small samples and yielding good coverage probabilities for its interval estimates.
 License: GPL-2
 BugReports: https://github.com/jyklly/Rgbp/issues
-Built: R 3.0.0; ; 2013-08-20 04:43:32 UTC; unix
+Built: R 3.0.0; ; 2013-08-20 04:46:41 UTC; unix

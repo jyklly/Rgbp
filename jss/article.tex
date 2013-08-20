@@ -521,7 +521,7 @@ Summary for each unit (sorted by se):
 1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
 3           -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
 8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
-colMeans     8.75 12.5      8.168     0.552   -9.163     8.168   25.723   8.900
+colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
 The output from \code{gbp} provides an easy to read summary of the results of the estimation. In the Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_i = V_i/(V_i + A)$ and as such those schools whose variation within the school is less than between the variation schools will shrink greater than $50\%$. The results provide by \code{gpb} suggests that there is little evidence that the training provided much of an added benefit with every school's $95\%$ posterior interval containing 0. \pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}.
@@ -534,7 +534,7 @@ R> plot(g)
 
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[scale=0.3]{school1.png}
+\includegraphics[width = 3in]{school1.png}
 \caption{Shrinkage plot and 95\% interval plot for 8 schools}
 \label{fig:8schoolsplot}
 \end{center}
@@ -549,25 +549,25 @@ R> summary(g)
 \begin{CodeOutput}
 Main summary:
 
-                    obs.mean   se prior.mean shrinkage low.intv post.mean
-Unit w/ min(se)        -1.00  9.0      8.168     0.408  -13.297     2.737
-Unit w/ median(se)1     1.00 11.0      8.168     0.507  -13.027     4.633
-Unit w/ median(se)2     7.00 11.0      8.168     0.507   -8.780     7.592
-Unit w/ max(se)        12.00 18.0      8.168     0.734  -10.208     9.189
-Overall Mean            8.75 12.5      8.168     0.552   -9.163     8.168
+                      obs.mean   se prior.mean shrinkage low.intv post.mean
+Unit with min(se)        -1.00  9.0       8.17     0.408   -13.30      2.74     
+Unit with median(se)1     1.00 11.0       8.17     0.507   -13.03      4.63     
+Unit with median(se)2     7.00 11.0       8.17     0.507    -8.78      7.59     
+Unit with max(se)        12.00 18.0       8.17     0.734   -10.21      9.19     
+Overall Mean                   12.5       8.17     0.552    -9.16      8.17     
 
-                     upp.intv post.sd
-                       16.692   7.634
-                       20.131   8.441
-                       23.602   8.257
-                       29.939  10.227
-                       25.723   8.900
+                      upp.intv post.sd
+                          16.7    7.63
+                          20.1    8.44
+                          23.6    8.26
+                          29.9   10.23
+                          25.7    8.90
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha
-1           4.768         1.139
+  post.mode.alpha post.sd.alpha post.mode.A
+1            4.77          1.14         118
 
 
 Regression Summary:
@@ -689,7 +689,8 @@ Summary for each unit (sorted by n):
 16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302  0.0377
 17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297  0.0381
 18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292  0.0389
-colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.0410\end{CodeOutput}
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.0410
+\end{CodeOutput}
 \end{CodeChunk}
 Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $113 / (113+45)$ = 0.715). The estimation results including $\hat{r}=113$ follows.
 

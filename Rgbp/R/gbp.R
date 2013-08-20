@@ -70,7 +70,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
 
   temp.mean <- colMeans(temp)
   temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
-  temp[, 1] <- format.default(temp[, 1], digits = 3, nsmall = 3)
+  temp[, 1] <- format.default(temp[, 1], digits = 3)
   temp[dim(temp)[1], 1] <- ""
 
   if (x$model == "gr") {
@@ -239,7 +239,7 @@ summary.gbp <- function(object, ...) {
 
   summary.table <- data.frame(rbind(summary.table, temp.mean), 
                               row.names = c(rownames(summary.table), "Overall Mean"))
-  summary.table[, 1] <- format.default(summary.table[, 1], digits = 3, nsmall = 3)
+  summary.table[, 1] <- format.default(summary.table[, 1], digits = 3)
   summary.table[dim(summary.table)[1], 1] <- ""
 
   post.mode.alpha <- object$a.new
