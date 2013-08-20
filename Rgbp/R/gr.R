@@ -84,7 +84,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   
   tmp <- lapply(1:length(thetahat), function(i){
     snparam <- as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))
-    row <- c(qsn((1-Alpha)/2,snparam[1], snparam[2], snparam[3]),thetahat[i],qsn(1-(1-Alpha)/2,snparam[1], snparam[2], snparam[3]))
+    row <- c(qsn((1-Alpha)/2,snparam[1], snparam[2], snparam[3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[1], snparam[2], snparam[3], engine = "biv.nt.prob"))
     return(row)
   })
   skewedmat <- as.matrix(do.call("rbind", tmp))
