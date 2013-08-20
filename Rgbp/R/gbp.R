@@ -71,7 +71,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
   temp.mean <- colMeans(temp)
   temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
   temp[, 1] <- format.default(temp[, 1], digits = 3, nsmall = 3)
-  temp[length(n) + 1, 1] <- ""
+  temp[dim(temp)[1], 1] <- ""
 
   if (x$model == "gr") {
     temp[, 2] <- round(temp[, 2], 1)
