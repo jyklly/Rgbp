@@ -235,15 +235,22 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking a cond
 \section[Examples]{Examples}
 \subsection[Known Second-level Mean]{31 Hospitals: Known Second-level Mean}
 \label{sec:ex:hosp}
-In this example we take the perspective of a person living in the state of New York (NY) and has been suffering from severe coronary heart disease. If this person is supposed to receive a coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for dealing with such a surgery.
+In this example we adopt the perspective of a person living in the state of New York (NY) who has been suffering from severe coronary heart disease. If this person must receive coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for that.
 
-For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) within a month of CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital. Using these data, \pkg{Rgbp} provides point and interval estimates of the true death ratio for each hospital so that one can choose the most reliable hospital. The data can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' below represents a command prompt that you should not type on \proglang{R}.
+
+For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($\textbf{z}_{(31\times1)}$) for a specified period after CABG surgeries and total number of patients ($\textbf{n}_{(31\times1)}$) receiving CABG surgeries in each hospital. For reference, caseloads ($n_{j}$) can be interpreted as exposures, not necessarily integers. These data can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
+
+%For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) for a specified period after CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital.  Suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death proportion for each hospital so that one can evaluate the hospital reliabilities. 
+
+
+%These data, $\textbf{z}_{(31\times1)}$ and $\textbf{n}_{(31\times1)}$, can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> z <- c( 3, 2, 5, 11, 9, 12, 12, 4, 10, 13, 14, 7, 12, 11, 13, 22, 15, 
-          11, 14, 11, 16, 14, 9, 15, 13, 35, 26, 25, 20, 35, 27)
-R> n <- c(67, 68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
+R> z <- c(  3,  2,   5,  11,   9,  12,  12,   4,  10,  13,  14,   7,  12,
+          11,  13,  22,  15,  11,  14,  11,  16,  14,   9,  15,  13,  35,
+          26,  25,  20,  35,  27)
+R> n <- c( 67, 68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
          441, 477, 484, 494, 501, 505, 540, 563, 593, 602, 629, 636, 729,
          849, 914, 940, 1193, 1340)
 \end{CodeInput}
@@ -252,78 +259,72 @@ or
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(hospitals)
-R> z <- hospitals$d
+R> z <- hospitals$d # variable name for the number of deaths is d in dataset
 R> n <- hospitals$n
 \end{CodeInput}
 \end{CodeChunk}
 
 
-There are two extreme perspectives that the patient could take in this example. The first is that each hospital is identical in their ability to undertake CABG surgeries, in which case the choice of hospitals is irrelevant and the data could be pooled in order to estimate the common death rate for all hospitals (complete pooling). The second, is that the hospitals are totally unrelated in which case the death rate estimate for each hospital would only be a function of the observed data for that particular hospital (no pooling). 
+In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death proportion for each hospital so that one can evaluate the hospital reliabilities. 
 
 
-However, in reality, these hospitals are neither completely the same nor different. For example, doctor' ability and experience for dealing with such a surgery vary according to each hospital. At the same time, these hospitals are all subject to the same rules and regulations enforced by the federal and state governments. The hierarchical model provides a happy medium accounting for such a difference and similarity altogether (partial pooling).
+The independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively big. 
 
 
-The patient can then presume a state-level (NY) hierarchy governing the true death rates ($\lambda$) of CABG surgery for all the hospitals in NY. This perspective is to view the true death rates of those 31 hospitals as sampled from the state-level population distribution. In this example it is assumed that the mean of such state-level death rate distribution is known to be 0.020 ($\lambda_{0}$). 
-
-
-As the state-level death rate is small we can conclude that the caseload ($n_{j}$) is much bigger than the number of deaths ($z_{j}$) in each hospital. Thus, the independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data. Note that caseload  ($n_{j}$) can be interpreted as an exposure, which is not necessarily an integer.
-
-
-Next, \code{gbp} will help us fit the Poisson hierarchical model with the Gamma conjugate prior distribution on the true death rate $\lambda_{j}$ whose mean is 0.020 ($\lambda_{0}=0.020$) as described in the section \ref{poissonsubsec}. For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression.
+Next, \code{gbp} will help us fit the Poisson hierarchical model with the Gamma conjugate prior distribution as the NY state-level population distribution of the true death rates ($\lambda_{j}$) whose mean is 0.030 ($\lambda_{0}=0.030$). For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> p <- gbp(z, n, mean.PriorDist = 0.02, model = "poisson")
+R> p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
 R> p
 \end{CodeInput}
 \begin{CodeOutput}
 Summary for each unit (sorted by n):
 
          obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
-1           0.045   67       0.02     0.834    0.011     0.024    0.042   0.008
-2           0.029   68       0.02     0.832    0.010     0.022    0.038   0.007
-3           0.024  210       0.02     0.616    0.011     0.021    0.035   0.006
-4           0.043  256       0.02     0.568    0.017     0.030    0.046   0.008
-5           0.033  269       0.02     0.556    0.015     0.026    0.041   0.007
-6           0.044  274       0.02     0.551    0.018     0.031    0.047   0.008
-7           0.043  278       0.02     0.548    0.018     0.030    0.047   0.007
-8           0.014  295       0.02     0.533    0.008     0.017    0.029   0.005
-9           0.029  347       0.02     0.492    0.014     0.024    0.038   0.006
-10          0.037  349       0.02     0.491    0.017     0.029    0.043   0.007
-11          0.039  358       0.02     0.484    0.018     0.030    0.045   0.007
-12          0.018  396       0.02     0.459    0.010     0.019    0.030   0.005
-13          0.028  431       0.02     0.438    0.015     0.024    0.037   0.006
-14          0.025  441       0.02     0.433    0.013     0.023    0.035   0.005
-15          0.027  477       0.02     0.414    0.015     0.024    0.036   0.006
-16          0.045  484       0.02     0.410    0.023     0.035    0.050   0.007
-17          0.030  494       0.02     0.405    0.016     0.026    0.039   0.006
-18          0.022  501       0.02     0.402    0.012     0.021    0.032   0.005
-19          0.028  505       0.02     0.400    0.015     0.025    0.036   0.005
-20          0.020  540       0.02     0.384    0.012     0.020    0.031   0.005
-21          0.028  563       0.02     0.374    0.016     0.025    0.037   0.005
-22          0.024  593       0.02     0.362    0.014     0.022    0.033   0.005
-23          0.015  602       0.02     0.358    0.010     0.017    0.026   0.004
-24          0.024  629       0.02     0.348    0.014     0.023    0.033   0.005
-25          0.020  636       0.02     0.346    0.012     0.020    0.030   0.005
-26          0.048  729       0.02     0.316    0.027     0.039    0.053   0.007
-27          0.031  849       0.02     0.284    0.019     0.028    0.038   0.005
-28          0.027  914       0.02     0.269    0.017     0.025    0.035   0.005
-29          0.021  940       0.02     0.264    0.014     0.021    0.030   0.004
-30          0.029 1193       0.02     0.220    0.020     0.027    0.036   0.004
-31          0.020 1340       0.02     0.201    0.014     0.020    0.027   0.003
-colMeans    0.029  517       0.02     0.438    0.015     0.025    0.037   0.006
+1          0.0448   67       0.03     0.911   0.0199    0.0313   0.0454 0.00653
+2          0.0294   68       0.03     0.910   0.0189    0.0299   0.0435 0.00631
+3          0.0238  210       0.03     0.765   0.0185    0.0285   0.0407 0.00566
+4          0.0430  256       0.03     0.728   0.0225    0.0335   0.0467 0.00619
+5          0.0335  269       0.03     0.718   0.0208    0.0310   0.0432 0.00573
+6          0.0438  274       0.03     0.714   0.0229    0.0339   0.0472 0.00621
+7          0.0432  278       0.03     0.711   0.0228    0.0338   0.0469 0.00617
+8          0.0136  295       0.03     0.699   0.0157    0.0250   0.0366 0.00534
+9          0.0288  347       0.03     0.663   0.0200    0.0296   0.0410 0.00536
+10         0.0372  349       0.03     0.662   0.0222    0.0325   0.0446 0.00571
+11         0.0391  358       0.03     0.656   0.0228    0.0331   0.0454 0.00579
+12         0.0177  396       0.03     0.633   0.0165    0.0255   0.0363 0.00506
+13         0.0278  431       0.03     0.613   0.0200    0.0292   0.0400 0.00511
+14         0.0249  441       0.03     0.608   0.0191    0.0280   0.0387 0.00502
+15         0.0273  477       0.03     0.589   0.0199    0.0289   0.0394 0.00499
+16         0.0455  484       0.03     0.585   0.0256    0.0364   0.0491 0.00601
+17         0.0304  494       0.03     0.580   0.0211    0.0302   0.0409 0.00506
+18         0.0220  501       0.03     0.577   0.0180    0.0266   0.0369 0.00483
+19         0.0277  505       0.03     0.575   0.0202    0.0290   0.0395 0.00494
+20         0.0204  540       0.03     0.559   0.0173    0.0258   0.0358 0.00474
+21         0.0284  563       0.03     0.548   0.0206    0.0293   0.0395 0.00485
+22         0.0236  593       0.03     0.535   0.0187    0.0270   0.0369 0.00466
+23         0.0150  602       0.03     0.532   0.0147    0.0230   0.0329 0.00466
+24         0.0238  629       0.03     0.521   0.0188    0.0271   0.0368 0.00460
+25         0.0204  636       0.03     0.518   0.0173    0.0254   0.0351 0.00455
+26         0.0480  729       0.03     0.484   0.0286    0.0393   0.0516 0.00587
+27         0.0306  849       0.03     0.446   0.0223    0.0303   0.0397 0.00445
+28         0.0274  914       0.03     0.428   0.0208    0.0285   0.0374 0.00423
+29         0.0213  940       0.03     0.421   0.0176    0.0249   0.0335 0.00407
+30         0.0293 1193       0.03     0.364   0.0223    0.0296   0.0379 0.00397
+31         0.0201 1340       0.03     0.338   0.0170    0.0235   0.0310 0.00360
+colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 \end{CodeOutput}
 \end{CodeChunk}
-For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$). 
+For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$), as shown above.
 
 
-The output contains information about observed death ratio ($y_{j}$), caseload ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimate ($\hat{B}_{j}$), lower bound of interval estimate ($\hat{\lambda}_{j, low}$), posterior mean ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bound of interval estimate ($\hat{\lambda}_{j, upp}$), and standard deviation of posterior distribution ($sd(\lambda_{j}\vert \textbf{y})$).
+The output contains information about observed death ratios ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds of interval estimates ($\hat{\lambda}_{j, upp}$), and standard deviations of posterior distribution3 ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.02$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear in this example because, as caseload increases, shrinkage decreases, depending less on the second-level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.02$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the second-level information.
 
 
-A function \code{summary} shows selective information on hospitals and more detailed estimation result as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the result of $\alpha\equiv\log(1/r)$, follow. Note that when we do not know the prior mean in advance unlike this hospital problem, \code{gbp} fits a linear regression for the Normal model, a log-linear regression for the Poisson model, or a logistic regression for the Binomial model.
+A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. When we do not know the prior mean in advance, unlike this hospital problem, \code{gbp} always fits the natural link, \emph{i.e.} a linear regression for the Normal model, a log-linear regression for the Poisson model, and a logistic regression for the Binomial model.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
@@ -331,26 +332,26 @@ R> summary(p)
 \begin{CodeOutput}
 Main summary:
 
-                  obs.mean    n prior.mean shrinkage low.intv post.mean
-Unit w/ min(n)       0.045   67       0.02     0.834    0.011     0.024
-Unit w/ median(n)    0.045  484       0.02     0.410    0.023     0.035
-Unit w/ max(n)       0.020 1340       0.02     0.201    0.014     0.020
-Overall Mean         0.029  517       0.02     0.438    0.015     0.025
+                    obs.mean    n prior.mean shrinkage low.intv post.mean
+Unit with min(n)      0.0448   67       0.03     0.911   0.0199    0.0313   
+Unit with median(n)   0.0455  484       0.03     0.585   0.0256    0.0364   
+Unit with max(n)      0.0201 1340       0.03     0.338   0.0170    0.0235   
+Overall Mean                  517       0.03     0.600   0.0201    0.0293   
 
-                  upp.intv post.sd
-                     0.042   0.008
-                     0.050   0.007
-                     0.027   0.003
-                     0.037   0.006
+                    upp.intv  post.sd
+                      0.0454  0.00653
+                      0.0491  0.00601
+                      0.0310  0.00360
+                      0.0403  0.00517
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha
-1          -5.818         0.411
+  post.mode.alpha post.sd.alpha post.mode.r
+1           -6.53         0.576         684
 \end{CodeOutput}
 \end{CodeChunk}
-From the output of \code{summary} we can easily calculate $\hat{r}=\textrm{exp}(5.818)=336$, which is a good indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 336 will shrink toward the prior mean (0.020) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.834$) was calculated by 336 / (336 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.834)*0.045 + 0.834 * 0.020=0.024$. As for this hospital, using more information from the prior distribution is an appropriate choice because the observed amount of information (67) is far less than the amount of state-level information (336).
+The output of \code{summary} also provides $\hat{r}=\textrm{exp}(6.53)=684$, which is an indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 684 will shrink toward the prior mean (0.030) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.911$) was calculated by 684 / (684 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.911)*0.0448 + 0.911 * 0.030=0.0313$. As for this hospital, using more information from the prior distribution is an appropriate choice because the observed amount of information (67) is far less than the amount of state-level information (684).
 
 
 To obtain a graphical summary the function \code{plot} can be used, as seen in Figure \ref{fig:hospshr}.
@@ -362,21 +363,23 @@ R> plot(p)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.25]{hospital1.png}
+\includegraphics[width = 3in]{hospital1.png}
 \caption{Shrinkage plot and 95\% interval plot for 31 hospitals}
 \label{fig:hospshr}
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the left-side graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.02) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.02 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
 
 
-Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death ratios ($y_{j}$, $j=8, 23$) are 0.014 and 0.015 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death ratios may lead to an unfair comparison because the latter hospital handled more than twice caseloads. \pkg{Rgbp} accounts for this caseload difference, making the estimate of true death rate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.02) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
+Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death ratios ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death ratios may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the true death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
 
 
-In Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We can clearly see that all the posterior means (red dots) are between sample mean (empty dots) and second-level mean (a blue horizontal line). For reference, to draw this plot by the order of data input the command, \code{plot(p, sort = FALSE)}, can be used. 
+But the point estimates are not enough to evaluate hospital reliabilities because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
 
-This interval plot confirms that the 23rd hospital has the lowest upper bound for the true death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for the true death rate is lower than the 8th hospital's one.
+This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hopitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with much more precision. 
+
+%and What happened is that Since the 23rd hospital has the lowest upper bound for the true death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for the true death rate is lower than the 8th hospital's one.
 
 
 %From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow relatively less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
@@ -386,11 +389,11 @@ This interval plot confirms that the 23rd hospital has the lowest upper bound fo
 
 % Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
+Based on the point and interval estimates, the 31st hospital seems the most reliable one among all the candidates. But when fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, We also could try any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
 
-Then, how reliable are these intervals? Does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets regarding the estimated $r~(=336.37)$ as a given true value. For reference, we can try any other value of $r$, for example $r=200$, by replacing the code below with `\code{R> pcv <- coverage(p, A.or.r = 200, mean.PriorDist = 0.02, nsim = 1000)}.
 
 
-Also, \code{gbp} can provide interval estimates with different confidence levels, for example 90\%,  and the appropriate code adjustment is `\code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.02, model = "poisson")}.'  Then, the below code will evaluate whether interval estimates achieve the 90\% confidence level.
+Also, \code{gbp} provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the model fitting code, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -407,7 +410,7 @@ R> pcv <- coverage(p, nsim = 1000)
 
 In Figure \ref{fig:hospitalcoverage} we see three lines; one is a red line connecting Rao-Blackwellized unbiased estimates for 31 hospitals; another is a dashed blue line connecting simple unbiased estimates for those hospitals; the other is a black horizontal line indicating the confidence level, 0.95. 
 
-The estimated overall average coverage rate across all the hospitals is 0.950 from both Rao-Blackwellized and simple unbiased estimates. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$ and the assumption that the model is true.
+The estimated overall average coverage rate across all the hospitals is 0.955 from both Rao-Blackwellized. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
 If we want to check average Rao-Blackwellized unbiased estimates for each hospital, the following code gives us such estimates.
 \begin{CodeChunk}
@@ -415,9 +418,9 @@ If we want to check average Rao-Blackwellized unbiased estimates for each hospit
 R> pcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.950 0.950 0.950 0.951 0.950 0.950 0.951 0.950 0.950 0.950 0.951 0.951 
-[13] 0.950 0.950 0.950 0.950 0.951 0.950 0.950 0.950 0.950 0.951 0.950 0.950 
-[25] 0.951 0.950 0.951 0.950 0.951 0.951 0.950
+ [1] 0.956 0.957 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.955 
+[13] 0.955 0.956 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.954 0.955 0.955 
+[25] 0.955 0.954 0.954 0.954 0.954 0.953 0.953
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -427,9 +430,9 @@ As for average simple unbiased estimates for each hospital, we can type the code
 R> pcv$coverageS
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.949 0.953 0.946 0.955 0.957 0.939 0.956 0.957 0.944 0.952 0.956 0.955 
-[13] 0.949 0.957 0.948 0.954 0.951 0.934 0.956 0.943 0.959 0.952 0.949 0.964 
-[25] 0.949 0.953 0.941 0.938 0.941 0.956 0.951
+ [1] 0.955 0.959 0.955 0.949 0.944 0.955 0.960 0.947 0.948 0.962 0.967 0.962 
+[13] 0.957 0.959 0.961 0.958 0.957 0.948 0.963 0.963 0.967 0.955 0.968 0.948 
+[25] 0.965 0.947 0.955 0.946 0.957 0.948 0.948
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -439,17 +442,17 @@ One more thing to mention is the accuracy of Rao-Blackwellized unbiased estimate
 R> var(pcv$raw.resultRB[1, ]) / 1000
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.000002031225
+ [1] 0.00000245
 \end{CodeOutput}
 \begin{CodeInput}
 R> var(pcv$raw.resultS[1, ]) / 1000
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.00004844745
+ [1] 0.00004302
 \end{CodeOutput}
 \end{CodeChunk}
 
-It shows that Rao-Blackwellized unbiased estimate is about 24 times more accurate than simple one. Also, as the number of simulation increases, the zig-zagging blue line is expected to be closer to the red line.
+It shows that Rao-Blackwellized unbiased estimate is about 18 times more accurate than simple one. Also, as the number of simulation increases, the zig-zagging blue line is expected to converge to the red line by the law of large numbers.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
@@ -668,28 +671,27 @@ R> b
 Summary for each unit (sorted by n):
 
          obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv post.sd
-1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429   0.046
-2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420   0.045
-3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411   0.044
-4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403   0.043
-5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396   0.042
-6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341   0.041
-7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331   0.040
-8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323   0.039
-9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315   0.038
-10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379   0.043
-11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
-12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
-13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308   0.038
-14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375   0.044
-15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375   0.044
-16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302   0.038
-17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297   0.038
-18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292   0.039
-colMeans    0.265 45 0.44      0.267     0.715    0.191     0.267    0.351   0.041
-\end{CodeOutput}
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429  0.0462
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420  0.0448
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411  0.0437
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403  0.0429
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396  0.0424
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341  0.0415
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331  0.0400
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323  0.0388
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315  0.0380
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379  0.0432
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375  0.0441
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375  0.0441
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302  0.0377
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297  0.0381
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292  0.0389
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.0410\end{CodeOutput}
 \end{CodeChunk}
-Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $e^{4.727} / (e^{4.727}+45)$ = 0.715). The estimation results including $\hat{r}=e^{4.727}$ follows.
+Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $113 / (113+45)$ = 0.715). The estimation results including $\hat{r}=113$ follows.
 
 %Note that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is a critical factor that makes posterior variances different from each player because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 
@@ -701,25 +703,26 @@ R> summary(b)
 \begin{CodeOutput}
 Main summary:
 
-                          obs.mean  n   X1 prior.mean shrinkage low.intv
-Unit w/ min(obs.mean)        0.156 45 0.00      0.233     0.715    0.140
-Unit w/ median(obs.mean)1    0.244 45 0.00      0.233     0.715    0.166
-Unit w/ median(obs.mean)2    0.244 45 1.00      0.310     0.715    0.210
-Unit w/ max(obs.mean)        0.400 45 1.00      0.310     0.715    0.248
-Overall Mean                 0.265 45 0.44      0.267     0.715    0.191
+                            obs.mean  n    X1 prior.mean shrinkage low.intv 
+Unit with min(obs.mean)        0.156 45 0.000      0.233     0.715    0.140     
+Unit with median(obs.mean)1    0.244 45 0.000      0.233     0.715    0.166     
+Unit with median(obs.mean)2    0.244 45 1.000      0.310     0.715    0.210     
+Unit with max(obs.mean)        0.400 45 1.000      0.310     0.715    0.248     
+Overall Mean                         45 0.444      0.267     0.715    0.191     
 
-                         post.mean upp.intv post.sd
-                             0.211    0.292   0.039
-                             0.237    0.315   0.038
-                             0.291    0.379   0.043
-                             0.335    0.429   0.046
-                             0.267    0.351   0.041
+
+                            post.mean upp.intv post.sd
+                                0.211    0.292  0.0389
+                                0.237    0.315  0.0380
+                                0.291    0.379  0.0432
+                                0.335    0.429  0.0462
+                                0.267    0.351  0.0410
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian and log(1/r) for Binomial and Poisson data:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha
-1          -4.727         0.957
+  post.mode.alpha post.sd.alpha post.mode.r
+1           -4.73         0.957         113
 
 
 Regression Summary:
@@ -741,7 +744,7 @@ R> plot(b)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=0.3]{baseball1.png}
+\includegraphics[width = 3in]{baseball1.png}
 \caption{Shrinkage plot and 95\% interval plot for 18 baseball players}
 \label{fig:baseball}
 \end{center}
@@ -753,7 +756,7 @@ R> plot(b)
 In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
-Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values for example 100 for $r$ and (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the appropriate code will be \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of below one.
+Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the code below.
 
 \begin{CodeChunk}
 \begin{CodeInput}
