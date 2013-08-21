@@ -115,6 +115,8 @@ This package will be useful for frequentists and Bayesians alike. Bayesians are 
 \section[Hierarchical Structure]{Hierarchical Structure} \label{hierarchical}
 A two-level or multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
+
+
 \code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level parameters. The \code{gbp} function allows users to choose one of three types of hierarchical models, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
 \subsection[Normal-Normal]{Normal-Normal (``g''=Gaussian data)}
@@ -215,7 +217,7 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=5cm]{process.png}
+\includegraphics[width=6cm]{process.png}
 \caption{Pseudo-data generating process}
 \label{fig:pseudo}
 \end{center}
@@ -224,10 +226,10 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \subsection{Coverage Estimation Process}
 Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  And then within each group, it will check simply how often the interval estimates include true parameters, or calculate Rao-Blackwellized coverage estimate. 
 
-\subsubsection{Simple Unbiased Estimates of Coverage Probabilities}
-Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. This provides a simple unbiased estimate of the $k$ coverage probabilities. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased estimate of coverage probability for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given a specific $(A, \beta)$. As the number of pseudo-datasets increases, this simple estimate converges to the true coverage probability of the first group given $A$ and $\beta$.
+\subsubsection{Simple Unbiased Coverage Estimates}
+Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given a specific $(A, \beta)$. As the number of pseudo-datasets increases, this simple unbiased coverage estimate converges to the true coverage probability of the first group given $A$ and $\beta$.
 
-\subsubsection{Rao-Blackwellized Unbiased Estimates of Coverage Probabilities}
+\subsubsection{Rao-Blackwellized Unbiased Coverage Estimates}
 Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we estimate the first group's coverage probability by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
 
 
@@ -318,10 +320,10 @@ colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$), as shown above.
 
 
-The output contains information about observed death ratios ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds of interval estimates ($\hat{\lambda}_{j, upp}$), and standard deviations of posterior distribution3 ($sd(\lambda_{j}\vert \textbf{y})$).
+The output contains information about observed death ratios ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds (2.5\% percentiles of posterior distributions if 95\% confidence level is given) of interval estimates ($\hat{\lambda}_{j, low}$), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds (97.5\% percentiles of posterior distributions) of interval estimates ($\hat{\lambda}_{j, upp}$), and standard deviations of posterior distributions ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.02$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the second-level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.030$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the second-level information.
 
 
 A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. When we do not know the prior mean in advance, unlike this hospital problem, \code{gbp} always fits the natural link, \emph{i.e.} a linear regression for the Normal model, a log-linear regression for the Poisson model, and a logistic regression for the Binomial model.
@@ -363,7 +365,7 @@ R> plot(p)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 3in]{hospital1.png}
+\includegraphics[width = 6in]{hospital1.png}
 \caption{Shrinkage plot and 95\% interval plot for 31 hospitals}
 \label{fig:hospshr}
 \end{center}
@@ -372,10 +374,10 @@ R> plot(p)
 In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
 
 
-Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death ratios ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death ratios may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the true death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
+Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the true death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
 
 
-But the point estimates are not enough to evaluate hospital reliabilities because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed on the right-hand side. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
+But the point estimates are not enough to evaluate hospital reliabilities because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
 
 This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hopitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with much more precision. 
 
@@ -402,17 +404,19 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 5.5cm]{hospital2.png}
+\includegraphics[width = 3.5in]{hospital2.png}
 \caption{Coverage plot via frequency method checking for 31 hospitals}
 \label{fig:hospitalcoverage}
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage} we see three lines; one is a red line connecting Rao-Blackwellized unbiased estimates for 31 hospitals; another is a dashed blue line connecting simple unbiased estimates for those hospitals; the other is a black horizontal line indicating the confidence level, 0.95. 
+In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level, the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals, and the dashed zagged blue curve passes simple unbiased coverage estimates for these hospitals. As the number of simulations increases, the zig-zagging blue curve would be closer to the smooth red curve by the law of large numbers.
 
-The estimated overall average coverage rate across all the hospitals is 0.955 from both Rao-Blackwellized. This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
-If we want to check average Rao-Blackwellized unbiased estimates for each hospital, the following code gives us such estimates.
+
+The overall RB unbiased coverage estimate across all the hospitals is 0.955. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
+
+The following code provides 31 RB unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$coverageRB
@@ -424,7 +428,7 @@ R> pcv$coverageRB
 \end{CodeOutput}
 \end{CodeChunk}
 
-As for average simple unbiased estimates for each hospital, we can type the code below.
+And the code below calculates 31 simple unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$coverageS
@@ -436,23 +440,32 @@ R> pcv$coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-One more thing to mention is the accuracy of Rao-Blackwellized unbiased estimates compared to that of simple ones. Taking the first hospital as an example, we can calculate the sample variance of 1,000 Rao-Blackwellized unbiased estimates for the first hospital and that of 1,000 simple ones by typing following code. For reference, \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual simulation results.
+The function \code{coverage} also calculates the standard errors for each hospital's RB unbiased coverage estimate defined as the square root of $S^{2}_{RB, j}/N_{sim}$, where $S^{2}_{RB, j}$ is the sample variance of 1,000 RB unbiased coverage estimates for the $j$-th hospital. The following code provides 31 standard errors.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> var(pcv$raw.resultRB[1, ]) / 1000
+R> pcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.00000245
+ [1] 0.0015 0.0015 0.0013 0.0012 0.0012 0.0012 0.0012 0.0012 0.0011 0.0011 0.0011 
+[12] 0.0011 0.0010 0.0010 0.0010 0.0010 0.0011 0.0010 0.0010 0.0010 0.0009 0.0010 
+[23] 0.0009 0.0009 0.0009 0.0009 0.0008 0.0008 0.0007 0.0006 0.0006
 \end{CodeOutput}
+\end{CodeChunk}
+Similarly, 31 standard errors for each simple unbiased coverage estimate are
+\begin{CodeChunk}
 \begin{CodeInput}
-R> var(pcv$raw.resultS[1, ]) / 1000
+R> pcv$se.coverageS
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.00004302
+[1] 0.0063 0.0060 0.0071 0.0063 0.0059 0.0066 0.0063 0.0068 0.0060 0.0076 0.0063 
+[12] 0.0059 0.0066 0.0072 0.0070 0.0074 0.0060 0.0062 0.0065 0.0065 0.0075 0.0072 
+[23] 0.0061 0.0067 0.0064 0.0065 0.0061 0.0072 0.0067 0.0070 0.0065
 \end{CodeOutput}
 \end{CodeChunk}
 
-It shows that Rao-Blackwellized unbiased estimate is about 18 times more accurate than simple one. Also, as the number of simulation increases, the zig-zagging blue line is expected to converge to the red line by the law of large numbers.
+Taking the first hospital as an example, the variance of RB unbiased coverage estimate is about 18 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as efficient as 18,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
+
+For reference, \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual simulation results.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
@@ -478,7 +491,7 @@ It shows that Rao-Blackwellized unbiased estimate is about 18 times more accurat
 
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 
-It is noted that \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
+\cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
@@ -501,7 +514,7 @@ R> se <- schools$se
 
 
 
-Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. It is assumed that the mean for each score is drawn from a common normal distribution and hence, we can use \code{gbp} to fit this Normal-Normal hierarchical model.
+Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known. At the second hierarchy, the mean for each school is assumed to be drawn from a common Normal distribution and hence, we can use the Gaussian component of \code{gbp} to fit this Normal-Normal hierarchical model.
 
 
 \begin{CodeChunk}
@@ -524,7 +537,7 @@ Summary for each unit (sorted by se):
 colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-The output from \code{gbp} provides an easy to read summary of the results of the estimation. In the Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_i = V_i/(V_i + A)$ and as such those schools whose variation within the school is less than between the variation schools will shrink greater than $50\%$. The results provide by \code{gpb} suggests that there is little evidence that the training provided much of an added benefit with every school's $95\%$ posterior interval containing 0. \pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}.
+This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_i = V_i/(V_i + A)$. As such schools whose variation within the school ($V_{j}$) is less than the between variation ($A$) schools will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit because every school's $95\%$ posterior interval contains 0. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -534,13 +547,13 @@ R> plot(g)
 
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 3in]{school1.png}
+\includegraphics[width = 6in]{school1.png}
 \caption{Shrinkage plot and 95\% interval plot for 8 schools}
 \label{fig:8schoolsplot}
 \end{center}
 \end{figure}
 
-Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
+\pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}. Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -578,7 +591,7 @@ beta0    8.168 5.73 1.425 0.154
 \end{CodeChunk}
 
 
-An integral part of fitting any model is to check the method of estimation. Namely we can generate new pseudo-data from our assumed model by fixing the hyper-parameter values ($A$ and $\mu_0$ in this example) at their estimates. It is then possible to simulate ``true'' $\theta_i$ for each group $i$ and re-fit the model numerous times to estimate the coverage probabilities of our procedure.  
+The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example). We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -587,16 +600,16 @@ R> gcv <- coverage(g, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 5.5cm]{school2.png}
+\includegraphics[width = 3.5in]{school2.png}
 \caption{Coverage plot via frequency method checking for 8 schools}
 \label{fig:schoolcoverage}
 \end{center}
 \end{figure}
 
-As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (black horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Note that all the coverage estimates depend on the given true values of $A$ and $\beta_{0}$, and the assumption that the model is true.
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (black horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Note that all the coverage estimates depend on the chosen true values of $A$ and $\beta_{0}$, and the assumption that the model is valid.
 
 
-In addition, average Rao-Blackwellized unbiased estimates for each school can be seen as below.
+In addition, Rao-Blackwellized (RB) unbiased coverage estimates for each school can be gotten with the command below.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> gcv$coverageRB
@@ -616,7 +629,7 @@ R> gcv$coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-All the individual simulation results are saved in \code{gcv$raw.resultRB} and \code{gcv$raw.resultS}, in which each row is about each school.
+All the simulation results (0-1 coverage and RB coverage estimates) are saved in two $8\times1,000$ matrices, \code{gcv$raw.resultRB} and \code{gcv$raw.resultS}, each row of which is about each school.
 
 
 % For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
@@ -734,7 +747,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-We see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all the outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
+We see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
 
 Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
@@ -745,7 +758,7 @@ R> plot(b)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 3in]{baseball1.png}
+\includegraphics[width = 6in]{baseball1.png}
 \caption{Shrinkage plot and 95\% interval plot for 18 baseball players}
 \label{fig:baseball}
 \end{center}
@@ -766,16 +779,16 @@ R> bcv <- coverage(b, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 5.5cm]{baseball2.png}
+\includegraphics[width = 3.5in]{baseball2.png}
 \caption{Coverage plot via frequency method checking for 18 players}
 \label{fig:baseball2}
 \end{center}
 \end{figure}
 
-Finally, in Figure \ref{fig:baseball2}, we see that the estimated average coverage probability is 0.972 based on the Rao-Blackwellization, conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is true.
+Finally, in Figure \ref{fig:baseball2}, we see that the overall Rao-Blackwellized unbiased coverage estimate is 0.972 (across all the players), conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is valid.
 
 
-The average Rao-Blackwellized unbiased estimates for each player follows.
+The Rao-Blackwellized unbiased coverage estimates and their standard errors for each player follow.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv$coverageRB
@@ -785,8 +798,17 @@ R> bcv$coverageRB
 [13] 0.972 0.972 0.973 0.972 0.973 0.972
 \end{CodeOutput}
 \end{CodeChunk}
+\begin{CodeChunk}
+\begin{CodeInput}
+R> bcv$se.coverageRB
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.0012 0.0013 0.0012 0.0012 0.0013 0.0011 0.0011 0.0009 0.0012 0.0013 
+[11] 0.0010 0.0013 0.0010 0.0012 0.0015 0.0010 0.0010 0.0011
+\end{CodeOutput}
+\end{CodeChunk}
 
-And average simple unbiased estimates for each player are
+And simple unbiased coverage estimates and their standard errors for each player are
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv$coverageS
@@ -796,8 +818,17 @@ R> bcv$coverageS
 [13] 0.957 0.969 0.972 0.982 0.978 0.984
 \end{CodeOutput}
 \end{CodeChunk}
+\begin{CodeChunk}
+\begin{CodeInput}
+R> bcv$se.coverageRB
+\end{CodeInput}
+\begin{CodeOutput}
+ [1] 0.0045 0.0059 0.0066 0.0049 0.0052 0.0044 0.0042 0.0054 0.0056 0.0053 0.0049 
+[11] 0.0056 0.0042 0.0049 0.0056 0.0057 0.0052 0.0052
+\end{CodeOutput}
+\end{CodeChunk}
 
-All the individual simulation results are saved in \code{bcv$raw.resultRB} and \code{bcv$raw.resultS}, in which each row is about each player.
+All the simulation results are saved in two $18\times1,000$ matrices, \code{bcv$raw.resultRB} and \code{bcv$raw.resultS}, each row of which is about each player.
 
 %Finally,  we see that Rao-Blackwellized unbiased estimate for the first player is about 26 times more accurate than simple one. It is based on the ratio of the sample variances of individual estimates from two approaches.
 %\begin{CodeChunk}

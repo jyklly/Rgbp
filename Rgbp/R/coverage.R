@@ -538,9 +538,10 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   # average coverage probability
   result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
-
+  se.cov <- round(sqrt(apply(coverageRB, 1, var) / nsim), 4)
   result2 <- round(rowMeans(coverageS, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
+  se.cov2 <- round(sqrt(apply(coverageS, 1, var) / nsim), 4)
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
@@ -635,6 +636,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   # print output
   output <- list(coverageRB = result, coverageS = result2, 
                  average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
+                 se.coverageRB = se.cov, se.coverageS = se.cov2, 
                  raw.resultRB = coverageRB, raw.resultS = coverageS)
   return(output)
 }

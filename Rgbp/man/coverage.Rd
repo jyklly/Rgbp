@@ -72,22 +72,28 @@
 
 \value{
   \item{coverageRB}{
-    Rao-Blackwellized unbiased estimate of coverage probability for each group averaged over all simulations.
+    Rao-Blackwellized unbiased coverage estimate for each group averaged over all simulations.
   }
   \item{coverageS}{
-    Simple unbiased estimate of coverage probability for each group averaged over all simulations.
+    Simple unbiased coverage estimate for each group averaged over all simulations.
   }
   \item{average.coverageRB}{
-    average Rao-Blackwellized unbiased estimate of coverage probability over all the simulation regardless of group.
+    Overall Rao-Blackwellized unbiased coverage estimate across all the groups and simulations.
   }
   \item{average.coverageS}{
-    average simple unbiased estimate of coverage probability over all the simulation regardless of group.
+    Overall simple unbiased coverage estimate across all the groups and simulations.
+  }
+  \item{se.coverageRB}{
+    Standard error of Rao-Blackwellized unbiased coverage estimate for each group.
+  }
+  \item{se.coverageS}{
+    Standard error of simple unbiased coverage estimate for each group.
   }
   \item{raw.resultRB}{
-    all the Rao-Blackwellized unbiased estimates for coverage probabilities for every group and for every simulation.
+    all the Rao-Blackwellized unbiased coverage estimates for every group and for every simulation.
   }
   \item{raw.resultS}{
-    all the simple unbiased estimates for coverage probabilities for every group and for every simulation.
+    all the simple unbiased coverage estimates for every group and for every simulation.
   }
 }
 
