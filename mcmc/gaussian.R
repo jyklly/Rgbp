@@ -1,5 +1,4 @@
 library(rstan)
-library(parallel)
 
 args <- commandArgs(TRUE)
 if (length(args)==0){
@@ -37,7 +36,7 @@ rstan_schools <- function(y, sigma){
                       y = y,
                       sigma = sigma)
 
-  fit <- stan(model_code = schools_code, data = schools_dat, iter = 1000, chains = 4)
+  fit <- stan(model_code = schools_code, data = schools_dat, iter = 20000, chains = 2)
   return(fit)
 }
 
@@ -76,8 +75,6 @@ mu0 <- 8.168
 A <- 117.71
 k <- 8
 sigma <- c(9, 10, 10, 11, 11, 15, 16, 18)
-##nits <- 1000
 
-## out <- mclapply(1:nits, schools.sim, mu0 = mu0, A = A, k = k, sigma = sigma, mc.cores = 3)
 out <- schools.sim(s, mu0 = mu0, A = A, k = k, sigma = sigma)
 save(out, file=paste("output/mcmcout",s,".RData", sep = ""))
