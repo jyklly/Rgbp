@@ -1,7 +1,7 @@
 \documentclass[article]{jss}
 
 %%uncomment line below for double-spacing
-\linespread{2}
+%\linespread{1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -224,14 +224,38 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \end{figure}
 
 \subsection{Coverage Estimation Process}
-Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  And then within each group, it will check simply how often the interval estimates include true parameters, or calculate Rao-Blackwellized coverage estimate. 
+Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but \code{coverage} displays only Rao-Blackwellized one.
 
 \subsubsection{Simple Unbiased Coverage Estimates}
-Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given a specific $(A, \beta)$. As the number of pseudo-datasets increases, this simple unbiased coverage estimate converges to the true coverage probability of the first group given $A$ and $\beta$.
+Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. 
+\begin{equation}
+\bar{I}_{j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}I^{(i)}_{j},~ j=1, 2, \ldots, k.
+\end{equation}
+
+This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given specific values of $A$ and $\beta$. 
+
+Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$.
+
+So, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
+\begin{equation}
+\widehat{Var}(\bar{I}_{j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}(I^{(i)}_{j}-\bar{I}_{j})^{2},~ j=1, 2, \ldots, k.
+\end{equation}
+
 
 \subsubsection{Rao-Blackwellized Unbiased Coverage Estimates}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking a conditional expectation given a sufficient statistic. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. This expectation is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. Then, we estimate the first group's coverage probability by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
+Rao-Blackwellization improves accuracy of an unbiased estimator by taking more information (sufficient statistic) into consideration. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. 
+\begin{equation}\label{RB}
+\bar{I}_{RB, j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta),~ j=1, 2, \ldots, k.
+\end{equation}
 
+The expectation in (\ref{RB}) is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. 
+
+For example, we estimate the first group's coverage probability (that depend on specific $A$ and $\beta$) by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased for $p_{cov, 1}$ but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
+
+Under the setting where one dataset ($\mathbf{y}^{(i)}_{(k\times1)}$) is simulated per one true parameter set ({\boldmath $\mu$}$^{(i)}_{(k\times1)})$, the unbiased variance estimator for Var($\bar{I}_{RB, j}$) follows.
+\begin{equation}
+\widehat{Var}(\bar{I}_{RB, j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}\bigg(E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta)-\bar{I}_{RB, j}\bigg)^{2},~ j=1, 2, \ldots, k.
+\end{equation}
 
 
 \section[Examples]{Examples}
@@ -410,11 +434,11 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level, the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals, and the dashed zagged blue curve passes simple unbiased coverage estimates for these hospitals. As the number of simulations increases, the zig-zagging blue curve would be closer to the smooth red curve by the law of large numbers.
+In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals.
 
 
 
-The overall RB unbiased coverage estimate across all the hospitals is 0.955. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
+The overall RB unbiased coverage estimate across all the hospitals is 0.954. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
 The following code provides 31 RB unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
@@ -422,9 +446,9 @@ The following code provides 31 RB unbiased coverage estimates for each hospital.
 R> pcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.956 0.957 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.956 0.955 
-[13] 0.955 0.956 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.954 0.955 0.955 
-[25] 0.955 0.954 0.954 0.954 0.954 0.953 0.953
+ [1] 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.954 0.954 0.955 
+[13] 0.954 0.955 0.954 0.954 0.954 0.955 0.954 0.954 0.954 0.954 0.954 0.954 
+[25] 0.953 0.954 0.953 0.953 0.954 0.952 0.952
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -434,9 +458,9 @@ And the code below calculates 31 simple unbiased coverage estimates for each hos
 R> pcv$coverageS
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.955 0.959 0.955 0.949 0.944 0.955 0.960 0.947 0.948 0.962 0.967 0.962 
-[13] 0.957 0.959 0.961 0.958 0.957 0.948 0.963 0.963 0.967 0.955 0.968 0.948 
-[25] 0.965 0.947 0.955 0.946 0.957 0.948 0.948
+ [1] 0.960 0.953 0.956 0.952 0.957 0.957 0.960 0.949 0.949 0.944 0.951 0.947 
+[13] 0.949 0.958 0.958 0.959 0.953 0.954 0.953 0.955 0.956 0.952 0.953 0.959 
+[25] 0.945 0.945 0.953 0.946 0.953 0.948 0.955
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -446,9 +470,9 @@ The function \code{coverage} also calculates the standard errors for each hospit
 R> pcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0015 0.0015 0.0013 0.0012 0.0012 0.0012 0.0012 0.0012 0.0011 0.0011 0.0011 
-[12] 0.0011 0.0010 0.0010 0.0010 0.0010 0.0011 0.0010 0.0010 0.0010 0.0009 0.0010 
-[23] 0.0009 0.0009 0.0009 0.0009 0.0008 0.0008 0.0007 0.0006 0.0006
+ [1] 0.0016 0.0016 0.0014 0.0013 0.0013 0.0013 0.0013 0.0013 0.0013 0.0013 0.0012 
+[12] 0.0012 0.0012 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0010
+[23] 0.0010 0.0010 0.0010 0.0009 0.0009 0.0008 0.0008 0.0007 0.0007
 \end{CodeOutput}
 \end{CodeChunk}
 Similarly, 31 standard errors for each simple unbiased coverage estimate are
@@ -457,15 +481,15 @@ Similarly, 31 standard errors for each simple unbiased coverage estimate are
 R> pcv$se.coverageS
 \end{CodeInput}
 \begin{CodeOutput}
-[1] 0.0063 0.0060 0.0071 0.0063 0.0059 0.0066 0.0063 0.0068 0.0060 0.0076 0.0063 
-[12] 0.0059 0.0066 0.0072 0.0070 0.0074 0.0060 0.0062 0.0065 0.0065 0.0075 0.0072 
-[23] 0.0061 0.0067 0.0064 0.0065 0.0061 0.0072 0.0067 0.0070 0.0065
+ [1] 0.0062 0.0067 0.0065 0.0068 0.0064 0.0064 0.0062 0.0070 0.0070 0.0073 0.0068 
+[12] 0.0071 0.0070 0.0063 0.0063 0.0063 0.0067 0.0066 0.0067 0.0066 0.0065 0.0068
+[23] 0.0067 0.0063 0.0072 0.0072 0.0067 0.0072 0.0067 0.0070 0.0066
 \end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance of RB unbiased coverage estimate is about 18 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 18,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
+Taking the first hospital as an example, the variance of RB unbiased coverage estimate is about 15 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 15,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
 
-For reference, \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual simulation results.
+For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
@@ -609,27 +633,25 @@ R> gcv <- coverage(g, nsim = 1000)
 As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (black horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Note that all the coverage estimates depend on the chosen true values of $A$ and $\beta_{0}$, and the assumption that the model is valid.
 
 
-In addition, Rao-Blackwellized (RB) unbiased coverage estimates for each school can be gotten with the command below.
+In addition, Rao-Blackwellized (RB) unbiased coverage estimate and its standard error for each school can be gotten with the command below.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> gcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.966 0.957 0.966 0.962 0.960 0.961 0.960 0.969
+ [1] 0.964 0.958 0.964 0.960 0.956 0.959 0.958 0.966
 \end{CodeOutput}
 \end{CodeChunk}
-
-As for average simple unbiased estimates for each school, 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> gcv$coverageS
+R> gcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
-[1] 0.970 0.943 0.957 0.968 0.956 0.969 0.961 0.976
+ [1] 0.0014 0.0013 0.0016 0.0014 0.0014 0.0012 0.0012 0.0017
 \end{CodeOutput}
 \end{CodeChunk}
 
-All the simulation results (0-1 coverage and RB coverage estimates) are saved in two $8\times1,000$ matrices, \code{gcv$raw.resultRB} and \code{gcv$raw.resultS}, each row of which is about each school.
+All the individual RB coverage estimates are saved in the $8\times1,000$ matrix, \code{gcv$raw.resultRB}, each row of which is about each school.
 
 
 % For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
@@ -762,12 +784,12 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-Now, let's see following shrinkage and 95\% interval plots for more intuition. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+Now, let's see the shrinkage and 95\% interval plots for more intuition in Figure \ref{fig:baseball}. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-In Figure \ref{fig:baseball} the 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
+The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
 
 
 Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the code below.
@@ -794,8 +816,8 @@ The Rao-Blackwellized unbiased coverage estimates and their standard errors for 
 R> bcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.972 0.972 0.973 0.972 0.972 0.970 0.974 0.972 0.973 0.973 0.973 0.970 
-[13] 0.972 0.972 0.973 0.972 0.973 0.972
+ [1] 0.973 0.973 0.974 0.971 0.971 0.973 0.972 0.973 0.972 0.973 0.971 0.973 
+[13] 0.971 0.972 0.974 0.972 0.972 0.973
 \end{CodeOutput}
 \end{CodeChunk}
 \begin{CodeChunk}
@@ -803,32 +825,13 @@ R> bcv$coverageRB
 R> bcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0012 0.0013 0.0012 0.0012 0.0013 0.0011 0.0011 0.0009 0.0012 0.0013 
-[11] 0.0010 0.0013 0.0010 0.0012 0.0015 0.0010 0.0010 0.0011
+ [1] 0.0010 0.0011 0.0011 0.0013 0.0012 0.0011 0.0012 0.0011 0.0012 0.0010 
+[11] 0.0013 0.0012 0.0013 0.0013 0.0010 0.0010 0.0010 0.0010
 \end{CodeOutput}
 \end{CodeChunk}
 
-And simple unbiased coverage estimates and their standard errors for each player are
-\begin{CodeChunk}
-\begin{CodeInput}
-R> bcv$coverageS
-\end{CodeInput}
-\begin{CodeOutput}
- [1] 0.969 0.967 0.973 0.980 0.970 0.974 0.965 0.976 0.969 0.972 0.980 0.972 
-[13] 0.957 0.969 0.972 0.982 0.978 0.984
-\end{CodeOutput}
-\end{CodeChunk}
-\begin{CodeChunk}
-\begin{CodeInput}
-R> bcv$se.coverageS
-\end{CodeInput}
-\begin{CodeOutput}
- [1] 0.0045 0.0059 0.0066 0.0049 0.0052 0.0044 0.0042 0.0054 0.0056 0.0053 0.0049 
-[11] 0.0056 0.0042 0.0049 0.0056 0.0057 0.0052 0.0052
-\end{CodeOutput}
-\end{CodeChunk}
 
-All the simulation results are saved in two $18\times1,000$ matrices, \code{bcv$raw.resultRB} and \code{bcv$raw.resultS}, each row of which is about each player.
+All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$raw.resultRB}, each row of which is for each player.
 
 %Finally,  we see that Rao-Blackwellized unbiased estimate for the first player is about 26 times more accurate than simple one. It is based on the ratio of the sample variances of individual estimates from two approaches.
 %\begin{CodeChunk}

@@ -551,85 +551,76 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
        main = "Estimated Coverage Probability for Each Unit",
        lwd = 3, lty = 1)
   abline(h = gbp.object$Alpha)
-  points(1 : length(gbp.object$se), result2, type = "l", lty = 2, col = 4, lwd = 2)
 
   if (is.na(gbp.object$prior.mean) & missing(mean.PriorDist)) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"), 
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True A =", round(A, 2)), 
                              paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True r =", round(r, 2)), 
                              paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     }
 
   } else if (is.na(gbp.object$prior.mean) & !missing(mean.PriorDist)) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     }
 
   } else if (!is.na(gbp.object$prior.mean) & !missing(mean.PriorDist)) {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     }
   } else if (!is.na(gbp.object$prior.mean) & missing(mean.PriorDist)) {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
-                             "Red Line: Rao-Blackwellized",
-                             "Blue Dashed Line: (Simple)",
+                             "Red Line: RB coverage estimates",
                              paste("# of Simulation per Unit: ", nsim),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
-                             paste("Avg.Coverage =", avr.cov, "(", avr.cov2, ")")))
+                             paste("Overall Coverage =", avr.cov)))
     }
   }
 
