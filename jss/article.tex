@@ -518,7 +518,7 @@ For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.
 \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
 
-\subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate}
+\subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate} \label{sec:ex:8schools}
 
 The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
 \begin{CodeChunk}
@@ -786,19 +786,19 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-Now, let's see the shrinkage and 95\% interval plots for more intuition in Figure \ref{fig:baseball}. It is obvious that sample means (empty dots) on the upper horizontal line shrink towards two different means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+It is evident in the shrinkage and 95\% interval plots in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows us range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. Let's see the 10th, 14th, and 15th players on the graph for example. They are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM means that it can happen by their bad luck though in the long run their batting averages will come back to their expected ones as outfielders (blue horizontal lines). So, their posterior means (red dots) can be interpreted as their RTTM. 
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM suggests that in the long run their batting averages will shrink toward the expected prior means as outfielders (blue horizontal lines).
 
 
-Then, how much can we trust these interval estimates? The following frequency method checking that regards the estimated values, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, as true values will answer it. For reference, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the code below.
+As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. For reference, to do the method check at different true values additional arguments can be specified in the coverage function.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> bcv <- coverage(b, nsim = 1000)
+R> bcv <- coverage(b, nsim = 1000) 
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h]
