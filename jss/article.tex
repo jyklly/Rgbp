@@ -676,7 +676,8 @@ All the individual RB coverage estimates are saved in the $8\times1,000$ matrix,
 \subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Second-level Mean and One Covariate}
 %The New York Times published on 26 April 1970 covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then we became interested in their batting averages over the remaining season. 
 
-The following dataset from the New York Times published on 26 April 1970 contains information on the batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}. In addition one covariate relating to the position of each player was observed and for illustrative purposes, we transform this variable into a binary indicator (1 if a player was an outfielder and 0 otherwise).
+The following dataset from the New York Times published on 26 April 1970 contains information on the batting averages and positions (outfielder=1,otherwise=0) of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}.
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
@@ -688,13 +689,13 @@ or
 \begin{CodeChunk}
 \begin{CodeInput}
 R> data(baseball)
-R> z <- baseball[, 4]
-R> n <- baseball[, 3]
+R> z <- baseball$Hits
+R> n <- baseball$At.Bats
 R> x <- ifelse(baseball$Position == "fielder", 1, 0)
 \end{CodeInput}
 \end{CodeChunk}
-
-Conditioning on the true batting average for each player we assume that the at-bats are independent and therefore, $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to estimate point and interval estimates of the true batting average, $p_{j}$, for each player, considering additional information on whether the player is an outfielder or not. \code{gbp} provides a way to incorporate such information seamlessly into the second-level hierarchy so that information is shared and regression towards the mean (RTTM) occurs within outfielders and non-outfielders separately. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
+%$
+Conditioning on the true batting average for each player we assume that the at-bats are independent and therefore, $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to obtain point and interval estimates of the true batting average, $p_{j}$, for each player, considering the additional information on whether the player is an outfielder or not. \code{gbp} provides a way to incorporate such covariate information seamlessly into the second-level hierarchy so that information is shared and regression towards the mean (RTTM) occurs within outfielders and non-outfielders separately. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
 
 
 \begin{CodeChunk}
@@ -815,6 +816,7 @@ The Rao-Blackwellized unbiased coverage estimates and their standard errors for 
 \begin{CodeInput}
 R> bcv$coverageRB
 \end{CodeInput}
+%$
 \begin{CodeOutput}
  [1] 0.973 0.973 0.974 0.971 0.971 0.973 0.972 0.973 0.972 0.973 0.971 0.973 
 [13] 0.971 0.972 0.974 0.972 0.972 0.973
@@ -830,8 +832,12 @@ R> bcv$se.coverageRB
 \end{CodeOutput}
 \end{CodeChunk}
 
+%$
 
 All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$raw.resultRB}, each row of which is for each player.
+
+%$
+
 
 %Finally,  we see that Rao-Blackwellized unbiased estimate for the first player is about 26 times more accurate than simple one. It is based on the ratio of the sample variances of individual estimates from two approaches.
 %\begin{CodeChunk}
@@ -872,7 +878,20 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-Due to the fact that the estimation procedures in \pkg{Rgbp} rely on derivatives, the package is extremely quick in fitting the available models. This makes the package ideal to be used in simulation studies where a hierarchical model needs to be fitted at every iteration and where running a Bayesian model via MCMC would be computationally impractical.
+As an alternative to other derivative based estimation methods such as MLE and REML \pkg{Rgbp} utilizes ADM. In addition to be benefits outlined in this paper ADM based models typically have non-random output and so the model can easily be reproduced and compared. ADM can also be used 
+
+\begin{enumerate}
+\item to initialize an MCMC to speed up time to convergence.
+\item to check the validity of the code of an MCMC program.
+\item as evaluated modules in object-oriented programming.
+\item for preliminary data analyses.
+\item as a demo that a particular prior gives adequate coverage.
+\item for computational speed.
+\item for frequentist procedure checking (via bootstrapping).
+\item for model checking.
+\item to see if there is any reason to develop and use a more precise shrinkage method.
+\item as an envelope for accept-reject and importance sampling possibly leading to higher acceptance ratios than standard envelopes. 
+\end{enumerate}
 
 \section[acknowledgments]{Acknowledgments}
 The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
