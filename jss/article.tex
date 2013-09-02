@@ -1,7 +1,8 @@
 \documentclass[article]{jss}
 
 %%uncomment line below for double-spacing
-%\linespread{1}
+\linespread{2}
+\setlength{\parskip}{1.5cm}%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -875,11 +876,13 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion}
-\pkg{Rgbp} is an R package for estimating and validating a two-level hierarchical model. The package aims to provide a procedure that is not only fast and easy to use but has good frequency properties and can be used in many scenarios for estimating point and interval estimates of true parameters. The package provides ``frequency method checking'' functionality to examine repeated sampling properties and test that the method is valid at given hyper-parameter values.
+\pkg{Rgbp} is an R package for estimating and validating two-level Gaussian, Poisson and Binomial hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``method checking'' functionality to examine repeated sampling properties and test that the method is valid at given hyper-parameter values.
+
+As an alternative to other derivative based estimation methods such as MLE and REML \pkg{Rgbp} provides point and interval estimates of true parameters using the ADM framework. Using the ADM framework in conjunction with the specified choice of priors safeguards from cases of overshrinkage and undercoverage that the aforementioned methods suffer from.
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-As an alternative to other derivative based estimation methods such as MLE and REML \pkg{Rgbp} utilizes ADM. In addition to be benefits outlined in this paper ADM based models typically have non-random output and so the model can easily be reproduced and compared. ADM can also be used 
+A benefit of \pkg{Rgbp} is that it produces non-random output, unlike most MCMC methods,  and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. Such as being used to
 
 \begin{enumerate}
 \item to initialize an MCMC to speed up time to convergence.
@@ -887,12 +890,16 @@ As an alternative to other derivative based estimation methods such as MLE and R
 \item as evaluated modules in object-oriented programming.
 \item for preliminary data analyses.
 \item as a demo that a particular prior gives adequate coverage.
-\item for computational speed.
 \item for frequentist procedure checking (via bootstrapping).
 \item for model checking.
 \item to see if there is any reason to develop and use a more precise shrinkage method.
-\item as an envelope for accept-reject and importance sampling possibly leading to higher acceptance ratios than standard envelopes. 
+
+%%these are more ADM than RGBP
+%%\item for computational speed.
+%%\item as an envelope for accept-reject and importance sampling possibly leading to higher acceptance ratios than standard envelopes. 
 \end{enumerate}
+
+\pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
 \section[acknowledgments]{Acknowledgments}
 The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
