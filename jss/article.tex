@@ -214,7 +214,7 @@ Once we make sure that the hierarchical modeling can be appropriate for our data
 From now on, the explanation will be based on Normal-Normal model because the idea can be easily applied to the other two models.
 
 \subsection{Pseudo-data Generation Process}
-Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we generated 500 $(=N_{sim}$) {\boldmath $\mu$}$_{(k\times1)}$'s, \emph{i.e.}, \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (\ref{normalprior}), where $A$ and $\beta$ are given. Then using (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}, $ where $i$ indicates the $i$-th simulation. 
+Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we generated 500 $(=N_{sim}$) {\boldmath $\mu$}$_{(k\times1)}$'s, \emph{i.e.}, \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (\ref{normalprior}), where $A$ and $\beta$ are given and the superscript $(i)$ indicates the $i$-th simulation. Then using (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$.
 
 \begin{figure}[h]
 \begin{center}
@@ -237,14 +237,14 @@ This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500
 
 Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$.
 
-So, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
+Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
 \begin{equation}
 \widehat{Var}(\bar{I}_{j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}(I^{(i)}_{j}-\bar{I}_{j})^{2},~ j=1, 2, \ldots, k.
 \end{equation}
 
 
 \subsubsection{Rao-Blackwellized Unbiased Coverage Estimates}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking more information (sufficient statistic) into consideration. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. 
+Rao-Blackwellization improves accuracy of an unbiased estimator by taking more information (sufficient statistic) into account. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta$), where $A$ and $\beta$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. 
 \begin{equation}\label{RB}
 \bar{I}_{RB, j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta),~ j=1, 2, \ldots, k.
 \end{equation}
@@ -488,7 +488,7 @@ R> pcv$se.coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance of RB unbiased coverage estimate is about 15 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 15,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
+Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 15 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 15,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
 
 For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
@@ -787,7 +787,7 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-It is evident in the shrinkage and 95\% interval plots in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
@@ -795,7 +795,7 @@ It is evident in the shrinkage and 95\% interval plots in Figure \ref{fig:baseba
 The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM suggests that in the long run their batting averages will shrink toward the expected prior means as outfielders (blue horizontal lines).
 
 
-As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. For reference, to do the method check at different true values additional arguments can be specified in the coverage function.
+As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -809,6 +809,9 @@ R> bcv <- coverage(b, nsim = 1000)
 \label{fig:baseball2}
 \end{center}
 \end{figure}
+
+For reference, to do the method check at different true values additional arguments can be specified in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the above code.
+
 
 Finally, in Figure \ref{fig:baseball2}, we see that the overall Rao-Blackwellized unbiased coverage estimate is 0.972 (across all the players), conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is valid.
 
@@ -882,7 +885,7 @@ As an alternative to other derivative based estimation methods such as MLE and R
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-A benefit of \pkg{Rgbp} is that it produces non-random output, unlike most MCMC methods,  and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. Such as being used to
+A benefit of \pkg{Rgbp} is that it produces non-random output, unlike most MCMC methods,  and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. Such as being used
 
 \begin{enumerate}
 \item to initialize an MCMC to speed up time to convergence.
@@ -890,7 +893,7 @@ A benefit of \pkg{Rgbp} is that it produces non-random output, unlike most MCMC 
 \item as evaluated modules in object-oriented programming.
 \item for preliminary data analyses.
 \item as a demo that a particular prior gives adequate coverage.
-\item for frequentist procedure checking (via bootstrapping).
+\item for frequentist procedure checking.
 \item for model checking.
 \item to see if there is any reason to develop and use a more precise shrinkage method.
 
