@@ -447,9 +447,9 @@ The following code provides 31 RB unbiased coverage estimates for each hospital.
 R> pcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.954 0.954 0.955 
-[13] 0.954 0.955 0.954 0.954 0.954 0.955 0.954 0.954 0.954 0.954 0.954 0.954 
-[25] 0.953 0.954 0.953 0.953 0.954 0.952 0.952
+ [1] 0.956 0.956 0.956 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.955 0.954 
+[13] 0.955 0.954 0.954 0.954 0.954 0.954 0.955 0.954 0.954 0.953 0.953 0.953
+[25] 0.954 0.954 0.954 0.953 0.953 0.953 0.952
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -459,9 +459,9 @@ And the code below calculates 31 simple unbiased coverage estimates for each hos
 R> pcv$coverageS
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.960 0.953 0.956 0.952 0.957 0.957 0.960 0.949 0.949 0.944 0.951 0.947 
-[13] 0.949 0.958 0.958 0.959 0.953 0.954 0.953 0.955 0.956 0.952 0.953 0.959 
-[25] 0.945 0.945 0.953 0.946 0.953 0.948 0.955
+ [1] 0.947 0.952 0.963 0.961 0.957 0.957 0.959 0.952 0.957 0.957 0.941 0.958 
+[13] 0.954 0.962 0.935 0.940 0.955 0.952 0.951 0.941 0.955 0.952 0.954 0.946 
+[25] 0.942 0.952 0.958 0.945 0.938 0.958 0.948
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -471,9 +471,9 @@ The function \code{coverage} also calculates the standard errors for each hospit
 R> pcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0016 0.0016 0.0014 0.0013 0.0013 0.0013 0.0013 0.0013 0.0013 0.0013 0.0012 
-[12] 0.0012 0.0012 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0011 0.0010
-[23] 0.0010 0.0010 0.0010 0.0009 0.0009 0.0008 0.0008 0.0007 0.0007
+ [1] 0.0017 0.0017 0.0014 0.0014 0.0014 0.0014 0.0014 0.0014 0.0013 0.0013 0.0013 
+[12] 0.0013 0.0012 0.0012 0.0012 0.0012 0.0011 0.0012 0.0011 0.0011 0.0011 0.0011
+[23] 0.0010 0.0011 0.0010 0.0010 0.0009 0.0009 0.0009 0.0007 0.0007
 \end{CodeOutput}
 \end{CodeChunk}
 Similarly, 31 standard errors for each simple unbiased coverage estimate are
@@ -482,13 +482,13 @@ Similarly, 31 standard errors for each simple unbiased coverage estimate are
 R> pcv$se.coverageS
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0062 0.0067 0.0065 0.0068 0.0064 0.0064 0.0062 0.0070 0.0070 0.0073 0.0068 
-[12] 0.0071 0.0070 0.0063 0.0063 0.0063 0.0067 0.0066 0.0067 0.0066 0.0065 0.0068
-[23] 0.0067 0.0063 0.0072 0.0072 0.0067 0.0072 0.0067 0.0070 0.0066
+ [1] 0.0071 0.0068 0.0060 0.0061 0.0064 0.0064 0.0063 0.0068 0.0064 0.0064 0.0075 
+[12] 0.0063 0.0066 0.0060 0.0078 0.0075 0.0066 0.0068 0.0068 0.0075 0.0066 0.0068 
+[23] 0.0066 0.0072 0.0074 0.0068 0.0063 0.0072 0.0076 0.0063 0.0070
 \end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 15 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 15,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
+Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 17 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
 
 For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
@@ -640,7 +640,7 @@ In addition, Rao-Blackwellized (RB) unbiased coverage estimate and its standard 
 R> gcv$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.964 0.958 0.964 0.960 0.956 0.959 0.958 0.966
+ [1] 0.966 0.959 0.967 0.960 0.959 0.962 0.960 0.966
 \end{CodeOutput}
 \end{CodeChunk}
 \begin{CodeChunk}
@@ -648,7 +648,7 @@ R> gcv$coverageRB
 R> gcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0014 0.0013 0.0016 0.0014 0.0014 0.0012 0.0012 0.0017
+ [1] 0.0013 0.0012 0.0013 0.0013 0.0011 0.0011 0.0010 0.0017
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -823,8 +823,8 @@ R> bcv$coverageRB
 \end{CodeInput}
 %$
 \begin{CodeOutput}
- [1] 0.973 0.973 0.974 0.971 0.971 0.973 0.972 0.973 0.972 0.973 0.971 0.973 
-[13] 0.971 0.972 0.974 0.972 0.972 0.973
+ [1] 0.972 0.973 0.973 0.973 0.972 0.972 0.972 0.972 0.973 0.972 0.973 0.972 
+[13] 0.973 0.973 0.971 0.973 0.971 0.973
 \end{CodeOutput}
 \end{CodeChunk}
 \begin{CodeChunk}
@@ -832,8 +832,8 @@ R> bcv$coverageRB
 R> bcv$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
- [1] 0.0010 0.0011 0.0011 0.0013 0.0012 0.0011 0.0012 0.0011 0.0012 0.0010 
-[11] 0.0013 0.0012 0.0013 0.0013 0.0010 0.0010 0.0010 0.0010
+ [1] 0.0015 0.0011 0.0012 0.0011 0.0015 0.0012 0.0012 0.0010 0.0011 0.0012 
+[11] 0.0010 0.0012 0.0010 0.0011 0.0013 0.0011 0.0013 0.0010
 \end{CodeOutput}
 \end{CodeChunk}
 
