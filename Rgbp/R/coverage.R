@@ -542,6 +542,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
   result2 <- round(rowMeans(coverageS, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
   se.cov2 <- round(sqrt(apply(coverageS, 1, var) / nsim), 4)
+  effective.n <- nsim - sum(is.na(coverageS[1, ]))
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
@@ -556,7 +557,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"), 
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True A =", round(A, 2)), 
                              paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -564,7 +565,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True r =", round(r, 2)), 
                              paste("Given True beta", 0 : (length(betas) - 1), "=", round(betas, 3)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -574,7 +575,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -582,7 +583,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -592,7 +593,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -600,7 +601,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -609,7 +610,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Gaussian"),
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True A =", round(A, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
@@ -617,7 +618,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial", "Poisson")
       legend("bottomleft", c(paste("Model: ", modelspec), 
                              "Red Line: RB coverage estimates",
-                             paste("# of Simulation per Unit: ", nsim),
+                             paste("# of Simulations per Unit: ", effective.n),
                              paste("Given True r =", round(r, 2)), 
                              paste("Known Prior Mean: ", round(priormeanused, 2)), 
                              paste("Overall Coverage =", avr.cov)))
