@@ -129,7 +129,10 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}$, $j=1, \ldots k$, $x_{j}$ is the $j$-th group's covariate vector ($m\times 1$), $m$ is the number of regression coefficients and both $\mathbf{\beta}$ and $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^{T}=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+
+
+
 \begin{equation} \label{normalpost}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})V_{j}~),
 \end{equation}
@@ -890,15 +893,13 @@ As an alternative to other derivative based estimation methods such as MLE and R
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-A benefit of \pkg{Rgbp} is that it produces non-random output and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. For example, convergence of an MCMC can be increased by using the point estimates from \pkg{Rgbp} to initialize the chain. 
+A benefit of \pkg{Rgbp} is that it produces non-random output and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been implemented correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus increasing time to convergence. Note, however, that this is only valid when the same model under both procedures is assumed. 
 
-Due to the speed and ease of use \pkg{Rgbp} can be used as a method of preliminary data analysis. The results of which may inform the statistician whether a more intensive (in terms of coding and computational time) but more precise method (such as MCMC) should be used. 
+Due to the speed and ease of use \pkg{Rgbp} can be utilized as a method of preliminary data analysis. The results of which may inform the statistician whether a more intensive (in terms of coding and computational time) but more precise method (such as MCMC) should be used. As the package assumes non-informative priors the results can be used as reference point to see whether implementing a more sophisticated model, perhaps with informative priors, should be used. 
 
 In addition to the built in ``method checking'' procedure the package can be used to undergo ``model checking''. For example, in GRIMM the point estimates from the package can be substituted into the marginal distribution \ref{normalmarginal} to check whether the data marginally follow this distribution. If certain modeling assumptions have been violated a more sophisticated model can be assumed and implemented by other means.
 
- to check the validity of the code of an MCMC program.
 
-as a demo that a particular prior gives adequate coverage. for frequentist procedure checking.
 
 % \pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
