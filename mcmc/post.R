@@ -1,7 +1,9 @@
 library(Rgbp)
-
-nits <- 1000
-results <- lapply(1:nits, function(s){load(file=paste("output/mcmcout",s,".RData", sep = ""));return(out)})
+file.names <- list.files("output/")
+results <- lapply(file.names, function(s){out <- NULL;try({load(paste("output/",s,sep=""))});return(out)})
+results <- results[!unlist(lapply(results, is.null))]
+nits <- length(results)
+print(nits)
 ind <- as.numeric(apply(do.call("rbind",lapply(results,function(x){x$coverage.ind})),2,mean))
 rb <- apply(do.call("rbind",lapply(results,function(x){x$coverage.RB})),2,mean)
 

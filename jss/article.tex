@@ -1,9 +1,9 @@
 \documentclass[article]{jss}
 
 %%uncomment line below for double-spacing
-\linespread{2}
-\setlength{\parskip}{1.5cm}%
-
+%\linespread{2}
+%\setlength{\parskip}{1.5cm}%
+\setlength\parindent{24pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,7 +133,10 @@ where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}$, $j=1, \ldots k$, $x_{j}$ is the $j$
 \begin{equation} \label{normalpost}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})V_{j}~),
 \end{equation}
-where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages.
+where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages. By integrating over $\mu_{j}$ for $j = 1 \ldots k$ a marginal distribution, useful for model checking (Section \ref{discussion}), can be derived
+\begin{equation} \label{normalmarginal}
+y_{j}\vert \beta, A \stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, V_{j} + A). 
+\end{equation}
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
 \code{gbp} is also able to build a Poisson-Gamma hierarchical model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group.
@@ -562,23 +565,7 @@ Summary for each unit (sorted by se):
 colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between variation ($A$) schools will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. 
-
-\begin{CodeChunk}
-\begin{CodeInput}
-R> plot(g)
-\end{CodeInput}
-\end{CodeChunk}
-
-\begin{figure}[h] 
-\begin{center}
-\includegraphics[width = 6in]{school1.png}
-\caption{Shrinkage plot and 95\% interval plot for 8 schools}
-\label{fig:8schoolsplot}
-\end{center}
-\end{figure}
-
-\pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}. Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
+This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between variation ($A$) schools will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -614,6 +601,24 @@ Regression Summary:
 beta0    8.168 5.73 1.425 0.154
 \end{CodeOutput}
 \end{CodeChunk}
+The summary provides results regarding the second level hierarchy parameters. It can be seen that the estimate of the second level mean, \code{beta0}, is not significantly different from 0 suggesting that there was no effect of the coaching program on SAT math scores. 
+
+
+\pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}. Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small.
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(g)
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{figure}[h] 
+\begin{center}
+\includegraphics[width = 6in]{school1.png}
+\caption{Shrinkage plot and 95\% interval plot for 8 schools}
+\label{fig:8schoolsplot}
+\end{center}
+\end{figure}
 
 
 The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example). We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
@@ -878,31 +883,24 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
-\section[Discussion]{Discussion}
+\section[Discussion]{Discussion and Summary} \label{discussion}
 \pkg{Rgbp} is an R package for estimating and validating two-level Gaussian, Poisson and Binomial hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``method checking'' functionality to examine repeated sampling properties and test that the method is valid at given hyper-parameter values.
 
-As an alternative to other derivative based estimation methods such as MLE and REML \pkg{Rgbp} provides point and interval estimates of true parameters using the ADM framework. Using the ADM framework in conjunction with the specified choice of priors safeguards from cases of overshrinkage and undercoverage that the aforementioned methods suffer from.
+As an alternative to other derivative based estimation methods such as MLE and REML \pkg{Rgbp} provides point and interval estimates of true parameters using the ADM framework. Using the ADM framework in conjunction with the specified choice of priors safeguards from cases of overshrinkage and undercoverage that the aforementioned methods suffer from. % (TODO: need citation).
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-A benefit of \pkg{Rgbp} is that it produces non-random output, unlike most MCMC methods,  and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. Such as being used
+A benefit of \pkg{Rgbp} is that it produces non-random output and so results can easily be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid or a tool in a broader estimation procedure. For example, convergence of an MCMC can be increased by using the point estimates from \pkg{Rgbp} to initialize the chain. 
 
-\begin{enumerate}
-\item to initialize an MCMC to speed up time to convergence.
-\item to check the validity of the code of an MCMC program.
-\item as evaluated modules in object-oriented programming.
-\item for preliminary data analyses.
-\item as a demo that a particular prior gives adequate coverage.
-\item for frequentist procedure checking.
-\item for model checking.
-\item to see if there is any reason to develop and use a more precise shrinkage method.
+Due to the speed and ease of use \pkg{Rgbp} can be used as a method of preliminary data analysis. The results of which may inform the statistician whether a more intensive (in terms of coding and computational time) but more precise method (such as MCMC) should be used. 
 
-%%these are more ADM than RGBP
-%%\item for computational speed.
-%%\item as an envelope for accept-reject and importance sampling possibly leading to higher acceptance ratios than standard envelopes. 
-\end{enumerate}
+In addition to the built in ``method checking'' procedure the package can be used to undergo ``model checking''. For example, in GRIMM the point estimates from the package can be substituted into the marginal distribution \ref{normalmarginal} to check whether the data marginally follow this distribution. If certain modeling assumptions have been violated a more sophisticated model can be assumed and implemented by other means.
 
-\pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
+to initialize an MCMC to speed up time to convergence. to check the validity of the code of an MCMC program.
+
+as a demo that a particular prior gives adequate coverage. for frequentist procedure checking.
+
+% \pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
 \section[acknowledgments]{Acknowledgments}
 The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.

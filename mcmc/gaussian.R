@@ -1,4 +1,5 @@
 library(rstan)
+set_cppo("fast")
 
 args <- commandArgs(TRUE)
 if (length(args)==0){
@@ -7,7 +8,9 @@ if (length(args)==0){
   s <- as.numeric(args[1])
 }
 print(paste("Core number",s, "started at", date()))
-
+s <- sample(1:1000000,1)
+if(file.exists(paste("output/mcmcout",s,".RData", sep = "")))
+  stop("file exists")
 
 rstan_schools <- function(y, sigma){
   schools_code <- '

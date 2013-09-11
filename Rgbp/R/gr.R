@@ -81,18 +81,15 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
 	
   ## calculate CIs using skewed normal
   ## TODO: use apply not loop
-  
-  tmp <- lapply(1:length(thetahat), function(i){
-    snparam <- as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))
-    row <- c(qsn((1-Alpha)/2,snparam[1], snparam[2], snparam[3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[1], snparam[2], snparam[3], engine = "biv.nt.prob"))
-    return(row)
-  })
+
+  snparam <- lapply(1:length(thetahat), function(i){as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))})
+  tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
   skewedmat <- as.matrix(do.call("rbind", tmp))
 
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1], Alpha = Alpha, weight = NA)
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1], Alpha = Alpha, weight = NA, snparam = snparam)
   return(output)
 }
 
