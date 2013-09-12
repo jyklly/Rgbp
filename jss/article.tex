@@ -570,7 +570,7 @@ Summary for each unit (sorted by se):
 colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between variation ($A$) schools will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
+This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between school variation ($A$) will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -626,7 +626,7 @@ R> plot(g)
 \end{figure}
 
 
-The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example). We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
+The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) unless these are specified. We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -782,7 +782,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-From the output summary we see that the two prior means distinguishing outfielders from other positions are statistically significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
+From the output of \code{summary} we see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -797,12 +797,12 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the short red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM suggests that in the long run their batting averages will shrink toward the expected prior means as outfielders (blue horizontal lines).
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. Their observed batting averages close to their lower limits of interval estimates tells us it can happen by their bad luck. RTTM suggests that in the long run their batting averages will shrink towards the expected prior mean as outfielders (blue horizontal lines).
 
 
 As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. 
