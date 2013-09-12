@@ -75,7 +75,7 @@
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 \pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
-This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model. Frequentists will have a procedure that meets or exceeds their confidence specification and repeated sampling.
+This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model and frequentists will have a procedure with good repeated sampling properties.
 
 
 %\section[Feasible Data Types]{Three Feasible Types of Data }
@@ -242,7 +242,8 @@ Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th grou
 
 This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given specific values of $A$ and $\beta$. 
 
-Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$. For reference, even if we sample $L$ datasets per one parameter set, $L\cdot N_{sim}$ indicators $I^{(i, l)}_{j}, i = 1, \ldots, N_{sim}, l = 1, \ldots, L$, have still $iid$ Bernoulli($p_{cov, j}$) distribution.
+Each indicator has an independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$. 
+%For reference, even if we sample $L$ datasets per one parameter set, $L\cdot N_{sim}$ indicators $I^{(i, l)}_{j}, i = 1, \ldots, N_{sim}, l = 1, \ldots, L$, have still $iid$ Bernoulli($p_{cov, j}$) distribution.
 
 Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
 \begin{equation}\label{svar}
@@ -626,7 +627,7 @@ R> plot(g)
 \end{figure}
 
 
-The frequency method checking, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) unless these are specified. We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
+The frequency method checking, assuming the model is correct, generates new pseudo-data from our assumed model. Unless otherwise specified, the procedure fixes the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) and then simulates ``true'' $\theta_j$ for each group $j$. The model is then estimated and this is repeated an \code{nsim} number of times to estimate the coverage probabilities of the procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -802,7 +803,7 @@ It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. It can be due to their bad luck because their observed batting averages are close to their lower bounds of interval estimates (left tail area). RTTM suggests that their batting averages will shrink towards the expected prior mean of outfielders (0.310) in the long run.
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. This can likely be attributed to their bad luck because their observed batting averages are close to the lower bounds of their interval estimates. RTTM suggests that their batting averages will shrink towards the expected prior mean of outfielders (0.310) in the long run.
 
 
 As in the previous examples in Section \ref{sec:ex:hosp} and \ref{sec:ex:8schools}, in order to check the level of trust in these interval estimates, we can proceed to frequency method checking by assuming the estimates, 112.95 for $\hat{r}$ and (-1.194, ~0.389) for $\hat{\beta}'$, are given values. 
@@ -901,7 +902,7 @@ Due to it's speed and ease of use, \pkg{Rgbp} can be used for as a method of pre
 
 %As the package assumes non-informative priors the results can be used as reference point to see whether implementing a more sophisticated model, perhaps with informative priors, should be used. 
 
-In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian model, the point estimates of $A$ and $\beta$ from the package are substituted into the marginal distribution in (\ref{normalmarginal}). And then we can check whether this maginal distribution explains the data better than the observed data distribution in (\ref{normalobs}). If better, e.g. in terms of data variation, we can benefit from the two-level hierarchical modeling on the dataset considered.
+In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in (\ref{normalmarginal}). By substituting the point estimates of $A$ and $\beta$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
 
 % \pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
