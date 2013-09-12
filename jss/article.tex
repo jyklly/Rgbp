@@ -20,7 +20,7 @@
 
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
+\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for each group's parameter, $\mu_{j}$ for Gaussian, $\lambda_{j}$ for Poisson, or $p_{j}$ for Binomial model, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
 \Keywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage}
 \Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
 %% at least one keyword must be supplied
@@ -73,7 +73,7 @@
 
 \section[introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of the true parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
+\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
 This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model. Frequentists will have a procedure that meets or exceeds their confidence specification and repeated sampling.
 
@@ -100,7 +100,7 @@ This package will be useful for frequentists and Bayesians alike. Bayesians are 
 %R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
 %\end{CodeInput}
 %\end{CodeChunk}
-%Considering the type of data, it is reasonable to assume the number of deaths in each hospital follow independent Poisson distributions given an unknown true rate parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ where, for each $j$, $n_{j}$ can be interpreted as an exposure (not necessarily an integer) and $\lambda_{j}$ as the true death rate per exposure. This data set is also included in the package and can be called by `\code{data(hospital)}' on \proglang{R}.
+%Considering the type of data, it is reasonable to assume the number of deaths in each hospital follow independent Poisson distributions given an unknown true rate parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ where, for each $j$, $n_{j}$ can be interpreted as an exposure (not necessarily an integer) and $\lambda_{j}$ as  death rate per exposure. This data set is also included in the package and can be called by `\code{data(hospital)}' on \proglang{R}.
 
 %\subsection{Binomial: 18 Baseball Hitters}
 %The following dataset contains information on the batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}. In addition one covariate relating to the position each player was playing was observed and for illustrative purposes, we transform this variable into a binary indicator (1 if a player was an outfielder and 0 otherwise).
@@ -129,7 +129,7 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} = x^{T}_{j} \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^{T}=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^{T}=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
 
 
 
@@ -142,7 +142,7 @@ y_{j}\vert \beta, A \stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, V_{j} + A).
 \end{equation}
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
-\code{gbp} is also able to build a Poisson-Gamma hierarchical model. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group.
+\code{gbp} is also able to build a Poisson-Gamma hierarchical model. For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group, where  $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. For this Poisson model $n_{j}$ can be interpreted as the exposure of the $j$-th group,  not necessarily an interger. The notation $r$ represents the amount of prior information as $n_{j}$ does the amount of observed information. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. 
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
@@ -150,7 +150,7 @@ z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(r\lambda_{0j})\sim \textrm{Gamma} \left[\lambda_{0j}, ~\frac{\lambda_{0j}}{r} \right],
 \end{equation}
 
-where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, k$, with two unknown hyper-parameters, $\beta$ and $r$. The posterior distribution of this Poisson-Gamma model given these hyper-parameters is
+where $\log(\lambda_{0j}) =x_{j}'\beta$, $j=1, \ldots, k$, with two unknown hyper-parameters, $\beta_{(m\times1)}$ and $r$. The posterior distribution of this Poisson-Gamma model given these hyper-parameters is
 \begin{equation} \label{gammapost}
 \lambda_{j}\vert \textbf{y}, \beta, r \stackrel{ind}{\sim}\frac{1}{r + n_{j}}\textrm{Gamma}(r\lambda_{0j} + n_{j}y_{j})\sim\textrm{Gamma} \left[\lambda^{\ast}_{j},~\frac{\lambda^{\ast}_{j}}{r+n_{j}} \right],
 \end{equation}
@@ -161,7 +161,7 @@ where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0j}$ and   $B_{j
 Note that the variance in (\ref{gammaprior}) is linear in the mean, whereas a slightly different Poisson-Gamma specification \citep{1997} has been used elsewhere e.g. that makes the variance in (\ref{gammaprior}) quadratic.
 
 \subsection[Binomial-Beta]{Binomial-Beta (``b''=Binomial data)}
-Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, a square bracket below indicates [mean, variance] of a distribution.
+Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials of the $j$-th group and the square bracket [, ] below indicates [mean, variance] of a distribution.
 \begin{equation}
 z_{j} \vert p_{j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
 \end{equation}
@@ -169,7 +169,7 @@ z_{j} \vert p_{j}\stackrel{ind}{\sim}\textrm{Binomial}(n_{j}, ~p_{j}),
 p_{j} \vert \beta, r\stackrel{ind}{\sim}\textrm{Beta}(rp_{0j},~ r(1-p_{0j}))\sim \textrm{Beta} \left[p_{0j}, ~\frac{p_{0j}(1-p_{0j})}{r + 1} \right],
 \end{equation}
 
-where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, k$ and $\beta$ and $r$ are two unknown hyper-parameters. Then corresponding posterior distribution given  $\beta$ and $r$ is
+where $\log(\frac{p_{0j}}{1-p_{0j}}) =x_{j}'\beta, ~j=1, \ldots, k$ and $\beta_{(m\times1)}$ and $r$ are two unknown hyper-parameters. Then corresponding posterior distribution given  $\beta_{(m\times1)}$ and $r$ is
 \begin{equation} \label{betapost}
 p_{j}\vert \textbf{y}, \beta, r \stackrel{ind}{\sim}\textrm{Beta}(rp_{0j}+n_{j}y_{j},~r(1-p_{0j})+n_{j}(1-y_{j}))\sim\textrm{Beta}\bigg[p^{\ast}_{j},~ \frac{p^{\ast}_{j}(1-p^{\ast}_{j})}{r+n_{j}+1}\bigg],
 \end{equation}
@@ -182,7 +182,7 @@ A hyper-prior distribution is a distribution assigned to the second-level parame
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of the true parameters $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
+where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of the parameters $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
 
 
 
@@ -206,13 +206,14 @@ Var(\mu_{j}\vert \textbf{y}) & = & E(Var(\mu_{j}\vert \textbf{y}, \beta, A)\vert
 where both $E(\mu_{j}\vert \textbf{y}, \beta, A)$ and $Var(\mu_{j}\vert \textbf{y}, \beta, A)$ are linear functions of the shrinkage factors as specified in (\ref{normalpost}). We then estimate $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$ by plugging-in approximately estimated two posterior moments of shrinkage factors.
 
 \subsection[Approximation to Posterior Distribution by Moment Matching]{Approximation to Posterior Distribution via Matching Moments}
-After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, $\pi(p_{j}\vert \textbf{y})$, with a Beta distribution and for the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \textbf{y})$ with a Gamma distribution. Finally for the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \textbf{y})$ with a skewed-Normal distribution \citep{sn2013}. 
+After estimating the two posterior moments, for example $E(\mu_{j}\vert \textbf{y})$ and $Var(\mu_{j}\vert \textbf{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \textbf{y})$ with a skewed-Normal distribution \citep{sn2013}. For the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \textbf{y})$ with a Gamma distribution and finally for the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, $\pi(p_{j}\vert \textbf{y})$, with a Beta distribution.
+
 
 \section[Frequency Method Checking]{Frequency Method Checking}
 Like the two sides of the same coin, checking a statistical model comes hand in hand with fitting the model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
 
 
-There are two kinds of model justification processes; one is a model checking and the other is a method checking. The model checking is for the justification of the hierarchical model on a specific dataset. One possible question is, ``Can this dataset benefit from such a hierarchical modeling?'' \cite{modelchecking1996} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and Poisson hierarchical model could successfully account for such additional variation.
+There are two kinds of model justification processes; one is a model checking and the other is a method checking. The model checking is for the justification of the hierarchical model on a specific dataset. One possible question is, ``Can this dataset benefit from such a hierarchical modeling?'' \cite{modelchecking1996} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and two-level Poisson hierarchical model could successfully account for such additional variation.
 
 
 Once we make sure that the hierarchical modeling can be appropriate for our data, the following question will be about the validity of interval estimates, the final product of this hierarchical modeling. ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' \pkg{Rgbp} has a function called \code{coverage} to answer this question and it comprises of two parts, generating pseudo-datasets and estimating coverage probabilities.
@@ -220,7 +221,7 @@ Once we make sure that the hierarchical modeling can be appropriate for our data
 From now on, the explanation will be based on Normal-Normal model because the idea can be easily applied to the other two models.
 
 \subsection{Pseudo-data Generation Process}
-Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each true parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate true parameters. Suppose we generated 500 $(=N_{sim}$) {\boldmath $\mu$}$_{(k\times1)}$'s, \emph{i.e.}, \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (\ref{normalprior}), where $A$ and $\beta$ are given and the superscript $(i)$ indicates the $i$-th simulation. Then using (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$.
+Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate as many parameters as we want. Suppose we generated 500 $(=N_{sim}$) {\boldmath $\mu$}$_{(k\times1)}$'s, \emph{i.e.}, \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ from the prior distribution in (\ref{normalprior}), where values of $A$ and $\beta$ are specifically given and the superscript $(i)$ indicates the $i$-th simulation. Then using the distribution of observed data in (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, 500\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$. Note that we generate one dataset per one parameter set.
 
 \begin{figure}[h]
 \begin{center}
@@ -231,7 +232,7 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \end{figure}
 
 \subsection{Coverage Estimation Process}
-Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but \code{coverage} displays only Rao-Blackwellized one.
+Next, \code{coverage} fits the Normal-Normal model 500 times using the 500 pseudo-datasets in order to obtain 500$\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, 500$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but the function \code{coverage} in \pkg{Rgbp} displays only the Rao-Blackwellized one.
 
 \subsubsection{Simple Unbiased Coverage Estimates}
 Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. 
@@ -255,9 +256,9 @@ Rao-Blackwellization improves accuracy of an unbiased estimator by taking more i
 \bar{I}_{RB, j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta),~ j=1, 2, \ldots, k.
 \end{equation}
 
-The expectation in (\ref{RB}) is the same as Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. 
+The expectation part in (\ref{RB}) is Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \beta)$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \beta$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\mathbf{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\beta$ are known. 
 
-For example, we estimate the first group's coverage probability (that depend on specific $A$ and $\beta$) by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased for $p_{cov, 1}$ but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
+For example, we estimate the first group's true coverage probability $p_{cov, 1}$ (that depend on specific values of $A$ and $\beta$) by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
 
 Under the setting where one dataset ($\mathbf{y}^{(i)}_{(k\times1)}$) is simulated per one true parameter set ({\boldmath $\mu$}$^{(i)}_{(k\times1)})$, the unbiased variance estimator for Var($\bar{I}_{RB, j}$) follows.
 \begin{equation}
@@ -273,7 +274,7 @@ In this example we adopt the perspective of a person living in the state of New 
 
 For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($\textbf{z}_{(31\times1)}$) for a specified period after CABG surgeries and total number of patients ($\textbf{n}_{(31\times1)}$) receiving CABG surgeries in each hospital. For reference, caseloads ($n_{j}$) can be interpreted as exposures, not necessarily integers. These data can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
 
-%For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) for a specified period after CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital.  Suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death proportion for each hospital so that one can evaluate the hospital reliabilities. 
+%For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) for a specified period after CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital.  Suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of   for each hospital so that one can evaluate the hospital reliabilities. 
 
 
 %These data, $\textbf{z}_{(31\times1)}$ and $\textbf{n}_{(31\times1)}$, can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
@@ -298,13 +299,13 @@ R> n <- hospitals$n
 \end{CodeChunk}
 
 
-In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death proportion for each hospital so that one can evaluate the hospital reliabilities. 
+In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death rate ($\lambda_{j}$) for each hospital so that one can evaluate the hospital reliabilities. 
 
 
-The independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively big. 
+The independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively large. 
 
 
-Next, \code{gbp} will help us fit the Poisson hierarchical model with the Gamma conjugate prior distribution as the NY state-level population distribution of the true death rates ($\lambda_{j}$) whose mean is 0.030 ($\lambda_{0}=0.030$). For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression.
+Next, \code{gbp} fits the Poisson hierarchical model with the Gamma conjugate prior distribution as the NY state-level population distribution of the death rates whose mean is 0.030 ($\lambda_{0}=0.030$). For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean via log-linear regression.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
@@ -348,13 +349,14 @@ Summary for each unit (sorted by n):
 colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 \end{CodeOutput}
 \end{CodeChunk}
+
 For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$), as shown above.
 
 
-The output contains information about observed death ratios ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$, 2.5\% percentiles of posterior distributions if 95\% confidence level is given), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds  of interval estimates ($\hat{\lambda}_{j, upp}$, 97.5\% percentiles of posterior distributions), and standard deviations of posterior distributions ($sd(\lambda_{j}\vert \textbf{y})$).
+The output contains information about observed death rates ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$, 2.5\% percentiles of posterior distributions if 95\% confidence level is given), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds  of interval estimates ($\hat{\lambda}_{j, upp}$, 97.5\% percentiles of posterior distributions), and standard deviations of posterior distributions ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.030$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the second-level information.
+As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.030$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the NY state-level (second-level) information.
 
 
 A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. When we do not know the prior mean in advance, unlike this hospital problem, \code{gbp} always fits the natural link, \emph{i.e.} a linear regression for the Normal model, a log-linear regression for the Poisson model, and a logistic regression for the Binomial model.
@@ -402,27 +404,27 @@ R> plot(p)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death ratio is not actually safer than seemingly the second safest hospital. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death rate is not actually safer than seemingly the second safest hospital. 
 
 
-Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the true death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
+Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
 
 
 But the point estimates are not enough to evaluate hospital reliabilities because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
 
-This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hopitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance.
+This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hopitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
 
-%and What happened is that Since the 23rd hospital has the lowest upper bound for the true death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for the true death rate is lower than the 8th hospital's one.
+%and What happened is that Since the 23rd hospital has the lowest upper bound for  death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for  death rate is lower than the 8th hospital's one.
 
 
 %From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow relatively less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
 
-%provides one more point, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of the true death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
+%provides one more point, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of  death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
 
 
 % Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
-Based on the point and interval estimates, the 31st hospital seems the most reliable one among all the candidates. But when fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, We also could try any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
+But when fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, we can designate any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
 
 
 
@@ -500,7 +502,7 @@ For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
 
 
-%These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when the true parameter value ($r$) varies.
+%These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when  parameter value ($r$) varies.
 
 %\begin{CodeChunk}
 %\begin{CodeInput}
@@ -518,7 +520,7 @@ For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.
 %\end{center}
 %\end{figure}
 
-%We plotted \code{cov.save} on \code{shr}, connecting dots (coverage %probabilities). This plot shows that the estimated shrinkages are at least %0.947 (under 95\% only at one shrinkage value, 0.01) on the tried range %of true shrinkage values, slightly deviating from the definition of 95\% %confidence interval. Note that our model is approximating the true %distribution of shrinkage by ADM (see 4.2). 
+%We plotted \code{cov.save} on \code{shr}, connecting dots (coverage %probabilities). This plot shows that the estimated shrinkages are at least %0.947 (under 95\% only at one shrinkage value, 0.01) on the tried range %of true shrinkage values, slightly deviating from the definition of 95\% %confidence interval. Note that our model is approximating  %distribution of shrinkage by ADM (see 4.2). 
 
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 
