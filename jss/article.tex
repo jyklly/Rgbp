@@ -129,7 +129,7 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^{T}=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}'=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
 
 
 
@@ -242,7 +242,7 @@ Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th grou
 
 This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given specific values of $A$ and $\beta$. 
 
-Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$.
+Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$. For reference, even if we sample $L$ datasets per one parameter set, $L\cdot N_{sim}$ indicators $I^{(i, l)}_{j}, i = 1, \ldots, N_{sim}, l = 1, \ldots, L$, have still $iid$ Bernoulli($p_{cov, j}$) distribution.
 
 Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
 \begin{equation}\label{svar}
@@ -437,7 +437,7 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 3.5in]{hospital2.png}
+\includegraphics[width = 3in]{hospital2.png}
 \caption{Coverage plot via frequency method checking for 31 hospitals}
 \label{fig:hospitalcoverage}
 \end{center}
@@ -570,7 +570,7 @@ Summary for each unit (sorted by se):
 colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between variation ($A$) schools will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
+This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between school variation ($A$) will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -626,7 +626,7 @@ R> plot(g)
 \end{figure}
 
 
-The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example). We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
+The frequency method checking, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) unless these are specified. We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -635,7 +635,7 @@ R> gcv <- coverage(g, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 3.5in]{school2.png}
+\includegraphics[width = 3in]{school2.png}
 \caption{Coverage plot via frequency method checking for 8 schools}
 \label{fig:schoolcoverage}
 \end{center}
@@ -782,7 +782,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-From the output summary we see that the two prior means distinguishing outfielders from other positions are statistically significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
+From the output of \code{summary} we see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -797,15 +797,15 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the short red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. RTTM suggests that in the long run their batting averages will shrink toward the expected prior means as outfielders (blue horizontal lines).
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. It can be due to their bad luck because their observed batting averages are close to their lower bounds of interval estimates (left tail area). RTTM suggests that their batting averages will shrink towards the expected prior mean of outfielders (0.310) in the long run.
 
 
-As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. 
+As in the previous examples in Section \ref{sec:ex:hosp} and \ref{sec:ex:8schools}, in order to check the level of trust in these interval estimates, we can proceed to frequency method checking by assuming the estimates, 112.95 for $\hat{r}$ and (-1.194, ~0.389) for $\hat{\beta}'$, are given values. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -814,13 +814,13 @@ R> bcv <- coverage(b, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 3.5in]{baseball2.png}
+\includegraphics[width = 3in]{baseball2.png}
 \caption{Coverage plot via frequency method checking for 18 players}
 \label{fig:baseball2}
 \end{center}
 \end{figure}
 
-For reference, to do the method check at different true values additional arguments can be specified in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the above code.
+For reference, to do the frequency method checking at different true values, we need to specify additional arguments in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)}.
 
 
 Finally, in Figure \ref{fig:baseball2}, we see that the overall Rao-Blackwellized unbiased coverage estimate is 0.972 (across all the players), conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is valid.
@@ -889,19 +889,19 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 %The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion and Summary} \label{discussion}
-\pkg{Rgbp} is an R package for estimating and validating two-level Gaussian, Binomial and Poisson hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``method checking'' functionality to examine repeated sampling properties and to test that the method is valid at specified hyper-parameter values.
+\pkg{Rgbp} is an R package for estimating and validating two-level Gaussian, Binomial and Poisson hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``frequency method checking'' functionality to examine repeated sampling properties and to test that the method is valid at specified hyper-parameter values.
 
-As an alternative to other derivative based estimation methods such as MLE and REML, \pkg{Rgbp} provides point and interval estimates of parameters using ADM. Using the ADM approach, with our specified choice of priors, protects from cases of overshrinkage and undercoverage from which the aforementioned methods suffer from. % (TODO: need citation).
+As an alternative to other maximization based estimation methods such as MLE and REML, \pkg{Rgbp} provides point and interval estimates of parameters via ADM. Using the ADM approach, with our specified choice of priors, protects from cases of overshrinkage and undercoverage from which the aforementioned methods suffer from \citep{accuracy1988}.
 
 %In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
-A benefit of \pkg{Rgbp} is that it produces non-random output and so results easily can be reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
+A benefit of \pkg{Rgbp} is that it produces non-random output and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
 
-Due to it's speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell the statistician whether a more intensive (in terms of implementation and computational time) but more precise method (such as MCMC) is needed. 
+Due to it's speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
 
 %As the package assumes non-informative priors the results can be used as reference point to see whether implementing a more sophisticated model, perhaps with informative priors, should be used. 
 
-In addition to the built in ``method checking'' procedure the package can be used to undergo ``model checking''. For example, in GRIMM, the point estimates from the package can be substituted into the marginal distribution in (\ref{normalmarginal}) to check whether the data marginally follow this distribution.
+In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian model, the point estimates of $A$ and $\beta$ from the package are substituted into the marginal distribution in (\ref{normalmarginal}). And then we can check whether this maginal distribution explains the data better than the observed data distribution in (\ref{normalobs}). If better, e.g. in terms of data variation, we can benefit from the two-level hierarchical modeling on the dataset considered.
 
 % \pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
