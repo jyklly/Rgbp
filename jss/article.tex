@@ -121,7 +121,7 @@ A two-level or multilevel model is a powerful tool for exploring the hierarchica
 \code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level parameters. The \code{gbp} function allows users to choose one of three types of hierarchical models, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
 \subsection[Normal-Normal]{Normal-Normal (``g''=Gaussian data)}
-The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
+The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
 \begin{equation}\label{normalobs}
 y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \end{equation}
@@ -245,7 +245,7 @@ This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500
 Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$.
 
 Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
-\begin{equation}
+\begin{equation}\label{svar}
 \widehat{Var}(\bar{I}_{j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}(I^{(i)}_{j}-\bar{I}_{j})^{2},~ j=1, 2, \ldots, k.
 \end{equation}
 
@@ -261,7 +261,7 @@ The expectation part in (\ref{RB}) is Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_
 For example, we estimate the first group's true coverage probability $p_{cov, 1}$ (that depend on specific values of $A$ and $\beta$) by $\frac{1}{500}\sum_{i=1}^{500}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \beta)$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$.
 
 Under the setting where one dataset ($\mathbf{y}^{(i)}_{(k\times1)}$) is simulated per one true parameter set ({\boldmath $\mu$}$^{(i)}_{(k\times1)})$, the unbiased variance estimator for Var($\bar{I}_{RB, j}$) follows.
-\begin{equation}
+\begin{equation}\label{RBvar}
 \widehat{Var}(\bar{I}_{RB, j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}\bigg(E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta)-\bar{I}_{RB, j}\bigg)^{2},~ j=1, 2, \ldots, k.
 \end{equation}
 
@@ -461,7 +461,7 @@ R> pcv$coverageRB
 \end{CodeOutput}
 \end{CodeChunk}
 
-And the code below calculates 31 simple unbiased coverage estimates for each hospital.
+And the code below shows 31 simple unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$coverageS
@@ -473,7 +473,7 @@ R> pcv$coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-The function \code{coverage} also calculates the standard errors for each hospital's RB unbiased coverage estimate defined as the square root of $S^{2}_{RB, j}/N_{sim}$, where $S^{2}_{RB, j}$ is the sample variance of 1,000 RB unbiased coverage estimates for the $j$-th hospital. The following code provides 31 standard errors.
+The function \code{coverage} also calculates the standard errors for each hospital's RB unbiased coverage estimate defined in (\ref{RBvar}). The following code provides 31 standard errors for RB estimates.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$se.coverageRB
@@ -484,7 +484,7 @@ R> pcv$se.coverageRB
 [23] 0.0010 0.0011 0.0010 0.0010 0.0009 0.0009 0.0009 0.0007 0.0007
 \end{CodeOutput}
 \end{CodeChunk}
-Similarly, 31 standard errors for each simple unbiased coverage estimate are
+Similarly, 31 standard errors for each simple unbiased coverage estimate defined in (\ref{svar}) are
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$se.coverageS
@@ -496,7 +496,7 @@ R> pcv$se.coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 17 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital.
+Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 17 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
 
 For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
 % For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
