@@ -129,7 +129,7 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^{T}=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}'=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. Both $\mathbf{\beta}_{(m\times1)}$ and the second-level variance $A$ are unknown. Note that if there is no covariate then $x_{j}=1$ just for an intercept term ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
 
 
 
@@ -626,7 +626,7 @@ R> plot(g)
 \end{figure}
 
 
-The method check, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) unless these are specified. We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
+The frequency method checking, assuming the model is correct, generates new pseudo-data from our assumed model. It starts by fixing the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\beta}_0$ in this example) unless these are specified. We then simulate ``true'' $\theta_j$ for each group $j$ and re-fit the model 1,000 times to estimate the coverage probabilities of our procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -802,10 +802,10 @@ It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. Their observed batting averages close to their lower limits of interval estimates tells us it can happen by their bad luck. RTTM suggests that in the long run their batting averages will shrink towards the expected prior mean as outfielders (blue horizontal lines).
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. It can be due to their bad luck because their observed batting averages are close to their lower bounds of interval estimates (left tail area). RTTM suggests that their batting averages will shrink towards the expected prior mean of outfielders (0.310) in the long run.
 
 
-As in the previous examples in Sections \ref{sec:ex:hosp} and \ref{sec:ex:8schools} to check the level of trust in these interval estimates a method check can be undertaken by assuming the estimates, $\hat{r}$ (=112.95) and $\hat{\beta}~(=(-1.194, ~0.389)^{T})$, are true values. 
+As in the previous examples in Section \ref{sec:ex:hosp} and \ref{sec:ex:8schools}, in order to check the level of trust in these interval estimates, we can proceed to frequency method checking by assuming the estimates, 112.95 for $\hat{r}$ and (-1.194, ~0.389) for $\hat{\beta}'$, are given values. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -820,7 +820,7 @@ R> bcv <- coverage(b, nsim = 1000)
 \end{center}
 \end{figure}
 
-For reference, to do the method check at different true values additional arguments can be specified in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)} instead of the above code.
+For reference, to do the frequency method checking at different true values, we need to specify additional arguments in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)}.
 
 
 Finally, in Figure \ref{fig:baseball2}, we see that the overall Rao-Blackwellized unbiased coverage estimate is 0.972 (across all the players), conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is valid.
