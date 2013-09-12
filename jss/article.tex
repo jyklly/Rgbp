@@ -242,7 +242,7 @@ Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th grou
 
 This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{500}\sum_{i=1}^{500}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, 500,$ given specific values of $A$ and $\beta$. 
 
-Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$.
+Each indicator has the independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\beta$. For reference, even if we sample $L$ datasets per one parameter set, $L\cdot N_{sim}$ indicators $I^{(i, l)}_{j}, i = 1, \ldots, N_{sim}, l = 1, \ldots, L$, have still $iid$ Bernoulli($p_{cov, j}$) distribution.
 
 Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
 \begin{equation}\label{svar}
@@ -437,7 +437,7 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 3.5in]{hospital2.png}
+\includegraphics[width = 3in]{hospital2.png}
 \caption{Coverage plot via frequency method checking for 31 hospitals}
 \label{fig:hospitalcoverage}
 \end{center}
@@ -635,7 +635,7 @@ R> gcv <- coverage(g, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 3.5in]{school2.png}
+\includegraphics[width = 3in]{school2.png}
 \caption{Coverage plot via frequency method checking for 8 schools}
 \label{fig:schoolcoverage}
 \end{center}
@@ -814,7 +814,7 @@ R> bcv <- coverage(b, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 3.5in]{baseball2.png}
+\includegraphics[width = 3in]{baseball2.png}
 \caption{Coverage plot via frequency method checking for 18 players}
 \label{fig:baseball2}
 \end{center}
