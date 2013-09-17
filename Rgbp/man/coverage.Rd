@@ -31,20 +31,20 @@
   on the first-level parameter.
  
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal 2-level model. \eqn{\sigma^{2}_{j}}{\sigma_j^2} below is assumed to be known or to be accurately estimated (\eqn{s^{2}_{j}}{s^2}) and subscript \emph{j} indicates \emph{j}-th group in a dataset.
-  \deqn{(y_{j} | \theta_{j}) \sim  indep_N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
-  \deqn{(\theta_{j} |\mu_{0j} , A) \sim   indep_N(\mu_{0j}, A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}
+  \deqn{(y_{j} | \theta_{j}) \sim  indep\_N(\theta_{j}, \sigma^{2}_{j})}{(y_j | \theta_j) ~ indep N(\theta_j, \sigma_j^2)}
+  \deqn{(\theta_{j} |\mu_{0j} , A) \sim   indep\_N(\mu_{0j}, A)}{(\theta_j | \mu0_j, A) ~ indep N(\mu0_j, A)}
   \deqn{\mu_{0j} = x_{j}'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multi-level model. A square bracket below indicates [mean, variance] of distribution and a constant multiplied to the notation representing Gamma distribution (Gam) is a scale. Also, for consistent notation, \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{y_j = z_j / n_j} and \eqn{n_{j}}{n_j} can be interpreted as \emph{j}-th group's exposure only in this Poisson-Gamma hierarchical model.
-  \deqn{(z_{j}~ |~ \theta_{j})~ \sim ~ indep~ Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
-  \deqn{(\theta_{j}~ |~ r,~ \mu_{0j})~ \sim ~ indep~~ \frac{1}{r}Gam(r\mu_{0j})~ \sim ~ indep~ Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep  Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
-  \deqn{log(\mu_{0j})~ =~ x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
+  \deqn{(z_{j} | \theta_{j}) \sim  indep\_Pois(n_{j}\theta_{j})}{(z_j | \theta_j) ~ indep Pois(n_j\theta_j)}
+  \deqn{(\theta_{j} | r, \mu_{0j}) \sim  indep\_\frac{1}{r}Gam(r\mu_{0j})\sim indep\_Gam[\mu_{0j}, \mu_{0j} / r]}{(\theta_j | r, \mu0_j) ~ indep  Gam(r\mu0_j) / r ~ indep Gam[\mu0_j, \mu0_j / r]}
+  \deqn{log(\mu_{0j}) = x_{j}'\beta}{log(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
   For Binomial data, \code{gbp} sets a two-level Binomial-Beta multi-level model. For reference, a square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{y_j = z_j / n_j}.
-  \deqn{(z_{j} | \theta_{j}) \sim  indep_Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
-  \deqn{(\theta_{j} | r, \mu_{0j}) \sim  indep_Beta(r\mu_{0j}, r(1-\mu_{0j})) \sim  indep_Beta[\mu_{0j}, \mu_{0j}(1 - \mu_{0j}) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
+  \deqn{(z_{j} | \theta_{j}) \sim  indep\_Bin(n_{j}, \theta_{j})}{(z_j | \theta_j) ~ indep Bin(n_j, \theta_j)}
+  \deqn{(\theta_{j} | r, \mu_{0j}) \sim  indep\_Beta(r\mu_{0j}, r(1-\mu_{0j})) \sim  indep\_Beta[\mu_{0j}, \mu_{0j}(1 - \mu_{0j}) / (r + 1)]}{(\theta_j | r, \mu0_j) ~ indep Beta(r\mu0_j, r(1 - \mu0_j)) ~ indep Beta[\mu0_j, \mu0_j(1 - \mu0_j) / (r + 1)]}
   \deqn{logit(\mu_{0j}) = x_{j}'\beta}{logit(\mu0_j) = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
 
@@ -59,8 +59,8 @@
   First, if any values related to the prior distribution are not designated like 
   \code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values (or known prior mean, \eqn{\mu_{0}}{\mu0}) in \code{b} (\code{gbp.object}) as given true values when it generates lots of pseudo-datasets. After sampling \eqn{\theta_{(i)}}{\theta_(i)} from the prior distribution determined by these estimated values (or known prior mean) in \code{b} (\code{gbp.object}), \code{coverage} creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{(i)}}{\theta_(i)} just sampled.
 
-  Second, \code{coverage} allows us to try different true values in generating datasets. Suppose \code{gbp.object} is based on the model with a known prior mean, \eqn{\mu_{0}}{\mu0}. Then, we can try either different \code{A.or.r} or \code{mean.PriorDist}. For example, \code{coverage(b, A.or.r = 20, nsim = 10)}, 
-\code{coverage(b, mean.PriorDist = 0.5, nsim = 10)}, or 
+  Second, \code{coverage} allows us to try different true values in generating datasets. Suppose \code{gbp.object} is based on the model with a known prior mean, \eqn{\mu_{0}}{\mu0}. Then, we can try either different \code{A.or.r} or \code{mean.PriorDist}. For example, \code{coverage(b, A.or.r = 20, nsim = 10)}, \\
+\code{coverage(b, mean.PriorDist = 0.5, nsim = 10)}, or \\
 \code{coverage(b, A.or.r = 20, mean.PriorDist = 0.5, nsim = 10)}. Note that we cannot set \code{reg.coef} because the second-level mean (prior mean) is known in \code{gbp.object} to begin with.
 
   Suppose \code{gbp.object} is based on the model with an unknown prior mean. In this case, \code{gbp.object} has the estimation result of regression model, linear regression for Normal-Normal, log-linear regression for Poisson-Gamma, or logistic regression for Binomial-Beta, (only intercept term if there is no covariate) to estimate the unknown prior mean. Then, we can try some options: one or two of (\code{A.or.r}, \code{mean.PriorDist}, \code{reg.coef}). For example, \code{coverage(b, A.or.r = 20, nsim = 10)}, \code{coverage(b, mean.PriorDist = 0.5, nsim = 10)}, or \code{coverage(b, reg.coef = 0.1, nsim = 10)} with no covariate where \code{reg.coef} is a designated intercept term. Estimates in \code{gbp.object} will be used for undesignated values. Also, we can try appropriate combinations of two arguments. For example, \code{coverage(b, A.or.r = 20, mean.PriorDist = 0.5, nsim = 10)} and 
