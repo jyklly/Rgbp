@@ -31,7 +31,7 @@
   on the first-level parameter.
  
   To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal 2-level model. \eqn{\sigma^{2}_{j}}{\sigma_j^2} below is assumed to be known or to be accurately estimated (\eqn{s^{2}_{j}}{s^2}) and subscript \emph{j} indicates \emph{j}-th group in a dataset.
-  \deqn{(y_{j} | \theta_{j}) \sim  indep}{(y_j | \theta_j) ~ indep} \deqn{N(\theta_{j}, \sigma^{2}_{j})}{N(\theta_j, \sigma_j^2)}
+  \deqn{(y_{j} | \theta_{j}) \stackrel{ind}{\sim}  indep}{(y_j | \theta_j) ~ indep} \deqn{N(\theta_{j}, \sigma^{2}_{j})}{N(\theta_j, \sigma_j^2)}
   \deqn{(\theta_{j} |\mu_{0j} , A) \sim indep}{(\theta_j | \mu0_j, A) ~ indep}  \deqn{N(\mu_{0j}, A)}{ N(\mu0_j, A)}
   \deqn{\mu_{0j} = x_{j}'\beta}{\mu0_j = x_j'\beta}
   for \eqn{j = 1, \ldots, k}, where \emph{k} is the number of groups (units) in a dataset.
