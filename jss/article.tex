@@ -20,7 +20,7 @@
 
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for each group's parameter, $\mu_{j}$ for Gaussian, $\lambda_{j}$ for Poisson, or $p_{j}$ for Binomial model, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
+\pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for each group's random effect, $\mu_{j}$ for Gaussian, $\lambda_{j}$ for Poisson, or $p_{j}$ for Binomial model, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
 \Keywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage}
 \Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
 %% at least one keyword must be supplied
@@ -73,7 +73,7 @@
 
 \section[introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  parameters. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
+\pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  random effects. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
 This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model and frequentists will have a procedure with good repeated sampling properties.
 
@@ -182,7 +182,7 @@ A hyper-prior distribution is a distribution assigned to the second-level parame
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of the parameters $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
+where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of random effects $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
 
 
 
