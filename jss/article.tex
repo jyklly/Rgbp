@@ -182,7 +182,10 @@ A hyper-prior distribution is a distribution assigned to the second-level parame
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
-where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of random effects $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. We will show the efficiency of this assignment  in the examples in section 5.
+where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of random effects $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. 
+\\
+
+In the other two cases, Poisson and Binomial, the distribution of $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($B_{j}$) as does $A$ with Uniform($0, \infty$) for the Gaussian. As for the posterior propriety, we found that the resultant posterior distribution for Binomial model is proper if $k\ge2$ and a covariate matrix has a full rank. But Poisson model can have such posterior propriety if $k\ge2$ and the second-level mean is known. We will show the efficiency of this assignment  in the examples in section 5.
 
 
 
