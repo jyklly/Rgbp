@@ -158,7 +158,7 @@ where $\lambda_{0}$, the second-level mean, is known a priori and $r$ is the onl
 where $\lambda^{\ast}_{j} \equiv (1-B_{j})y_{j} + B_{j}\lambda_{0}$ and   $B_{j}\equiv r / (r+n_{j})$ for $j=1, \ldots, k$. 
 
 
-Note that the variance in (\ref{gammaprior}) is linear in the mean, whereas a slightly different Poisson-Gamma specification \citep{1997} has been used elsewhere e.g. that makes the variance in (\ref{gammaprior}) quadratic.
+Note that the variance in (\ref{gammaprior}) is linear in the mean, whereas a slightly different Poisson-Gamma specification \citep{1997} has been used elsewhere e.g. that makes the variances in (\ref{gammaprior}) and (\ref{gammapost}) quadratic functions of the mean respectively.
 
 \subsection[Binomial-Beta]{Binomial-Beta (``b''=Binomial data)}
 Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. Again, $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials of the $j$-th group and the square bracket [, ] below indicates [mean, variance] of a distribution. Unlike the Poisson-Gamma model, the second-level mean is either known ($m=0$) or unknown ($m\ge1$) a priori.
