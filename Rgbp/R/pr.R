@@ -59,7 +59,7 @@ PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
       print("The components of lgamma should be positive")
       stop()
     } else {
-      sum(dnbinom(z, size = am, prob = exp(-a) / (exp(-a) + n), log=T))
+      sum(dnbinom(z, size = am, prob = exp(-a) / (exp(-a) + n), log = T))
     }
   }
 
@@ -72,7 +72,7 @@ PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
   a.new <- a.temp$par
   a.hess <- a.temp$hessian
 
-  list(a.new = a.ini, a.var = - 1/ hessian)
+  list(a.new = a.ini, a.var = - 1/ a.hess)
 }
 
 PRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
