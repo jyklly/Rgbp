@@ -1,7 +1,7 @@
 #Note this R code fits the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
 
-gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
+gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
 	
   ##define some values that will be used often
   muknown <- !missing(mu)
@@ -86,6 +86,10 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001){
   tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
   skewedmat <- as.matrix(do.call("rbind", tmp))
 
+  if(normal.CI){
+    skewedmat[,1] <- qnorm((1-Alpha)/2,thetahat,shat)
+    skewedmat[,3] <- qnorm(1-(1-Alpha)/2,thetahat,shat)
+  }
   
   ## return output
   ## TODO: discuss with Tak and sync output
