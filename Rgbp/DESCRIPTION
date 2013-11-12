@@ -1,6 +1,6 @@
 Package: Rgbp
-Version: 1.0.2
-Date: 2013-09-11
+Version: 1.0.3
+Date: 2013-11-12
 Title: Gaussian, Poisson, and Binomial Hierarchical Modeling
 Author: Joseph Kelly, Hyungsuk Tak, and Carl Morris
 Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
