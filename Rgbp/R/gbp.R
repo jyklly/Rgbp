@@ -4,6 +4,12 @@ gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.IS,
 gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
                         n.IS = 0, trial.scale = 2.5, normal.CI = FALSE) {
+
+  ##input checks
+  if((abs(max(x) - min(x)) == 0) & (abs(max(w) - min(w)) == 0) & missing(mean.PriorDist))
+    stop("Groups have identical data. This program can not yet give reliable results for this data.")
+  
+  
 ######
   res <- switch(model, 
        gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, normal.CI = normal.CI), 

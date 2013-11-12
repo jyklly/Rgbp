@@ -21,8 +21,9 @@
 %% an abstract and keywords
 \Abstract{
 \pkg{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for each group's random effect, $\mu_{j}$ for Gaussian, $\lambda_{j}$ for Poisson, or $p_{j}$ for Binomial model, whose good frequency properties can be validated via its repeated sampling procedure called ``frequency method checking."  It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.}
-\Keywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage}
-\Plainkeywords{keywords, comma-separated, not capitalized, r} %% without formatting
+\Keywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage, R}
+\Plainkeywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage, R} 
+%% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -75,48 +76,10 @@
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 \pkg{Rgbp} is an R package for estimating and validating a two-level model, also called conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or called a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  random effects. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
-This package will be useful for frequentists and Bayesians alike. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model and frequentists will have a procedure with good repeated sampling properties.
-
-
-%\section[Feasible Data Types]{Three Feasible Types of Data }
-%\pkg{Rgbp} is intended to fit a model where two levels of structure are assumed (unit and group levels). The model can be characterized by the distributional family assumed for the group level data and in the case of \pkg{Rgbp} this will be either the Normal, Poisson, or Binomial distribution. In this section, we will introduce three specific types of feasible data sets that illustrate this fact.
-
-%\subsection{Normal: 8 Schools} \label{8schooldata}
-%The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
-%R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
-%\end{CodeInput}
-%\end{CodeChunk}
-
-%Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, \emph{i.e.}, standard error of each school is assumed to be known or to be accurately estimated. So, it is reasonable to think that each school-level coaching effect is distributed as an independent Normal distribution given the unknown mean $\mu_{j}$ and known standard error:  $y_{j}\vert\mu_{j}\stackrel{ind}{\sim} \textrm{Normal}(\mu_{j}, se^{2}_{j}),~ j=1, \ldots, 8$. \pkg{Rgbp} includes this data set and can be called by the command `\code{data(schools)}' on \proglang{R}.
-
-%\subsection{Poisson: 31 Hospitals}
-%The following data are from medical profiling evaluations for Coronary Artery Bypass Graft (CABG) surgeries of 31 New York hospitals conducted in 1992 \citep{2012}. It comprises of the number of deaths within a month of CABG surgeries in each hospital ($z_{j},~j=1, \ldots, 31$) and the total number of patients receiving CABG surgeries (case load) in each hospital ($n_{j},~j=1, \ldots, 31$). The following code is an example of input based on the last ten hospital data.
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> z <- c( 14,   9,  15,  13,  35,  26,  25,  20,   35,   27)
-%R> n <- c(593, 602, 629, 636, 729, 849, 914, 940, 1193, 1340)
-%\end{CodeInput}
-%\end{CodeChunk}
-%Considering the type of data, it is reasonable to assume the number of deaths in each hospital follow independent Poisson distributions given an unknown true rate parameter $\lambda_{j}$: $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ where, for each $j$, $n_{j}$ can be interpreted as an exposure (not necessarily an integer) and $\lambda_{j}$ as  death rate per exposure. This data set is also included in the package and can be called by `\code{data(hospital)}' on \proglang{R}.
-
-%\subsection{Binomial: 18 Baseball Hitters}
-%The following dataset contains information on the batting averages of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}. In addition one covariate relating to the position each player was playing was observed and for illustrative purposes, we transform this variable into a binary indicator (1 if a player was an outfielder and 0 otherwise).
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  %8,  7)
-%R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, %45, 45)
-%R> x <- c( 1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0) 
-%\end{CodeInput}
-%\end{CodeChunk}
-%The data indicate that independent Binomial distribution is appropriate for each player's number of hits among 45 at-bats conditioning on the unknown true batting average $p_{j}$: $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(n_{j}, p_{j}), ~j=1, \ldots, 18$. This data set is also a part of the package and can be called on \proglang{R} by `\code{data(baseball)}'.
+This package is useful for both frequentists and Bayesians. Bayesians are able to use the package to see results for a non-informative reference prior before and after constructing their own Bayesian hierarchical model and frequentists are provided with a procedure with good repeated sampling properties.
 
 \section[Hierarchical Structure]{Hierarchical Structure} \label{hierarchical}
 A two-level or multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
-
-
 
 \code{gbp}, one of the functions in \pkg{Rgbp}, fits such a hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level parameters. The \code{gbp} function allows users to choose one of three types of hierarchical models, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta. 
  
@@ -142,7 +105,7 @@ y_{j}\vert \beta, A \stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, V_{j} + A).
 \end{equation}
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
-\code{gbp} is also able to build a Poisson-Gamma hierarchical model, though its usage is limited to the case where the second-level mean is known ($m=0$). For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group, where  $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. For this Poisson model $n_{j}$ can be interpreted as the exposure of the $j$-th group,  not necessarily an interger. The notation $r$ represents the amount of prior information as $n_{j}$ does the amount of observed information. Note that a constant, $1/r$, multiplied to the Gamma distribution below is a scale and a square bracket [, ] below indicates [mean, variance] of a distribution. 
+\code{gbp} is also able to build a Poisson-Gamma hierarchical model, though its usage is limited to the case where the second-level mean is known ($m=0$). For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group, where  $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. For this Poisson model $n_{j}$ can be interpreted as the exposure of the $j$-th group,  not necessarily an interger. The notation $r$ represents the amount of prior information as $n_{j}$ does the amount of observed information. Note that the constant, $1/r$, multiplied to the Gamma distribution below is a scaling factor and the square brackets indicates the [mean, variance] of a distribution. 
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
@@ -183,11 +146,11 @@ A hyper-prior distribution is a distribution assigned to the second-level parame
 \end{equation}
 
 where $m$ is the number of regression coefficients. As for $\beta$, the flat non-informative distribution above is a common choice. In the Gaussian case, the flat prior distribution on the second-level variance $A$ is chosen to produce good repeated sampling properties for point and interval estimates of random effects $\{\mu_{j}\}$, and to have its posterior propriety when $k\ge m+3$ \citep{2011}. 
-\\
+
 
 
 In the other two cases, Poisson and Binomial, the flat prior distribution on $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($\pi(B_{j})\propto B_{j}^{-2} d B_j$) as does $A$ with Uniform($0, \infty$) for the Gaussian. As for the posterior propriety, we found that the resultant posterior distribution for the Binomial model is proper if there are at least two groups (among $k$ groups), whose observed values ($z_{j}$) are neither 0 nor $n_j$,  and the covariate matrix ($X_{(k\times m )}$), if any,  has full rank ($rank(X)=m$). 
-\\
+
 
 The Poisson model can have such posterior propriety if there are two groups whose observed values exceed 0 and the second-level mean ($\lambda_0$) is known. If $\lambda_0$ is unknown, the posterior distribution for the Poisson model is improper and this model should not be used. However, the Binomial model can still be used  instead because the Poisson distribution is just the approximation to the Binomial distribution. The efficiency of these priors is explored in the examples in section 5.
 
@@ -282,17 +245,12 @@ In this example we adopt the perspective of a person living in the state of New 
 
 For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($\textbf{z}_{(31\times1)}$) for a specified period after CABG surgeries and total number of patients ($\textbf{n}_{(31\times1)}$) receiving CABG surgeries in each hospital. For reference, caseloads ($n_{j}$) can be interpreted as exposures, not necessarily integers. These data can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
 
-%For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($z$) for a specified period after CABG surgeries and total number of patients ($n$) receiving CABG surgeries in each hospital.  Suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of   for each hospital so that one can evaluate the hospital reliabilities. 
-
-
-%These data, $\textbf{z}_{(31\times1)}$ and $\textbf{n}_{(31\times1)}$, can be loaded into R using the following code. Note that throughout this paper, the symbol `\code{R>}' represents a command prompt (not to be typed into \proglang{R}).
-
 \begin{CodeChunk}
 \begin{CodeInput}
-R> z <- c(  3,  2,   5,  11,   9,  12,  12,   4,  10,  13,  14,   7,  12,
+R> z <- c( 3,   2,   5,  11,   9,  12,  12,   4,  10,  13,  14,   7,  12,
           11,  13,  22,  15,  11,  14,  11,  16,  14,   9,  15,  13,  35,
           26,  25,  20,  35,  27)
-R> n <- c( 67, 68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
+R> n <- c(67,  68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
          441, 477, 484, 494, 501, 505, 540, 563, 593, 602, 629, 636, 729,
          849, 914, 940, 1193, 1340)
 \end{CodeInput}
@@ -422,18 +380,8 @@ But the point estimates are not enough to evaluate hospital reliabilities becaus
 
 This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hopitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
 
-%and What happened is that Since the 23rd hospital has the lowest upper bound for  death rate, not to mention the lowest point estimate. Also it reveals that the 31st hospital may be the second safest because its upper bound of 95\% interval estimate for  death rate is lower than the 8th hospital's one.
-
-
-%From the output provided by \code{gbp} it can be seen that a reasonable choice of a hospital for the patient is hospital 23. Although hospital 8 has a smaller observed mean the fact that hospital 23 has a much higher caseload means that we borrow relatively less information from other hospitals. The result being that the upper bound of the $95\%$ interval is smaller.
-
-%provides one more point, which we could not have noticed. Let's look at the 8th and the 31st hospitals on the graph (or on the outcome for numeric reference). The point estimate of  death rate per exposure of the 31st hospital is higher than the one of the 8th. But, the upper bound of interval estimate of this 31st hospital is lower than that of the 8th. This interval plot makes the 31st hospital emerge as one of your candidates.
-
-
-% Also it reveals that the 23rd hospital, whose estimated true rate was the smallest, has also the smallest upper bound. If you are a risk-adverse, this hospital will attract you most strongly. And if you already chose this 23rd hospital compared to the 8th from the shrinkage plot, your decision might become stronger at this point, excluding the 8th hospital with more certainty. 
 
 But when fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, we can designate any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
-
 
 
 Also, \code{gbp} provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the code for fitting the model, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
@@ -452,8 +400,6 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{figure}
 
 In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals.
-
-
 
 The overall RB unbiased coverage estimate across all the hospitals is 0.954. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
@@ -507,30 +453,6 @@ R> pcv$se.coverageS
 Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 17 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
 
 For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
-% For reference, it took 10 seconds for MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU to run 10,000 simulations.
-
-
-%These numbers are encouraging, but achieving at least 95\% coverage at %one specific true value does not mean that our model has good repeated %sampling property. We need to check whether coverage probabilities are %at least 0.95 when  parameter value ($r$) varies.
-
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> shr <- seq(0.01, 0.99, length.out = 20)
-%R> r.trial <- mean(n) * shr / (1 - shr)
-%R> cov.save <- sapply (1 : length(r.trial), function(i){
-%R>               coverage(p, A.or.r = r.trial[i], mean.PriorDist = 0.02, 
-%R>                        nsim = 500)$average.coverageRB
-%R>             })
-%\end{CodeInput}
-%\end{CodeChunk}
-%\begin{figure}[h]
-%\begin{center}
-%\includegraphics[width = 5.5cm]{hospital3.png}
-%\end{center}
-%\end{figure}
-
-%We plotted \code{cov.save} on \code{shr}, connecting dots (coverage %probabilities). This plot shows that the estimated shrinkages are at least %0.947 (under 95\% only at one shrinkage value, 0.01) on the tried range %of true shrinkage values, slightly deviating from the definition of 95\% %confidence interval. Note that our model is approximating  %distribution of shrinkage by ADM (see 4.2). 
-
-%The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j})=0)$, corresponding to $r=0$, makes the scale of the distribution go to $\infty$ (see (5)), and full shrinkage ($B_{j}=1$) makes $r$ goes to $\infty$, not appropriate for an argument.
 
 \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
@@ -692,8 +614,7 @@ All the individual RB coverage estimates are saved in the $8\times1,000$ matrix,
 %\end{figure}
 
 
-\subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Second-level Mean and One Covariate}
-%The New York Times published on 26 April 1970 covered 18 baseball players' batting averages through their first official 45 at-bats of the 1970 season. And then we became interested in their batting averages over the remaining season. 
+\subsection[Unknown Second-level Mean and One Covariate]{18 Baseball Players: Unknown Second-level Mean and One Covariate} 
 
 The following dataset from the New York Times published on 26 April 1970 contains information on the batting averages and positions (outfielder=1,otherwise=0) of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}.
 
@@ -750,9 +671,7 @@ colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.04
 % Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also
 Note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $113 / (113+45)$ = 0.715). 
 
-%Note that the posterior standard deviation tends to be bigger among outfielders than among others. Let's see its formula in (9). We can notice that the estimated posterior mean is a critical factor that makes posterior variances different from each player because every player has the same at-bats ($n_{j}$) and $r$. As the posterior mean gets closer to 0.5, the posterior variance gets bigger and has the biggest value when the posterior mean is 0.5. Intuitively, it makes sense. If a true batting average is 0.1, we can easily expect less hits. But if it is 0.5, we are less certain whether an at-bat would be more likely a hit or not, like a coin tossing. Our model is automatically reflecting on such uncertainty.
 
-%In problems where a covariate is present \code{gbp} provides a regression summary (in this example logistic regression)
 \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(b)
@@ -862,56 +781,20 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 %$
 
 
-%Finally,  we see that Rao-Blackwellized unbiased estimate for the first player is about 26 times more accurate than simple one. It is based on the ratio of the sample variances of individual estimates from two approaches.
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> var(bcv$raw.resultS[1, ]) / var(bcv$raw.resultRB[1, ])
-%\end{CodeInput}
-%\begin{CodeOutput}
-% [1] 25.64346
-%\end{CodeOutput}
-%\end{CodeChunk}
-% As for the running time, it took 243 seconds for MacBook Pro equipped with a 2.3 GHz dual-core Interl i5 CPU to execute 10,000 simulations.
-
-
-%However, achieving at least 95\% coverage at specific true values of $r$ and $\beta$ does not mean that our model has good repeated sampling property. So, as we did in previous examples, we will see whether coverage probabilities are at least 0.95 when the true shrinkage value ($B(r)$) varies, fixing $\beta$ at estimated values. Note that, if we want to check a coverage probability under the different parameter values, $r$ and $\beta$, for example 150 for $r$ and $(-1, 0.5)^{T}$ for $\beta$, the appropriate code is \code{R> coverage(b, A.or.r = 150, reg.coef = c(-1, 0.5), covariates = x, nsim = 10000)}. 
-
-%\begin{CodeChunk}
-%\begin{CodeInput}
-%R> shr <- seq(0.01, 0.99, length.out = 20)
-%R> r.trial <- mean(n) * shr / (1 - shr)
-%R> cov.save <- sapply (1 : length(r.trial), function(i){
-%R>               coverage(b, A.or.r = r.trial[i], reg.coef = c(-1.194, 0.389), 
-%R>                        covariates = x, nsim = 500)$average.coverageRB
-%R>             })
-%\end{CodeInput}
-%\end{CodeChunk}
-%\begin{figure}[h]
-%\begin{center}
-%\includegraphics[width = 5.5cm]{baseball4.png}
-%\end{center}
-%\end{figure}
-
-%We drew \code{cov.save} on \code{shr}, conneting dots. It shows that the estimated shrinkages are at least 0.946 on the tried range of true shrinkage values, slightly deviating from the definition of 95\% confidence interval. Note that even this result does not guarantee good repeated sampling property because $\beta$ was fixed. But, this result can definitely be an encouraging sign for our model's good repeated sampling property. 
-
-%The reason we tried true shrinkage values between 0.01 and 0.99 is that no shriankge ($\equiv r / (r + n_{j}))$, corresponding to $r=0$, makes parameters of the second-level distribution 0 (see (8)), and full shrinkage corresponds to $r=\infty$ that we cannot designate as an argument of \code{coverage} function.
 
 \section[Discussion]{Discussion and Summary} \label{discussion}
 \pkg{Rgbp} is an R package for estimating and validating two-level Gaussian, Binomial and Poisson hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``frequency method checking'' functionality to examine repeated sampling properties and to test that the method is valid at specified hyper-parameter values.
 
 As an alternative to other maximization based estimation methods such as MLE and REML, \pkg{Rgbp} provides point and interval estimates of parameters via ADM. Using the ADM approach, with our specified choice of priors, protects from cases of overshrinkage and undercoverage from which the aforementioned methods suffer from \citep{accuracy1988}.
 
-%In addition to good frequency properties Bayesians will be able to use the package to see the results from a non-informative reference point. This allows the user to examine whether it is worth to implement a full Bayesian model (which is often more time consuming). 
 
 A benefit of \pkg{Rgbp} is that it produces non-random output and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
 
 Due to it's speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
 
-%As the package assumes non-informative priors the results can be used as reference point to see whether implementing a more sophisticated model, perhaps with informative priors, should be used. 
 
 In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in (\ref{normalmarginal}). By substituting the point estimates of $A$ and $\beta$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
 
-% \pkg{Rgbp} provides a computationally efficient estimation procedure for Gaussian, Poisson and Binomial hierarchical models. An extension to Rgbp, that is underway, is to include functionality for fitting Gamma hierarchical models. 
 
 \section[acknowledgments]{Acknowledgments}
 The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
