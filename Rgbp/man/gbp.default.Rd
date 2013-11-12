@@ -6,8 +6,9 @@
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 
-\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model = "gaussian", intercept = TRUE, 
-                             Alpha = 0.95, n.IS = 0, trial.scale = 2.5)}
+\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
+"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, trial.scale = 2.5,
+normal.CI = FALSE)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -41,6 +42,14 @@
 
   \item{trial.scale}{
     Scale in trial distribution where \eqn{\alpha} is sampled. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is 2.5.
+  }
+
+    \item{normal.CI}{
+    Only applicable for Gaussian data. If \code{TRUE} then a Normal
+    approximation is used to construct intervals for the level 1 group
+    means. If \code{FALSE} (default) then a Skew-Normal distribution is
+    used. Setting the value to \code{TRUE} may result in speed
+    improvements but may lead to intervals that under cover. 
   }
 }
 
