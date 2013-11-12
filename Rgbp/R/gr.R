@@ -2,7 +2,7 @@
 #Author: Joseph Kelly
 
 gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
-	
+
   ##define some values that will be used often
   muknown <- !missing(mu)
   if (!muknown) {
