@@ -42,7 +42,7 @@ BRInitialValue2ndLevelMeanUnknown <- function(given) {
   }	
 
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
-  r.ini <- p0.ini * (1 - p0.ini) / var(y) 
+  r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
@@ -194,7 +194,6 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
     b.sub.a <-  BetaHatSubAlpha(a)$beta.new
     a + BRLogLikUn(a, b.sub.a) - 0.5 * log(det(-BRDerivBeta2order(a, b.sub.a)))
   }
-
   a.temp <- optim(a.ini, MarginalPostAlpha, control = list(fnscale = -1), method= "L-BFGS-B",
                   hessian = TRUE,  lower = -Inf, upper = Inf)
   a.new <- a.temp$par
