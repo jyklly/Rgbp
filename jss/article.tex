@@ -319,14 +319,13 @@ colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$), as shown above.
 
 
-The output contains information about observed death rates ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$, 2.5\% percentiles of posterior distributions if 95\% confidence level is given), posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds  of interval estimates ($\hat{\lambda}_{j, upp}$, 97.5\% percentiles of posterior distributions), and standard deviations of posterior distributions ($sd(\lambda_{j}\vert \textbf{y})$).
+The output contains information about observed death rates ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$, 2.5\% percentiles of the approximate posterior distributions if 95\% confidence level is given), approximate posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \textbf{y})$), upper bounds  of interval estimates ($\hat{\lambda}_{j, upp}$, 97.5\% percentiles of the approximate posterior distributions), and standard deviations of the approximate posterior distributions ($sd(\lambda_{j}\vert \textbf{y})$).
 
 
 As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.030$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, \emph{i.e.} ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the NY state-level (second-level) information.
 
 
-A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. When we do not know the prior mean in advance, unlike this hospital problem, \code{gbp} always fits the natural link, \emph{i.e.} a linear regression for the Normal model, a log-linear regression for the Poisson model, and a logistic regression for the Binomial model.
-\begin{CodeChunk}
+A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. \begin{CodeChunk}
 \begin{CodeInput}
 R> summary(p)
 \end{CodeInput}
@@ -452,7 +451,7 @@ R> pcv$se.coverageS
 
 Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 17 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
 
-For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates.
+For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates, $I^{(i)}_{j}$ and $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta)$.
 
 \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
@@ -709,7 +708,7 @@ beta1    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-From the output of \code{summary} we see that the two prior means distinguishing outfielders from other positions are significantly different (p-value = 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
+From the \code{Regression Summary}, one of the outputs of \code{summary}, we see that the two prior means distinguishing outfielders from other positions are significantly different (p-value for $\hat{\beta}_1$= 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
 
 \begin{CodeChunk}
 \begin{CodeInput}
