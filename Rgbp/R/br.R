@@ -424,58 +424,58 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
+  a.IS <- rsn(n.IS * 10, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
   a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
                   scale = trial.scale, shape = -3)
 
-  beta.IS.temp <- sapply(1 : n.IS, function(t) { 
+  beta.IS.temp <- sapply(1 : (n.IS * 10), function(t) { 
                     BetaHatSubAlpha(a.IS[t])
                   })
 
-  beta.IS.mean <- sapply(1 : n.IS, function(t) {
+  beta.IS.mean <- sapply(1 : (n.IS * 10), function(t) {
                      beta.IS.temp[, t]$beta.new
                    })
 
-  beta.IS.vCov <- sapply(1 : n.IS, function(t) {
+  beta.IS.vCov <- sapply(1 : (n.IS * 10), function(t) {
                      -solve(beta.IS.temp[, t]$beta.hessian)
                   })
 
   if(m == 1) {
-    beta.IS <- sapply(1 : n.IS, function(t) {
+    beta.IS <- sapply(1 : (n.IS * 10), function(t) {
                  beta.IS.mean[t] + sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS) * rt(1, df = df.IS)
                })
 
-    beta.IS.den <- sapply(1 : n.IS, function(t) {
+    beta.IS.den <- sapply(1 : (n.IS * 10), function(t) {
       dt( (beta.IS[t] - beta.IS.mean[t]) / sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS), df = df.IS) /
       sqrt(beta.IS.vCov[t] * (df.IS - 2) / df.IS)
     })
 
-    ab.logpost <- sapply(1 : n.IS, function(t) { 
+    ab.logpost <- sapply(1 : (n.IS * 10), function(t) { 
                     BRLogLikUn(a.IS[t], beta.IS[t]) + a.IS[t]
                   })
 
-    p0.IS <- sapply(1 : n.IS, function(t) { exp(x * beta.IS[t]) / (1 + exp(x * beta.IS[t]))})
+    p0.IS <- sapply(1 : (n.IS * 10), function(t) { exp(x * beta.IS[t]) / (1 + exp(x * beta.IS[t]))})
 
   } else {
-    beta.IS <- sapply(1 : n.IS, function(t) {
+    beta.IS <- sapply(1 : (n.IS * 10), function(t) {
       rmt(1, mean = beta.IS.mean[, t], S = matrix(beta.IS.vCov[, t], nrow = m) * (df.IS - 2) / df.IS,
           df = df.IS)
     })
 
-    beta.IS.den <- sapply(1 : n.IS, function(t) {
+    beta.IS.den <- sapply(1 : (n.IS * 10), function(t) {
       ch <- chol(matrix(beta.IS.vCov[, t], ncol = m) * (df.IS - 2) / df.IS)
       dmt(beta.IS[, t], mean = beta.IS.mean[, t], S = t(ch) %*% ch, df = df.IS)
     })
 
-    ab.logpost <- sapply(1 : n.IS, function(t) { 
+    ab.logpost <- sapply(1 : (n.IS * 10), function(t) { 
                     BRLogLikUn(a.IS[t], beta.IS[, t]) + a.IS[t]
                   })
 
-    p0.IS <- sapply(1 : n.IS, function(t) { exp(x %*% beta.IS[, t]) / (1 + exp(x %*% beta.IS[, t]))})
+    p0.IS <- sapply(1 : (n.IS * 10), function(t) { exp(x %*% beta.IS[, t]) / (1 + exp(x %*% beta.IS[, t]))})
 
   }
 
-  p.IS <- sapply(1 : n.IS, function(t) {
+  p.IS <- sapply(1 : (n.IS * 10), function(t) {
             a1.p.IS <- exp(-a.IS)[t] * p0.IS[, t] + z
             a0.p.IS <- exp(-a.IS)[t] * (1 - p0.IS[, t]) + n - z
             rbeta(k, a1.p.IS, a0.p.IS)
@@ -483,7 +483,7 @@ BRIS <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, trial.scale = 2.5) {
 
   weight <- exp(ab.logpost - max(ab.logpost)) / beta.IS.den / a.IS.den
 
-  index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
+  index <- suppressWarnings(sample(1 : (n.IS * 10), n.IS, prob = weight / sum(weight), replace = T))
 
   p.IS.resample <- p.IS[, index]
 
@@ -520,15 +520,15 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, tri
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  a.IS <- rsn(n.IS, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
+  a.IS <- rsn(n.IS * 10, location = a.new + abs(a.new - optimax), scale = trial.scale, shape = -3)
   a.IS.den <- dsn(a.IS, location = a.new + abs(a.new - optimax), 
                   scale = trial.scale, shape = -3)
 
-  a.logpost <- sapply(1 : n.IS, function(t) { 
+  a.logpost <- sapply(1 : (n.IS * 10), function(t) { 
                     BRLogLikKn(a.IS[t]) + a.IS[t]
                   })
 
-  p.IS <- sapply(1 : n.IS, function(t) {
+  p.IS <- sapply(1 : (n.IS * 10), function(t) {
             a1.p.IS <- exp(-a.IS)[t] * p0 + z
             a0.p.IS <- exp(-a.IS)[t] * (1 - p0) + n - z
             rbeta(k, a1.p.IS, a0.p.IS)
@@ -536,7 +536,7 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = 5000, df.IS = 4, tri
 
   weight <- exp(a.logpost) / a.IS.den
 
-  index <- suppressWarnings(sample(1 : n.IS, n.IS, prob = weight / sum(weight), replace = T))
+  index <- suppressWarnings(sample(1 : (n.IS * 10), n.IS, prob = weight / sum(weight), replace = T))
   
   p.IS.resample <- p.IS[, index]
 
