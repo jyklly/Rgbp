@@ -51,7 +51,6 @@ PRInitialValue2ndLevelMeanUnknown <- function(given) {
 
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
-
 PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
 
   z <- given$z
@@ -60,28 +59,28 @@ PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
   k <- length(n)
   a.ini <- ini$a.ini
 
-  PRDerivAlpha <- function(a) {
-    zam <- z + exp(-a) * mu0
-    am <- exp(-a) * mu0
-    const1 <- ((digamma(zam) -  digamma(am) + n / (exp(-a) + n) - log(1 + n * exp(a))) * mu0
-               - z / (exp(-a) + n))
-    const3 <- (const1 + z * exp(-a) / (exp(-a) + n)^2 + mu0 * n / (n + exp(-a))
-              - n * am / (exp(-a) + n)^2 + am * mu0 * (trigamma(zam) - trigamma(am)))
-    out <- c(1 - exp(-a) * sum(const1), exp(-a) * sum(const3))
+  PRDerivAlpha <- function(a) {
+    zam <- z + exp(-a) * mu0
+    am <- exp(-a) * mu0
+    const1 <- ((digamma(zam) - digamma(am) + n / (exp(-a) + n) - log(1 + n * exp(a))) * mu0
+               - z / (exp(-a) + n))
+    const3 <- (const1 + z * exp(-a) / (exp(-a) + n)^2 + mu0 * n / (n + exp(-a))
+              - n * am / (exp(-a) + n)^2 + am * mu0 * (trigamma(zam) - trigamma(am)))
+    out <- c(1 - exp(-a) * sum(const1), exp(-a) * sum(const3))
     out
   }
 
-  dif <- 1
-  eps <- 0.0001
-  while (abs(dif) > eps) {
-    out1 <- PRDerivAlpha(a.ini)
-    score <- out1[1]
-    hessian <- out1[2]
-    dif <- score / hessian
-    a.ini <- a.ini - dif
+  dif <- 1
+  eps <- 0.0001
+  while (abs(dif) > eps) {
+    out1 <- PRDerivAlpha(a.ini)
+    score <- out1[1]
+    hessian <- out1[2]
+    dif <- score / hessian
+    a.ini <- a.ini - dif
   }
 
-  list(a.new = a.ini, a.var = - 1/ hessian)
+  list(a.new = a.ini, a.var = - 1 / hessian)
 }
 
 PRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
