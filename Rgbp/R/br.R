@@ -4,13 +4,13 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
 
   if (given$prior.mean == 0) {
     if(all(given$sample.mean == mean(given$sample.mean))) {
-      r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 1)
+      r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 0.1)
     } else {
       r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean)
     }
   } else {
     if(all(given$sample.mean == mean(given$sample.mean))) {
-      r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 1)
+      r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 0.1)
     } else {
       r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
     }
@@ -51,7 +51,7 @@ BRInitialValue2ndLevelMeanUnknown <- function(given) {
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
 
   if(all(y == mean(y))) {
-    r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
+    r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 0.1)
   } else {
     r.ini <- p0.ini * (1 - p0.ini) / var(y)
   }
@@ -134,6 +134,8 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
     nzaq <- n - z + exp(-a) * q
     ap <- exp(-a) * p 
     aq <- exp(-a) * q
+    vec <- rep(NA, k)
+    diagm <- rep(NA, k)
     if (any(c(ap, aq, zap, nzaq) == 0)) {
       vec[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
       tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
@@ -143,19 +145,19 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
       vec <- (digamma(zap) - digamma(ap) - digamma(nzaq) + digamma(aq)) * exp(-a) * p * q
     }
     if (any(c(ap, aq, zap, nzaq) == 0)) {
-      diag[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
+      diagm[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
       tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
-      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+      diagm[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
                     * exp(-a) * p[tmp] * q[tmp] 
                     + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
                     * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
     } else {
-      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+      diagm <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
                 + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
                (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
                 - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
     }
-    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diag)) %*% x)
+    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diagm)) %*% x)
     out
   } 
 
@@ -167,20 +169,21 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
     nzaq <- n - z + exp(-a) * q
     ap <- exp(-a) * p 
     aq <- exp(-a) * q
+    diagm <- rep(NA, k)
     if (any(c(ap, aq, zap, nzaq) == 0)) {
-      diag[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
+      diagm[(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)] <- 0
       tmp <- !(ap == 0 | aq == 0 | zap == 0 | nzaq == 0)
-      diag[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
+      diagm[tmp] <- ((trigamma(zap[tmp]) - trigamma(ap[tmp]) + trigamma(nzaq[tmp]) - trigamma(aq[tmp])) 
                     * exp(-a) * p[tmp] * q[tmp] 
                     + (digamma(zap[tmp]) - digamma(ap[tmp]) - digamma(nzaq[tmp]) + digamma(aq[tmp])) 
                     * (q[tmp] - p[tmp])) * exp(-a) * p[tmp] * q[tmp]
     } else {
-      diag <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
+      diagm <- ((trigamma(z + exp(-a) * p) - trigamma(exp(-a) * p) 
                 + trigamma(n - z + exp(-a) * q) - trigamma(exp(-a) * q)) * exp(-a) * p * q +
                (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
                 - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
     }
-    out <- t(x) %*% diag(as.numeric(diag)) %*% x
+    out <- t(x) %*% diag(as.numeric(diagm)) %*% x
     out
   } 
 
