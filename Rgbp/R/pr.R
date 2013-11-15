@@ -53,6 +53,7 @@ PRInitialValue2ndLevelMeanUnknown <- function(given) {
 }
 
 PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
+
   z <- given$z
   n <- given$n
   mu0 <- given$prior.mean
