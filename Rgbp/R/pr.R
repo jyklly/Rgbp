@@ -2,7 +2,7 @@ PRInitialValue2ndLevelMeanKnown <- function(given) {
   # This function makes the initial values needed to run PRIMM.
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
  
-  r.ini <- given$prior.mean / var(given$sample.mean)
+  r.ini <- given$prior.mean / (var(given$sample.mean)+1)
 
   list(a.ini = -log(r.ini))
 }
