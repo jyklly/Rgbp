@@ -53,8 +53,6 @@ PRInitialValue2ndLevelMeanUnknown <- function(given) {
 }
 
 PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
-  # Alpha estimation of PRIMM when the descriptive second level mean is known
-
   z <- given$z
   n <- given$n
   mu0 <- given$prior.mean
@@ -67,10 +65,10 @@ PRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
     const1 <- ((digamma(zam) -  digamma(am) + n / (exp(-a) + n) - log(1 + n * exp(a))) * mu0
                - z / (exp(-a) + n))
     const3 <- (const1 + z * exp(-a) / (exp(-a) + n)^2 + mu0 * n / (n + exp(-a))
-               - n * am / (exp(-a) + n)^2 + am * mu0 * (trigamma(zam) - trigamma(am)))
+              - n * am / (exp(-a) + n)^2 + am * mu0 * (trigamma(zam) - trigamma(am)))
     out <- c(1 - exp(-a) * sum(const1), exp(-a) * sum(const3))
     out
-  }
+  }
 
   dif <- 1
   eps <- 0.0001
