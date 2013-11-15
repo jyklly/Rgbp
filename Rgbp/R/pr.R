@@ -8,7 +8,6 @@ PRInitialValue2ndLevelMeanKnown <- function(given) {
     r.ini <- given$prior.mean / var(given$sample.mean)
   }
 
-
   list(a.ini = -log(r.ini))
 }
 

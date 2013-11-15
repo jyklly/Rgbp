@@ -13,8 +13,8 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
       r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 1)
     } else {
       r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
+    }
   }
-
   list(r.ini = r.ini, a.ini = -log(r.ini))
 }
 
@@ -54,7 +54,7 @@ BRInitialValue2ndLevelMeanUnknown <- function(given) {
     r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
   } else {
     r.ini <- p0.ini * (1 - p0.ini) / var(y)
-
+  }
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
