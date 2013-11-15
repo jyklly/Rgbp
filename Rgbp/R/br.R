@@ -3,13 +3,13 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
 
   if (given$prior.mean == 0) {
-    if(all(given$sample.mean) == mean(given$sample.mean)) {
+    if(all(given$sample.mean == mean(given$sample.mean))) {
       r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 1)
     } else {
       r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean)
     }
   } else {
-    if(all(given$sample.mean) == mean(given$sample.mean)) {
+    if(all(given$sample.mean == mean(given$sample.mean))) {
       r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 1)
     } else {
       r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
@@ -50,7 +50,7 @@ BRInitialValue2ndLevelMeanUnknown <- function(given) {
 
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
 
-  if(all(y) == mean(y)) {
+  if(all(y == mean(y))) {
     r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
   } else {
     r.ini <- p0.ini * (1 - p0.ini) / var(y)

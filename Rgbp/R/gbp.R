@@ -6,9 +6,6 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
                         n.IS = 0, trial.scale = 2.5, normal.CI = FALSE) {
 
   ##input checks
-  if((abs(max(x) - min(x)) == 0) & (abs(max(w) - min(w)) == 0) & missing(mean.PriorDist))
-    stop("Groups have identical data. This program can not yet give reliable results for this data.")
-
   if(model == "poisson" & missing(mean.PriorDist))
     warning("Model is Poisson and the prior mean is unknown. This program can not yet give reliable results for this data. If the Poisson is being used as an approximation to the Binomial and the exposures are known then please assume a Binomial model")
   
