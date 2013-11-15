@@ -3,9 +3,16 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
 
   if (given$prior.mean == 0) {
-    r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 1)
+    if(all(given$sample.mean) == mean(given$sample.mean)) {
+      r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 1)
+    } else {
+      r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / var(given$sample.mean)
+    }
   } else {
-    r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 1)
+    if(all(given$sample.mean) == mean(given$sample.mean)) {
+      r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 1)
+    } else {
+      r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
   }
 
   list(r.ini = r.ini, a.ini = -log(r.ini))
@@ -42,7 +49,12 @@ BRInitialValue2ndLevelMeanUnknown <- function(given) {
   }	
 
   p0.ini <- mean(exp(x %*% b.ini) / (1 + exp(x %*% b.ini)))
-  r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
+
+  if(all(y) == mean(y)) {
+    r.ini <- p0.ini * (1 - p0.ini) / (var(y) + 1)
+  } else {
+    r.ini <- p0.ini * (1 - p0.ini) / var(y)
+
   list(x = x, b.ini = b.ini, a.ini = -log(r.ini))
 }
 
@@ -85,6 +97,7 @@ BRAlphaEst2ndLevelMeanKnown <- function(given, ini) {
 
   list(a.new = a.ini, a.var = - 1 / hessian)
 }
+
 
 BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
   # Alpha and Beta estimation of BRIMM when the second level mean is unknown
