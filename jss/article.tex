@@ -43,7 +43,6 @@
   Harvard University\\
   1 Oxford Street, Cambridge, MA\\
   E-mail: \email{kelly2@fas.harvard.edu}\\
-  URL: \url{http://www.people.fas.harvard.edu/~kelly2/}\\
 
   Hyungsuk Tak\\
   Department of Statistics\\
@@ -92,20 +91,20 @@ y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
 \mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
 \end{equation}
 
-where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}'=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. It is assumed that the second-level variance $A$ is unknown and that $\mathbf{\beta}_{(m\times1)}$ is also unknown unless specified otherwise. Note that if there are no covariates then $x_{j}=1$, ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
+where $\mu_{0j} = x_{j}' \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}'=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. It is assumed that the second-level variance $A$ is unknown and that $\mathbf{\beta}_{(m\times1)}$ is also unknown unless otherwise specified. Note that if there are no covariates then $x_{j}=1$, ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, \emph{i.e.}, a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
 
 
 
 \begin{equation} \label{normalpost}
 \mu_{j}\vert \textbf{y}, \beta, A \stackrel{ind}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu_{0j},~(1-B_{j})V_{j}~),
 \end{equation}
-where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkages. By integrating over $\mu_{j}$ for $j = 1 \ldots k$ a marginal distribution, useful for model checking (Section \ref{discussion}), can be derived
+where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkage factors. By integrating over $\mu_{j}$ for $j = 1 \ldots k$ a marginal distribution, useful for model checking (Section \ref{discussion}), can be derived
 \begin{equation} \label{normalmarginal}
 y_{j}\vert \beta, A \stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, V_{j} + A). 
 \end{equation}
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
-\code{gbp} is also able to build a Poisson-Gamma hierarchical model, though its usage is limited to the case where the second-level mean is known ($m=0$). For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group, where  $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. For this Poisson model $n_{j}$ can be interpreted as the exposure of the $j$-th group,  not necessarily an interger. The notation $r$ represents the amount of prior information as $n_{j}$ does the amount of observed information. Note that the constant, $1/r$, multiplied to the Gamma distribution below is a scaling factor and the square brackets indicates the [mean, variance] of a distribution. 
+\code{gbp} is also capable of estimating a Poisson-Gamma hierarchical model, though its usage is limited to the case where the second-level mean is known ($m=0$). For notational consistency, let's define $y_{j}\equiv z_{j} / n_{j}$ as the unbiased estimate of $\lambda_{j}$ for the $j$-th group, where  $z_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. For this Poisson model $n_{j}$ can be interpreted as the exposure of the $j$-th group,  not necessarily an integer. The notation $r$ represents the amount of prior information as $n_{j}$ does the amount of observed information. Note that the constant, $1/r$, multiplied to the Gamma distribution below is a scaling factor and the square brackets indicates the [mean, variance] of a distribution. 
 \begin{equation}
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
@@ -265,7 +264,7 @@ R> n <- hospital$n
 \end{CodeChunk}
 
 
-In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death rate ($\lambda_{j}$) for each hospital so that one can evaluate the hospital reliabilities. 
+In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death rate ($\lambda_{j}$) so that one can evaluate each hospital's reliability. 
 
 
 The independent Poisson distribution, \emph{i.e.},  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively large. 
@@ -456,7 +455,7 @@ For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.
 \cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
 
 
-\subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean and No Covariate} \label{sec:ex:8schools}
+\subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean with No Covariates} \label{sec:ex:8schools}
 
 The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
 \begin{CodeChunk}
@@ -789,7 +788,7 @@ As an alternative to other maximization based estimation methods such as MLE and
 
 A benefit of \pkg{Rgbp} is that it produces non-random output and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
 
-Due to it's speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
+Due to its speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
 
 
 In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in (\ref{normalmarginal}). By substituting the point estimates of $A$ and $\beta$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
