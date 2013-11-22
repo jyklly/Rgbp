@@ -364,21 +364,21 @@ R> plot(p)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death rate is not actually safer than seemingly the second safest hospital. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death rate is not the safest in terms of the estimated posterior means. 
 
 
-Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital. This is what happened to the two left-most hospitals in the first plot.
+Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital.
 
 
-But the point estimates are not enough to evaluate hospital reliability because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
+Note that the point estimates are not enough to evaluate hospital reliability because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
 
-This 95\% interval plot reveals that the 31st hospital has the lowest upper bound of 95\% interval estimate, although its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). Let's see the details of these two hospitals. The observed death rates for these two hospitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
-
-
-But when fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, we can designate any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
+This 95\% interval plot reveals that the 31st hospital has the lowest upper bound even though its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). The observed death rates for these two hospitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
 
 
-Also, \code{gbp} provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the code for fitting the model, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
+When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, we can designate any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
+
+
+In addition, \code{gbp} also provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the code for fitting the model, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -393,9 +393,7 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals.
-
-The overall RB unbiased coverage estimate across all the hospitals is 0.954. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
+In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals. The overall RB unbiased coverage estimate across all the hospitals is 0.954. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
 The following code provides 31 RB unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
@@ -453,7 +451,7 @@ For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.
 
 \subsection[Unknown Second-level Mean and No Covariate]{8 Schools: Unknown Second-level Mean with No Covariates} \label{sec:ex:8schools}
 
-The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (group) to test whether students (unit) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
+The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (groups) to test whether students (units) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
@@ -784,7 +782,7 @@ As an alternative to other maximization based estimation methods such as MLE and
 
 A benefit of \pkg{Rgbp} is that it produces non-random output and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
 
-Due to its speed and ease of use, \pkg{Rgbp} can be used for as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
+Due to its speed and ease of use, \pkg{Rgbp} can be used as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
 
 
 In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in (\ref{normalmarginal}). By substituting the point estimates of $A$ and $\beta$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
