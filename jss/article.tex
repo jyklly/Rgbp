@@ -137,6 +137,7 @@ where $p^{\ast}_{j}\equiv(1-B_{j})y_{j}+B_{j}p_{0j}$, $B_{j}\equiv r/ (r+n_{j})$
 \subsection[Hyper-prior Distribution]{Hyper-prior Distribution}
 A hyper-prior distribution is a distribution assigned to the second-level parameters. With the goal of objectivity in mind our choice for hyper-priors assumes the following non-informative distributions:
 \begin{equation}
+  \label{eq:hyper}
 \beta \sim \textrm{Uniform on}~ \mathbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
 \end{equation}
 
@@ -147,7 +148,7 @@ where $m$ is the number of regression coefficients. As for $\beta$, the flat non
 In the other two cases, Poisson and Binomial, the flat prior distribution on $\frac{1}{r}$ induces the same improper prior distribution on shrinkages ($\pi(B_{j})\propto B_{j}^{-2} d B_j$) as does $A$ with Uniform($0, \infty$) for the Gaussian. As for the posterior propriety, we found that the resultant posterior distribution for the Binomial model is proper if there are at least two groups (among $k$ groups), whose observed values ($z_{j}$) are neither 0 nor $n_j$,  and the covariate matrix ($X_{(k\times m )}$), if any,  has full rank ($rank(X)=m$). 
 
 
-The Poisson model can have such posterior propriety if there are two groups whose observed values exceed 0 and the second-level mean ($\lambda_0$) is known. If $\lambda_0$ is unknown, the posterior distribution for the Poisson model is improper and this model should not be used. In the case where the Poisson model is as an approximation to the Binomial and the exposures, $n_j$, are known then the Binomial model should be used as an alternative to the Poisson. The efficiency of these priors is explored in the examples in section 5.
+The Poisson model with hyper-prior in (\ref{eq:hyper}) provides posterior propriety if there are two groups whose observed values exceed 0 and the second-level mean ($\lambda_0$) is known ($m=0$). However, if $\lambda_0$ is unknown $(m \geq 1)$ the posterior distribution for the Poisson model is improper with hyper-prior in (\ref{eq:hyper}) and this model should not be used. In cases where the Poisson model is used because it is an approximation to the Binomial, then we recommend staying with the Binomial model with the same hyper-prior distribution. The efficiency of these priors is explored in the examples in section 5.
 
 
 
