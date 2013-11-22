@@ -1,5 +1,5 @@
 
-coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10) {
+coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
 
   # Rao-Blackwellized criterion
   coverageRB <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
