@@ -2,7 +2,7 @@
 \alias{coverage}
 \title{Estimating Coverage Probability}
 \description{\code{coverage} estimates Rao-Blackwellized and simple unbiased coverage probabilities.}
-\usage{coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10)}
+\usage{coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100)}
 
 \arguments{
   \item{gbp.object}{
@@ -18,7 +18,7 @@
     (optional) a given true numeric value for the mean of (second-level) prior distribution. If not designated, the previously known value in the \code{gbp.object} object will be considered as a known prior mean.
   }
   \item{nsim}{
-    number of datasets to be generated. Default is 10.
+    number of datasets to be generated. Default is 100.
   }
 }
 
