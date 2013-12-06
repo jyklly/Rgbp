@@ -3,7 +3,7 @@ gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.IS,
 ######
 gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
-                        n.IS = 0, trial.scale = 2.5, normal.CI = FALSE) {
+                        n.IS = 0, trial.scale = 3, normal.CI = FALSE) {
 
   ##input checks
   if(model == "poisson" & missing(mean.PriorDist))

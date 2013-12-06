@@ -39,7 +39,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
       }
   
       n <- gbp.object$se
-      r <- exp(-gbp.object$a.new)
+      r <- as.numeric(exp(-gbp.object$a.new))
       priormeanused <- p0
 
       # 2. generate p matrix
@@ -93,7 +93,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
       # 1. initial values
       if (missing(A.or.r) & missing(reg.coef) & !missing(mean.PriorDist)) {
         p0 <- mean.PriorDist
-        r <- exp(-gbp.object$a.new)
+        r <- as.numeric(exp(-gbp.object$a.new))
       } else if (missing(A.or.r) & !missing(reg.coef) & missing(mean.PriorDist)) {
         if (!identical(gbp.object$prior.mean, NA)) {
           print("reg.coef cannot be designated because there is no covariate.")
@@ -106,7 +106,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
           betas <- as.vector(reg.coef)
         }
         p0 <- exp(temp.x %*% betas) / (1 + exp(temp.x %*% betas))
-        r <- exp(-gbp.object$a.new)
+        r <- as.numeric(exp(-gbp.object$a.new))
       } else if (!missing(A.or.r) & missing(reg.coef) & missing(mean.PriorDist)) {
         if (!identical(gbp.object$prior.mean, NA)) {
           p0 <- gbp.object$prior.mean

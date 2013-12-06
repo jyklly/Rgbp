@@ -7,7 +7,7 @@
 }
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, trial.scale = 2.5,
+"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, trial.scale = 3,
 normal.CI = FALSE)}
 \arguments{
   \item{x}{
@@ -37,11 +37,11 @@ normal.CI = FALSE)}
   }
 
   \item{n.IS}{
-    If \code{n.IS = 5000}, all the results will be based on 5000 importance samples. Default is 0.
+    If \code{n.IS = 1000}, all the results will be based on 1000 importance samples. Default is 0.
   }
 
   \item{trial.scale}{
-    Scale in trial distribution where \eqn{\alpha} is sampled. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is 2.5.
+    Scale in trial distribution where \eqn{\alpha} is sampled. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is 3.
   }
 
     \item{normal.CI}{
