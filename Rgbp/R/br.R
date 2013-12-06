@@ -489,6 +489,10 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   }
 
   skewness <- (third.moment - 3 * post.m * post.var - post.m^3) / post.sd^3
+  if (max(skewness) > 1) {
+    skewness <- skewness / max(skewness) * 0.9952717
+  }
+
   del <- sign(skewness) * 
          ifelse(sqrt(pi / 2 * abs(skewness)^(2 / 3) / (abs(skewness)^(2 / 3) + ((4 - pi) / 2)^(2 / 3))) < 0.9952717, 
                 sqrt(pi / 2 * abs(skewness)^(2 / 3) / (abs(skewness)^(2 / 3) + ((4 - pi) / 2)^(2 / 3))), 0.9952717)
@@ -585,6 +589,10 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, tri
   })
 
   skewness <- (third.moment - 3 * post.m * post.var - post.m^3) / post.sd^3
+  if (max(skewness) > 1) {
+    skewness <- skewness / max(skewness) * 0.9952717
+  }
+
   del <- sign(skewness) * 
          ifelse(sqrt(pi / 2 * abs(skewness)^(2 / 3) / (abs(skewness)^(2 / 3) + ((4 - pi) / 2)^(2 / 3))) < 0.9952717, 
                 sqrt(pi / 2 * abs(skewness)^(2 / 3) / (abs(skewness)^(2 / 3) + ((4 - pi) / 2)^(2 / 3))), 0.9952717)
