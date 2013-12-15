@@ -435,7 +435,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
       post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
       post.ve <- post.ve1 - post.ve2^2
-      post.var <- post.ev + t(post.ve)
+      post.var <- post.ev + post.ve
       post.sd <- sqrt(post.var)
       third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
                                   nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
