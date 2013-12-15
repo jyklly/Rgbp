@@ -477,14 +477,14 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       }
     }
 
-    beta.IS <- rmt(n.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var * (df.IS - 2) / df.IS,
+    beta.IS <- rmt(n.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var,
                    df = df.IS)
-    beta.IS.den <- dmt(beta.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var * (df.IS - 2) / df.IS, 
+    beta.IS.den <- dmt(beta.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var, 
                        df = df.IS)
-    p0.sample <- (exp(beta.IS) %*% t(x)) / (1 + exp(beta.IS) %*% t(x))
+    p0.sample <- exp(beta.IS %*% t(x)) / (1 + exp(beta.IS %*% t(x)))
+
     numerator <- exp(BRlogpost(alpha.IS, beta.IS))
     denominator <- alpha.IS.den * beta.IS.den
-
     weight <- numerator / denominator
     weight <- weight / sum(weight)
 
