@@ -407,40 +407,65 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
     numerator <- sapply(1 : n.IS, function(k){ exp(BRlogpost(alpha.IS[k], beta.IS[k])) })
     denominator <- alpha.IS.den * beta.IS.den
     weight <- numerator / denominator
-    prior.m <- ( exp(beta.IS) / (1 + exp(beta.IS)) ) %*% weight / sum(weight)
+    weight <- weight / sum(weight)
 
-    post.shrinkage <- sapply(1 : length(n), function(k) {
-      ( exp(-alpha.IS) / (n[k] + exp(-alpha.IS)) ) %*% weight / sum(weight)
-    })
-    post.m <- sapply(1 : length(n), function(k){
-      ( y[k] - (exp(-alpha.IS) / (n[k] + exp(-alpha.IS))) * (y[k] - exp(beta.IS) / 
-        (1 + exp(beta.IS))) ) %*% weight / sum(weight)
-    })
-    post.ev <- sapply(1 : length(n), function(k){
-      (( y[k] - (exp(-alpha.IS) / (n[k] + exp(-alpha.IS))) * (y[k] - exp(beta.IS) / (1 + exp(beta.IS))) ) *
-       ( 1 - y[k] + (exp(-alpha.IS) / (n[k] + exp(-alpha.IS))) * (y[k] - exp(beta.IS) / (1 + exp(beta.IS))) ) /
-       ( n[k] + exp(-alpha.IS) + 1)) %*% weight / sum(weight)
-    })
-    post.ve1 <- sapply(1 : length(n), function(k){ 
-      ( (exp(-alpha.IS) / (n[k] + exp(-alpha.IS)))^2 * (y[k] - exp(beta.IS) / (1 + exp(beta.IS)))^2 ) %*% weight / 
-      sum(weight) 
-    })
-    post.ve2 <- sapply(1 : length(n), function(k){ 
-      ( (exp(-alpha.IS) / (n[k] + exp(-alpha.IS))) * (y[k] - exp(beta.IS) / (1 + exp(beta.IS))) ) %*% weight / 
-      sum(weight) 
-    })
-    post.ve <- post.ve1 - post.ve2^2
-    post.var <- post.ev + post.ve
-    post.sd <- sqrt(post.var)
-    third.moment <- sapply(1 : length(n), function(k) { 
-      (( n[k] * y[k] + exp(-alpha.IS) * exp(beta.IS) / (1 + exp(beta.IS)) ) / (exp(-alpha.IS) + n[k]) *
-       ( n[k] * y[k] + exp(-alpha.IS) * exp(beta.IS) / (1 + exp(beta.IS)) + 1) / (exp(-alpha.IS) + n[k] + 1) *
-       ( n[k] * y[k] + exp(-alpha.IS) * exp(beta.IS) / (1 + exp(beta.IS)) + 2) / (exp(-alpha.IS) + n[k] + 2)) %*%
-      weight / sum(weight)
-    })
-    beta.mean <- beta.IS %*% weight / sum(weight)
-    beta.2moment <- beta.IS^2 %*% weight / sum(weight)
+    p0.sample <- exp(beta.IS) / (1 + exp(beta.IS))
+
+    beta.mean <- beta.IS %*% weight 
+    beta.2moment <- beta.IS^2 %*% weight 
     beta.var <- beta.2moment - beta.mean^2
+
+    if ( all(n == n[1]) ) {
+      B.matrix <- exp(-alpha.IS) / (n[1] + exp(-alpha.IS))
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- sapply(1 : length(n), function(k) {
+        (1 - B.matrix) * y[k] + Bp.matrix
+      })
+      nr.matrix <- n[1] + exp(-alpha.IS)
+      y_p0.matrix <- sapply(1 : length(n), function(k) {
+        y[k] - p0.sample
+      })
+      nyrp0.matrix <- sapply(1 : length(n), function(k) {
+        z[k] + exp(-alpha.IS) * p0.sample
+      })
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- p0.sample %*% weight 
+      post.m <- weight %*% post.m.matrix
+      post.ev <- weight %*% (post.m.matrix * (1 - post.m.matrix) / (nr.matrix + 1))
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + t(post.ve)
+      post.sd <- sqrt(post.var)
+      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                  nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
+    } else {
+      B.matrix <- sapply(1 : length(n), function(k) {
+        exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
+      })
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- t(1 - B.matrix) * y + t(Bp.matrix)
+      nr.matrix <- sapply(1 : length(n), function(k) {
+        n[k] + exp(-alpha.IS)
+      })
+      y_p0.matrix <- sapply(1 : length(n), function(k) {
+        y[k] - p0.sample
+      })
+      nyrp0.matrix <- sapply(1 : length(n), function(k) {
+        z[k] + exp(-alpha.IS) * p0.sample
+      })
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- p0.sample %*% weight 
+      post.m <- post.m.matrix %*% weight
+      post.ev <- (temp1 * (1 - temp1) / t(nr.matrix + 1)) %*% weight
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + t(post.ve)
+      post.sd <- sqrt(post.var)
+      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                  nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
+    }
 
   } else {
     beta.IS <- rmt(n.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var * (df.IS - 2) / df.IS,
