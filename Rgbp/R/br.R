@@ -436,8 +436,8 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.ve <- post.ve1 - post.ve2^2
       post.var <- post.ev + post.ve
       post.sd <- sqrt(post.var)
-      third.moment <- t(weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
-                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2)))
+      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
     } else {
       B.matrix <- sapply(1 : length(n), function(k) {
         exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
@@ -462,8 +462,8 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.ve <- post.ve1 - post.ve2^2
       post.var <- post.ev + t(post.ve)
       post.sd <- sqrt(post.var)
-      third.moment <- t(weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
-                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2)))
+      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
     }
 
   } else {
@@ -512,7 +512,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
     beta.var <- beta.2moment - beta.mean^2
   }
 
-  skewness <- (third.moment - 3 * post.m * post.var - post.m^3) / post.sd^3
+  skewness <- (as.numeric(third.moment) - 3 * post.m * post.var - post.m^3) / post.sd^3
   if (max(skewness) > 1) {
     skewness <- skewness / max(skewness) * 0.9952717
   }
