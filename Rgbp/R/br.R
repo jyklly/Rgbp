@@ -388,9 +388,9 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   BRlogpost <- function(a, b) {
 
     p0.hat <- exp(b) / (1 + exp(b))
-    t0 <- matrix(p0.hat * exp(-a), nc = n.IS, nr = length(z), byrow = T)
-    t1 <- matrix((1 - p0.hat) * exp(-a), nc = n.IS, nr = length(z), byrow = T)
-    t2 <- matrix(exp(-a), nc = n.IS, nr = length(z), byrow = T)
+    t0 <- matrix(p0.hat * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+    t1 <- matrix((1 - p0.hat) * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+    t2 <- matrix(exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
     if (any(c(t0, t1, t2, min(n - z) + t1, t0 + min(z)) <= 0)) {
       print("The components of lgamma should be positive")
       stop()
