@@ -569,7 +569,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   alpha.var <- alpha.2moment - alpha.mean^2
 
   list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
-       post.sd = as.numeric(post.sd), prior.mean.hat = prior.m,
+       post.sd = as.numeric(post.sd), prior.mean.hat = as.numeric(prior.m),
        post.intv.low = post.intv.low, post.intv.upp = post.intv.upp, beta.new = beta.mean, beta.var = beta.var,
        a.new = alpha.mean, a.var = alpha.var)
 }
@@ -701,7 +701,8 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, tri
   alpha.2moment <- alpha.IS^2 %*% weight / sum(weight)
   alpha.var <- alpha.2moment - alpha.mean^2
 
-  list(weight = weight, shrinkage = post.shrinkage, post.mean = post.m, post.sd = post.sd,
+  list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
+       post.sd = as.numeric(post.sd),
        post.intv.low = post.intv.low, post.intv.upp = post.intv.upp,
        a.new = alpha.mean, a.var = alpha.var)
 }
