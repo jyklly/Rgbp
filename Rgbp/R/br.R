@@ -337,21 +337,6 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   b.ini <- ini$b.ini
   m <- ncol(x)
 
-
-  BRlogpost <- function(a, b) {
-
-    p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
-    t0 <- p0.hat * exp(-a)
-    t1 <- (1 - p0.hat) * exp(-a)
-    t2 <- exp(-a)
-    if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
-      print("The components of lgamma should be positive")
-      stop()
-    } else {
-      a + sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-    }
-  }
-
   AlphaBetaMode <- function(given, ini) {
 
     z <- given$z
@@ -399,12 +384,26 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   mode.move <- alpha.beta$alpha.mode - optimax
   alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
   alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
- 
+
+  BRlogpost <- function(a, b) {
+
+    p0.hat <- exp(b) / (1 + exp(b))
+    t0 <- matrix(p0.hat * exp(-a), nc = n.IS, nr = length(z), byrow = T)
+    t1 <- matrix((1 - p0.hat) * exp(-a), nc = n.IS, nr = length(z), byrow = T)
+    t2 <- matrix(exp(-a), nc = n.IS, nr = length(z), byrow = T)
+    if (any(c(t0, t1, t2, min(n - z) + t1, t0 + min(z)) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      a + colSums(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
   if(m == 1) {
     beta.IS <- sqrt(alpha.beta$beta.var) * rt(n.IS, df = 4) + alpha.beta$beta.mode
     beta.IS.den <- dt((beta.IS - alpha.beta$beta.mode) / sqrt(alpha.beta$beta.var), df = 4) / 
                    sqrt(alpha.beta$beta.var)
-    numerator <- sapply(1 : n.IS, function(k){ exp(BRlogpost(alpha.IS[k], beta.IS[k])) })
+    numerator <- exp(BRlogpost(alpha.IS, beta.IS))
     denominator <- alpha.IS.den * beta.IS.den
     weight <- numerator / denominator
     weight <- weight / sum(weight)
