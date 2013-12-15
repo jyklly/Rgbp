@@ -436,8 +436,8 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.ve <- post.ve1 - post.ve2^2
       post.var <- post.ev + post.ve
       post.sd <- sqrt(post.var)
-      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
-                                  nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
+      third.moment <- t(weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2)))
     } else {
       B.matrix <- sapply(1 : length(n), function(k) {
         exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
@@ -462,8 +462,8 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.ve <- post.ve1 - post.ve2^2
       post.var <- post.ev + t(post.ve)
       post.sd <- sqrt(post.var)
-      third.moment <- weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
-                                  nr.matrix / (nr.matrix + 1) / (nr.matrix + 2))
+      third.moment <- t(weight %*% (nyrp0.matrix * (nyrp0.matrix + 1) * (nyrp0.matrix + 2) / 
+                                    nr.matrix / (nr.matrix + 1) / (nr.matrix + 2)))
     }
 
   } else {
@@ -537,6 +537,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
          psn(0, location = ep[kk], scale = w[kk], shape = al[kk])) * 0.025, 
         location = ep[kk], scale = w[kk], shape = al[kk])
   })
+
   alpha.mean <- alpha.IS %*% weight / sum(weight)
   alpha.2moment <- alpha.IS^2 %*% weight / sum(weight)
   alpha.var <- alpha.2moment - alpha.mean^2
