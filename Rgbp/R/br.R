@@ -542,7 +542,8 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
   alpha.2moment <- alpha.IS^2 %*% weight / sum(weight)
   alpha.var <- alpha.2moment - alpha.mean^2
 
-  list(weight = weight, shrinkage = post.shrinkage, post.mean = post.m, post.sd = post.sd, prior.mean.hat = prior.m,
+  list(weight = weight, shrinkage = post.shrinkage, post.mean = as.numeric(post.m), 
+       post.sd = as.numeric(post.sd), prior.mean.hat = prior.m,
        post.intv.low = post.intv.low, post.intv.upp = post.intv.upp, beta.new = beta.mean, beta.var = beta.var,
        a.new = alpha.mean, a.var = alpha.var)
 }
