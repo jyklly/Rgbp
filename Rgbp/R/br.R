@@ -457,7 +457,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, df.IS = 4, trial.scale = trial.
       post.shrinkage <- weight %*% B.matrix
       prior.m <- p0.sample %*% weight 
       post.m <- post.m.matrix %*% weight
-      post.ev <- (temp1 * (1 - temp1) / t(nr.matrix + 1)) %*% weight
+      post.ev <- (post.m.matrix * (1 - post.m.matrix) / t(nr.matrix + 1)) %*% weight
       post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
       post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
       post.ve <- post.ve1 - post.ve2^2
