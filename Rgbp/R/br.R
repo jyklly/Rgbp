@@ -326,6 +326,318 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
 }
 
 ######
+BRISBeta <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
+
+  z <- given$z
+  n <- given$n
+  y <- given$sample.mean
+  x <- ini$x
+  k <- length(n)
+  a.ini <- ini$a.ini
+  b.ini <- ini$b.ini
+  m <- ncol(x)
+
+  AlphaBetaMode <- function(given, ini) {
+
+    z <- given$z
+    n <- given$n
+    x <- ini$x
+    k <- length(n)
+    a.ini <- ini$a.ini
+    b.ini <- ini$b.ini
+    m <- ncol(x)
+
+    BRLogPostPriorMeanUn <- function(vec) {
+      # Log likelihood function of alpha and beta (regression coefficients) for BRIMM 
+      # when the descriptive second level mean is unknown.
+      a <- vec[1]
+      b <- vec[2 : (m + 1)]
+      p0.hat <- exp(x %*% as.matrix(b)) / (1 + exp(x %*% as.matrix(b)))
+      t0 <- p0.hat * exp(-a)
+      t1 <- (1 - p0.hat) * exp(-a)
+      t2 <- exp(-a)
+      if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+        print("The components of lgamma should be positive")
+        stop()
+      } else {
+        a + sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      }
+    }
+
+    alpha.beta <- optim(c(a.ini, b.ini), BRLogPostPriorMeanUn, control = list(fnscale = -1), 
+                        method= "L-BFGS-B", lower = -Inf, upper = Inf, hessian = TRUE)
+    alpha.beta.mode <- alpha.beta$par
+    alpha.beta.var <- -solve(alpha.beta$hessian)
+    alpha.var <- alpha.beta.var[1, 1]
+    beta.var <- alpha.beta.var[2 : (m + 1), 2 : (m + 1)]
+
+    list(alpha.mode = alpha.beta.mode[1], beta.mode = alpha.beta.mode[2 : (m + 1)], 
+         beta.var = beta.var, alpha.var = alpha.var)
+  }
+
+  SkewedNormal <- function(s) {
+    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+  }
+
+  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
+  alpha.beta <- AlphaBetaMode(given, ini)
+  mode.move <- alpha.beta$alpha.mode - optimax
+  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
+  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+
+  if (m == 1) {
+    BRlogpost <- function(a, b) {
+      t0 <- matrix(p0.sample * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+      t1 <- matrix((1 - p0.sample) * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+      t2 <- matrix(exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+      if (any(c(t0, t1, t2, min(n - z) + t1, t0 + min(z)) <= 0)) {
+        print("The components of lgamma should be positive")
+        stop()
+      } else {
+        a + colSums(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      }
+    }
+    beta.IS <- sqrt(alpha.beta$beta.var) * rt(n.IS, df = 4) + alpha.beta$beta.mode
+    beta.IS.den <- dt((beta.IS - alpha.beta$beta.mode) / sqrt(alpha.beta$beta.var), df = 4) / 
+                   sqrt(alpha.beta$beta.var)
+    p0.sample <- exp(beta.IS) / (1 + exp(beta.IS))
+    numerator <- exp(BRlogpost(alpha.IS, beta.IS))
+    denominator <- alpha.IS.den * beta.IS.den
+    weight <- numerator / denominator
+    weight <- weight / sum(weight)
+
+    beta.mean <- beta.IS %*% weight 
+    beta.2moment <- beta.IS^2 %*% weight 
+    beta.var <- beta.2moment - beta.mean^2
+
+    if ( all(n == n[1]) ) {
+      B.matrix <- exp(-alpha.IS) / (n[1] + exp(-alpha.IS))
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- sapply(1 : length(n), function(k) {
+        (1 - B.matrix) * y[k] + Bp.matrix
+      })
+      nr.matrix <- n[1] + exp(-alpha.IS)
+      y_p0.matrix <- sapply(1 : length(n), function(k) {
+        y[k] - p0.sample
+      })
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- p0.sample %*% weight 
+      post.m <- weight %*% post.m.matrix
+      post.ev <- weight %*% (post.m.matrix * (1 - post.m.matrix) / (nr.matrix + 1))
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + post.ve
+      post.sd <- sqrt(post.var)
+    } else {
+
+      B.matrix <- sapply(1 : length(n), function(k) {
+        exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
+      })
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- t(1 - B.matrix) * y + t(Bp.matrix)
+      nr.matrix <- sapply(1 : length(n), function(k) {
+        n[k] + exp(-alpha.IS)
+      })
+      y_p0.matrix <- sapply(1 : length(n), function(k) {
+        y[k] - p0.sample
+      })
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- p0.sample %*% weight 
+      post.m <- post.m.matrix %*% weight
+      post.ev <- (post.m.matrix * (1 - post.m.matrix) / t(nr.matrix + 1)) %*% weight
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + t(post.ve)
+      post.sd <- sqrt(post.var)
+    }
+
+  } else {
+ 
+    BRlogpost <- function(a, b) {
+      t0 <- t(p0.sample * exp(-a))
+      t1 <- t((1 - p0.sample) * exp(-a))
+      t2 <- matrix(exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+      if (any(c(t0, t1, t2, min(n - z) + t1, t0 + min(z)) <= 0)) {
+        print("The components of lgamma should be positive")
+        stop()
+      } else {
+        a + colSums(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      }
+    }
+
+    beta.IS <- rmt(n.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var,
+                   df = 4)
+    beta.IS.den <- dmt(beta.IS, mean = alpha.beta$beta.mode, S = alpha.beta$beta.var, 
+                       df = 4)
+    p0.sample <- exp(beta.IS %*% t(x)) / (1 + exp(beta.IS %*% t(x)))
+
+    numerator <- exp(BRlogpost(alpha.IS, beta.IS))
+    denominator <- alpha.IS.den * beta.IS.den
+    weight <- numerator / denominator
+    weight <- weight / sum(weight)
+
+    beta.mean <- weight %*% beta.IS 
+    beta.2moment <- weight %*% beta.IS^2 
+    beta.var <- beta.2moment - beta.mean^2
+
+    if ( all(n == n[1]) ) {
+      B.matrix <- exp(-alpha.IS) / (n[1] + exp(-alpha.IS))
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- sapply(1 : length(n), function(k) {
+        (1 - B.matrix) * y[k] + Bp.matrix[, k]
+      })
+      nr.matrix <- n[1] + exp(-alpha.IS)
+      y_p0.matrix <- t(y - t(p0.sample))
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- weight %*% p0.sample 
+      post.m <- weight %*% post.m.matrix
+      post.ev <- weight %*% (post.m.matrix * (1 - post.m.matrix) / (nr.matrix + 1))
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + post.ve
+      post.sd <- sqrt(post.var)
+    } else {
+
+      B.matrix <- sapply(1 : length(n), function(k) {
+        exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
+      })
+      Bp.matrix <- B.matrix * p0.sample
+      post.m.matrix <- t(1 - B.matrix) * y + t(Bp.matrix)
+      nr.matrix <- sapply(1 : length(n), function(k) {
+        n[k] + exp(-alpha.IS)
+      })
+      y_p0.matrix <- t(y - t(p0.sample))
+      post.shrinkage <- weight %*% B.matrix
+      prior.m <- weight %*% p0.sample
+      post.m <- post.m.matrix %*% weight
+      post.ev <- (post.m.matrix * (1 - post.m.matrix) / t(nr.matrix + 1)) %*% weight
+      post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+      post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+      post.ve <- post.ve1 - post.ve2^2
+      post.var <- post.ev + t(post.ve)
+      post.sd <- sqrt(post.var)
+    }
+  }
+
+  a1.beta.p <- (post.m * (1 - post.m) / post.var - 1) * post.m
+  a0.beta.p <- (post.m * (1 - post.m) / post.var - 1) * (1 - post.m)
+  post.intv.low <- qbeta((1 - given$Alpha) / 2, a1.beta.p, a0.beta.p)
+  post.intv.upp <- qbeta((1 + given$Alpha) / 2, a1.beta.p, a0.beta.p)
+
+  alpha.mean <- alpha.IS %*% weight / sum(weight)
+  alpha.2moment <- alpha.IS^2 %*% weight / sum(weight)
+  alpha.var <- alpha.2moment - alpha.mean^2
+
+  list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
+       post.sd = as.numeric(post.sd), prior.mean.hat = as.numeric(prior.m),
+       post.intv.low = post.intv.low, post.intv.upp = post.intv.upp, beta.new = beta.mean, beta.var = beta.var,
+       a.new = alpha.mean, a.var = alpha.var)
+}
+
+BRISBeta2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
+
+  z <- given$z
+  n <- given$n
+  y <- given$sample.mean
+  k <- length(n)
+  p0 <- given$prior.mean
+  a.ini <- ini$a.ini
+
+  BRLogPostKn <- function(a) {
+
+    t0 <- p0 * exp(-a)
+    t1 <- (1 - p0) * exp(-a)
+    t2 <- exp(-a)
+    if (any(c(t0, t1, t2, n - z + t1, t0 + z) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      a + sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
+  alpha.mode <- optimize(BRLogPostKn, lower = -10, upper = 0, maximum = TRUE)$maximum
+
+  SkewedNormal <- function(s) {
+    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+  }
+
+  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
+  mode.move <- alpha.mode - optimax
+  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
+  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+
+  BRLogPostKn2 <- function(a) {
+
+    t0 <- matrix(p0 * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+    t1 <- matrix((1 - p0) * exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+    t2 <- matrix(exp(-a), ncol = n.IS, nrow = length(z), byrow = T)
+    if (any(c(t0, t1, t2, min(n - z) + t1, t0 + min(z)) <= 0)) {
+      print("The components of lgamma should be positive")
+      stop()
+    } else {
+      a + colSums(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+    }
+  }
+
+  weight <- exp(BRLogPostKn2(alpha.IS)) / alpha.IS.den
+  weight <- weight / sum(weight)
+
+  if ( all(n == n[1]) ) {
+    B.matrix <- exp(-alpha.IS) / (n[1] + exp(-alpha.IS))
+    Bp.matrix <- B.matrix * p0
+    post.m.matrix <- sapply(1 : length(n), function(k) {
+      (1 - B.matrix) * y[k] + Bp.matrix
+    })
+    nr.matrix <- n[1] + exp(-alpha.IS)
+    y_p0.matrix <- matrix(y - p0, nrow = n.IS, ncol = length(y), byrow = T)
+    post.shrinkage <- weight %*% B.matrix
+    post.m <- weight %*% post.m.matrix
+    post.ev <- weight %*% (post.m.matrix * (1 - post.m.matrix) / (nr.matrix + 1))
+    post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+    post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+    post.ve <- post.ve1 - post.ve2^2
+    post.var <- post.ev + post.ve
+    post.sd <- sqrt(post.var)
+  } else {
+    B.matrix <- sapply(1 : length(n), function(k) {
+      exp(-alpha.IS) / (n[k] + exp(-alpha.IS))
+    })
+    Bp.matrix <- B.matrix * p0
+    post.m.matrix <- t(1 - B.matrix) * y + t(Bp.matrix)
+    nr.matrix <- sapply(1 : length(n), function(k) {
+      n[k] + exp(-alpha.IS)
+    })
+    y_p0.matrix <- matrix(y - p0, nrow = n.IS, ncol = length(y), byrow = T)
+    post.shrinkage <- weight %*% B.matrix
+    post.m <- post.m.matrix %*% weight
+    post.ev <- (post.m.matrix * (1 - post.m.matrix) / t(nr.matrix + 1)) %*% weight
+    post.ve1 <- weight %*% (B.matrix^2 * y_p0.matrix^2)
+    post.ve2 <- weight %*% (B.matrix * y_p0.matrix)
+    post.ve <- post.ve1 - post.ve2^2
+    post.var <- post.ev + t(post.ve)
+    post.sd <- sqrt(post.var)
+  }
+
+  a1.beta.p <- (post.m * (1 - post.m) / post.var - 1) * post.m
+  a0.beta.p <- (post.m * (1 - post.m) / post.var - 1) * (1 - post.m)
+  post.intv.low <- qbeta((1 - given$Alpha) / 2, a1.beta.p, a0.beta.p)
+  post.intv.upp <- qbeta((1 + given$Alpha) / 2, a1.beta.p, a0.beta.p)
+
+  alpha.mean <- alpha.IS %*% weight / sum(weight)
+  alpha.2moment <- alpha.IS^2 %*% weight / sum(weight)
+  alpha.var <- alpha.2moment - alpha.mean^2
+
+  list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
+       post.sd = as.numeric(post.sd),
+       post.intv.low = post.intv.low, post.intv.upp = post.intv.upp,
+       a.new = alpha.mean, a.var = alpha.var)
+}
+
+######
 BRIS <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
 
   z <- given$z
@@ -948,7 +1260,7 @@ BRSIR2ndLevelMeanKnown <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale
 }
     
 br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, 
-               n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TRUE){
+               n.IS = 0, n.SIR = 0, ISBetaApprox = FALSE, trial.scale = 3, save.result = TRUE){
 
   # The main function of BRIMM
 
@@ -998,42 +1310,66 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
 ######
   } else if (n.IS != 0 & n.SIR == 0) {
 
-    if (is.na(prior.mean)) {
-      res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+    if (ISBetaApprox == FALSE) {
+      if (is.na(prior.mean)) {
+        res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+      } else {
+        res <- BRIS2ndLevelMeanKnown(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
+      }
+
+      if (is.na(prior.mean)) {
+        p0.mean <- res$prior.mean.hat
+      } else {
+        p0.mean <- given$prior.mean
+      }
+
+      if (is.na(prior.mean)) {
+        b.mean <- res$beta.new
+        b.var <- res$beta.var
+      } else {
+        b.mean <- NA
+        b.var <- NA
+      }
     } else {
-      res <- BRIS2ndLevelMeanKnown(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
+      if (is.na(prior.mean)) {
+        res <- BRISBeta(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+      } else {
+        res <- BRISBeta2ndLevelMeanKnown(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
+      }
+
+      if (is.na(prior.mean)) {
+        p0.mean <- res$prior.mean.hat
+      } else {
+        p0.mean <- given$prior.mean
+      }
+
+      if (is.na(prior.mean)) {
+        b.mean <- res$beta.new
+        b.var <- res$beta.var
+      } else {
+        b.mean <- NA
+        b.var <- NA
+      }
+
     }
 
-    if (is.na(prior.mean)) {
-      p0.mean <- res$prior.mean.hat
-    } else {
-      p0.mean <- given$prior.mean
-    }
-
-    if (is.na(prior.mean)) {
-      b.mean <- res$beta.new
-      b.var <- res$beta.var
-    } else {
-      b.mean <- NA
-      b.var <- NA
-    }
-
-    output <- if (save.result = TRUE) {
+    output <- if (save.result == TRUE) {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
-           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA)
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA, ISBeta = ISBetaApprox)
     } else {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
-           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA)
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA, ISBeta = ISBetaApprox)
     }
     output
+
   } else {
 
     if (is.na(prior.mean)) {
@@ -1058,7 +1394,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
       beta <- NA
     }
 
-    output <- if (save.result == 1) {
+    output <- if (save.result == TRUE) {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 

@@ -7,7 +7,8 @@
 }
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TURE, normal.CI = FALSE)}
+"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TURE, 
+ISBetaApprox = FALSE, normal.CI = FALSE)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -47,10 +48,11 @@
   }
 
   \item{save.result}{
-    Only for Binomial model with IS and SIR. If save.result is TRUE, all the results of weights and approximate posterior samples will be saved in the gbp object. Default is TRUE.
-
+    Only for Binomial model with IS and SIR. If \code{save.result} is TRUE, all the results of weights and approximate posterior samples will be saved in the gbp object. Default is TRUE.
   }
-
+  \item{ISBetaApprox}{
+    Only for Binomial model with IS. If \code{ISBetaApprox} is TRUE, \code{gbp} approximates its posterior distribution by the Beta distribution with two moments estimated by Importance Sampling. If \code{ISBetaApprox} is FALSE, \code{gbp} approximates its posterior distribution by the truncated skewed Normal distribution with three moments estimated by Importance Sampling.
+  }
     \item{normal.CI}{
     Only applicable for Gaussian data. If \code{TRUE} then a Normal
     approximation is used to construct intervals for the level 1 group
