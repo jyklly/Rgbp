@@ -245,30 +245,30 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
               out <- if (!missing(mean.PriorDist)) {
                        gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
                            Alpha = gbp.object$Alpha, n.IS = length(gbp.object$weight),
-                           trial.scale = gbp.object$trial.scale, save.result = FALSE, save.result = FALSE)
+                           trial.scale = gbp.object$trial.scale, save.result = FALSE)
                      } else if (!missing(A.or.r) & missing(reg.coef)) { 
                        if (!identical(gbp.object$prior.mean, NA)) {
                          gbp(sim.z[, i], n, mean.PriorDist = gbp.object$prior.mean, model = "binomial", 
                              Alpha = gbp.object$Alpha, n.IS = length(gbp.object$weight),
-                             trial.scale = gbp.object$trial.scale, save.result = FALSE, save.result = FALSE)
+                             trial.scale = gbp.object$trial.scale, save.result = FALSE)
                        } else if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
                          gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                              n.IS = length(gbp.object$weight), trial.scale = gbp.object$trial.scale, 
-                             save.result = FALSE, save.result = FALSE)
+                             save.result = FALSE)
                        } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
                          gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
                              n.IS = length(gbp.object$weight), trial.scale = gbp.object$trial.scale, 
-                             save.result = FALSE, save.result = FALSE)
+                             save.result = FALSE)
                        }
                      } else if (!missing(reg.coef)) {
                        if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
                          gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                              n.IS = length(gbp.object$weight), trial.scale = gbp.object$trial.scale, 
-                             save.result = FALSE, save.result = FALSE)
+                             save.result = FALSE)
                        } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
                          gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
                              n.IS = length(gbp.object$weight), trial.scale = gbp.object$trial.scale, 
-                             save.result = FALSE, save.result = FALSE)
+                             save.result = FALSE)
                        }
                      }
             }
