@@ -7,7 +7,7 @@
 }
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TURE, 
+"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TRUE, 
 ISBetaApprox = FALSE, normal.CI = FALSE)}
 \arguments{
   \item{x}{
