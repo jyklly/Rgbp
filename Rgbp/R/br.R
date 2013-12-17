@@ -996,7 +996,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
                    weight = NA, p = NA)
     output
 ######
-  } else if (n.SIR == 0) {
+  } else if (n.IS != 0 & n.SIR == 0) {
 
     if (is.na(prior.mean)) {
       res <- BRIS(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
