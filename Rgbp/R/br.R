@@ -948,7 +948,7 @@ BRSIR2ndLevelMeanKnown <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale
 }
     
 br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, 
-               n.IS = 0, n.SIR = 0, trial.scale = 3){
+               n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TRUE){
 
   # The main function of BRIMM
 
@@ -1018,13 +1018,21 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
       b.var <- NA
     }
 
-    output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
-                   shrinkage = res$shrinkage, 
-                   post.mean = res$post.mean, post.sd = res$post.sd, 
-                   prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
-                   post.intv.upp = res$post.intv.upp, model = "br", X = X, 
-                   beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
-                   intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA)
+    output <- if (save.result = TRUE) {
+      list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+           shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
+           prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
+           post.intv.upp = res$post.intv.upp, model = "br", X = X, 
+           beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA)
+    } else {
+      list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+           shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
+           prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
+           post.intv.upp = res$post.intv.upp, model = "br", X = X, 
+           beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = NA)
+    }
     output
   } else {
 
@@ -1050,14 +1058,23 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
       beta <- NA
     }
 
-    output <- list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
-                   shrinkage = res$shrinkage, 
-                   post.mean = res$post.mean, post.sd = res$post.sd, 
-                   prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
-                   post.intv.upp = res$post.intv.upp, model = "br", X = X, 
-                   beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
-                   intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
-                   alpha = res$alpha.sample, beta = beta)
+    output <- if (save.result == 1) {
+      list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+           shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
+           prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
+           post.intv.upp = res$post.intv.upp, model = "br", X = X, 
+           beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
+           alpha = res$alpha.sample, beta = beta)
+    } else {
+      list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
+           shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
+           prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
+           post.intv.upp = res$post.intv.upp, model = "br", X = X, 
+           beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = 1)
+
+    }
     output
 
   }
