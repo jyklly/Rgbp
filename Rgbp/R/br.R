@@ -842,22 +842,22 @@ BRSIR <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale = trial.scale) {
     })
     post.shrinkage <- colMeans(B.matrix)
   }
-  post.mean <- rowMeans(p.SIR)
+  post.m <- rowMeans(p.SIR)
   post.sd <- apply(p.SIR, 1, sd)
   if (m == 1) {
     prior.m <- mean(p0.sample)
-    beta.new <- mean(beta.SIR)
+    beta.mean <- mean(beta.SIR)
     beta.var <- var(beta.SIR)
   } else {
     prior.m <- apply(p0.sample, 2, mean)
-    beta.new <- colMeans(beta.SIR)
+    beta.mean <- colMeans(beta.SIR)
     beta.var <- apply(beta.SIR, 2, var)
   }
   post.intv <- apply(p.SIR, 1, quantile, probs = c((1 - given$Alpha) / 2, 1 / 2 + given$Alpha / 2))
   post.intv.low <- post.intv[1, ]
   post.intv.upp <- post.intv[2, ]
-  a.new <- mean(alpha.SIR)
-  a.var <- var(alpha.SIR)
+  alpha.mean <- mean(alpha.SIR)
+  alpha.var <- var(alpha.SIR)
 
   list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
        post.sd = as.numeric(post.sd), prior.mean.hat = as.numeric(prior.m),
@@ -933,13 +933,13 @@ BRSIR2ndLevelMeanKnown <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale
     })
     post.shrinkage <- colMeans(B.matrix)
   }
-  post.mean <- rowMeans(p.SIR)
+  post.m <- rowMeans(p.SIR)
   post.sd <- apply(p.SIR, 1, sd)
   post.intv <- apply(p.SIR, 1, quantile, probs = c((1 - given$Alpha) / 2, 1 / 2 + given$Alpha / 2))
   post.intv.low <- post.intv[1, ]
   post.intv.upp <- post.intv[2, ]
-  a.new <- mean(alpha.SIR)
-  a.var <- var(alpha.SIR)
+  alpha.mean <- mean(alpha.SIR)
+  alpha.var <- var(alpha.SIR)
 
 
   list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
@@ -1029,9 +1029,9 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
   } else {
 
     if (is.na(prior.mean)) {
-      res <- BRSIR(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale)
+      res <- BRSIR(given, ini, a.res, n.SIR = n.SIR, trial.scale = trial.scale)
     } else {
-      res <- BRSIR2ndLevelMeanKnown(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
+      res <- BRSIR2ndLevelMeanKnown(given, ini, a.res, n.SIR = n.SIR, trial.scale = trial.scale) 
     }
 
     if (is.na(prior.mean)) {
