@@ -2,7 +2,7 @@
 \alias{coverage}
 \title{Estimating Coverage Probability}
 \description{\code{coverage} estimates Rao-Blackwellized and simple unbiased coverage probabilities.}
-\usage{coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 10)}
+\usage{coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100)}
 
 \arguments{
   \item{gbp.object}{

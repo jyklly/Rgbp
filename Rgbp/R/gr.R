@@ -75,9 +75,9 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   skew<-((mu-y)^3*mu3-3*V*(mu-y)*v)/shat^3
   sqrtV<-sqrt(V)
   hmB <- length(Bhat)/sum(1/Bhat)
-  m4B <- (6*(a0^3 - a0^2*(2*a1-1) + a1^2*(a1+1)-2*a0*a1*(a1+2))/(a0*a1*(a0+a1+2)*(a0+a1+3)) + 3)*v^2
-  m4 <- 3*V^2*beta(a1+2,a0)/beta(a1,a0) + (mu-y)^4*m4B +6*(beta(a1+3,a0)/beta(a1,a0)*V*(y-mu)^2 - 2*beta(a1+2,a0)/beta(a1,a0)*(y-mu)^2*(1-a0/(a1+a0))*V + V*(1-a0/(a0+a1))^3*(y-mu)^2)
-  kurt <- m4/shat^2
+  ## m4B <- (6*(a0^3 - a0^2*(2*a1-1) + a1^2*(a1+1)-2*a0*a1*(a1+2))/(a0*a1*(a0+a1+2)*(a0+a1+3)) + 3)*v^2
+  ## m4 <- 3*V^2*beta(a1+2,a0)/beta(a1,a0) + (mu-y)^4*m4B +6*(beta(a1+3,a0)/beta(a1,a0)*V*(y-mu)^2 - 2*beta(a1+2,a0)/beta(a1,a0)*(y-mu)^2*(1-a0/(a1+a0))*V + V*(1-a0/(a0+a1))^3*(y-mu)^2)
+  ## kurt <- m4/shat^2
 	
   ## calculate CIs using skewed normal
   ## TODO: use apply not loop
