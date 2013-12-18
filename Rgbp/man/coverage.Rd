@@ -18,7 +18,7 @@
     (optional) a given true numeric value for the mean of (second-level) prior distribution. If not designated, the previously known value in the \code{gbp.object} object will be considered as a known prior mean.
   }
   \item{nsim}{
-    number of datasets to be generated. Default is 10.
+    number of datasets to be generated. Default is 100.
   }
 }
 

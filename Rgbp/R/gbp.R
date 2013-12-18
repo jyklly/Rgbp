@@ -1,9 +1,11 @@
 ######
-gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.IS, trial.scale, normal.CI) UseMethod("gbp")
+gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.IS, n.SIR, 
+                trial.scale, save.result, ISBetaApprox, normal.CI) UseMethod("gbp")
 ######
 gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
-                        n.IS = 0, trial.scale = 2.5, normal.CI = FALSE) {
+                        n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TRUE, 
+                        ISBetaApprox = FALSE, normal.CI = FALSE) {
 
   ##input checks
   if(model == "poisson" & missing(mean.PriorDist))
@@ -12,9 +14,10 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
   
 ######
   res <- switch(model, 
-       gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, normal.CI = normal.CI), 
+       gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, 
+                     normal.CI = normal.CI), 
        binomial = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
-                     n.IS = n.IS, trial.scale = trial.scale), 
+                     n.IS = n.IS, n.SIR = n.SIR, trial.scale = trial.scale, save.result = TRUE, ISBetaApprox = FALSE), 
        poisson = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
@@ -265,7 +268,11 @@ summary.gbp <- function(object, ...) {
     } else {
       names(estimate) <- paste("beta", 1 : (length(estimate)), sep = "")
     }
-    se <- as.vector(sqrt(diag(object$beta.var)))
+    if ((sum(is.na(object$weight)) == 1)) {
+      se <- as.vector(sqrt(diag(object$beta.var)))
+    } else {
+      se <- as.vector(sqrt(object$beta.var))
+    }
     z.val <- estimate / se
     p.val <- 2 * pnorm(-abs(z.val))
     beta.result <- data.frame(estimate, se, z.val, p.val)
