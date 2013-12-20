@@ -157,7 +157,7 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
                (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
                 - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
     }
-    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% diag(as.numeric(diagm)) %*% x)
+    out <- cbind(t(x) %*% as.vector(vec), t(x) %*% (x * as.numeric(diagm)))
     out
   } 
 
@@ -183,7 +183,7 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
                (digamma(z + exp(-a) * p) - digamma(exp(-a) *p)
                 - digamma(n - z + exp(-a) * q) + digamma(exp(-a) * q)) * (q - p)) * exp(-a) * p * q
     }
-    out <- t(x) %*% diag(as.numeric(diagm)) %*% x
+    out <- t(x) %*% (x * as.numeric(diagm))
     out
   } 
 
