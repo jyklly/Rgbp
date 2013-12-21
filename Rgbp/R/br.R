@@ -195,7 +195,7 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
       out <- BRDerivBeta(a, b.ini)
       score <- out[, 1]
       hessian <- out[, 2 : (m + 1)]
-      dif <- chol2inv(chol(hessian)) %*% score
+      dif <- -chol2inv(chol(-hessian)) %*% score
       b.ini <- b.ini - dif
       n.iter <- n.iter + 1
       if (n.iter > 50) {
