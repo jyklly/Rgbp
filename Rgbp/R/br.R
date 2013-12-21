@@ -195,7 +195,7 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
       out <- BRDerivBeta(a, b.ini)
       score <- out[, 1]
       hessian <- out[, 2 : (m + 1)]
-      dif <- solve(hessian) %*% score
+      dif <- chol2inv(chol(hessian)) %*% score
       b.ini <- b.ini - dif
       n.iter <- n.iter + 1
       if (n.iter > 50) {
@@ -219,7 +219,7 @@ BRAlphaBetaEst2ndLevelMeanUnknown <- function(given, ini) {
   b.hessian <- b.temp.result$beta.hessian
 
   list(a.new = a.new, beta.new = b.new, 
-       a.var = -1 / a.hess, beta.var = -solve(b.hessian))
+       a.var = -1 / a.hess, beta.var = -chol2inv(chol(b.hessian)))
 }
 
 
@@ -367,7 +367,7 @@ BRISBeta <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
     alpha.beta <- optim(c(a.ini, b.ini), BRLogPostPriorMeanUn, control = list(fnscale = -1), 
                         method= "L-BFGS-B", lower = -Inf, upper = Inf, hessian = TRUE)
     alpha.beta.mode <- alpha.beta$par
-    alpha.beta.var <- -solve(alpha.beta$hessian)
+    alpha.beta.var <- -chol2inv(chol(alpha.beta$hessian))
     alpha.var <- alpha.beta.var[1, 1]
     beta.var <- alpha.beta.var[2 : (m + 1), 2 : (m + 1)]
 
@@ -679,7 +679,7 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
     alpha.beta <- optim(c(a.ini, b.ini), BRLogPostPriorMeanUn, control = list(fnscale = -1), 
                         method= "L-BFGS-B", lower = -Inf, upper = Inf, hessian = TRUE)
     alpha.beta.mode <- alpha.beta$par
-    alpha.beta.var <- -solve(alpha.beta$hessian)
+    alpha.beta.var <- -chol2inv(chol(alpha.beta$hessian))
     alpha.var <- alpha.beta.var[1, 1]
     beta.var <- alpha.beta.var[2 : (m + 1), 2 : (m + 1)]
 
@@ -1060,7 +1060,7 @@ BRSIR <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale = trial.scale) {
     alpha.beta <- optim(c(a.ini, b.ini), BRLogPostPriorMeanUn, control = list(fnscale = -1), 
                         method= "L-BFGS-B", lower = -Inf, upper = Inf, hessian = TRUE)
     alpha.beta.mode <- alpha.beta$par
-    alpha.beta.var <- -solve(alpha.beta$hessian)
+    alpha.beta.var <- -chol2inv(chol(alpha.beta$hessian))
     alpha.var <- alpha.beta.var[1, 1]
     beta.var <- alpha.beta.var[2 : (m + 1), 2 : (m + 1)]
 
