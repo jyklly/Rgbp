@@ -55,16 +55,18 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   }else{
     DVAhat<-diag(V+Ahat)
     DVAhati <- diag(1/(V+Ahat))
-    Betahat <- solve(t(X)%*%DVAhati%*%X)%*%t(X)%*%DVAhati%*%y
     Betahatvar <- solve(t(X)%*%DVAhati%*%X)
+    BetahatvarmX <- Betahatvar%*%t(X)
+    Betahat <- BetahatvarmX%*%DVAhati%*%y
     BetahatSE <- sqrt(diag(Betahatvar))
     mu<-X%*%Betahat
     ##calculate posterior variance
-    E <- eigen(DVAhat)
-    W <- E$values
-    Q <- E$vectors
-    Z <- Q%*%diag(1/sqrt(W))%*%t(Q)
-    Phat<-Z%*%X%*%solve(t(X)%*%solve(DVAhat)%*%X)%*%t(X)%*%Z
+    #E <- eigen(DVAhat)
+    #W <- E$values
+    #Q <- E$vectors
+    #Z <- Q%*%diag(1/sqrt(W))%*%t(Q)
+    Z <- sqrt(DVAhati)
+    Phat<-Z%*%X%*%BetahatvarmX%*%Z
     p<-diag(Phat)
     shat<-sqrt((1-(1-p)*Bhat)*V+v*(y-mu)^2)
   }
