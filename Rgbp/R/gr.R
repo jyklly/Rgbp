@@ -32,7 +32,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
     Betahatvar<-NA
   }else{
     r <- dim(X)[2]
-    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="BFGS",gr = function(x){derval(x,y,V,X)}, hessian=T)
+    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="BFGS", hessian=T, gr = function(x){derval(x,y,V,X)})
     est.var <- -1/est$hessian
     Ahat <- exp(est$par[1])
   }
@@ -108,10 +108,10 @@ gr.ll.muknown<-function(A,y,V,mu,type){
 
 ##log adjusted posterior for unknown mu
 gr.ll.muunknown<-function(A,y,V,X,type){
-  DVA<-diag(V+A)
   DVAi <- diag(1/(V+A))
-  BetaA <- solve(t(X)%*%DVAi%*%X)%*%t(X)%*%DVAi%*%y
-  lla<-type*log(A) - 1/2*sum(log(V+A)) - 1/2*log(det(t(X)%*%DVAi%*%X)) - 1/2*t(y-X%*%BetaA)%*%DVAi%*%(y-X%*%BetaA)
+  exp1 <- t(X)%*%DVAi%*%X
+  BetaA <- solve(exp1)%*%t(X)%*%DVAi%*%y
+  lla <- type*log(A)+sum(dnorm(x=y,mean=X%*%BetaA,sd=sqrt(V+A),log=TRUE)) - 1/2*log(det(exp1))
   return(lla)
 }
 
