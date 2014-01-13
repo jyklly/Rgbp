@@ -7,8 +7,8 @@
 }
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0, trial.scale = 3, save.result = TRUE, 
-ISBetaApprox = FALSE, normal.CI = FALSE)}
+"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0,
+trial.scale = 3, save.result = TRUE, ISBetaApprox = FALSE, normal.CI = FALSE)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
