@@ -26,7 +26,6 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   if(muknown){
     r<-0
     est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},control=list(fnscale=-1),method="BFGS",hessian=T)
-    est.var <- solve(-1*as.matrix(est$hessian))
     Ahat <- exp(est$par)
     Betahat<-NA
     Betahatvar<-NA
@@ -38,8 +37,8 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   }
 
   ##calculate estimates
-  ninfo <- -1*as.matrix(est$hessian)[1,1]
-  Avar<-est.var[1,1]*Ahat^2
+  ninfo <- -1*est$hessian
+  Avar<-est.var*Ahat^2
   Bhat<-V/(V+Ahat)
   a0<-ninfo/Bhat
   a1<-ninfo/(1-Bhat)
@@ -55,7 +54,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   }else{
     DVAhat<-diag(V+Ahat)
     DVAhati <- diag(1/(V+Ahat))
-    Betahatvar <- solve(t(X)%*%DVAhati%*%X)
+    Betahatvar <- chol2inv(chol(t(X)%*%DVAhati%*%X))
     BetahatvarmX <- Betahatvar%*%t(X)
     Betahat <- BetahatvarmX%*%DVAhati%*%y
     BetahatSE <- sqrt(diag(Betahatvar))
@@ -91,6 +90,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
     skewedmat[,2] <- thetahat
     skewedmat[,3] <- qnorm(1-(1-Alpha)/2,thetahat,shat)
   }else{
+    browser()
     snparam <- lapply(1:length(thetahat), function(i){as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))})
     tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
     skewedmat <- as.matrix(do.call("rbind", tmp))
@@ -98,7 +98,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var[1,1], Alpha = Alpha, weight = NA, snparam = snparam)
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var, Alpha = Alpha, weight = NA, snparam = snparam)
   return(output)
 }
 
@@ -112,7 +112,7 @@ gr.ll.muknown<-function(A,y,V,mu,type){
 gr.ll.muunknown<-function(A,y,V,X,type){
   DVAi <- diag(1/(V+A))
   exp1 <- t(X)%*%DVAi%*%X
-  BetaA <- solve(exp1)%*%t(X)%*%DVAi%*%y
+  BetaA <- chol2inv(chol(exp1))%*%t(X)%*%DVAi%*%y
   lla <- type*log(A)+sum(dnorm(x=y,mean=X%*%BetaA,sd=sqrt(V+A),log=TRUE)) - 1/2*log(det(exp1))
   return(lla)
 }
@@ -148,7 +148,7 @@ derval <- function(alpha,y,V,X){
   wv = 1/(V+A)
   Wm = diag(wv)
   tXwm <- t(X)%*%Wm
-  Sigmam = solve(tXwm%*%X)
+  Sigmam = chol2inv(chol(tXwm%*%X))
   Betahat <- Sigmam%*%tXwm%*%y
   res <- (y-X%*%Betahat)
   exp1 <- Sigmam%*%t(X)%*%Wm^2

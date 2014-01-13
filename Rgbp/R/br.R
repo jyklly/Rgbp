@@ -382,8 +382,8 @@ BRISBeta <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   alpha.beta <- AlphaBetaMode(given, ini)
   mode.move <- alpha.beta$alpha.mode - optimax
-  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.IS <- rsn(n.IS,  mode.move,  trial.scale, -2) 
+  alpha.IS.den <- dsn(alpha.IS, mode.move,  trial.scale, -2)
 
   if (m == 1) {
     BRlogpost <- function(a, b) {
@@ -562,13 +562,13 @@ BRISBeta2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, trial.scal
   alpha.mode <- optimize(BRLogPostKn, lower = -10, upper = 0, maximum = TRUE)$maximum
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0,  trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   mode.move <- alpha.mode - optimax
-  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.IS <- rsn(n.IS,  mode.move,  trial.scale, -2) 
+  alpha.IS.den <- dsn(alpha.IS, mode.move,  trial.scale, -2)
 
   BRLogPostKn2 <- function(a) {
 
@@ -688,14 +688,14 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
   }
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0,  trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   alpha.beta <- AlphaBetaMode(given, ini)
   mode.move <- alpha.beta$alpha.mode - optimax
-  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.IS <- rsn(n.IS,  mode.move,  trial.scale, -2) 
+  alpha.IS.den <- dsn(alpha.IS, mode.move,  trial.scale, -2)
 
   if (m == 1) {
     BRlogpost <- function(a, b) {
@@ -863,17 +863,17 @@ BRIS <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) {
   al <- del / sqrt(1 - del^2)
 
   post.intv.low <- sapply(1 : length(n), function(kk){
-    qsn((psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-         psn(0, location = ep[kk], scale = w[kk], shape = al[kk])) * 0.025 + 
-        psn(0, location = ep[kk], scale = w[kk], shape = al[kk]), 
-        location = ep[kk], scale = w[kk], shape = al[kk])
+    qsn((psn(1, ep[kk],  w[kk], al[kk]) - 
+         psn(0, ep[kk],  w[kk], al[kk])) * 0.025 + 
+        psn(0, ep[kk],  w[kk], al[kk]), 
+        ep[kk],  w[kk], al[kk])
   })
 
   post.intv.upp <- sapply(1 : length(n), function(kk){
-    qsn(psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-        (psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-         psn(0, location = ep[kk], scale = w[kk], shape = al[kk])) * 0.025, 
-        location = ep[kk], scale = w[kk], shape = al[kk])
+    qsn(psn(1, ep[kk],  w[kk], al[kk]) - 
+        (psn(1, ep[kk],  w[kk], al[kk]) - 
+         psn(0, ep[kk],  w[kk], al[kk])) * 0.025, 
+        ep[kk],  w[kk], al[kk])
   })
 
   alpha.mean <- alpha.IS %*% weight / sum(weight)
@@ -911,13 +911,13 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, trial.scale = 
   alpha.mode <- optimize(BRLogPostKn, lower = -10, upper = 0, maximum = TRUE)$maximum
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0,  trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   mode.move <- alpha.mode - optimax
-  alpha.IS <- rsn(n.IS, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.IS.den <- dsn(alpha.IS, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.IS <- rsn(n.IS,  mode.move,  trial.scale, -2) 
+  alpha.IS.den <- dsn(alpha.IS, mode.move,  trial.scale, -2)
 
   BRLogPostKn2 <- function(a) {
 
@@ -995,17 +995,17 @@ BRIS2ndLevelMeanKnown <- function(given, ini, a.res, n.IS = n.IS, trial.scale = 
   al <- del / sqrt(1 - del^2)
 
   post.intv.low <- sapply(1 : length(n), function(kk){
-    qsn((psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-         psn(0, location = ep[kk], scale = w[kk], shape = al[kk])) * (1 - given$Alpha) / 2 + 
-        psn(0, location = ep[kk], scale = w[kk], shape = al[kk]), 
-        location = ep[kk], scale = w[kk], shape = al[kk])
+    qsn((psn(1, ep[kk],  w[kk], al[kk]) - 
+         psn(0, ep[kk],  w[kk], al[kk])) * (1 - given$Alpha) / 2 + 
+        psn(0, ep[kk],  w[kk], al[kk]), 
+        ep[kk],  w[kk], al[kk])
   })
 
   post.intv.upp <- sapply(1 : length(n), function(kk){
-    qsn(psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-        (psn(1, location = ep[kk], scale = w[kk], shape = al[kk]) - 
-         psn(0, location = ep[kk], scale = w[kk], shape = al[kk])) * (1 - given$Alpha) / 2, 
-        location = ep[kk], scale = w[kk], shape = al[kk])
+    qsn(psn(1, ep[kk],  w[kk], al[kk]) - 
+        (psn(1, ep[kk],  w[kk], al[kk]) - 
+         psn(0, ep[kk],  w[kk], al[kk])) * (1 - given$Alpha) / 2, 
+        ep[kk],  w[kk], al[kk])
   })
 
   alpha.mean <- alpha.IS %*% weight / sum(weight)
@@ -1069,15 +1069,15 @@ BRSIR <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale = trial.scale) {
   }
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0,  trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   alpha.beta <- AlphaBetaMode(given, ini)
   mode.move <- alpha.beta$alpha.mode - optimax
 
-  alpha.SIR <- rsn(2 * n.SIR, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.SIR.den <- dsn(alpha.SIR, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.SIR <- rsn(2 * n.SIR,  mode.move,  trial.scale, -2) 
+  alpha.SIR.den <- dsn(alpha.SIR, mode.move,  trial.scale, -2)
 
   if (m == 1) {
 
@@ -1204,13 +1204,13 @@ BRSIR2ndLevelMeanKnown <- function(given, ini, a.res, n.SIR = n.SIR, trial.scale
   alpha.mode <- optimize(BRLogPostKn, lower = -10, upper = 0, maximum = TRUE)$maximum
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0,  trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
   mode.move <- alpha.mode - optimax
-  alpha.SIR <- rsn(2 * n.SIR, location =  mode.move, scale = trial.scale, shape = -2) 
-  alpha.SIR.den <- dsn(alpha.SIR, location = mode.move, scale = trial.scale, shape = -2)
+  alpha.SIR <- rsn(2 * n.SIR,  mode.move,  trial.scale, -2) 
+  alpha.SIR.den <- dsn(alpha.SIR, mode.move,  trial.scale, -2)
 
   BRLogPostKn2 <- function(a) {
 
