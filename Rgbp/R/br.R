@@ -376,7 +376,7 @@ BRISBeta <- function(given, ini, a.res, n.IS = n.IS, trial.scale = trial.scale) 
   }
 
   SkewedNormal <- function(s) {
-    dsn(s, location = 0, scale = trial.scale, shape = -2) 
+    dsn(s, 0, trial.scale, -2) 
   }
 
   optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum

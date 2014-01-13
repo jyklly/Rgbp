@@ -32,11 +32,11 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   }else{
     r <- dim(X)[2]
     est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="BFGS", hessian=T, gr = function(x){derval(x,y,V,X)})
-    est.var <- -1/est$hessian
     Ahat <- exp(est$par[1])
   }
 
   ##calculate estimates
+  est.var <- -1/est$hessian
   ninfo <- -1*est$hessian
   Avar<-est.var*Ahat^2
   Bhat<-V/(V+Ahat)
@@ -90,7 +90,6 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
     skewedmat[,2] <- thetahat
     skewedmat[,3] <- qnorm(1-(1-Alpha)/2,thetahat,shat)
   }else{
-    browser()
     snparam <- lapply(1:length(thetahat), function(i){as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))})
     tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
     skewedmat <- as.matrix(do.call("rbind", tmp))
