@@ -67,7 +67,7 @@
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-\section[introduction]{Introduction}
+\section[Introduction]{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 \pkg{Rgbp} is an R package for estimating and validating a two-level model, also known as a conjugate hierarchical generalized linear model \citep{hglm2006, hglm2010} or a conditionally independent hierarchical model \citep{1989}, producing point and interval estimates of  random effects. The estimation procedure utilizes approximate Bayesian machinery and the validation involves checking frequency properties of the procedure via repeated sampling (which we call ``frequency method checking"). It is found that even in small samples our procedure yields good frequency properties in comparison to other methods such as Maximum Likelihood Estimation (MLE). 
 
@@ -254,7 +254,7 @@ R> n <- c(67,  68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
 or
 \begin{CodeChunk}
 \begin{CodeInput}
-R> data(hospital)
+R> data("hospital")
 R> z <- hospital$d # variable name for the number of deaths is d in dataset
 R> n <- hospital$n
 \end{CodeInput}
@@ -462,7 +462,7 @@ R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
 or
 \begin{CodeChunk}
 \begin{CodeInput}
-R> data(schools)
+R> data("schools")
 R> y  <- schools$y
 R> se <- schools$se
 \end{CodeInput}
@@ -621,7 +621,7 @@ R> x <- c( 1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0
 or
 \begin{CodeChunk}
 \begin{CodeInput}
-R> data(baseball)
+R> data("baseball")
 R> z <- baseball$Hits
 R> n <- baseball$At.Bats
 R> x <- ifelse(baseball$Position == "fielder", 1, 0)
