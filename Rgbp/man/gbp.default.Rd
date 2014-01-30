@@ -306,52 +306,6 @@ trial.scale = 3, save.result = TRUE, ISBetaApprox = FALSE, normal.CI = FALSE)}
   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
   ##############################################################
 
-    ####################################################################################
-    # If we do not have any covariate and do not know a mean of the prior distribution #
-    ####################################################################################
-
-    p <- gbp(z, n, model = "poisson")
-    p
-    print(p, sort = FALSE)
-    summary(p)
-    plot(p)
-    plot(p, sort = FALSE)
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    pcv <- coverage(p, nsim = 10)  
-
-    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
-    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
-
-    ### when we want to simulate pseudo datasets based on different values of r
-    ### and a regression coefficient (intercept), 
-    ### not using estimated values as true ones.
-    pcv <- coverage(p, A.or.r = 60, reg.coef = -5, nsim = 10)  
-
-    ##################################################################################
-    # If we have one covariate and do not know a mean of the prior distribution yet, #
-    ##################################################################################
-
-    p <- gbp(z, n, x1, model = "poisson")
-    p
-    print(p, sort = FALSE)
-    summary(p)
-    plot(p)
-    plot(p, sort = FALSE)
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    pcv <- coverage(p, nsim = 10)  
-
-    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
-    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
-
-    ### when we want to simulate pseudo datasets based on different values of r
-    ### and regression coefficients, not using estimated values 
-    ### as true ones. Two values of reg.coef are for beta0 and beta1
-    pcv <- coverage(p, A.or.r = 60, reg.coef = c(-2, 0), nsim = 10)  
-
     ################################################
     # If we know a mean of the prior distribution, #
     ################################################

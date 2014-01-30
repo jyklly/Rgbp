@@ -239,44 +239,6 @@
   # Poisson Regression Interactive Multi-level Modeling (PRIMM) #
   ###############################################################
 
-    ####################################################################################
-    # If we do not have any covariate and do not know a mean of the prior distribution #
-    ####################################################################################
-
-    p <- gbp(z, n, model = "poisson")
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    pcv <- coverage(p, nsim = 10)  
-
-    ### pcv$coverageRB, pcv$coverageS, pcv$average.coverageRB, pcv$average.coverageS,
-    ### pcv$minimum.coverageRB, pcv$raw.resultRB, pcv$raw.resultS
-
-    ### pcv <- coverage(p, mean.PriorDist = 0.265, nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 120, nsim = 100)
-    ### pcv <- coverage(p, reg.coef = -2, nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 120, mean.PriorDist = 0.265, nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 120, reg.coef = -2, nsim = 100)
-
-    ##################################################################################
-    # If we have one covariate and do not know a mean of the prior distribution yet, #
-    ##################################################################################
-
-    p <- gbp(z, n, x1, model = "poisson")
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    pcv <- coverage(p, nsim = 10)  
-
-    ### pcv$coverageRB, pcv$coverageS, pcv$average.coverageRB, pcv$average.coverageS,
-    ### pcv$minimum.coverageRB, pcv$raw.resultRB, pcv$raw.resultS
-
-    ### pcv <- coverage(p, mean.PriorDist = 0.265, nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 170, nsim = 100)
-    ### pcv <- coverage(p, reg.coef = c(-2, 1), nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 170, mean.PriorDist = 0.265, nsim = 100)
-    ### pcv <- coverage(p, A.or.r = 170, reg.coef = c(-2, 1), nsim = 100)
-
     ################################################
     # If we know a mean of the prior distribution, #
     ################################################

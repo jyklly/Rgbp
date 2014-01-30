@@ -152,38 +152,6 @@ Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeli
   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
   ##############################################################
 
-    ####################################################################################
-    # If we do not have any covariate and do not know a mean of the prior distribution #
-    ####################################################################################
-
-    p <- gbp(z, n, model = "poisson")
-    p
-    print(p, sort = FALSE)
-    summary(p)
-    plot(p)
-    plot(p, sort = FALSE)
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    ### pcv <- coverage(p, nsim = 10)  
-    ### more details in ?coverage 
-
-    ##################################################################################
-    # If we have one covariate and do not know a mean of the prior distribution yet, #
-    ##################################################################################
-
-    p <- gbp(z, n, x1, model = "poisson")
-    p
-    print(p, sort = FALSE)
-    summary(p)
-    plot(p)
-    plot(p, sort = FALSE)
-
-    ### when we want to simulate pseudo datasets considering the estimated values 
-    ### as true ones.
-    ### pcv <- coverage(p, nsim = 10)  
-    ### more details in ?coverage 
-
     ################################################
     # If we know a mean of the prior distribution, #
     ################################################

@@ -93,7 +93,7 @@
     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
     ##############################################################
 
-    p <- gbp(z, n, model = "poisson")
+    p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
     summary(p)
 
 }
