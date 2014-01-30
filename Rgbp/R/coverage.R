@@ -14,7 +14,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   }
 
   if (gbp.object$model == "pr" & is.na(gbp.object$prior.mean)) {
-    print("Model is Poisson and the prior mean is unknown. We currently do not provide Frequency Method Check for this model.")
+    print("Model is Poisson and the prior mean is unknown. We currently do not provide Frequency Method Checking for this model.")
     stop()
   }
 ######
