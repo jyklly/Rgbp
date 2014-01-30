@@ -22,7 +22,6 @@ p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
 p
 summary(p)
 plot(p)
-dev.off()
 pcv <- coverage(p, nsim = 1000)
 pcv$coverageRB
 pcv$coverageS
@@ -44,7 +43,6 @@ g <- gbp(y, se, model = "gaussian")
 g
 summary(g)
 plot(g)
-dev.off()
 gcv <- coverage(g, nsim = 1000)
 gcv$coverageRB
 gcv$se.coverageRB
@@ -66,7 +64,6 @@ b <- gbp(z, n, x, model = "binomial")
 b
 summary(b)
 plot(b)
-dev.off()
 bcv <- coverage(b, nsim = 1000)
 bcv$coverageRB
 bcv$se.coverageRB
