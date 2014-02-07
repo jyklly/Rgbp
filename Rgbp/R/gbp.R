@@ -322,7 +322,6 @@ print.summary.gbp <- function(x, ...) {
 }
 
 plot.gbp <- function(x, sort = TRUE, ...) {
-
   y <- x$sample.mean
   se <- x$se
   if (any(is.na(x$prior.mean))) {
@@ -420,6 +419,4 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   } else {
     legend("topleft", c("Units", "not", "sorted", "by the", "ascending", "order of", "n"), bty = "n")
   }
-
-
 }
