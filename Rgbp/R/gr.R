@@ -25,16 +25,19 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   ##optimize depending on if mu is specified. 
   if(muknown){
     r<-0
-    est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},control=list(fnscale=-1),method="BFGS",hessian=T)
+    est <- optim(mean(log(V)),function(x){gr.ll.muknown(exp(x),y,V,mu,type)},control=list(fnscale=-1, maxit = 1000),method="BFGS",hessian=T)
     Ahat <- exp(est$par)
     Betahat<-NA
     Betahatvar<-NA
   }else{
     r <- dim(X)[2]
-    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1),method="BFGS", hessian=T, gr = function(x){derval(x,y,V,X)})
+    est <- optim(mean(log(V)), function(x){gr.ll.muunknown(exp(x[1]),y,V,X,type)},control=list(fnscale=-1, maxit = 1000),method="BFGS", hessian=T, gr = function(x){derval(x,y,V,X)})
     Ahat <- exp(est$par[1])
   }
 
+  if(est$convergence == 1)
+    warning("Algorithm did not converge")
+  
   ##calculate estimates
   est.var <- -1/est$hessian
   ninfo <- -1*est$hessian

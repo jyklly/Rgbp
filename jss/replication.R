@@ -8,11 +8,11 @@ library("Rgbp")
 ###  5.1. 31 Hospitals: Known Second-level mean
 ################################################################################
 z <- c( 3,   2,   5,  11,   9,  12,  12,   4,  10,  13,  14,   7,  12,
-          11,  13,  22,  15,  11,  14,  11,  16,  14,   9,  15,  13,  35,
-          26,  25,  20,  35,  27)
+       11,  13,  22,  15,  11,  14,  11,  16,  14,   9,  15,  13,  35,
+       26,  25,  20,  35,  27)
 n <- c(67,  68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
-         441, 477, 484, 494, 501, 505, 540, 563, 593, 602, 629, 636, 729,
-         849, 914, 940, 1193, 1340)
+      441, 477, 484, 494, 501, 505, 540, 563, 593, 602, 629, 636, 729,
+      849, 914, 940, 1193, 1340)
 ## or 
 data("hospital")
 z <- hospital$d # variable name for the number of deaths is d in dataset
@@ -22,7 +22,9 @@ p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
 p
 summary(p)
 plot(p)
+dev.off()
 pcv <- coverage(p, nsim = 1000)
+dev.off()
 pcv$coverageRB
 pcv$coverageS
 pcv$se.coverageRB
@@ -43,7 +45,9 @@ g <- gbp(y, se, model = "gaussian")
 g
 summary(g)
 plot(g)
+dev.off()
 gcv <- coverage(g, nsim = 1000)
+dev.off()
 gcv$coverageRB
 gcv$se.coverageRB
 
@@ -64,6 +68,8 @@ b <- gbp(z, n, x, model = "binomial")
 b
 summary(b)
 plot(b)
+dev.off()
 bcv <- coverage(b, nsim = 1000)
+dev.off()
 bcv$coverageRB
 bcv$se.coverageRB
