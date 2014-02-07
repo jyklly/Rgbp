@@ -658,7 +658,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   effective.n <- nsim - sum(is.na(coverageS[1, ]))
 
   # plotting coverage graph
-  dev.off()
+
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.6, 1, 0.3))
   n.units <- length(gbp.object$se)
   plot(1 : length(gbp.object$se), result, ylim = c(0.6, 1), type = "l", col = 2, ylab = "",
