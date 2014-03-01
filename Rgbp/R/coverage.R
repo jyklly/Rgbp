@@ -651,10 +651,10 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   # average coverage probability
   result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
-  se.cov <- round(sqrt(apply(coverageRB, 1, var) / nsim), 4)
+  se.cov <- round(sqrt(apply(coverageRB, 1, var, na.rm = TRUE) / nsim), 4)
   result2 <- round(rowMeans(coverageS, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
-  se.cov2 <- round(sqrt(apply(coverageS, 1, var) / nsim), 4)
+  se.cov2 <- round(sqrt(apply(coverageS, 1, var, na.rm = TRUE) / nsim), 4)
   effective.n <- nsim - sum(is.na(coverageS[1, ]))
 
   # plotting coverage graph
