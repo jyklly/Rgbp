@@ -354,7 +354,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
       oma = c(0, 9, 0, 0))
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
-  postlens <- po.sd / max(po.sd)
+  postlens <- po.sd / max(sqrtV)
   xmin <- min(c(y, po.m, pr.m))
   xmax <- max(c(y, po.m, pr.m))
   
