@@ -324,6 +324,7 @@ print.summary.gbp <- function(x, ...) {
 plot.gbp <- function(x, sort = TRUE, ...) {
   y <- x$sample.mean
   se <- x$se
+
   if (any(is.na(x$prior.mean))) {
     pr.m <- x$prior.mean.hat
   } else {
@@ -352,6 +353,11 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   
   par(mfrow = c(2, 1), xaxs = "r", yaxs = "r", mai = c(0.5, 0.3, 0.5, 0.3), las = 1, ps = 13,
       oma = c(0, 9, 0, 0))
+
+  if (x$model != "gr") {
+    se <- sqrt(y * (1 - y) / se)
+  }
+
   sqrtV <- se
   sdlens <- sqrtV / max(sqrtV)
   postlens <- po.sd / max(sqrtV)
@@ -400,7 +406,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   }
 
   ## legend
-  se.or.n <- switch(x$model, "gr" = "standard error", "br" = "n", "pr" = "n")
+  se.or.n <- "standard error"
   par(new = TRUE, mfrow = c(1, 1), oma = c(0, 0, 0, 0))
   plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
