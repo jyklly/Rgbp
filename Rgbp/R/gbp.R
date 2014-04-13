@@ -351,8 +351,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
   
-  par(mfrow = c(2, 1), xaxs = "r", yaxs = "r", mai = c(0.5, 0.3, 0.5, 0.3), las = 1, ps = 13,
-      oma = c(0, 9, 0, 0))
+  par(fig = c(0.25, 1, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.5, 0.5, 0.5, 0.3), las = 1, ps = 13)
 
   if (x$model != "gr") {
     se <- sqrt(y * (1 - y) / se)
@@ -389,8 +388,21 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     points(coords, pch=0)
   })
 
-  
-  plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = "", ylab = expression(theta),
+  par(fig = c(0, 1, 0, 0.5), xaxs = "r", yaxs = "r", mai = c(0.8, 0.7, 0.5, 0.3), las = 1, 
+      ps = 13, new = TRUE)  
+
+
+  if (sort == TRUE) {
+    if (x$model == "gr") {
+      xl <- c("Units sorted by the ascending order of se")
+    } else {
+      xl <- c("Units sorted by the ascending order of n")
+    }
+  } else {
+    xl <- c("Units sorted by the ascending order of n")
+  }
+
+  plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = "",
        main = paste(100 * x$Alpha, "% Interval Plot"), 
        col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
@@ -407,22 +419,13 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   ## legend
   se.or.n <- "standard error"
-  par(new = TRUE, mfrow = c(1, 1), oma = c(0, 0, 0, 0))
+  par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 13,
+      oma = c(0, 0, 0, 0), new = TRUE)  
   plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
          lwd = c(NA, NA, 2, 2, 2), 
          c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "crossover"),
          seg.len = 0.5, bty = "n",xpd=TRUE)
 
-  par(new = TRUE, mfrow = c(2, 1), oma = c(0, 0, 0, 0))
-  plot(1, type="n", axes=F, xlab="", ylab="")
-  if (sort == TRUE) {
-    if (x$model == "gr") {
-      legend("topleft", c("Units", "sorted", "by the", "ascending", "order of", "se"), bty = "n")
-    } else {
-      legend("topleft", c("Units", "sorted", "by the", "ascending", "order of", "n"), bty = "n")
-    }
-  } else {
-    legend("topleft", c("Units", "not", "sorted", "by the", "ascending", "order of", "n"), bty = "n")
-  }
+
 }
