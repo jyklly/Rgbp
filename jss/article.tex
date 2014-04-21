@@ -187,7 +187,7 @@ Once we make sure that the hierarchical model is appropriate for our data, the f
 From now on, the explanation will be based on the Normal-Normal model because the idea can be easily applied to the other two models.
 
 \subsection{Pseudo-data Generation Process}
-Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalpost}), the distribution of each parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate as many parameters as we want. Suppose we generated an $N_{sim}$ (default: $N_{sim} = 100$) number of {\boldmath $\mu$}$_{(k\times1)}$'s, (i.e., \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$), from the prior distribution in (\ref{normalprior}), where values of $A$ and $\beta$ are specifically given and the superscript $(i)$ indicates the $i$-th simulation. Then using the distribution of observed data in (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$. Note that we generate one dataset per one parameter set.
+Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalprior}), the distribution of each parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\beta_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate as many parameters as we want. Suppose we generated an $N_{sim}$ (default: $N_{sim} = 100$) number of {\boldmath $\mu$}$_{(k\times1)}$'s, (i.e., \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$), from the prior distribution in (\ref{normalprior}), where values of $A$ and $\beta$ are specifically given and the superscript $(i)$ indicates the $i$-th simulation. Then using the distribution of observed data in (\ref{normalobs}), we can also generate $\{\mathbf{y}^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$. Note that we generate one dataset per one parameter set.
 
 \begin{figure}[h]
 \begin{center}
@@ -198,7 +198,7 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \end{figure}
 
 \subsection{Coverage Estimation Process}
-Next, \code{coverage} fits the Normal-Normal model an $N_{sim}$ number of times using the $N_{sim}$ pseudo-datasets in order to obtain $N_{sim}$ $\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, N_{sim}$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but the function \code{coverage} in \pkg{Rgbp} displays only the Rao-Blackwellized one.
+Next, \code{coverage} fits the Normal-Normal model  $N_{sim}$ number of times using the $N_{sim}$ pseudo-datasets in order to obtain $N_{sim}$ $\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, N_{sim}$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but the function \code{coverage} in \pkg{Rgbp} displays only the Rao-Blackwellized one.
 
 \subsubsection{Simple Unbiased Coverage Estimates}
 Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\beta$. 
@@ -365,7 +365,7 @@ R> plot(p)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that seemingly the safest hospital among 31 hospitals in terms of the observed death rate is not the safest in terms of the estimated posterior means. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that  the seemingly safest hospital among 31 hospitals in terms of the observed death rate is probably not the safest in terms of the estimated posterior means. 
 
 
 Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital.
@@ -394,7 +394,7 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the smooth red curve connects Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals. The overall RB unbiased coverage estimate across all the hospitals is 0.953. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
+In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the red circles indicate Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals. The overall RB unbiased coverage estimate across all the hospitals is 0.953. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
 
 The following code provides 31 RB unbiased coverage estimates for each hospital.
 \begin{CodeChunk}
@@ -443,7 +443,7 @@ R> pcv$se.coverageS
 \end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 19 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 17,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
+Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 19 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 19,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
 
 For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates, $I^{(i)}_{j}$ and $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \beta)$.
 
