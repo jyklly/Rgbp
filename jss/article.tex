@@ -105,7 +105,7 @@ y_{j}\vert \beta, A \stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, V_{j} + A).
 z_{j}\vert \lambda_{j} \stackrel{ind}{\sim}\textrm{Poisson}(n_{j}\lambda_{j}),
 \end{equation}
 \begin{equation}\label{gammaprior}
-\lambda_{j}\vert \beta, r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(r\lambda_{0})\sim \textrm{Gamma} \left[\lambda_{0}, ~\frac{\lambda_{0}}{r} \right],
+\lambda_{j}\vert r\stackrel{ind}{\sim}\frac{1}{r}\textrm{Gamma}(r\lambda_{0})\sim \textrm{Gamma} \left[\lambda_{0}, ~\frac{\lambda_{0}}{r} \right],
 \end{equation}
 
 where $\lambda_{0}$, the second-level mean, is known a priori and $r$ is the only unknown hyper-parameter. The posterior distribution of this Poisson-Gamma model given the hyper-parameter $r$ is
