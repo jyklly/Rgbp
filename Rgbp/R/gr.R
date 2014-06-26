@@ -43,14 +43,14 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   ninfo <- -1*est$hessian
   Avar<-est.var*Ahat^2
   Bhat<-V/(V+Ahat)
-  ## a0<-ninfo/Bhat
-  ## a1<-ninfo/(1-Bhat)
-  ## v<-Bhat*(1-Bhat)/(a1+a0+1)
-  ## seB<-sqrt(v)
-  ## skewB<-2*(a1-a0)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
+  a0<-ninfo/Bhat
+  a1<-ninfo/(1-Bhat)
+  v<-Bhat*(1-Bhat)/(a1+a0+1)
+  seB<-sqrt(v)
+  skewB<-2*(a1-a0)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
 
-  ## LCLB <- qbeta((1-Alpha)/2,a1,a0)
-  ## UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
+  LCLB <- qbeta((1-Alpha)/2,a1,a0)
+  UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
   
   ##if mu is estimated use different formula for posterior sd and estimate mu
   if(muknown){
@@ -115,26 +115,26 @@ gr.ll.muunknown<-function(A,y,V,X,type){
 ##this function is a slightly modified version of cp.to.dp in the sn package
 ##Author: Adelchi Azzalini
 ##Webpage: http://azzalini.stat.unipd.it/SN/
-## gr.cp.to.dp <- function (param) {
-##   b <- sqrt(2/pi)
-##   m <- length(param) - 2
-##   gamma1 <- param[m + 2]
-##   if (abs(gamma1) > 0.995271746431) 
-##     gamma1 <- 0.9952  ##this line was altered from original
-##   A <- sign(gamma1) * (abs(2 * gamma1/(4 - pi)))^(1/3)
-##   delta <- A/(b * sqrt(1 + A^2))
-##   lambda <- delta/sqrt(1 - delta^2)
-##   E.Z <- b * delta
-##   sd.Z <- sqrt(1 - E.Z^2)
-##   location <- param[1:m]
-##   location[1] <- param[1] - param[m + 1] * E.Z/sd.Z
-##   scale <- param[m + 1]/sd.Z
-##   dp <- c(location, scale, lambda)
-##   names(dp)[(m + 1):(m + 2)] <- c("scale", "shape")
-##   if (m == 1) 
-##     names(dp)[1] <- "location"
-##   dp
-## }
+gr.cp.to.dp <- function (param) {
+  b <- sqrt(2/pi)
+  m <- length(param) - 2
+  gamma1 <- param[m + 2]
+  if (abs(gamma1) > 0.995271746431) 
+    gamma1 <- 0.9952  ##this line was altered from original
+  A <- sign(gamma1) * (abs(2 * gamma1/(4 - pi)))^(1/3)
+  delta <- A/(b * sqrt(1 + A^2))
+  lambda <- delta/sqrt(1 - delta^2)
+  E.Z <- b * delta
+  sd.Z <- sqrt(1 - E.Z^2)
+  location <- param[1:m]
+  location[1] <- param[1] - param[m + 1] * E.Z/sd.Z
+  scale <- param[m + 1]/sd.Z
+  dp <- c(location, scale, lambda)
+  names(dp)[(m + 1):(m + 2)] <- c("scale", "shape")
+  if (m == 1) 
+    names(dp)[1] <- "location"
+  dp
+}
 
 
 derval <- function(alpha,y,V,X){
