@@ -43,13 +43,14 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   ninfo <- -1*est$hessian
   Avar<-est.var*Ahat^2
   Bhat<-V/(V+Ahat)
-  a0<-ninfo/Bhat
-  a1<-ninfo/(1-Bhat)
-  v<-Bhat*(1-Bhat)/(a1+a0+1)
-  seB<-sqrt(v)
-  skewB<-2*(a0-a1)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
-  LCLB <- qbeta((1-Alpha)/2,a1,a0)
-  UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
+  ## a0<-ninfo/Bhat
+  ## a1<-ninfo/(1-Bhat)
+  ## v<-Bhat*(1-Bhat)/(a1+a0+1)
+  ## seB<-sqrt(v)
+  ## skewB<-2*(a1-a0)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
+
+  ## LCLB <- qbeta((1-Alpha)/2,a1,a0)
+  ## UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
   
   ##if mu is estimated use different formula for posterior sd and estimate mu
   if(muknown){
@@ -62,11 +63,6 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
     Betahat <- BetahatvarmX%*%DVAhati%*%y
     BetahatSE <- sqrt(diag(Betahatvar))
     mu<-X%*%Betahat
-    ##calculate posterior variance
-    #E <- eigen(DVAhat)
-    #W <- E$values
-    #Q <- E$vectors
-    #Z <- Q%*%diag(1/sqrt(W))%*%t(Q)
     Z <- sqrt(DVAhati)
     Phat<-Z%*%X%*%BetahatvarmX%*%Z
     p<-diag(Phat)
@@ -79,10 +75,7 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   skew<-((mu-y)^3*mu3-3*V*(mu-y)*v)/shat^3
   sqrtV<-sqrt(V)
   hmB <- length(Bhat)/sum(1/Bhat)
-  ## m4B <- (6*(a0^3 - a0^2*(2*a1-1) + a1^2*(a1+1)-2*a0*a1*(a1+2))/(a0*a1*(a0+a1+2)*(a0+a1+3)) + 3)*v^2
-  ## m4 <- 3*V^2*beta(a1+2,a0)/beta(a1,a0) + (mu-y)^4*m4B +6*(beta(a1+3,a0)/beta(a1,a0)*V*(y-mu)^2 - 2*beta(a1+2,a0)/beta(a1,a0)*(y-mu)^2*(1-a0/(a1+a0))*V + V*(1-a0/(a0+a1))^3*(y-mu)^2)
-  ## kurt <- m4/shat^2
-	
+
   ## calculate CIs using skewed normal
   ## TODO: use apply not loop
 
@@ -122,26 +115,26 @@ gr.ll.muunknown<-function(A,y,V,X,type){
 ##this function is a slightly modified version of cp.to.dp in the sn package
 ##Author: Adelchi Azzalini
 ##Webpage: http://azzalini.stat.unipd.it/SN/
-gr.cp.to.dp <- function (param) {
-  b <- sqrt(2/pi)
-  m <- length(param) - 2
-  gamma1 <- param[m + 2]
-  if (abs(gamma1) > 0.995271746431) 
-    gamma1 <- 0.9952  ##this line was altered from original
-  A <- sign(gamma1) * (abs(2 * gamma1/(4 - pi)))^(1/3)
-  delta <- A/(b * sqrt(1 + A^2))
-  lambda <- delta/sqrt(1 - delta^2)
-  E.Z <- b * delta
-  sd.Z <- sqrt(1 - E.Z^2)
-  location <- param[1:m]
-  location[1] <- param[1] - param[m + 1] * E.Z/sd.Z
-  scale <- param[m + 1]/sd.Z
-  dp <- c(location, scale, lambda)
-  names(dp)[(m + 1):(m + 2)] <- c("scale", "shape")
-  if (m == 1) 
-    names(dp)[1] <- "location"
-  dp
-}
+## gr.cp.to.dp <- function (param) {
+##   b <- sqrt(2/pi)
+##   m <- length(param) - 2
+##   gamma1 <- param[m + 2]
+##   if (abs(gamma1) > 0.995271746431) 
+##     gamma1 <- 0.9952  ##this line was altered from original
+##   A <- sign(gamma1) * (abs(2 * gamma1/(4 - pi)))^(1/3)
+##   delta <- A/(b * sqrt(1 + A^2))
+##   lambda <- delta/sqrt(1 - delta^2)
+##   E.Z <- b * delta
+##   sd.Z <- sqrt(1 - E.Z^2)
+##   location <- param[1:m]
+##   location[1] <- param[1] - param[m + 1] * E.Z/sd.Z
+##   scale <- param[m + 1]/sd.Z
+##   dp <- c(location, scale, lambda)
+##   names(dp)[(m + 1):(m + 2)] <- c("scale", "shape")
+##   if (m == 1) 
+##     names(dp)[1] <- "location"
+##   dp
+## }
 
 
 derval <- function(alpha,y,V,X){
@@ -157,14 +150,8 @@ derval <- function(alpha,y,V,X){
   l2 = log(A) - 1/2*sum(log(V+A)) + 1/2*log(det(Sigmam)) - 1/2*sum(wv*res^2)
 
   dlralphaBEVAL = 1 - A/2*sum(wv) + A/2*tr(exp1%*%X) + A/2*sum(wv^2*res^2)
-  ##dlralphaBEVAL2 = -A/2*sum(wv^2*V) + A/2*tr(Sigmam%*%t(X)%*%Wm^2%*%X) + A/2*sum(wv^2*(y-X%*%Betahat)^2) + A^2/2*tr((Sigmam%*%t(X)%*%Wm^2%*%X)%*%(Sigmam%*%t(X)%*%Wm^2%*%X)) - A^2*tr(Sigmam%*%t(X)%*%Wm^3%*%X) - A^2*sum(wv^3*(y-X%*%Betahat)^2)
-
   dbetahatA = exp1%*%res
-  ## dbetahatA2 = 2*Sigmam%*%t(X)%*%Wm^2%*%X%*%dbetahatA - 2*Sigmam%*%t(X)%*%Wm^3%*%(X%*%Betahat-y)
   dl2alpha = dlralphaBEVAL + A*sum(wv*res*X%*%dbetahatA)
-  ##dl2alpha2 = dlralphaBEVAL2 + A*sum(wv^2*V*(y-X%*%Betahat)*X%*%dbetahatA) - A^2*sum(wv*(X%*%dbetahatA)^2) + A^2*sum(wv*(y-X%*%Betahat)*X%*%dbetahatA2) - A^2*sum(wv^2*(y-X%*%Betahat)*X%*%dbetahatA)
-
-  ## return(list(alpha=alpha,l2=l2,dl2alpha=dl2alpha,dl2alpha2=dl2alpha2))
   return(dl2alpha=dl2alpha)
 }
 
