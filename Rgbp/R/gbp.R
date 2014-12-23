@@ -322,6 +322,9 @@ print.summary.gbp <- function(x, ...) {
 }
 
 plot.gbp <- function(x, sort = TRUE, ...) {
+  oldpar <- par(no.readonly=TRUE)
+  on.exit(par(oldpar))
+
   y <- x$sample.mean
   se <- x$se
 
@@ -427,5 +430,5 @@ plot.gbp <- function(x, sort = TRUE, ...) {
          c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "crossover"),
          seg.len = 0.5, bty = "n",xpd=TRUE)
 
-
+  invisible()
 }
