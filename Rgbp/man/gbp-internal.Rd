@@ -6,12 +6,8 @@
 \alias{BRShrinkageEst}
 \alias{BRPosteriorEst2ndLevelMeanKnown}
 \alias{BRPosteriorEst2ndLevelMeanUnknown}
-\alias{BRIS}
-\alias{BRIS2ndLevelMeanKnown}
-\alias{BRISBeta}
-\alias{BRISBeta2ndLevelMeanKnown}
-\alias{BRSIR}
-\alias{BRSIR2ndLevelMeanKnown}
+\alias{BRAR}
+\alias{BRAR2ndLevelMeanKnown}
 \alias{br}
 
 \alias{PRInitialValue2ndLevelMeanKnown}

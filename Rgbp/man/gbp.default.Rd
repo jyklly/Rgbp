@@ -7,8 +7,8 @@
 }
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.IS = 0, n.SIR = 0,
-trial.scale = 3, save.result = TRUE, ISBetaApprox = FALSE, normal.CI = FALSE)}
+"gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
+trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -36,24 +36,22 @@ trial.scale = 3, save.result = TRUE, ISBetaApprox = FALSE, normal.CI = FALSE)}
     a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
   }
 
-  \item{n.IS}{
-    Only for Binomial model. If \code{n.IS = 1000}, all the results will be based on 1000 importance samples. Default is 0.
+  \item{n.AR}{
+    Only for Binomial model. If \code{n.AR = 1000}, all the results will be based on 1000 posterior samples using the acceptance-rejection sampling. Default is 0.
   }
-  \item{n.SIR}{
-    Only for Binomial model. If \code{n.SIR = 1000}, all the results will be based on 1000 approximate posterior samples using sampling importance resampling. Default is 0.
+  \item{n.AR.factor}{
+    Only for Binomial model. If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial posteior samples, and accept or reject them. Default is 4.
   }
 
   \item{trial.scale}{
-    Scale in trial distribution where \eqn{\alpha} is sampled. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is 3.
+    A scale used in the trial distribution \eqn{\alpha}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is NA and the code automaticalaly set an appropriate number.
   }
 
   \item{save.result}{
     Only for Binomial model with IS and SIR. If \code{save.result} is TRUE, all the results of weights and approximate posterior samples will be saved in the gbp object. Default is TRUE.
   }
-  \item{ISBetaApprox}{
-    Only for Binomial model with IS. If \code{ISBetaApprox} is TRUE, \code{gbp} approximates its posterior distribution by the Beta distribution with two moments estimated by Importance Sampling. If \code{ISBetaApprox} is FALSE, \code{gbp} approximates its posterior distribution by the truncated skewed Normal distribution with three moments estimated by Importance Sampling.
-  }
-    \item{normal.CI}{
+
+  \item{normal.CI}{
     Only applicable for Gaussian data. If \code{TRUE} then a Normal
     approximation is used to construct intervals for the level 1 group
     means. If \code{FALSE} (default) then a Skew-Normal distribution is
@@ -129,8 +127,12 @@ trial.scale = 3, save.result = TRUE, ISBetaApprox = FALSE, normal.CI = FALSE)}
   \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
   \item{a.var}{posterior variance of \eqn{\alpha}}
   \item{Alpha}{confidence level based on which confidence interval is constructed }
-  \item{weight}{(only for Binomial model) importance weights, if importance sampling is done}
-  \item{p}{(only for Binomial model) approximate posterior samples for p based on sampling importance resampling, if sampling importance resampling is done}
+  \item{weight}{(only for Binomial model) weights for acceptance-rejection method}
+  \item{p}{(only for Binomial model) posterior samples of p based on the acceptance-rejection method, if this method was used}
+  \item{alpha}{(only for Binomial model) posterior samples of alpha based on the acceptance-rejection method, if this method was used}
+  \item{beta}{(only for Binomial model) posterior samples of beta based on the acceptance-rejection method, if this method was used}
+  \item{accept.rate}{(only for Binomial model) the acceptance rate of the acceptance-rejection method, if this method was used}
+  \item{n.AR.factor}{(only for Binomial model) If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial posteior samples, and accept or reject them. Default is 4.}
 }
 
 \references{
