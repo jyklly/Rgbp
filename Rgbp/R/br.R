@@ -404,7 +404,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   weight.index <- which(weight / M > U)
 
   if (n.accept < n.AR) {
-    n.sample2 <- 2 * n.AR.factor * (n.AR - n.accept)
+    n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
     alpha.ar2 <- rsn(n.sample2, xi = alpha.temp + abs(alpha.temp - optimax), 
                   omega = ts, alpha = -2)
     alpha.den2 <- dsn(alpha.ar2, xi = alpha.temp + abs(alpha.temp - optimax),
@@ -431,6 +431,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
     n.accept <- sum(weight / M > U)
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
+    weight.index <- weight.index[1 : n.AR]
     alpha.ar <- c(alpha.ar, alpha.ar2)
     if (m == 1) {
       beta.ar <- c(beta.ar, beta.ar2)
@@ -555,7 +556,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
   weight.index <- which(weight / M > U)
 
   if (n.accept < n.AR) {
-    n.sample2 <- 2 * n.AR.factor * (n.AR - n.accept)
+    n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
     alpha.ar2 <- rsn(n.sample2, xi = alpha.temp + abs(alpha.temp - optimax), 
                   omega = ts, alpha = -2)
     alpha.den2 <- dsn(alpha.ar2, xi = alpha.temp + abs(alpha.temp - optimax),
@@ -573,6 +574,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
     n.accept <- sum(weight / M > U)
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
+    weight.index <- weight.index[1 : n.AR]
     alpha.ar <- c(alpha.ar, alpha.ar2)
   }
 
@@ -658,6 +660,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
     output
 
   } else {
+
     if (is.na(prior.mean)) {
       res <- BRAR(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor = n.AR.factor)
     } else {
