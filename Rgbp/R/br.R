@@ -695,7 +695,8 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
-           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = 1)
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = 1,
+           alpha = res$alpha.sample, beta = beta)
 
     }
     output

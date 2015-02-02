@@ -6,6 +6,12 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
   coverageS <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
+  coverage.alpha <- rep(NA, nsim)
+  if (length(gbp.object$beta.new) == 1) {
+    coverage.beta <- rep(NA, nsim)
+  } else {
+    coverage.beta <- matrix(NA, nrow = nsim, ncol = length(gbp.object$beta.new))
+  }
 
   if (missing(A.or.r) & missing(reg.coef) & missing(mean.PriorDist)) {
     only.gbp.result <- TRUE
@@ -81,6 +87,20 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                          n.AR.factor = gbp.object$n.AR.factor,
                          trial.scale = gbp.object$trial.scale, save.result = FALSE)
                    }
+             quant.alpha <- quantile(out$alpha, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                         1 / 2 + gbp.object$Alpha / 2))
+             coverage.alpha[i] <- ifelse(-log(r) < quant.alpha[2] & -log(r) > quant.alpha[1], 1, 0)
+             if (length(gbp.object$beta.new) == 1) {
+               quant.beta <- quantile(out$beta, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                          1 / 2 + gbp.object$Alpha / 2))
+               coverage.beta[i] <- ifelse(gbp.object$beta.new < quant.beta[2] & 
+                                          gbp.object$beta.new > quant.beta[1], 1, 0)
+             } else {
+               quant.beta <- apply(out$beta, 2, quantile, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                                   1 / 2 + gbp.object$Alpha / 2))
+               coverage.beta[i, ] <- (gbp.object$beta.new < quant.beta[, 2] & 
+                                          gbp.object$beta.new > quant.beta[, 1])
+             }
           }
 
           a1 <- r * p0 + sim.z[, i]
@@ -225,6 +245,21 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                            save.result = FALSE)
                      }
                    }
+               quant.alpha <- quantile(out$alpha, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                           1 / 2 + gbp.object$Alpha / 2))
+               coverage.alpha[i] <- ifelse(-log(r) < quant.alpha[2] & -log(r) > quant.alpha[1], 1, 0)
+               if (length(gbp.object$beta.new) == 1) {
+                 quant.beta <- quantile(out$beta, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                            1 / 2 + gbp.object$Alpha / 2))
+                 coverage.beta[i] <- ifelse(betas < quant.beta[2] & 
+                                            betas > quant.beta[1], 1, 0)
+               } else {
+                 quant.beta <- apply(out$beta, 2, quantile, probs = c((1 - gbp.object$Alpha) / 2, 
+                                                                     1 / 2 + gbp.object$Alpha / 2))
+                 coverage.beta[i, ] <- (betas < quant.beta[, 2] & 
+                                        betas > quant.beta[, 1])
+               }
+
           }
 
           a1 <- r * p0 + sim.z[, i]
@@ -653,6 +688,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   output <- list(coverageRB = result, coverageS = result2, 
                  average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
                  se.coverageRB = se.cov, se.coverageS = se.cov2, 
-                 raw.resultRB = coverageRB, raw.resultS = coverageS)
+                 raw.resultRB = coverageRB, raw.resultS = coverageS,
+                 coverage.alpha = coverage.alpha, coverage.beta = coverage.beta)
   return(output)
 }
