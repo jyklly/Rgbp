@@ -357,7 +357,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   b.ini <- ini$b.ini
   m <- ncol(x)
 
-  initial.tuning <- optim(as.numeric(c(a.ini, beta.ini)), logpost, control = list(fnscale = -1), 
+  initial.tuning <- optim(as.numeric(c(a.ini, b.ini)), logpost, control = list(fnscale = -1), 
                           method = "BFGS", hessian = TRUE)
   alpha.temp <- initial.tuning$par[1]
   beta.temp <- initial.tuning$par[2 : (m + 1)]
@@ -562,7 +562,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
                    omega = ts, alpha = -2)
 
     ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
-                     logpost(c(alpha.ar2[j], beta.ar2[j]))
+                     logpost(alpha.ar2[j])
                    })
 
     ab.logpost <- c(ab.logpost, ab.logpost2)
