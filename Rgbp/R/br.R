@@ -431,7 +431,6 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
     n.accept <- sum(weight / M > U)
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
-    weight.index <- weight.index[1 : n.AR]
     alpha.ar <- c(alpha.ar, alpha.ar2)
     if (m == 1) {
       beta.ar <- c(beta.ar, beta.ar2)
@@ -440,6 +439,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
     }
   }
 
+  weight.index <- weight.index[1 : n.AR]
   alpha.sample <- alpha.ar[weight.index]
 
   if (m == 1) {
@@ -574,10 +574,10 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
     n.accept <- sum(weight / M > U)
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
-    weight.index <- weight.index[1 : n.AR]
     alpha.ar <- c(alpha.ar, alpha.ar2)
   }
 
+  weight.index <- weight.index[1 : n.AR]
   alpha.sample <- alpha.ar[weight.index]
 
   p.sample <- matrix(rbeta(length(z) * n.AR, z + matrix(exp(-alpha.sample) * p0, 
