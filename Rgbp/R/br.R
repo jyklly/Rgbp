@@ -403,7 +403,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   accept.rate <- n.accept / n.sample
   weight.index <- which(weight / M > U)
 
-  if (n.accept < n.AR) {
+  while (n.accept < n.AR) {
     n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
     alpha.ar2 <- rsn(n.sample2, xi = alpha.temp + abs(alpha.temp - optimax), 
                   omega = ts, alpha = -2)
@@ -437,6 +437,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
     } else {
       beta.ar <- rbind(beta.ar, beta.ar2)
     }
+    n.sample <- n.sample + n.sample2
   }
 
   weight.index <- weight.index[1 : n.AR]
