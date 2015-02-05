@@ -132,6 +132,8 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
   \item{alpha}{(only for Binomial model) posterior samples of alpha based on the acceptance-rejection method, if this method was used}
   \item{beta}{(only for Binomial model) posterior samples of beta based on the acceptance-rejection method, if this method was used}
   \item{accept.rate}{(only for Binomial model) the acceptance rate of the acceptance-rejection method, if this method was used}
+  \item{n.AR}{(Only for Binomial model) If \code{n.AR = 1000}, all the results will be based on 1000 posterior samples using the acceptance-rejection sampling. Default is 0.
+  }
   \item{n.AR.factor}{(only for Binomial model) If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial posteior samples, and accept or reject them. Default is 4.}
 }
 

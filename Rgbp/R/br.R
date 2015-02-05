@@ -402,6 +402,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   n.accept <- sum(weight / M > U)
   accept.rate <- n.accept / n.sample
   weight.index <- which(weight / M > U)
+  n.iter <- 0
 
   while (n.accept < n.AR) {
     n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
@@ -438,6 +439,9 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
       beta.ar <- rbind(beta.ar, beta.ar2)
     }
     n.sample <- n.sample + n.sample2
+    if (n.iter > 5) {
+      break()
+    }
   }
 
   weight.index <- weight.index[1 : n.AR]
@@ -555,6 +559,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
   n.accept <- sum(weight / M > U)
   accept.rate <- n.accept / n.sample
   weight.index <- which(weight / M > U)
+  n.iter <- 0
 
   if (n.accept < n.AR) {
     n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
@@ -576,6 +581,10 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
     alpha.ar <- c(alpha.ar, alpha.ar2)
+    n.iter <- n.iter + 1
+    if (n.iter > 5) {
+      break()
+    }
   }
 
   weight.index <- weight.index[1 : n.AR]
@@ -692,7 +701,8 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
            intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
-           alpha = res$alpha.sample, beta = beta, accept.rate = res$accept.rate, n.AR.factor = n.AR.factor)
+           alpha = res$alpha.sample, beta = beta, accept.rate = res$accept.rate, n.AR.factor = n.AR.factor,
+           n.AR = n.AR)
     } else {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
@@ -700,7 +710,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
            intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = 1,
-           alpha = res$alpha.sample, beta = beta)
+           alpha = res$alpha.sample, beta = beta, n.AR = n.AR)
 
     }
     output
