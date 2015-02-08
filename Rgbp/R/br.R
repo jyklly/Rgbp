@@ -439,12 +439,17 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
       beta.ar <- rbind(beta.ar, beta.ar2)
     }
     n.sample <- n.sample + n.sample2
-    if (n.iter > 5) {
+    if (n.iter > 1) {
       break()
     }
   }
 
-  weight.index <- weight.index[1 : n.AR]
+  if (n.AR < n.accept) {
+    weight.index <- weight.index[1 : n.AR]
+  } else {
+    n.AR <- n.accept
+  }
+
   alpha.sample <- alpha.ar[weight.index]
 
   if (m == 1) {
@@ -582,12 +587,17 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
     weight.index <- which(weight / M > U)
     alpha.ar <- c(alpha.ar, alpha.ar2)
     n.iter <- n.iter + 1
-    if (n.iter > 5) {
+    if (n.iter > 1) {
       break()
     }
   }
 
-  weight.index <- weight.index[1 : n.AR]
+  if (n.AR < n.accept) {
+    weight.index <- weight.index[1 : n.AR]
+  } else {
+    n.AR <- n.accept
+  }
+
   alpha.sample <- alpha.ar[weight.index]
 
   p.sample <- matrix(rbeta(length(z) * n.AR, z + matrix(exp(-alpha.sample) * p0, 
