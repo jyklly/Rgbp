@@ -80,12 +80,11 @@ A two-level or multilevel model is a powerful tool for exploring the hierarchica
  
 \subsection[Normal-Normal]{Normal-Normal (``g''=Gaussian data)}
 The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset.
-\begin{equation}\label{normalobs}
-y_{j}\vert \mu_{j} \stackrel{ind}{\sim}\textrm{Normal}(\mu_{j}, V_{j}),
-\end{equation}
-\begin{equation}\label{normalprior}
-\mu_{j}\vert \beta, A\stackrel{ind}{\sim}\textrm{Normal}(\mu_{0j}, A),
-\end{equation}
+\begin{eqnarray}
+y_{j}\vert \mu_{j} & \stackrel{ind}{\sim} &\textrm{Normal}(\mu_{j}, V_{j}),\label{normalobs}\\
+\mu_{j}\vert \beta, A & \stackrel{ind}{\sim} &\textrm{Normal}(\mu_{0j}, A),\label{normalprior}
+\end{eqnarray}
+
 
 where $\mu_{0j} = x_{j}^\top \mathbf{\beta}_{(m\times1)}=\beta_{0}+\beta_{1}x_{1, j} + \cdots + \beta_{m-1}x_{m-1, j}$, $j=1, \ldots k$ and $m$ is the number of regression coefficients including an intercept term. The notation $x_{j}^\top=(1, x_{1, j}, x_{2, j}, \ldots, x_{m-1, j})$ represents the $j$-th group's $m\times 1$ covariate vector whose first element is 1 for the intercept term of regression coefficients. It is assumed that the second-level variance $A$ is unknown and that $\mathbf{\beta}_{(m\times1)}$ is also unknown unless otherwise specified. Note that if there are no covariates then $x_{j}=1$, ($m=1$) and so $\mu_{0j}=\mu_{0}=\beta_{0}$ for all $j$, resulting in an exchangeable prior distribution. For reference, a parameter with a zero subscript, such as $\mu_{0j}$, represents a mean parameter of the prior (second-level) distribution, i.e., a prior mean. Based on this conjugate prior distribution it is easy to derive the corresponding posterior distribution
 
