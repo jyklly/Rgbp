@@ -94,12 +94,12 @@ print.gbp <- function(x, sort = TRUE, ...) {
 
   if (sort == TRUE) {
     if (x$model == "gr") {
-      cat("Summary for each unit (sorted by se): \n")
+      cat("Summary for each group (sorted by the ascending order of se): \n")
     } else {
-      cat("Summary for each unit (sorted by n): \n")
+      cat("Summary for each group (sorted by  the ascending order of n): \n")
     }
   } else {
-    cat("Summary for each unit: \n")
+    cat("Summary for each group: \n")
   }
 
   cat("\n")
@@ -167,25 +167,25 @@ summary.gbp <- function(object, ...) {
       summary.table <- temp2[c(1, (dim(temp2)[1] + 1) / 2, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
-        row.names(summary.table) <- c("Unit with min(obs.mean)", 
-                                      "Unit with median(obs.mean)", 
-                                      "Unit with max(obs.mean)")
+        row.names(summary.table) <- c("Group with min(obs.mean)", 
+                                      "Group with median(obs.mean)", 
+                                      "Group with max(obs.mean)")
       } else {  # if there are more than one median
-        row.names(summary.table) <- c("Unit with min(obs.mean)", 
-                                     paste("Unit with median(obs.mean)", 1 : number.of.medians, sep = ""),
-                                     "Unit with max(obs.mean)")
+        row.names(summary.table) <- c("Group with min(obs.mean)", 
+                                     paste("Group with median(obs.mean)", 1 : number.of.medians, sep = ""),
+                                     "Group with max(obs.mean)")
       }
     } else {  # if number of groups is even
       summary.table <- temp2[c(1, dim(temp2)[1] / 2, dim(temp2)[1] / 2 + 1, dim(temp2)[1]), ]
       number.of.medians <- dim(summary.table)[1] - 2
       if (number.of.medians == 1) {
-        row.names(summary.table) <- c("Unit with min(obs.mean)", 
-                                      "Unit with median(obs.mean)", 
-                                      "Unit with max(obs.mean)")
+        row.names(summary.table) <- c("Group with min(obs.mean)", 
+                                      "Group with median(obs.mean)", 
+                                      "Group with max(obs.mean)")
       } else {  # if there are more than one median
-        row.names(summary.table) <- c("Unit with min(obs.mean)", 
-                                     paste("Unit with median(obs.mean)", 1 : number.of.medians, sep = ""),
-                                     "Unit with max(obs.mean)")
+        row.names(summary.table) <- c("Group with min(obs.mean)", 
+                                     paste("Group with median(obs.mean)", 1 : number.of.medians, sep = ""),
+                                     "Group with max(obs.mean)")
       }
     }
   } else { # if n or se are different from each group
@@ -197,19 +197,19 @@ summary.gbp <- function(object, ...) {
       number.of.medians <- dim(summary.table)[1] - 2
       if (object$model == "gr") {
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Unit with min(se)", "Unit with median(se)", "Unit with max(se)")
+          row.names(summary.table) <- c("Group with min(se)", "Group with median(se)", "Group with max(se)")
         } else {
-          row.names(summary.table) <- c("Unit with min(se)", 
-                                       paste("Unit with median(se)", 1 : number.of.medians, sep = ""),
-                                       "Unit with max(se)")
+          row.names(summary.table) <- c("Group with min(se)", 
+                                       paste("Group with median(se)", 1 : number.of.medians, sep = ""),
+                                       "Group with max(se)")
         }
       } else {  # if model is not "gr"
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Unit with min(n)", "Unit with median(n)", "Unit with max(n)")
+          row.names(summary.table) <- c("Group with min(n)", "Group with median(n)", "Group with max(n)")
         } else {
-          row.names(summary.table) <- c("Unit with min(n)", 
-                                       paste("Unit with median(n)", 1 : number.of.medians, sep = ""),
-                                       "Unit with max(n)")
+          row.names(summary.table) <- c("Group with min(n)", 
+                                       paste("Group with median(n)", 1 : number.of.medians, sep = ""),
+                                       "Group with max(n)")
         }
       }
 
@@ -218,19 +218,19 @@ summary.gbp <- function(object, ...) {
       number.of.medians <- dim(summary.table)[1] - 2
       if (object$model == "gr") {
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Unit with min(se)", "Unit with median(se)", "Unit with max(se)")
+          row.names(summary.table) <- c("Group with min(se)", "Group with median(se)", "Group with max(se)")
         } else {
-          row.names(summary.table) <- c("Unit with min(se)", 
-                                       paste("Unit with median(se)", 1 : number.of.medians, sep = ""),
-                                       "Unit with max(se)")
+          row.names(summary.table) <- c("Group with min(se)", 
+                                       paste("Group with median(se)", 1 : number.of.medians, sep = ""),
+                                       "Group with max(se)")
         }
       } else {  # if model is not "gr"
         if (number.of.medians == 1) {
-          row.names(summary.table) <- c("Unit with min(n)", "Unit with median(n)", "Unit with max(n)")
+          row.names(summary.table) <- c("Group with min(n)", "Group with median(n)", "Group with max(n)")
         } else {
-          row.names(summary.table) <- c("Unit with min(n)", 
-                                       paste("Unit with median(n)", 1 : number.of.medians, sep = ""),
-                                       "Unit with max(n)")
+          row.names(summary.table) <- c("Group with min(n)", 
+                                       paste("Group with median(n)", 1 : number.of.medians, sep = ""),
+                                       "Group with max(n)")
         }
       }
     }
@@ -295,7 +295,7 @@ print.summary.gbp <- function(x, ...) {
     print(x$main)
     cat("\n")
     cat("\n")
-    cat("Second-level Variance Component Estimation Summary:\n")
+    cat("Estimation summary for the second-level variance component:\n")
     cat("alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:\n")
     cat("\n")
     print(x$sec.var)
@@ -307,14 +307,14 @@ print.summary.gbp <- function(x, ...) {
     print(x$main)
     cat("\n")
     cat("\n")
-    cat("Second-level Variance Component Estimation Summary:\n")
+    cat("Estimation summary for the second-level variance component:\n")
     cat("alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:\n")
     cat("\n")
     print(x$sec.var)
     options(digits = 7)
     cat("\n")
     cat("\n")
-    cat("Regression Summary:\n")
+    cat("Estimation summary for the regression coefficient :\n")
     cat("\n")
     print(round(x$reg, 3))
   }
@@ -364,7 +364,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   xmax <- max(c(y, po.m, pr.m))
   
   sunflowerplot(rep(4, length(y)) ~ y, ylim = c(-1, 5), xlim = c(xmin - abs(xmin) * 0.1, 
-                xmax + abs(xmax) * 0.1), yaxt = "n", col.lab = "white", main = "Shrinkage Plot", pch=1,cex=1)
+                xmax + abs(xmax) * 0.1), yaxt = "n", col.lab = "white", main = "Shrinkage plot", pch=1,cex=1)
   
   if (length(unique(pr.m)) == 1) {
     abline(v = pr.m, col = 4)
@@ -394,16 +394,16 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   if (sort == TRUE) {
     if (x$model == "gr") {
-      xl <- c("Units sorted by the ascending order of se")
+      xl <- c("Groups sorted by the ascending order of se")
     } else {
-      xl <- c("Units sorted by the ascending order of n")
+      xl <- c("Groups sorted by the ascending order of n")
     }
   } else {
-    xl <- c("Units sorted by the ascending order of n")
+    xl <- c("Groups sorted by the ascending order of n")
   }
 
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = "",
-       main = paste(100 * x$Alpha, "% Interval Plot"), 
+       main = paste(100 * x$Alpha, "% Interval plot"), 
        col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
     lines(rep(index[j], 2), c(po.low[j], po.upp[j]), lwd = 0.5)
@@ -418,13 +418,13 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   }
 
   ## legend
-  se.or.n <- "standard error"
+  se.or.n <- "Standard error"
   par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 13,
       oma = c(0, 0, 0, 0), new = TRUE)  
   plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
          lwd = c(NA, NA, 2, 2, 2), 
-         c("posterior mean", "sample mean", "prior mean", se.or.n, "posterior sd", "crossover"),
+         c("Posterior mean", "Sample mean", "Prior mean", se.or.n, "Posterior sd", "Crossover"),
          seg.len = 0.5, bty = "n",xpd=TRUE)
 
 
