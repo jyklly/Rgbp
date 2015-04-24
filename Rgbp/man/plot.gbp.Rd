@@ -42,7 +42,7 @@
 
 \value{Two plots described in \emph{details} will be displayed.}
 
-\author{Joseph Kelly, Hyungsuk Tak, and Carl Morris}
+\author{Hyungsuk Tak, Joseph Kelly, and Carl Morris}
 
 \examples{
 

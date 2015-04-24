@@ -327,7 +327,8 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
 
 
 ######
-BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor = n.AR.factor) {
+BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, 
+                 n.AR.factor = n.AR.factor, c = 0, u = 1) {
 
   logpost <- function(para) {
     a <- para[1]
@@ -344,7 +345,9 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
       print("The components of lgamma should be positive")
       stop()
     } else {
-      a + sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+       loglik <- sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - 
+                    lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      -a -(u + 1) * log(c + exp(-a)) + loglik
     }
   }
 
@@ -358,7 +361,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   m <- ncol(x)
 
   initial.tuning <- optim(as.numeric(c(a.ini, b.ini)), logpost, control = list(fnscale = -1), 
-                          method = "BFGS", hessian = TRUE)
+                          method = "L-BFGS-B", hessian = TRUE, lower = -Inf, upper = Inf)
   alpha.temp <- initial.tuning$par[1]
   beta.temp <- initial.tuning$par[2 : (m + 1)]
   neg.inv.hess <- chol2inv(chol(-initial.tuning$hessian))
@@ -366,61 +369,82 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   beta.var <- neg.inv.hess[2 : (m + 1), 2 : (m + 1)]
 
   if (is.na(trial.scale)) {
-    ts <- 3 * sqrt(alpha.var)
+    scale <- 1.3 * sqrt(alpha.var)
   } else {
-    ts <- trial.scale
+    scale <- trial.scale * sqrt(alpha.var)
   }
 
-  SkewedNormal <- function(s) {
-    dsn(s, xi = alpha.temp, omega = ts, alpha = -2.5)  
+  Skewedt <- function(x, a, b) {
+    (1 + x / sqrt(a + b + x^2))^(a + 0.5) * (1 - x / sqrt(a + b + x^2))^(b + 0.5) 
   }
 
+  b <- 2 * log(k)
+  a <- b / 2
   n.sample <- n.AR.factor * n.AR
-  df <- 4
+  n.accept <- 0
 
-  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  alpha.ar <- rsn(n.sample, xi = alpha.temp + abs(alpha.temp - optimax), 
-                  omega = ts, alpha = -2)
-  alpha.den <- dsn(alpha.ar, xi = alpha.temp + abs(alpha.temp - optimax),
-                   omega = ts, alpha = -2)
-  beta.ar <- rmt(n = n.sample, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
-  beta.den <- dmt(beta.ar, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+  while (n.accept < n.AR / 10) { 
+  # prescreening step
+  # because sometimes extreme weights appear, making n.accept very small, looping forever
+  # this while function prevents it
 
-  if (m == 1) {
-    ab.logpost <- sapply(1 : n.sample, function(j) { 
-                    logpost(c(alpha.ar[j], beta.ar[j]))
-                  })
-  } else {
-    ab.logpost <- sapply(1 : n.sample, function(j) { 
-                    logpost(c(alpha.ar[j], beta.ar[j, ]))
-                  })
-  }
-
-  weight <- exp(ab.logpost - max(ab.logpost)) / beta.den / alpha.den 
-  M <- max(weight)
-  U <- runif(n.sample)
-  n.accept <- sum(weight / M > U)
-  accept.rate <- n.accept / n.sample
-  weight.index <- which(weight / M > U)
-  n.iter <- 0
-
-  while (n.accept < n.AR) {
-    n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
-    alpha.ar2 <- rsn(n.sample2, xi = alpha.temp + abs(alpha.temp - optimax), 
-                  omega = ts, alpha = -2)
-    alpha.den2 <- dsn(alpha.ar2, xi = alpha.temp + abs(alpha.temp - optimax),
-                   omega = ts, alpha = -2)
-    beta.ar2 <- rmt(n = n.sample2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
-    beta.den2 <- dmt(beta.ar2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+    B <- rbeta(n.sample, a, b)
+    alpha.ar.temp <- sqrt(a + b) * (2 * B - 1) / 2 / sqrt(B * (1 - B))
+    mode.skewt <- (a - b) * sqrt(a + b) / sqrt(2 * a + 1) / sqrt(2 * b + 1)
+    mode.adj <- alpha.temp - mode.skewt
+    alpha.ar <- mode.adj + scale * alpha.ar.temp 
+    alpha.den <- Skewedt(alpha.ar.temp, a, b) / scale
+    df <- 4
+    beta.ar <- rmt(n = n.sample, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+    beta.den <- dmt(beta.ar, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
 
     if (m == 1) {
-      ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
-                      logpost(c(alpha.ar2[j], beta.ar2[j]))
+      ab.logpost <- sapply(1 : n.sample, function(j) { 
+                       logpost(c(alpha.ar[j], beta.ar[j]))
                     })
     } else {
-      ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
-                      logpost(c(alpha.ar2[j], beta.ar2[j, ]))
+      ab.logpost <- sapply(1 : n.sample, function(j) { 
+                      logpost(c(alpha.ar[j], beta.ar[j, ]))
                     })
+    }
+
+
+    weight <- exp(ab.logpost - max(ab.logpost)) / beta.den / alpha.den 
+    M <- max(weight)
+    U <- runif(n.sample)
+    n.accept <- sum(weight / M > U)
+    accept.rate <- n.accept / n.sample
+    weight.index <- which(weight / M > U)
+  }
+
+  while (n.accept < n.AR) {
+    n.accept.temp <- 0
+    n.iter <- 1
+
+    while (n.accept.temp < (n.AR - n.accept) / 10) { 
+      # to guarantee the additional samples do not have extreme weights
+      n.sample2 <- 6 * (n.AR - n.accept)
+      B2 <- rbeta(n.sample2, a, b)
+      alpha.ar.temp2 <- sqrt(a + b) * (2 * B2 - 1) / 2 / sqrt(B2 * (1 - B2))
+      alpha.ar2 <- mode.adj + scale * alpha.ar.temp2
+      alpha.den2 <- Skewedt(alpha.ar.temp2, a, b) / scale
+      beta.ar2 <- rmt(n = n.sample2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+      beta.den2 <- dmt(beta.ar2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+
+      if (m == 1) {
+        ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
+                        logpost(c(alpha.ar2[j], beta.ar2[j]))
+                      })
+      } else {
+        ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
+                        logpost(c(alpha.ar2[j], beta.ar2[j, ]))
+                      })
+      }
+
+      weight2 <- exp(ab.logpost2 - max(ab.logpost2)) / beta.den2 / alpha.den2 
+      M <- max(weight2)
+      U <- runif(n.sample2)
+      n.accept.temp <- sum(weight2 / M > U)
     }
 
     ab.logpost <- c(ab.logpost, ab.logpost2)
@@ -439,11 +463,12 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
       beta.ar <- rbind(beta.ar, beta.ar2)
     }
     n.sample <- n.sample + n.sample2
-    if (n.iter > 1) {
+    n.iter <- n.iter + 1
+    if (n.iter > 2) {
       break()
     }
   }
-
+ 
   if (n.AR < n.accept) {
     weight.index <- weight.index[1 : n.AR]
   } else {
@@ -469,6 +494,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
                                          ncol = n.AR, nrow = length(z), byrow = T)),
                        nrow = length(z), ncol = n.AR)
   }
+
 
   if ( all(n == n[1]) ) {
     B.matrix <- exp(-alpha.sample) / (n[1] + exp(-alpha.sample))
@@ -498,16 +524,16 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor
   alpha.mean <- mean(alpha.sample)
   alpha.var <- var(alpha.sample)
 
-  list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
+  list(weight = weight[weight.index], shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
        post.sd = as.numeric(post.sd), prior.mean.hat = as.numeric(prior.m),
        post.intv.low = post.intv.low, post.intv.upp = post.intv.upp, beta.new = beta.mean, beta.var = beta.var,
        a.new = alpha.mean, a.var = alpha.var, 
        alpha.sample = alpha.sample, beta.sample = beta.sample, p.sample = p.sample,
-       accept.rate = accept.rate, trial.scale = ts)
+       accept.rate = accept.rate, trial.scale = scale)
 }
   
 
-BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, 
+BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, c = 0, u = 1,
                                   trial.scale = trial.scale, n.AR.factor = n.AR.factor) {
 
   z <- given$z
@@ -526,56 +552,77 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
       print("The components of lgamma should be positive")
       stop()
     } else {
-      a + sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      loglik <- sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - 
+                    lgamma(t1) + lgamma(t2) - lgamma(n + t2))
+      -a -(u + 1) * log(c + exp(-a)) + loglik      
     }
   }
 
   initial.tuning <- optim(a.ini, logpost, control = list(fnscale = -1), 
-                          method = "BFGS", hessian = TRUE)
+                          method = "L-BFGS-B", hessian = TRUE, lower = -Inf, upper = Inf)
   alpha.temp <- initial.tuning$par
   alpha.var <- -1 / initial.tuning$hessian
 
   if (is.na(trial.scale)) {
-    ts <- 3 * sqrt(alpha.var)
+    scale <- 1.3 * sqrt(alpha.var)
   } else {
-    ts <- trial.scale
+    scale <- trial.scale * sqrt(alpha.var)
   }
 
-  SkewedNormal <- function(s) {
-    dsn(s, xi = alpha.temp, omega = ts, alpha = -2.5)  
+  Skewedt <- function(x, a, b) {
+    (1 + x / sqrt(a + b + x^2))^(a + 0.5) * (1 - x / sqrt(a + b + x^2))^(b + 0.5) 
   }
 
+  b <- 2 * log(k)
+  a <- b / 2
   n.sample <- n.AR.factor * n.AR
-  df <- 4
+  n.accept <- 0
 
-  optimax <- optimize(SkewedNormal, lower = -10, upper = 0, maximum = TRUE)$maximum
-  alpha.ar <- rsn(n.sample, xi = alpha.temp + abs(alpha.temp - optimax), 
-                  omega = ts, alpha = -2)
-  alpha.den <- dsn(alpha.ar, xi = alpha.temp + abs(alpha.temp - optimax),
-                   omega = ts, alpha = -2)
+  while (n.accept < n.AR / 10) {
+  # prescreening step
+  # because sometimes extreme weights appear, making n.accept very small, looping forever
+  # this while function prevents it
 
-  ab.logpost <- sapply(1 : n.sample, function(j) { 
-                    logpost(alpha.ar[j])
-                })
+    B <- rbeta(n.sample, a, b)
+    alpha.ar.temp <- sqrt(a + b) * (2 * B - 1) / 2 / sqrt(B * (1 - B))
+    mode.skewt <- (a - b) * sqrt(a + b) / sqrt(2 * a + 1) / sqrt(2 * b + 1)
+    mode.adj <- alpha.temp - mode.skewt
+    alpha.ar <- mode.adj + scale * alpha.ar.temp 
+    alpha.den <- Skewedt(alpha.ar.temp, a, b) / scale
 
-  weight <- exp(ab.logpost - max(ab.logpost)) / alpha.den 
-  M <- max(weight)
-  U <- runif(n.sample)
-  n.accept <- sum(weight / M > U)
-  accept.rate <- n.accept / n.sample
-  weight.index <- which(weight / M > U)
-  n.iter <- 0
+    ab.logpost <- sapply(1 : n.sample, function(j) { 
+                         logpost(alpha.ar[j])
+                         })
 
-  if (n.accept < n.AR) {
-    n.sample2 <- round(1.5 * (n.AR - n.accept) / accept.rate)
-    alpha.ar2 <- rsn(n.sample2, xi = alpha.temp + abs(alpha.temp - optimax), 
-                  omega = ts, alpha = -2)
-    alpha.den2 <- dsn(alpha.ar2, xi = alpha.temp + abs(alpha.temp - optimax),
-                   omega = ts, alpha = -2)
+    weight <- exp(ab.logpost - max(ab.logpost)) / alpha.den 
+    M <- max(weight)
+    U <- runif(n.sample)
+    n.accept <- sum(weight / M > U)
+    accept.rate <- n.accept / n.sample
+    weight.index <- which(weight / M > U)
+  }
 
-    ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
-                     logpost(alpha.ar2[j])
-                   })
+  while (n.accept < n.AR) {
+    n.accept.temp <- 0
+    n.iter <- 1
+
+    while (n.accept.temp < (n.AR - n.accept) / 10) { 
+      # to guarantee the additional samples do not have extreme weights
+      n.sample2 <- 6 * (n.AR - n.accept)
+      B2 <- rbeta(n.sample2, a, b)
+      alpha.ar.temp2 <- sqrt(a + b) * (2 * B2 - 1) / 2 / sqrt(B2 * (1 - B2))
+      alpha.ar2 <- mode.adj + scale * alpha.ar.temp2
+      alpha.den2 <- Skewedt(alpha.ar.temp2, a, b) / scale
+
+      ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
+                        logpost(alpha.ar2[j])
+                      })
+
+      weight2 <- exp(ab.logpost2 - max(ab.logpost2)) / alpha.den2 
+      M <- max(weight2)
+      U <- runif(n.sample2)
+      n.accept.temp <- sum(weight2 / M > U)
+    }
 
     ab.logpost <- c(ab.logpost, ab.logpost2)
     alpha.den <- c(alpha.den, alpha.den2)
@@ -586,8 +633,9 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
     accept.rate <- n.accept / n.sample
     weight.index <- which(weight / M > U)
     alpha.ar <- c(alpha.ar, alpha.ar2)
+    n.sample <- n.sample + n.sample2
     n.iter <- n.iter + 1
-    if (n.iter > 1) {
+    if (n.iter > 2) {
       break()
     }
   }
@@ -625,13 +673,13 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR,
   alpha.mean <- mean(alpha.sample)
   alpha.var <- var(alpha.sample)
 
-  list(weight = weight, shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
+  list(weight = weight[weight.index], shrinkage = as.numeric(post.shrinkage), post.mean = as.numeric(post.m), 
        post.sd = as.numeric(post.sd), post.intv.low = post.intv.low, post.intv.upp = post.intv.upp,
        a.new = alpha.mean, a.var = alpha.var, alpha.sample = alpha.sample, p.sample = p.sample,
-       accept.rate = accept.rate, trial.scale = ts)
+       accept.rate = accept.rate, trial.scale = scale)
 }
     
-br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, 
+br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, c = 0, u = 1, 
                n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE){
 
   # The main function of BRIMM
@@ -682,10 +730,11 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
   } else {
 
     if (is.na(prior.mean)) {
-      res <- BRAR(given, ini, n.AR = n.AR, trial.scale = trial.scale, n.AR.factor = n.AR.factor)
+      res <- BRAR(given, ini, n.AR = n.AR, trial.scale = trial.scale, 
+                  n.AR.factor = n.AR.factor, c = c, u = u)
     } else {
       res <- BRAR2ndLevelMeanKnown(given, ini, n.AR = n.AR, trial.scale = trial.scale,
-                                   n.AR.factor = n.AR.factor) 
+                                   n.AR.factor = n.AR.factor, c = c, u = u)
     }
 
     if (is.na(prior.mean)) {
@@ -708,11 +757,11 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95,
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
-           post.intv.upp = res$post.intv.upp, model = "br", X = X, 
+           post.intv.upp = res$post.intv.upp, model = "br", X = X, trial.scale.est = res$trial.scale,
            beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
            intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
            alpha = res$alpha.sample, beta = beta, accept.rate = res$accept.rate, n.AR.factor = n.AR.factor,
-           n.AR = n.AR)
+           n.AR = n.AR, c = c, u = u)
     } else {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 

@@ -93,11 +93,33 @@
     Standard error of simple unbiased coverage estimate for each group.
   }
   \item{raw.resultRB}{
-    all the Rao-Blackwellized unbiased coverage estimates for every group and for every simulation.
+    All the Rao-Blackwellized unbiased coverage estimates for every group and for every simulation.
   }
   \item{raw.resultS}{
-    all the simple unbiased coverage estimates for every group and for every simulation.
+    All the simple unbiased coverage estimates for every group and for every simulation.
   }
+  \item{Alpha}{
+    Nominal confidence level 
+  }
+  \item{effective.n}{
+    The number of simulated data sets used to calculate the coverage estimates. The data sets may cause some errors in fitting models. For example, the data set may be against the conditions for the posteiror propriety in Binomial data.
+  }
+  \item{model}{
+    The model being used, "br", "pr", or "gr".
+  }
+  \item{case}{
+    One of the cases used to re-draw the coverage plot by \code{coverage.plot}.
+  }
+  \item{betas}{
+    The regression coefficient used to generate simulated data sets.
+  }
+  \item{A.r}{
+    The hyper-parameter value (A for Gaussian model, and r for both Binomial and Poisson models) used to generate simulated data sets.
+  }
+  \item{priormeanused}{
+    The value of the prior mean(s) used to generate simulated data sets.
+  }
+
 }
 
 \examples{
@@ -262,6 +284,6 @@
 Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}. 618-632.
 }
 
-\author{Joseph Kelly, Hyungsuk Tak, and Carl Morris}
+\author{Hyungsuk Tak, Joseph Kelly, and Carl Morris}
 
 \keyword{methods}

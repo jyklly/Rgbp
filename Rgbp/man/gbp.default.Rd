@@ -8,7 +8,8 @@
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
 "gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
-trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
+trial.scale = NA, save.result = TRUE, normal.CI = FALSE, c = 0, u = 1)}
+
 \arguments{
   \item{x}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
@@ -40,15 +41,15 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
     Only for Binomial model. If \code{n.AR = 1000}, all the results will be based on 1000 posterior samples using the acceptance-rejection sampling. Default is 0.
   }
   \item{n.AR.factor}{
-    Only for Binomial model. If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial posteior samples, and accept or reject them. Default is 4.
+    Only for Binomial model. If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial samples, and accept or reject them until the method gets n.AR posterior samples. Default is 4.
   }
 
   \item{trial.scale}{
-    A scale used in the trial distribution \eqn{\alpha}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be bigger than before. If there are relatively huge weights, scale should be bigger than before. Default is NA and the code automaticalaly set an appropriate number.
+    A scale used in the trial distribution of \eqn{\alpha}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be larger than before. If there are relatively huge weights, scale should be larger than before. Default is NA.
   }
 
   \item{save.result}{
-    Only for Binomial model with IS and SIR. If \code{save.result} is TRUE, all the results of weights and approximate posterior samples will be saved in the gbp object. Default is TRUE.
+    Only for Binomial model with the acceptance-rejection sampling. If \code{save.result} is TRUE, all the results of weights and posterior samples will be saved in the gbp object. Default is TRUE.
   }
 
   \item{normal.CI}{
@@ -58,6 +59,15 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
     used. Setting the value to \code{TRUE} may result in speed
     improvements but may lead to intervals that under cover. 
   }
+
+  \item{c}{
+    Non-negative constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. If c is positive, then the hyper-prior distribution of r is proper, otherwise improper. \eqn{dr/(c + r)^{u+1}}.
+  }
+
+  \item{u}{
+    A positive constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. \eqn{dr/(c + r)^{u+1}}.
+  }
+
 }
 
 \details{
@@ -128,7 +138,7 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
   \item{a.var}{posterior variance of \eqn{\alpha}}
   \item{Alpha}{confidence level based on which confidence interval is constructed }
   \item{weight}{(only for Binomial model) weights for acceptance-rejection method}
-  \item{p}{(only for Binomial model) posterior samples of p based on the acceptance-rejection method, if this method was used}
+  \item{p}{(only for Binomial model) posterior samples of p based on the acceptance-rejection method, if this method was used. This is a (k by nsim) matrix. Each row contains posteiror samples of each random effect.}
   \item{alpha}{(only for Binomial model) posterior samples of alpha based on the acceptance-rejection method, if this method was used}
   \item{beta}{(only for Binomial model) posterior samples of beta based on the acceptance-rejection method, if this method was used}
   \item{accept.rate}{(only for Binomial model) the acceptance rate of the acceptance-rejection method, if this method was used}
@@ -143,7 +153,7 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE)}
 }
 
 \author{
-  Joseph Kelly, Hyungsuk Tak, and Carl Morris
+  Hyungsuk Tak, Joseph Kelly, and Carl Morris
 }
 \examples{
 

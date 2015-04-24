@@ -1,11 +1,11 @@
 ######
 gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.AR, n.AR.factor,
-                trial.scale, save.result, normal.CI) UseMethod("gbp")
+                trial.scale, save.result, normal.CI, c, u) UseMethod("gbp")
 ######
 gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
                         n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE, 
-                        normal.CI = FALSE) {
+                        normal.CI = FALSE, c = 0, u = 1) {
 
   ##input checks
   if(model == "poisson" & missing(mean.PriorDist))
@@ -17,7 +17,8 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
        gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, 
                      normal.CI = normal.CI), 
        binomial = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
-                     n.AR = n.AR, n.AR.factor = n.AR.factor, trial.scale = trial.scale, save.result = TRUE), 
+                     n.AR = n.AR, n.AR.factor = n.AR.factor, trial.scale = trial.scale, save.result = TRUE,
+                     c = c, u = u), 
        poisson = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
@@ -255,12 +256,19 @@ summary.gbp <- function(object, ...) {
   post.sd.alpha <- sqrt(object$a.var)
   if (object$model == "gr") {
     post.mode.A <- exp(object$a.new)
-    result2 <- data.frame(post.mode.alpha, post.sd.alpha, post.mode.A)
+    result2 <- data.frame(post.mode.alpha, post.sd.alpha, post.mode.A, row.names = "")
   } else {
     post.mode.r <- exp(-object$a.new)
-    result2 <- data.frame(post.mode.alpha, post.sd.alpha, post.mode.r)
+    result2 <- data.frame(post.mode.alpha, post.sd.alpha, post.mode.r, row.names = "")
   }
 
+  if (object$model == "br" & length(object$weight) != 1) {
+    post.median.r <- median(exp(-object$alpha))
+    post.median.alpha <- median(object$alpha)
+    post.sd.alpha <- sd(object$alpha)
+    result2 <- data.frame(post.median.alpha, post.sd.alpha, post.median.r, row.names = "")
+  }
+  
   if (any(is.na(object$prior.mean))) {
     estimate <- as.vector(object$beta.new)
     if (object$intercept == TRUE) {
@@ -418,14 +426,31 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   }
 
   ## legend
-  se.or.n <- "Standard error"
-  par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 13,
-      oma = c(0, 0, 0, 0), new = TRUE)  
-  plot(1, type="n", axes=F, xlab="", ylab="")
+  if (x$model == "gr") {
+    se.or.n <- "Standard error"
+  } else {
+    se.or.n <- "Group size (n)"
+  }
+
+  if (x$model == "br" & length(x$weight) != 1) { 
+    par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 9,
+        oma = c(0, 0, 0, 0), new = TRUE)  
+    plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
-         lwd = c(NA, NA, 2, 2, 2), 
-         c("Posterior mean", "Sample mean", "Prior mean", se.or.n, "Posterior sd", "Crossover"),
-         seg.len = 0.5, bty = "n",xpd=TRUE)
+           lwd = c(NA, NA, 2, 2, 2), 
+           c("Posterior mean \nof random effect", "Sample mean", 
+             "Posterior mean of\nexpected random effect", se.or.n, 
+             "Posterior sd \nof random effect", "Crossover"),
+           seg.len = 0.5, bty = "n",xpd = TRUE)
+  } else {
+    par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 13,
+        oma = c(0, 0, 0, 0), new = TRUE)  
+    plot(1, type="n", axes=F, xlab="", ylab="")
+    legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
+           lwd = c(NA, NA, 2, 2, 2), 
+           c("Posterior mean", "Sample mean", "Prior mean", se.or.n, "Posterior sd", "Crossover"),
+           seg.len = 0.5, bty = "n",xpd = TRUE)
+  }
 
 
 }

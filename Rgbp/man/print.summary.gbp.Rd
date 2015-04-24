@@ -46,6 +46,9 @@
     \describe{
       \item{post.mode.alpha}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data.}
       \item{post.sd.alpha}{standard deviation of the posterior distribution of alpha}
+      \item{post.mode.r}{posterior mode of either \eqn{r} for Bianomial and Poisson models or \eqn{A} for Gaussian model.}
+      \item{post.median.alpha}{posterior median of \eqn{\alpha} for Bianomial model, if the acceptance-rejection method is used.}
+      \item{post.median.r}{posterior median of \eqn{r} for Bianomial model, if the acceptance-rejection method is used.}
     }
   }
   \item{Regression Summary (if fitted)}{
@@ -59,7 +62,7 @@
 }
   
 \author{
-  Joseph Kelly, Hyungsuk Tak, and Carl Morris
+  Hyungsuk Tak, Joseph Kelly, and Carl Morris
 }
 
 \examples{

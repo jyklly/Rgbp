@@ -6,18 +6,14 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
 
   # 1-0 criterion that is 1 if interval includes true parameter, 0 if not
   coverageS <- matrix(NA, nrow = length(gbp.object$se), ncol = nsim)
-  coverage.alpha <- rep(NA, nsim)
-  if (length(gbp.object$beta.new) == 1) {
-    coverage.beta <- rep(NA, nsim)
-  } else {
-    coverage.beta <- matrix(NA, nrow = nsim, ncol = length(gbp.object$beta.new))
-  }
 
   if (missing(A.or.r) & missing(reg.coef) & missing(mean.PriorDist)) {
     only.gbp.result <- TRUE
   } else {
     only.gbp.result <- FALSE
   }
+
+  betas <- NA
 
   if (gbp.object$model == "pr" & is.na(gbp.object$prior.mean)) {
     print("Model is Poisson and the prior mean is unknown. We currently do not provide Frequency Method Checking for this model.")
@@ -76,31 +72,20 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
             out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
                      gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                          n.AR = gbp.object$n.AR, n.AR.factor = gbp.object$n.AR.factor,
-                         trial.scale = gbp.object$trial.scale, save.result = FALSE)
+                         trial.scale = gbp.object$trial.scale, save.result = FALSE, 
+                         c = gbp.object$c, u = gbp.object$u)
                    } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
                      gbp(sim.z[, i], n, X, model = "binomial", Alpha = gbp.object$Alpha,
                          n.AR = gbp.object$n.AR, n.AR.factor = gbp.object$n.AR.factor, 
-                         trial.scale = gbp.object$trial.scale, save.result = FALSE)
+                         trial.scale = gbp.object$trial.scale, save.result = FALSE,
+                         c = gbp.object$c, u = gbp.object$u)
                    } else if (!is.na(gbp.object$prior.mean)) {
                      gbp(sim.z[, i], n, mean.PriorDist = p0, model = "binomial", 
                          Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR, 
                          n.AR.factor = gbp.object$n.AR.factor,
-                         trial.scale = gbp.object$trial.scale, save.result = FALSE)
+                         trial.scale = gbp.object$trial.scale, save.result = FALSE,
+                         c = gbp.object$c, u = gbp.object$u)
                    }
-             quant.alpha <- quantile(out$alpha, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                         1 / 2 + gbp.object$Alpha / 2))
-             coverage.alpha[i] <- ifelse(-log(r) < quant.alpha[2] & -log(r) > quant.alpha[1], 1, 0)
-             if (length(gbp.object$beta.new) == 1) {
-               quant.beta <- quantile(out$beta, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                          1 / 2 + gbp.object$Alpha / 2))
-               coverage.beta[i] <- ifelse(gbp.object$beta.new < quant.beta[2] & 
-                                          gbp.object$beta.new > quant.beta[1], 1, 0)
-             } else {
-               quant.beta <- apply(out$beta, 2, quantile, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                                   1 / 2 + gbp.object$Alpha / 2))
-               coverage.beta[i, ] <- (gbp.object$beta.new < quant.beta[, 2] & 
-                                          gbp.object$beta.new > quant.beta[, 1])
-             }
           }
 
           a1 <- r * p0 + sim.z[, i]
@@ -214,51 +199,39 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                      gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
                          Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR,
                          n.AR.factor = gbp.object$n.AR.factor,
-                         trial.scale = gbp.object$trial.scale, save.result = FALSE)
+                         trial.scale = gbp.object$trial.scale, save.result = FALSE,
+                         c = gbp.object$c, u = gbp.object$u)
                    } else if (!missing(A.or.r) & missing(reg.coef)) { 
                      if (!identical(gbp.object$prior.mean, NA)) {
                        gbp(sim.z[, i], n, mean.PriorDist = gbp.object$prior.mean, model = "binomial", 
                            Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR,
                            n.AR.factor = gbp.object$n.AR.factor,
-                           trial.scale = gbp.object$trial.scale, save.result = FALSE)
+                           trial.scale = gbp.object$trial.scale, save.result = FALSE,
+                           c = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
                        gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
-                           n.AR.factor = gbp.object$n.AR.factor,
-                           save.result = FALSE)
+                           n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
+                           c = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
                        gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
-                           n.AR.factor = gbp.object$n.AR.factor,
-                           save.result = FALSE)
+                           n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
+                           c = gbp.object$c, u = gbp.object$u)
                      }
                    } else if (!missing(reg.coef)) {
                      if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
                        gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
-                           n.AR.factor = gbp.object$n.AR.factor,
-                           save.result = FALSE)
+                           n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
+                           c = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
                        gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
-                           n.AR.factor = gbp.object$n.AR.factor,
-                           save.result = FALSE)
+                           n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
+                           c = gbp.object$c, u = gbp.object$u)
                      }
                    }
-               quant.alpha <- quantile(out$alpha, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                           1 / 2 + gbp.object$Alpha / 2))
-               coverage.alpha[i] <- ifelse(-log(r) < quant.alpha[2] & -log(r) > quant.alpha[1], 1, 0)
-               if (length(gbp.object$beta.new) == 1) {
-                 quant.beta <- quantile(out$beta, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                            1 / 2 + gbp.object$Alpha / 2))
-                 coverage.beta[i] <- ifelse(betas < quant.beta[2] & 
-                                            betas > quant.beta[1], 1, 0)
-               } else {
-                 quant.beta <- apply(out$beta, 2, quantile, probs = c((1 - gbp.object$Alpha) / 2, 
-                                                                     1 / 2 + gbp.object$Alpha / 2))
-                 coverage.beta[i, ] <- (betas < quant.beta[, 2] & 
-                                        betas > quant.beta[, 1])
-               }
 
           }
 
@@ -595,20 +568,36 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   # average coverage probability
   result <- round(rowMeans(coverageRB, na.rm = TRUE), 3)
   avr.cov <- round(mean(result), 3)
-  se.cov <- round(sqrt(apply(coverageRB, 1, var, na.rm = TRUE) / nsim), 4)
+  se.cov <- round(sqrt(apply(coverageRB, 1, var, na.rm = TRUE) / 
+                            sum(!is.na(coverageRB[1, ]))), 4)
+  avr.se.cov <- round(sqrt( sum(apply(coverageRB, 1, var, na.rm = TRUE) / 
+                            sum(!is.na(coverageRB[1, ]))) / length(result)^2 ), 4)
   result2 <- round(rowMeans(coverageS, na.rm = TRUE), 3)
   avr.cov2 <- round(mean(result2), 3)
-  se.cov2 <- round(sqrt(apply(coverageS, 1, var, na.rm = TRUE) / nsim), 4)
-  effective.n <- nsim - sum(is.na(coverageS[1, ]))
+  se.cov2 <- round(sqrt(apply(coverageS, 1, var, na.rm = TRUE) / 
+                        sum(!is.na(coverageS[1, ]))), 4)
+  effective.n <- sum(!is.na(coverageS[1, ]))
 
   # plotting coverage graph
   par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
   n.units <- length(gbp.object$se)
-  plot(1 : length(gbp.object$se), result, ylim = c(0.6, 1), type = "b", col = 2,
-       ylab = "Coverage estimate",
+  plot(1 : length(gbp.object$se), result, ylim = c(0.5, 1), col = 2,
+       ylab = "Coverage rate estimate",
        xlab = paste("Group_ j", ", ", "j = 1, ...,", n.units), 
-       main = "Estimated coverage probability for each group",
-       lwd = 3, lty = 1)
+       main = "Estimated coverage rate for each group",
+       lwd = 3, lty = 1, yaxt = "n", xaxt = "n")
+  axis(2, at = seq(0.5, 1, by = 0.05), labels = TRUE)
+
+  if (n.units <= 10) {
+    axis(1, at = seq(1, n.units, by = 1), labels = TRUE)
+  } else if (n.units <= 30) {
+    axis(1, at = seq(1, n.units, by = 2), labels = TRUE)
+  } else if (n.units <= 50) {
+    axis(1, at = seq(1, n.units, by = 5), labels = TRUE)
+  } else {
+    axis(1, at = seq(1, n.units, by = as.integer(n.units / 10)), labels = TRUE)
+  }
+
   abline(h = gbp.object$Alpha)
 
   if (is.na(gbp.object$prior.mean) & missing(mean.PriorDist)) {
@@ -617,18 +606,23 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              "Red circles: RB coverage estimates",
                              paste("# of simulations per group: ", effective.n),
                              paste("A for data generation: ", round(A, 2)), 
-                             paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3), 
+                                   sep = ""), 
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 1
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial-Beta", "Poisson-Gamma")
       legend("bottomleft", c(paste("Model: ", modelspec), 
                              "Red circles: RB coverage estimates",
                              paste("# of simulations per group: ", effective.n),
                              paste("r for data generation: ", round(r, 2)), 
-                             paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3), 
+                                   sep = ""), 
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 2   
     }
-
   } else if (is.na(gbp.object$prior.mean) & !missing(mean.PriorDist)) {
     if (gbp.object$model == "gr") {
       legend("bottomleft", c(paste("Model: Normal-Normal"),
@@ -636,7 +630,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("A for data generation: ", round(A, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 3
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial-Beta", "Poisson-Gamma")
       legend("bottomleft", c(paste("Model: ", modelspec), 
@@ -644,7 +640,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("r for data generation: ", round(r, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 4
     }
 
   } else if (!is.na(gbp.object$prior.mean) & !missing(mean.PriorDist)) {  # if prior mean is assigned
@@ -654,7 +652,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("A for data generation: ", round(A, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 5
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial-Beta", "Poisson-Gamma")
       legend("bottomleft", c(paste("Model: ", modelspec), 
@@ -662,7 +662,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("r for data generation: ", round(r, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 6
     }
   } else if (!is.na(gbp.object$prior.mean) & missing(mean.PriorDist)) {  # if prior mean is assigned
     if (gbp.object$model == "gr") {
@@ -671,7 +673,9 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("A for data generation: ", round(A, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 7
     } else {
       modelspec <- ifelse(gbp.object$model == "br", "Binomial-Beta", "Poisson-Gamma")
       legend("bottomleft", c(paste("Model: ", modelspec), 
@@ -679,16 +683,133 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                              paste("# of simulations per group: ", effective.n),
                              paste("r for data generation: ", round(r, 2)), 
                              paste("Known prior mean: ", round(priormeanused, 2)), 
-                             paste("Overall coverage: ", avr.cov)))
+                             paste("Overall coverage estimate: ", avr.cov),
+                             paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+      case <- 8
     }
   }
 
+  if (gbp.object$model == "gr") {
+    A.r <- A
+  } else {
+    A.r <- r
+  }
 
   # print output
   output <- list(coverageRB = result, coverageS = result2, 
                  average.coverageRB = avr.cov, average.coverageS = avr.cov2, 
                  se.coverageRB = se.cov, se.coverageS = se.cov2, 
                  raw.resultRB = coverageRB, raw.resultS = coverageS,
-                 coverage.alpha = coverage.alpha, coverage.beta = coverage.beta)
+                 Alpha = gbp.object$Alpha, effective.n = effective.n, 
+                 model = gbp.object$model, case = case, betas =  betas, A.r = A.r, 
+                 priormeanused = priormeanused)
   return(output)
+}
+
+coverage.plot <- function(cov) {
+
+  n.groups <- length(cov$coverageRB)
+  effective.n <- cov$effective.n
+  if (cov$model == "gr") {
+    A <- cov$A.r
+  } else {
+    r <- cov$A.r
+  }
+  betas <- cov$betas
+  avr.cov <- round(mean(cov$coverageRB), 3)
+  avr.se.cov <- round(sqrt(sum(cov$se.coverageRB^2) / n.groups^2), 4)
+  priormeanused <- cov$priormeanused
+
+  # plotting coverage graph
+  par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  plot(1 : n.groups, cov$coverageRB, ylim = c(0.5, 1), col = 2,
+       ylab = "Coverage rate estimate",
+       xlab = paste("Group_ j", ", ", "j = 1, ...,", n.groups), 
+       main = "Estimated coverage rate for each group",
+       lwd = 3, lty = 1, yaxt = "n", xaxt = "n")
+  axis(2, at = seq(0.5, 1, by = 0.05), labels = TRUE)
+
+  if (n.groups <= 10) {
+    axis(1, at = seq(1, n.groups, by = 1), labels = TRUE)
+  } else if (n.groups <= 30) {
+    axis(1, at = seq(1, n.groups, by = 2), labels = TRUE)
+  } else if (n.groups <= 50) {
+    axis(1, at = seq(1, n.groups, by = 5), labels = TRUE)
+  } else {
+    axis(1, at = seq(1, n.groups, by = as.integer(n.groups / 10)), labels = TRUE)
+  }
+
+  abline(h = cov$Alpha)
+
+  if (cov$case == 1) {
+    legend("bottomleft", c(paste("Model: Normal-Normal"), 
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("A for data generation: ", round(A, 2)), 
+                           paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3), 
+                                 sep = ""), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 2) {
+    modelspec <- ifelse(cov$model == "br", "Binomial-Beta", "Poisson-Gamma")
+    legend("bottomleft", c(paste("Model: ", modelspec), 
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("r for data generation: ", round(r, 2)), 
+                           paste("beta", 0 : (length(betas) - 1), " for data generation: ", round(betas, 3), 
+                                 sep = ""), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")   
+  } else if (cov$case == 3) {
+    legend("bottomleft", c(paste("Model: Normal-Normal"),
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("A for data generation: ", round(A, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 4) {
+    modelspec <- ifelse(cov$model == "br", "Binomial-Beta", "Poisson-Gamma")
+    legend("bottomleft", c(paste("Model: ", modelspec), 
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("r for data generation: ", round(r, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 5) {
+    legend("bottomleft", c(paste("Model: Normal-Normal"),
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("A for data generation: ", round(A, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 6) {
+    modelspec <- ifelse(cov$model == "br", "Binomial-Beta", "Poisson-Gamma")
+    legend("bottomleft", c(paste("Model: ", modelspec), 
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("r for data generation: ", round(r, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 7) {
+    legend("bottomleft", c(paste("Model: Normal-Normal"),
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("A for data generation: ", round(A, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  } else if (cov$case == 8) {
+    modelspec <- ifelse(cov$model == "br", "Binomial-Beta", "Poisson-Gamma")
+    legend("bottomleft", c(paste("Model: ", modelspec), 
+                           "Red circles: RB coverage estimates",
+                           paste("# of simulations per group: ", effective.n),
+                           paste("r for data generation: ", round(r, 2)), 
+                           paste("Known prior mean: ", round(priormeanused, 2)), 
+                           paste("Overall coverage estimate: ", avr.cov),
+                           paste("SE(overall coverage estimate): ", avr.se.cov)), bty = "n")
+  }
 }

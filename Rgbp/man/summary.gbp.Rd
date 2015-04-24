@@ -24,7 +24,7 @@
   }
 }
 
-\author{Joseph Kelly, Carl Morris, and Hyungsuk Tak}
+\author{Hyungsuk Tak, Joseph Kelly, and Carl Morris}
 
 \examples{
 

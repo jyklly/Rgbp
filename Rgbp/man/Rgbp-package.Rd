@@ -4,7 +4,7 @@
 \docType{package}
 \title{Gaussian, Poisson, and Binomial Hierarchical Modeling}
 \description{
-Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeling and frequency method checking for Gaussian, Binomial, and Poisson data.
+Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeling and frequency method checking for over-dispersed Gaussian, Binomial, and Poisson data.
 }
 \details{
   \tabular{ll}{
@@ -19,9 +19,9 @@ Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeli
 \code{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking.  It is found that such Bayesian-frequentist reconciliation allows \code{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
 }
 \author{
-  Joseph Kelly, Hyungsuk Tak, and Carl Morris
+  Hyungsuk Tak, Joseph Kelly, and Carl Morris
 
-  Maintainer: Joseph Kelly <kelly2@fas.harvard.edu>
+  Maintainer: Joseph Kelly <josephkelly@google.com>
 }
 \references{
   Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
