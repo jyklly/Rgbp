@@ -1,13 +1,13 @@
 This is BibTeX, Version 0.99d (TeX Live 2013)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: article.aux
+The top-level auxiliary file: article_v2.aux
 The style file: jss.bst
 Database file #1: bibliography.bib
 Warning--I didn't find a database entry for "2011"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 You've used 12 entries,
             3140 wiz_defined-function locations,
-            716 strings with 7376 characters,
+            717 strings with 7389 characters,
 and the built_in function-call counts, 11289 in all, are:
 = -- 960
 > -- 248
