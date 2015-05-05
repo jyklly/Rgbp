@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  4 MAY 2015 22:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 MAY 2015 15:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -470,7 +470,7 @@ LaTeX Info: Redefining \nameref on input line 66.
 \openout4 = `article_v2.out'.
 
 
-<jsslogo.jpg, id=92, 540.0175pt x 393.47pt>
+<jsslogo.jpg, id=96, 540.0175pt x 393.47pt>
 File: jsslogo.jpg Graphic file (type jpg)
  <use jsslogo.jpg>
 Package pdftex.def Info: jsslogo.jpg used on input line 66.
@@ -487,21 +487,23 @@ LaTeX Font Info:    Try loading font information for T1+aess on input line 66.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/ae/t1aess.fd
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
 )
-Underfull \vbox (badness 1062) has occurred while \output is active []
+Underfull \vbox (badness 3690) has occurred while \output is active []
 
  [1
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./jsslo
 go.jpg>]
+Underfull \vbox (badness 1810) has occurred while \output is active []
+
 LaTeX Font Info:    Font shape `T1/aer/b/sl' in size <10.95> not available
-(Font)              Font shape `T1/aer/bx/sl' tried instead on input line 94.
+(Font)              Font shape `T1/aer/bx/sl' tried instead on input line 90.
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 2 []
  []
 
 [2]
-LaTeX Font Info:    Try loading font information for T1+aett on input line 95.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 96.
  (/usr/local/texlive/2013/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
@@ -511,13 +513,16 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 
 [3]
 
-LaTeX Warning: Reference `gammaprior' on page 4 undefined on input line 132.
+LaTeX Warning: Reference `gammaprior' on page 4 undefined on input line 133.
 
 
-LaTeX Warning: Reference `gammaprior' on page 4 undefined on input line 132.
+Package natbib Warning: Citation `1997' on page 4 undefined on input line 133.
 
 
-Package natbib Warning: Citation `2011' on page 4 undefined on input line 155.
+LaTeX Warning: Reference `gammaprior' on page 4 undefined on input line 133.
+
+
+Package natbib Warning: Citation `2011' on page 4 undefined on input line 156.
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -526,22 +531,21 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 
 [4]
 
-Package natbib Warning: Citation `2011' on page 5 undefined on input line 174.
+Package natbib Warning: Citation `1997' on page 5 undefined on input line 175.
+
+
+Package natbib Warning: Citation `2011' on page 5 undefined on input line 175.
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 5
  []
 
-[5] <process.png, id=196, 1044.90375pt x 469.755pt>
+[5] <process.png, id=226, 1044.90375pt x 469.755pt>
 File: process.png Graphic file (type png)
  <use process.png>
-Package pdftex.def Info: process.png used on input line 205.
+Package pdftex.def Info: process.png used on input line 206.
 (pdftex.def)             Requested size: 170.71652pt x 76.74643pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 6 []
@@ -553,14 +557,14 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
  []
 
 [7 <./process.png>]
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 268
+LaTeX Font Info:    Try loading font information for TS1+aett on input line 271
 .
-LaTeX Font Info:    No file TS1aett.fd. on input line 268.
+LaTeX Font Info:    No file TS1aett.fd. on input line 271.
 
 
 LaTeX Font Warning: Font shape `TS1/aett/m/sl' undefined
 (Font)              using `TS1/cmr/m/n' instead
-(Font)              for symbol `textasciigrave' on input line 268.
+(Font)              for symbol `textasciigrave' on input line 271.
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -577,61 +581,62 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 10 []
  []
 
-[10] <hospital1.png, id=243, 524.96124pt x 556.0775pt>
+[10] <hospital1.png, id=272, 524.96124pt x 556.0775pt>
 File: hospital1.png Graphic file (type png)
  <use hospital1.png>
-Package pdftex.def Info: hospital1.png used on input line 373.
+Package pdftex.def Info: hospital1.png used on input line 376.
 (pdftex.def)             Requested size: 231.26378pt x 244.97183pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 11
  []
 
-[11 <./hospital1.png>] <hospital2.png, id=252, 550.055pt x 510.90875pt>
+[11 <./hospital1.png>] <hospital2.png, id=281, 550.055pt x 510.90875pt>
 File: hospital2.png Graphic file (type png)
 
 <use hospital2.png>
-Package pdftex.def Info: hospital2.png used on input line 402.
+Package pdftex.def Info: hospital2.png used on input line 405.
 (pdftex.def)             Requested size: 216.81pt x 201.38187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 12 []
  []
 
-[12 <./hospital2.png>]
+[12]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 13
  []
 
-[13]
+[13 <./hospital2.png>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 14 []
  []
 
-[14] <school1.png, id=279, 531.9875pt x 549.05125pt>
+[14]
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 15
+ []
+
+[15] <school1.png, id=314, 531.9875pt x 549.05125pt>
 File: school1.png Graphic file (type png)
  <use school1.png>
-Package pdftex.def Info: school1.png used on input line 556.
+Package pdftex.def Info: school1.png used on input line 559.
 (pdftex.def)             Requested size: 231.26378pt x 238.67618pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<school2.png, id=280, 552.0625pt x 514.92375pt>
+<school2.png, id=315, 552.0625pt x 514.92375pt>
 File: school2.png Graphic file (type png)
  <use school2.png>
-Package pdftex.def Info: school2.png used on input line 572.
+Package pdftex.def Info: school2.png used on input line 575.
 (pdftex.def)             Requested size: 216.81pt x 202.22586pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/aer/m/n/10.95 15
- []
-
-[15]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 16 []
  []
@@ -646,21 +651,21 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 18 []
  []
 
-[18] <baseball1.png, id=307, 543.02875pt x 553.06625pt>
+[18] <baseball1.png, id=336, 543.02875pt x 553.06625pt>
 File: baseball1.png Graphic file (type png)
  <use baseball1.png>
-Package pdftex.def Info: baseball1.png used on input line 725.
+Package pdftex.def Info: baseball1.png used on input line 728.
 (pdftex.def)             Requested size: 231.26378pt x 235.5353pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 19
  []
 
-[19 <./baseball1.png>] <baseball2.png, id=318, 552.0625pt x 515.9275pt>
+[19 <./baseball1.png>] <baseball2.png, id=347, 552.0625pt x 515.9275pt>
 File: baseball2.png Graphic file (type png)
 
 <use baseball2.png>
-Package pdftex.def Info: baseball2.png used on input line 748.
+Package pdftex.def Info: baseball2.png used on input line 751.
 (pdftex.def)             Requested size: 216.81pt x 202.62007pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -670,47 +675,47 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [20 <./baseball2.png>]
 
 LaTeX Warning: Reference `normalmarginal' on page 21 undefined on input line 80
-0.
+3.
 
 (./article_v2.bbl
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 21
  []
 
-[21])
-
-Package natbib Warning: There were undefined citations.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 808--808
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 808--808
-
- []
-
-LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
-(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 808.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 808.
-
+[21]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 22 []
  []
 
-[22]
+[22])
+
+Package natbib Warning: There were undefined citations.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--811
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--811
+
+ []
+
+LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
+(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 811.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 811.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 23
  []
 
 [23]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 808.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 811.
  (./article_v2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 808.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 808.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 811.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 811.
 Package rerunfilecheck Info: File `article_v2.out' has not changed.
-(rerunfilecheck)             Checksum: A7F6C93486351038ABB5E812931B7DBE;2414.
+(rerunfilecheck)             Checksum: D6C85632194B0B5049BBFE5848A4C694;2483.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -718,19 +723,16 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 808.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 811.
  ) 
 Here is how much of TeX's memory you used:
- 7701 strings out of 493315
- 111580 string characters out of 6137904
- 198302 words of memory out of 5000000
- 10871 multiletter control sequences out of 15000+600000
- 66622 words of font info for 113 fonts, out of 8000000 for 9000
+ 7742 strings out of 493315
+ 112426 string characters out of 6137904
+ 197894 words of memory out of 5000000
+ 10902 multiletter control sequences out of 15000+600000
+ 68799 words of font info for 116 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 36i,11n,34p,1245b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,11n,34p,1492b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 }{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/te
 xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/local/texl
@@ -756,10 +758,10 @@ ist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dis
 t/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2013/texmf-dist/
 fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v2.pdf (23 pages, 1127624 bytes).
+Output written on article_v2.pdf (23 pages, 1131786 bytes).
 PDF statistics:
- 455 PDF objects out of 1000 (max. 8388607)
- 388 compressed objects within 4 object streams
- 99 named destinations out of 1000 (max. 500000)
- 217 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 486 PDF objects out of 1000 (max. 8388607)
+ 418 compressed objects within 5 object streams
+ 107 named destinations out of 1000 (max. 500000)
+ 225 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -14,9 +14,10 @@
 \BOOKMARK [2][-]{Subsection.4.1.Coverage estimation process.2}{Coverage estimation process}{Section.3.Frequency method checking.1}% 14
 \BOOKMARK [3][-]{Subsubsection.4.2.0.Simple unbiased coverage estimates.3}{Simple unbiased coverage estimates}{Subsection.4.1.Coverage estimation process.2}% 15
 \BOOKMARK [3][-]{Subsubsection.4.2.1.Rao-Blackwellized unbiased coverage estimates.3}{Rao-Blackwellized unbiased coverage estimates}{Subsection.4.1.Coverage estimation process.2}% 16
-\BOOKMARK [1][-]{Section.4.Examples.1}{Examples}{}% 17
-\BOOKMARK [2][-]{Subsection.5.0.Known Second-level Mean.2}{Known Second-level Mean}{Section.4.Examples.1}% 18
-\BOOKMARK [2][-]{Subsection.5.1.Unknown Second-level Mean and No Covariate.2}{Unknown Second-level Mean and No Covariate}{Section.4.Examples.1}% 19
-\BOOKMARK [2][-]{Subsection.5.2.Unknown Second-level Mean and One Covariate.2}{Unknown Second-level Mean and One Covariate}{Section.4.Examples.1}% 20
-\BOOKMARK [1][-]{Section.5.Discussion.1}{Discussion}{}% 21
-\BOOKMARK [1][-]{Section.6.acknowledgments.1}{acknowledgments}{}% 22
+\BOOKMARK [1][-]{Section.4.packageoverview.1}{packageoverview}{}% 17
+\BOOKMARK [1][-]{Section.5.Examples.1}{Examples}{}% 18
+\BOOKMARK [2][-]{Subsection.6.0.Known Second-level Mean.2}{Known Second-level Mean}{Section.5.Examples.1}% 19
+\BOOKMARK [2][-]{Subsection.6.1.Unknown Second-level Mean and No Covariate.2}{Unknown Second-level Mean and No Covariate}{Section.5.Examples.1}% 20
+\BOOKMARK [2][-]{Subsection.6.2.Unknown Second-level Mean and One Covariate.2}{Unknown Second-level Mean and One Covariate}{Section.5.Examples.1}% 21
+\BOOKMARK [1][-]{Section.6.Discussion.1}{Discussion}{}% 22
+\BOOKMARK [1][-]{Section.7.acknowledgments.1}{acknowledgments}{}% 23
