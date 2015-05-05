@@ -40,15 +40,6 @@ Efron B, Morris C (1975).
 \newblock ISSN 01621459.
 \newblock \urlprefix\url{http://www.jstor.org/stable/2285814}.
 
-\bibitem[{Kass and Steffey(1989)}]{1989}
-Kass RE, Steffey D (1989).
-\newblock \enquote{Approximate Bayesian Inference in Conditionally Independent
-  Hierarchical Models (Parametric Empirical Bayes Models).}
-\newblock \emph{Journal of the American Statistical Association},
-  \textbf{84}(407), pp. 717--726.
-\newblock ISSN 01621459.
-\newblock \urlprefix\url{http://www.jstor.org/stable/2289653}.
-
 \bibitem[{Lee \emph{et~al.}(2006)Lee, Nelder, and Pawitan}]{hglm2006}
 Lee Y, Nelder JA, Pawitan Y (2006).
 \newblock \emph{Generalized linear models with random effects: a unified
@@ -75,6 +66,11 @@ Morris C, Christiansen C (1995).
   Extremes, With Application.}
 \newblock In J~Bernardo, J~Berger, A~Dawid, A~Smith (eds.), \emph{Bayesian
   Statistics 5}, pp. 227--296. New York: Oxford University Press.
+
+\bibitem[{Morris and Lysy(2012)}]{morris2012}
+Morris C, Lysy M (2012).
+\newblock \enquote{Shrinkage Estimation in Multilevel Normal Models.}
+\newblock \emph{Statistical Science}, \textbf{27}(1), 115--134.
 
 \bibitem[{Morris and Tang(2011)}]{tang2011}
 Morris C, Tang R (2011).
