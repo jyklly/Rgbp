@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 MAY 2015 15:15
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 MAY 2015 15:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -470,11 +470,11 @@ LaTeX Info: Redefining \nameref on input line 66.
 \openout4 = `article_v2.out'.
 
 
-<jsslogo.jpg, id=96, 540.0175pt x 393.47pt>
+<jsslogo.jpg, id=96, 216.81pt x 170.6375pt>
 File: jsslogo.jpg Graphic file (type jpg)
  <use jsslogo.jpg>
 Package pdftex.def Info: jsslogo.jpg used on input line 66.
-(pdftex.def)             Requested size: 89.80768pt x 65.43607pt.
+(pdftex.def)             Requested size: 83.14955pt x 65.44177pt.
 LaTeX Font Info:    Try loading font information for T1+pzc on input line 66.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/t1pzc.fd
@@ -758,7 +758,7 @@ ist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dis
 t/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2013/texmf-dist/
 fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v2.pdf (23 pages, 1131786 bytes).
+Output written on article_v2.pdf (23 pages, 1116111 bytes).
 PDF statistics:
  486 PDF objects out of 1000 (max. 8388607)
  418 compressed objects within 5 object streams
