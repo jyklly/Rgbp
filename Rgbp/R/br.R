@@ -378,8 +378,15 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
     (1 + x / sqrt(a + b + x^2))^(a + 0.5) * (1 - x / sqrt(a + b + x^2))^(b + 0.5) 
   }
 
-  b <- 2 * log(k)
-  a <- b / 2
+
+  if (k >= 10) {
+    b <- 2 * log(k)
+    a <- b / 2
+  } else {
+    b <- 2 * k
+    a <- k
+  }
+
   n.sample <- n.AR.factor * n.AR
   n.accept <- 0
 
@@ -573,8 +580,13 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, c = 0, u = 1,
     (1 + x / sqrt(a + b + x^2))^(a + 0.5) * (1 - x / sqrt(a + b + x^2))^(b + 0.5) 
   }
 
-  b <- 2 * log(k)
-  a <- b / 2
+  if (k >= 10) {
+    b <- 2 * log(k)
+    a <- b / 2
+  } else {
+    b <- 2 * k
+    a <- k
+  }
   n.sample <- n.AR.factor * n.AR
   n.accept <- 0
 
