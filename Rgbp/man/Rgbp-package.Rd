@@ -2,7 +2,7 @@
 \alias{Rgbp-package}
 \alias{Rgbp}
 \docType{package}
-\title{Gaussian, Poisson, and Binomial Hierarchical Modeling}
+\title{Hierarchical Modeling and Frequency Method Checking on Overdispersed Gaussian, Poisson, and Binomial Data}
 \description{
 Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeling and frequency method checking for over-dispersed Gaussian, Binomial, and Poisson data.
 }
