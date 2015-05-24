@@ -328,7 +328,7 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
 
 ######
 BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale, 
-                 n.AR.factor = n.AR.factor, c = 0, u = 1) {
+                 n.AR.factor = n.AR.factor, t, u) {
 
   logpost <- function(para) {
     a <- para[1]
@@ -347,7 +347,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
     } else {
        loglik <- sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - 
                     lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-      -a -(u + 1) * log(c + exp(-a)) + loglik
+      -a -(u + 1) * log(t + exp(-a)) + loglik
     }
   }
 
@@ -540,7 +540,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
 }
   
 
-BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, c = 0, u = 1,
+BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, t, u,
                                   trial.scale = trial.scale, n.AR.factor = n.AR.factor) {
 
   z <- given$z
@@ -561,7 +561,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, c = 0, u = 1,
     } else {
       loglik <- sum(lgamma(t0 + z) - lgamma(t0) + lgamma(n - z + t1) - 
                     lgamma(t1) + lgamma(t2) - lgamma(n + t2))
-      -a -(u + 1) * log(c + exp(-a)) + loglik      
+      -a -(u + 1) * log(t + exp(-a)) + loglik      
     }
   }
 
@@ -691,7 +691,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, c = 0, u = 1,
        accept.rate = accept.rate, trial.scale = scale)
 }
     
-br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, c = 0, u = 1, 
+br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1, 
                n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE){
 
   # The main function of BRIMM
@@ -743,10 +743,10 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, c = 0, u = 1
 
     if (is.na(prior.mean)) {
       res <- BRAR(given, ini, n.AR = n.AR, trial.scale = trial.scale, 
-                  n.AR.factor = n.AR.factor, c = c, u = u)
+                  n.AR.factor = n.AR.factor, t = t, u = u)
     } else {
       res <- BRAR2ndLevelMeanKnown(given, ini, n.AR = n.AR, trial.scale = trial.scale,
-                                   n.AR.factor = n.AR.factor, c = c, u = u)
+                                   n.AR.factor = n.AR.factor, t = t, u = u)
     }
 
     if (is.na(prior.mean)) {
@@ -773,7 +773,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, c = 0, u = 1
            beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
            intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
            alpha = res$alpha.sample, beta = beta, accept.rate = res$accept.rate, n.AR.factor = n.AR.factor,
-           n.AR = n.AR, c = c, u = u)
+           n.AR = n.AR, t = t, u = u)
     } else {
       list(sample.mean = given$sample.mean, se = given$n, prior.mean = prior.mean,
            shrinkage = res$shrinkage, post.mean = res$post.mean, post.sd = res$post.sd, 

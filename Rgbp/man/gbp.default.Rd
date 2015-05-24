@@ -8,7 +8,7 @@
 
 \usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
 "gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
-trial.scale = NA, save.result = TRUE, normal.CI = FALSE, c = 0, u = 1)}
+trial.scale = NA, save.result = TRUE, normal.CI = FALSE, t = 0, u = 1)}
 
 \arguments{
   \item{x}{
@@ -60,8 +60,8 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE, c = 0, u = 1)}
     improvements but may lead to intervals that under cover. 
   }
 
-  \item{c}{
-    Non-negative constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. If c is positive, then the hyper-prior distribution of r is proper, otherwise improper. \eqn{dr/(c + r)^{u+1}}.
+  \item{t}{
+    Non-negative constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. If t is positive, then the hyper-prior distribution of r is proper, otherwise improper. \eqn{dr/(t + r)^{u+1}}.
   }
 
   \item{u}{

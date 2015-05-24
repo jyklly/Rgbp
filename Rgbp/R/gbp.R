@@ -1,11 +1,11 @@
 ######
 gbp <- function(x, w, covariates, mean.PriorDist, model, intercept, Alpha, n.AR, n.AR.factor,
-                trial.scale, save.result, normal.CI, c, u) UseMethod("gbp")
+                trial.scale, save.result, normal.CI, t, u) UseMethod("gbp")
 ######
 gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
                         n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE, 
-                        normal.CI = FALSE, c = 0, u = 1) {
+                        normal.CI = FALSE, t = 0, u = 1) {
 
   ##input checks
   if(model == "poisson" & missing(mean.PriorDist))
@@ -18,7 +18,7 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
                      normal.CI = normal.CI), 
        binomial = br(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
                      n.AR = n.AR, n.AR.factor = n.AR.factor, trial.scale = trial.scale, save.result = TRUE,
-                     c = c, u = u), 
+                     t = t, u = u), 
        poisson = pr(x, w, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
   
   class(res) <- "gbp"	
