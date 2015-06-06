@@ -1,13 +1,14 @@
 \name{gbp}			
 \alias{gbp}
+\alias{gbp.default}
 \title{Fitting Gaussian, Poisson, and Binomial Hierarchical Models}
 \description{
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 
-\usage{gbp(x, w, covariates, mean.PriorDist, model =
-"gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
-trial.scale = NA, save.result = TRUE, normal.CI = FALSE, t = 0, u = 1)}
+\usage{gbp(x, w, covariates, mean.PriorDist, model, intercept, 
+           Alpha, n.AR, n.AR.factor, trial.scale, save.result,
+           normal.CI, t, u)}
 
 \arguments{
   \item{x}{
