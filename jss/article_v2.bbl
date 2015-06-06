@@ -1,4 +1,4 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{22}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -15,6 +15,13 @@ Azzalini A (2013).
   distributions (version 0.4-18)}.
 \newblock Universit\`a di Padova, Italia.
 \newblock \urlprefix\url{http://azzalini.stat.unipd.it/SN}.
+
+\bibitem[{Berger \emph{et~al.}(1999)Berger, Liseo, Wolpert
+  \emph{et~al.}}]{berger1999integrated}
+Berger JO, Liseo B, Wolpert RL, \emph{et~al.} (1999).
+\newblock \enquote{Integrated likelihood methods for eliminating nuisance
+  parameters.}
+\newblock \emph{Statistical Science}, \textbf{14}(1), 1--28.
 
 \bibitem[{Christiansen and Morris(1996)}]{modelchecking1996}
 Christiansen C, Morris C (1996).
@@ -52,6 +59,11 @@ Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T (2014).
   multilevel/hierarchical models, 2010.}
 \newblock \emph{URL http://CRAN. R-project. org/package= arm. R package
   version}, pp. 1--3.
+
+\bibitem[{Kelly(2014)}]{kelly2014advances}
+Kelly J (2014).
+\newblock \emph{Advances in the Normal-Normal Hierarchical Model}.
+\newblock Ph.D. thesis, Harvard University.
 
 \bibitem[{Lee and Nelder(1996)}]{lee1996hierarchical}
 Lee Y, Nelder JA (1996).
@@ -126,6 +138,20 @@ Rubin DB (1981).
   377--401.
 \newblock ISSN 03629791.
 \newblock \urlprefix\url{http://www.jstor.org/stable/1164617}.
+
+\bibitem[{Skellam(1948)}]{skellam1948}
+Skellam J (1948).
+\newblock \enquote{A probability distribution derived from the binomial
+  distribution by regarding the probability of success as variable between the
+  sets of trials.}
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, \textbf{10}(2), 257--261.
+
+\bibitem[{Tak and Morris(in progress)}]{tak2016propriety}
+Tak H, Morris C (in progress).
+\newblock \enquote{Posterior Propriety and Frequency Coverage Evaluation of
+  Bayesian Beta-Binomial Logistic Regression Model.}
+\newblock \emph{in progress}.
 
 \bibitem[{Tang(2002)}]{tang2002fitting}
 Tang R (2002).

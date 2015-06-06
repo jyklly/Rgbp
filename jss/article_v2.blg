@@ -3,48 +3,47 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: article_v2.aux
 The style file: jss.bst
 Database file #1: bibliography.bib
-Warning--I didn't find a database entry for "1997"
-Warning--I didn't find a database entry for "2011"
+Warning--I didn't find a database entry for "morris2011"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 18 entries,
+You've used 22 entries,
             3140 wiz_defined-function locations,
-            753 strings with 8273 characters,
-and the built_in function-call counts, 16359 in all, are:
-= -- 1380
-> -- 392
-< -- 20
-+ -- 149
-- -- 126
-* -- 1300
-:= -- 2188
-add.period$ -- 83
-call.type$ -- 18
-change.case$ -- 118
-chr.to.int$ -- 17
-cite$ -- 18
-duplicate$ -- 1485
-empty$ -- 1528
-format.name$ -- 188
-if$ -- 3407
+            772 strings with 8862 characters,
+and the built_in function-call counts, 19182 in all, are:
+= -- 1608
+> -- 465
+< -- 23
++ -- 179
+- -- 150
+* -- 1515
+:= -- 2588
+add.period$ -- 98
+call.type$ -- 22
+change.case$ -- 141
+chr.to.int$ -- 21
+cite$ -- 22
+duplicate$ -- 1748
+empty$ -- 1788
+format.name$ -- 222
+if$ -- 3973
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 216
-newline$ -- 111
-num.names$ -- 80
-pop$ -- 472
+missing$ -- 258
+newline$ -- 131
+num.names$ -- 96
+pop$ -- 566
 preamble$ -- 1
-purify$ -- 110
+purify$ -- 133
 quote$ -- 0
-skip$ -- 381
+skip$ -- 450
 stack$ -- 0
-substring$ -- 1456
-swap$ -- 546
+substring$ -- 1665
+swap$ -- 639
 text.length$ -- 6
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 159
+type$ -- 195
 warning$ -- 0
-while$ -- 135
+while$ -- 159
 width$ -- 0
-write$ -- 266
-(There were 2 warnings)
+write$ -- 317
+(There was 1 warning)

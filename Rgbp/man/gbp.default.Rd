@@ -1,12 +1,11 @@
 \name{gbp}			
 \alias{gbp}
-\alias{gbp.default}
 \title{Fitting Gaussian, Poisson, and Binomial Hierarchical Models}
 \description{
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 
-\usage{\method{gbp}{default}(x, w, covariates, mean.PriorDist, model =
+\usage{gbp(x, w, covariates, mean.PriorDist, model =
 "gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
 trial.scale = NA, save.result = TRUE, normal.CI = FALSE, t = 0, u = 1)}
 
@@ -65,7 +64,7 @@ trial.scale = NA, save.result = TRUE, normal.CI = FALSE, t = 0, u = 1)}
   }
 
   \item{u}{
-    A positive constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. \eqn{dr/(c + r)^{u+1}}.
+    A positive constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. \eqn{dr/(t + r)^{u+1}}.
   }
 
 }
