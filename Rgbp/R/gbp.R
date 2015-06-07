@@ -8,11 +8,16 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
                         normal.CI = FALSE, t = 0, u = 1) {
 
   ##input checks
-  if(model == "poisson" & missing(mean.PriorDist))
+  if(model == "poisson" & missing(mean.PriorDist)) {
     warning("Model is Poisson and the prior mean is unknown. This program can not yet give reliable results for this data. If the Poisson is being used as an approximation to the Binomial and the exposures are known then please assume a Binomial model")
+  }  
   
+  if(intercept == "FALSE" & missing(covariates)) {
+    warning("When there are no covariates and no intercept term, model cannot fit the model")
+    quit()
+  }  
   
-######
+  ######
   res <- switch(model, 
        gaussian = gr(x, w, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, 
                      normal.CI = normal.CI), 

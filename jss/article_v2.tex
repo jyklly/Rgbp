@@ -172,7 +172,7 @@ The Poisson-Gamma model with the hyper-prior distributions in Equation \ref{eq:h
 
 Obtaining point and interval estimates of each random effect is our primary inferential interest.  The approximate Bayesian tool assumes that the unconditional posterior distribution of each random effect follows a skewed-Normal distribution for the Gaussian case,  a Gamma distribution for the Poisson case, or a Beta distribution for the Binomial case whose parameters are matched to the estimated unconditional posterior moments of each random effect. We use these assumed unconditional posterior distributions to make point and interval estimates of each random effect. 
 
-We illustrate our estimation procedure equipped with the adjustment for density maximization (hereafter ADM) \citep{carl1988, morris1997, tang2011}, a distributional approximation to a Pearson family distribution via derivatives, using the Binomial and Poisson hierarchical models. The ADM procedure for the Gaussian hierarchical model used in  \pkg{Rgbp} has been well-documented in \cite{kelly2014advances}.
+We illustrate our estimation procedure equipped with the adjustment for density maximization (hereafter ADM) \citep{carl1988, morris1997, tang2011}, a way to  approximate a distribution of the parameter of interest by one of Pearson family distributions based on derivatives like the Delta method, using the Binomial and Poisson hierarchical models. The ADM procedure for the Gaussian hierarchical model adopted in  \pkg{Rgbp} has been well-documented in \cite{kelly2014advances}.
 
 \subsection[Inference]{The inferential model}\label{inference}
 
@@ -209,7 +209,7 @@ f(\boldsymbol{\lambda}\vert \boldsymbol{y})=\int  f(\boldsymbol{\lambda}\vert r,
 
 \subsection[shrinkage]{Estimation for shrinkage factors and expected random effects}\label{shrinkage}
 
-Obtaining the unconditional posterior moments of the shrinkage factors, $B_1, B_2, \ldots, B_k\equiv r/(r+n_k)$, and those of the expected random effects, $p^E_1, p^E_2, \ldots, p^E_k$ (or $\lambda^E$ for the Poisson model), is the most important estimation problem for the hierarchical models that \code{gbp} assumes. This is because these unconditional posterior moments are used to calculate the unconditional posterior moments of the random effects, $p_1, p_2, \ldots, p_k$ (or $\lambda_1, \lambda_2, \ldots, \lambda_k$ for the Poisson model). Taking the Binomial-Beta model as an example, with the assumption that hyper-parameters $r$ (or $A$ for the Gaussian model) and $\boldsymbol{\beta}$ are independent a posteriori, the unconditional posterior mean and variance of random effect $j$ of the Binomial hierarchical model are
+Estimating the unconditional posterior moments of the shrinkage factors, $B_1, B_2, \ldots, B_k\equiv r/(r+n_k)$, and the conditional posterior moments of the expected random effects, $p^E_1, p^E_2, \ldots, p^E_k$ (or $\lambda^E$ for the Poisson model), is the most important estimation problem for the hierarchical models that \code{gbp} assumes. This is because these moment estimates are used to approximate the unconditional posterior moments of the random effects, $p_1, p_2, \ldots, p_k$ (or $\lambda_1, \lambda_2, \ldots, \lambda_k$ for the Poisson model). Taking the Binomial-Beta model as an example, with the assumption that hyper-parameters $r$ (or $A$ for the Gaussian model) and $\boldsymbol{\beta}$ are independent a posteriori, the unconditional posterior mean and variance of random effect $j$ are
 \begin{eqnarray}
 E(p_{j}\vert \boldsymbol{y}) &=&E(E(p_{j}\vert r, \boldsymbol{\beta}, \boldsymbol{y})\vert\boldsymbol{y})=(1-E(B_j\vert\boldsymbol{y}))\bar{y}_j + E(B_j\vert  \boldsymbol{y})E(p^E_{j}\vert  \boldsymbol{y})\label{postmean} \\
 ~~~~~~Var(p_{j}\vert \boldsymbol{y}) &=&  E(Var(p_{j}\vert r, \boldsymbol{\beta}, \boldsymbol{y})\vert \boldsymbol{y})+Var(E(p_{j}\vert r, \boldsymbol{\beta},\boldsymbol{y})\vert \boldsymbol{y})\label{postvar}\\
@@ -219,29 +219,29 @@ E(p_{j}\vert \boldsymbol{y}) &=&E(E(p_{j}\vert r, \boldsymbol{\beta}, \boldsymbo
 \end{eqnarray}
 Note that the unconditional posterior mean and approximate variance of random effect $j$ in Equation \ref{postmean}  and \ref{approximate_var}  are functions of the unconditional posterior moments of shrinkage factors and expected random effects. We specify the function $g$ in Equation \ref{approximate_var} in Appendix \ref{apppostvar}.  
 
-We assumed that hyper-parameters $r$ and  $\boldsymbol{\beta}$ were independent a posteriori, considering that they are independent a posteriori in the limit of $k$ going to infinity  because they are asymptotically Normally distributed. 
-%Also, \cite{morris1997} used the Poisson model empirically showed that their covariance in observed information matrix of the Poisson-Gamma model was close to 0 in a small sample setting.
+We assumed that hyper-parameters $r$ and  $\boldsymbol{\beta}$ were independent a posteriori, considering that they are independent a posteriori in the limit of $k$ going to infinity  because they are asymptotically Normally distributed. Also, \cite{morris1997}  empirically showed that their covariance from the observed information matrix of the Poisson-Gamma model, though with a different parametrization, was close to 0 in a small sample setting.
 
 For the Poisson model, the unconditional posterior mean and variance of random effect $j$ are
 \begin{eqnarray}
-E(\lambda_j\vert \boldsymbol{y}) &=&E(E(p_{j}\vert r, \boldsymbol{y})\vert\boldsymbol{y})=(1-E(B_j\vert\boldsymbol{y}))\bar{y}_j + E(B_j\vert  \boldsymbol{y})E(\lambda^E\vert  \boldsymbol{y})\label{postmean_poisson} \\
+E(\lambda_j\vert \boldsymbol{y}) &=&E(E(p_{j}\vert r, \boldsymbol{y})\vert\boldsymbol{y})=(1-E(B_j\vert\boldsymbol{y}))\bar{y}_j + E(B_j\vert  \boldsymbol{y})\lambda^E\label{postmean_poisson} \\
 ~~~~~~Var(\lambda_{j}\vert \boldsymbol{y}) &=&  E(Var(p_{j}\vert r,  \boldsymbol{y})\vert \boldsymbol{y})+Var(E(\lambda_{j}\vert r, \boldsymbol{y})\vert \boldsymbol{y})\label{postvar_poisson}\\
 &=& E\big(\lambda^{\ast}_{j}/ (r+n_{j})\vert  \boldsymbol{y}\big)+Var\big(\textrm{B}_{j}(\bar{y}_{j}-\lambda^E_{j})\vert \boldsymbol{y}\big) \\
 &=&h(E(B_j\vert\boldsymbol{y}), E(B^2_j\vert\boldsymbol{y}) ).\label{approximate_var_poisson}
 \end{eqnarray}
-We specify the function $h$ in Equation \ref{approximate_var_poisson} in Appendix \ref{apppostvar_poisson}.
+The unconditional posterior mean and variance of random effect $j$ under the Poisson model are also functions of the unconditional posterior moments of the shrinkage factors. We specify the function $h$ in Equation \ref{approximate_var_poisson} in Appendix \ref{apppostvar_poisson}.
 %conditional posterior means of  random effect $j$ in Equation  \ref{normalpost}, \ref{gammapost_mean_var}, and \ref{betapost_mean_var} are a linear function of the shrinkage factor $B_{j}$ and the conditional posterior variances in Equation  \ref{normalpost}, \ref{gammapost_mean_var}, and \ref{betapost_mean_var} are linear (Gaussian), quadratic (Poisson), and  approximately cubic (Binomial) functions of $B_{j}$, considering $r+n_j=n_j/(1-B_j)$.  Thus, the unconditional posterior mean and variance of the random effect are the functions of the unconditional posterior moments of the shrinkage factors. 
 
 Next, we estimate the unconditional posterior moments of the shrinkage factors and expected random effects after approximating their unconditional posterior distributions by Beta distributions via the ADM. 
 
-\subsubsection{Unconditional posterior moments of shrinkage factors.}  It is noted that  the shrinkage factors ($B_1, \ldots B_k$) are a function of $r$, i.e., $B_{j}= r/(r+n_{j})=B_{j}(r)$. One way to approximate the distribution of $B_{j}$ is to find the maximum likelihood estimate of $r$, $\hat{r}_{MLE}$, with its Hessian value and to use a Delta method for an asymptotic Normal distribution of $B_{j}(\hat{r}_{MLE})$. This Normal approximation, however, is defined on $(-\infty, \infty)$ whereas $B_{j}$ lies on the unit interval between 0 and 1, and hence in small sample sizes this approximation can be quite flawed and can even result in point estimates lying on the boundary of the parameter space \citep{tang2011}.
+\subsubsection{Unconditional posterior moments of shrinkage factors.}  It is noted that  the shrinkage factors ($B_1, \ldots B_k$) are a function of $r$, i.e., $B_{j}= r/(r+n_{j})=B_{j}(r)$. One way to approximate the distribution of $B_{j}$ is to find the maximum likelihood estimate of $r$, $\hat{r}_{MLE}$, with its Hessian value and to use a Delta method for an asymptotic Normal distribution of $B_{j}(\hat{r}_{MLE})$. This Normal approximation, however, is defined on $(-\infty, \infty)$ whereas $B_{j}$ lies on the unit interval between 0 and 1, and hence in small sample sizes this approximation can be quite flawed and can even result in point estimates lying on the boundary of the parameter space, from which the restricted MLE procedure sometimes suffers \citep{tang2011, kelly2014advances}.
 
-To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of the ADM \citep{carl1988, morris1997, tang2011}. The ADM approximates the distribution of the function of the parameter of interest by one of the Pearson family distributions using the first two derivatives as the MLE with the Delta method does. For our purposes we approximate the posterior distribution of a shrinkage factor with a Beta distribution, which allows us to finally obtain estimates of the posterior moments, i.e.,  of $E(B_{j}\vert\boldsymbol{y})$ and $Var(B_{j}\vert\boldsymbol{y})$.  \citet{morris1997} showed that the Beta approximation for the shrinkage factors worked better than Normal approximation in Poisson-Gamma multilevel modeling when the sample size was small, and \citet{tang2011} showed that  in Normal-Normal hierarchical modeling. 
+To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of the ADM \citep{carl1988, morris1997, tang2011}. The ADM approximates the distribution of the function of the parameter of interest by one of the Pearson family distributions using the first two derivatives as the Delta method does; the Delta method is a special case of the ADM based on the Normal distribution. For our purposes we approximate the posterior distribution of a shrinkage factor with a Beta distribution, which allows us to finally obtain estimates of the posterior moments, i.e.,  of $E(B_{j}^c\vert\boldsymbol{y})$ for $c\ge0$.  \citet{morris1997} showed that the Beta approximation for the shrinkage factors worked better than Normal approximation using the Poisson hierarchical model when the sample size was small, and \citet{tang2011} showed that  using the Normal hierarchical model. 
 
-The ADM assumes the shrinkage factors follow Beta distributions a posteriori as
+The ADM assumes that the shrinkage factors follow Beta distributions a posteriori as
 \begin{equation}\label{admshrinkage}
 B_j\vert\boldsymbol{y}\sim Beta(a_{1j}, a_{0j}), ~\textrm{for}~j=1, 2, \ldots, k,
 \end{equation}
+and the ADM estimates the two parameters of the Beta distribution, i.e., $a_{1j}$ and $a_{0j}$.
 %The estimated Beta distribution with the estimates $\hat{a}_{1j}$ and $\hat{a}_{0j}$ will be used to approximate the posterior moments of the shrinkage factors. 
 % and $h(B_j)=\log(H(B_j))$Hessian
 %whose mean and variance are estimated via two derivatives of an adjusted posterior density and %matched to the two parameters of the Beta distribution, $a_{1j}$ and $a_{0j}$. 
@@ -253,9 +253,9 @@ E(B_j\vert\boldsymbol{y})&=&\frac{a_{1j}}{a_{1j}+a_{0j}}=\argmax_{B_j}~ A(B_j\ve
 Var(B_j\vert\boldsymbol{y})&=&\frac{B^\ast_j(1-B^\ast_j)}{a_{1j}+a_{0j}+1}=\frac{B^\ast_j(1-B^\ast_j)}{B^\ast_j(1-B^\ast_j)[-\frac{d^2}{dB^2_j}\log(A(B_j\vert \boldsymbol{y}))\vert_{B_j=B^\ast_j}] +1}.\label{admvar}
 \end{eqnarray}
 
-ADM estimates these mean and variance using the marginal posterior distribution of $r$, $f(r\vert\boldsymbol{y})\propto L(r)dr/r^2$, where the marginal likelihood $L(r)=\int L(\boldsymbol{\beta}, r)d\boldsymbol{\beta}$ for the Binomial model is obtained via Laplace approximation with a Lebesque measure on $\boldsymbol{\beta}$ and that for the Poisson model is specified in Equation \ref{marginal_poisson}; see \cite{berger1999integrated} for the integrated likelihood in detail. Considering that Equation \ref{admmean} and  \ref{admvar} involve the maximization and Hessian calculation, we work on $\alpha=-log(r)$ scale because the distribution of $\alpha$ is more symmetric than that of $r$ and $\alpha$ is defined on a real line without any boundary issues. Since $A(B_j\vert\boldsymbol{y})$ is proportional to the marginal posterior density $f(\alpha\vert\boldsymbol{y})\propto e^\alpha L(\alpha)$, the estimated posterior mean in Equation \ref{admmean} is 
+ADM estimates these mean and variance using the marginal posterior distribution of $r$, $f(r\vert\boldsymbol{y})\propto L(r)dr/r^2$, where the marginal likelihood $L(r)=\int L(\boldsymbol{\beta}, r)d\boldsymbol{\beta}$ for the Binomial model is obtained via Laplace approximation with a Lebesque measure on $\boldsymbol{\beta}$ and that for the Poisson model is specified in Equation \ref{marginal_poisson}; see \cite{berger1999integrated} for the integrated likelihood in detail. Considering that Equation \ref{admmean} and  \ref{admvar} involve the maximization and Hessian calculation, we work on a logarithmic scale of $r$, i.e., $\alpha=-log(r)$, because the distribution of $\alpha$ is more symmetric than that of $r$ and $\alpha$ is defined on a real line without any boundary issues. Since $A(B_j\vert\boldsymbol{y})$ is proportional to the marginal posterior density $f(\alpha\vert\boldsymbol{y})\propto e^\alpha L(\alpha)$, the estimated posterior mean in Equation \ref{admmean} is 
 \begin{equation}\label{meaninvariance}
-\hat{B}^\ast_j=exp(-\hat{\alpha})/(n_j+exp(-\hat{\alpha})),
+\hat{B}^\ast_j=\frac{e^{-\hat{\alpha}}}{n_j+e^{-\hat{\alpha}}},
 \end{equation}
 
 %This is because the marginal posterior distribution of the shrinkage factor, $p(B_j\vert\boldsymbol{y})dB_j \propto L(B_j)dB_j/B^2_j$ can be obtained via its variable transformation.
@@ -274,56 +274,58 @@ Note that this invariance information is  the negative Hessian value of $\alpha+
 \widehat{Var}(B_j\vert\boldsymbol{y})=\frac{\hat{B}^{\ast2}_j(1-\hat{B}^\ast_j)^2}{inv.info +\hat{B}^\ast_j(1-\hat{B}^\ast_j)}.
 \end{equation}
 
-After matching the unconditional posterior mean and variance of shrinkage factor $j$ in Equation \ref{meaninvariance} and \ref{varianceinvariance} to the two parameters of the Beta distribution in Equation \ref{admshrinkage}, i.e., $a_{1j}$ and $a_{0j}$, we get their estimates as
+After matching the estimated unconditional posterior mean and variance of shrinkage factor $j$ in Equation \ref{meaninvariance} and \ref{varianceinvariance} to the two parameters of the Beta distribution in Equation \ref{admshrinkage}, i.e., $a_{1j}$ and $a_{0j}$, we get their estimates as
 \begin{equation}\label{admpara}
-\hat{a}_{1j}=\textrm{inv.info}/(1-\hat{B}^\ast_j)~~\textrm{and}~~\hat{a}_{0j}=\textrm{inv.info}/\hat{B}^\ast_j.
+\hat{a}_{1j}=\frac{\textrm{inv.info}}{1-\hat{B}^\ast_j}~~\textrm{and}~~\hat{a}_{0j}=\frac{\textrm{inv.info}}{\hat{B}^\ast_j}.
 \end{equation}
 
 The moments of the Beta distribution are well defined as a function of $a_{1j}$ and $a_{0j}$; $E(B^c_j\vert\boldsymbol{y})=B(a_{1j} + c, a_{0j})/B(a_{1j}, a_{0j})$ for $c\ge0$. Their estimates are 
 \begin{equation}\label{shrinkagemoments}
-\widehat{E}(B^c_j\vert\boldsymbol{y})= B(\hat{a}_{1j} + c, \hat{a}_{0j})/B(\hat{a}_{1j}, \hat{a}_{0j}),
+\widehat{E}(B^c_j\vert\boldsymbol{y})= \frac{B(\hat{a}_{1j} + c, \hat{a}_{0j})}{B(\hat{a}_{1j}, \hat{a}_{0j})},
 \end{equation}
 
-and the approximation gets better if the true posterior distribution of the shrinkage factor is closer to the Beta distribution.
+and the approximation gets better if the true posterior distribution of the shrinkage factor is closer to the Beta distribution \citep{morris1997, tang2011, morris2012}.
 
 
 
 
 \subsubsection{Unconditional posterior moments of expected random effects for the Binomial model.}
-We approximate the unconditional posterior distribution of each expected random effect by the Beta distribution using the first and second derivatives of the conditional posterior distribution of $\beta$ given $\hat{\alpha}$ \citep{carl1988}. A motivation is that the moments of the expected random effects ($p^E_{1}, p^E_{2}, \ldots p^E_{k}$) involve an intractable integration such as
+We assume that the conditional posterior distribution of each expected random effect given $\hat{\alpha}$ follows a Beta distribution, and estimate the assumed Beta distribution using the first and second derivatives of the conditional posterior distribution of $\beta$ given $\hat{\alpha}$. We estimate the conditional posterior moments of the expected random effects and treat them as their estimated unconditional posterior moments obtained by the (Laplace) approximate marginal likelihood function of $\boldsymbol{\beta}$. We found that the conditional and unconditional posterior moment estimates were almost identical due to their small covariance between $r$ and $\boldsymbol{\beta}$ in the observed information matrix. In addition, calculating the conditional posterior moments was computationally less burdensome. 
+
+The moments of the expected random effects ($p^E_{1}, p^E_{2}, \ldots p^E_{k}$) involve an intractable integration. For example, the first conditional posterior moment is
 \begin{equation}\label{priormoment1}
-E(p^E_{j}\vert\hat{\alpha}, \boldsymbol{y})=E\bigg(\frac{e^{x_j^\top\beta}}{1+e^{x_j^\top\beta}}\bigg\vert\hat{\alpha}, \boldsymbol{y}\bigg)=\int_{\mathbf{R}^{m}} \frac{e^{x_j^\top\beta}}{1+e^{x_j^\top\beta}}f(\beta\vert\hat{\alpha}, \boldsymbol{y})d\beta
+E(p^E_{j}\vert\hat{\alpha}, \boldsymbol{y})=E\bigg(\frac{e^{x_j^\top\boldsymbol{\beta}}}{1+e^{x_j^\top\boldsymbol{\beta}}}\bigg\vert\hat{\alpha}, \boldsymbol{y}\bigg)=\int_{\mathbf{R}^{m}} \frac{e^{x_j^\top\boldsymbol{\beta}}}{1+e^{x_j^\top\boldsymbol{\beta}}}f(\beta\vert\hat{\alpha}, \boldsymbol{y})d\boldsymbol{\beta}.
 \end{equation}
 
-Considering that the expected random effects are a function of logistic regression coefficients $\boldsymbol{\beta}$, we can use the Delta method for the asymptotic Normal distribution of $p^E_{j}(\hat{\beta}_{MLE})$. However, the Normal approximation goes through the same support and boundary issues as the shrinkage factors do. Instead, we approximate the posterior distribution of $p^E_{j}(\boldsymbol{\beta})$ by a Beta distribution using $\hat{\beta}_{MLE}$ and the Hessian value at the MLE.
+Considering that the expected random effects are a function of logistic regression coefficients $\boldsymbol{\beta}$, we can use the Delta method for the asymptotic Normal distribution of $p^E_{j}(\hat{\boldsymbol{\beta}}_{MLE})$. However, the Normal approximation goes through the same support and boundary issues as the shrinkage factors do. Instead, we approximate the conditional posterior distribution of $p^E_{j}(\boldsymbol{\beta})$ by a Beta distribution using $\hat{\beta}_{MLE}$ and the Hessian value at the MLE.
 
-We assume the expected random effect has a Beta distribution a posteriori as follows;
+We assume the conditional posterior distribution of expected random effect $j$ is a Beta distribution as follows;
 \begin{equation}\label{admpriormean}
-p^E_{j}\vert\hat{\alpha}, \boldsymbol{y}=\frac{e^{x_j^\top\beta}}{1+e^{x_j^\top\beta}}\bigg\vert\hat{\alpha}, \boldsymbol{y}\sim \textrm{Beta}(b_{1j}, b_{0j})\sim \frac{G(b_{1j})}{G(b_{1j})+G(b_{0j})},
+p^E_{j}\vert\hat{\alpha}, \boldsymbol{y}=\frac{e^{x_j^\top\boldsymbol{\beta}}}{1+e^{x_j^\top\boldsymbol{\beta}}}\bigg\vert\hat{\alpha}, \boldsymbol{y}\sim \textrm{Beta}(b_{1j}, b_{0j})\sim \frac{G(b_{1j})}{G(b_{1j})+G(b_{0j})},
 \end{equation}
 
-where $G(b_{1j})$ is a random variable following a Gamma$(b_{1j}, 1)$ distribution with a unit scale and independently $G(b_{0j})$ has a Gamma($b_{0j}, 1)$ distribution.  Note that the representation in Equation (\ref{admpriormean}) is equivalent to saying $e^{x_j^\top\beta}\vert\hat{\alpha}, \boldsymbol{y}\sim G(b_{1j})/G(b_{0j})$, a ratio of two independent Gamma random variables. Its mean and variance are
+where $G(b_{1j})$ is a random variable following a Gamma$(b_{1j}, 1)$ distribution with a unit scale and independently $G(b_{0j})$ has a Gamma($b_{0j}, 1)$ distribution.  Note that the representation in Equation (\ref{admpriormean}) is equivalent to saying $e^{x_j^\top\boldsymbol{\beta}}\vert\hat{\alpha}, \boldsymbol{y}\sim G(b_{1j})/G(b_{0j})$, a ratio of two independent Gamma random variables. Its mean and variance are
 \begin{eqnarray}
-E(e^{x_j^\top\beta}\vert\hat{\alpha}, \boldsymbol{y})&=&E\bigg(\frac{G(b_{1j})}{G(b_{0j})}\bigg)=\frac{b_{1j}}{b_{0j}-1}\equiv\eta_j,\label{priormean1}\\
-~~~~~Var(e^{x_j^\top\beta}\vert\hat{\alpha}, \boldsymbol{y})&=&Var\bigg(\frac{G(b_{1j})}{G(b_{0j})}\bigg)=\frac{\eta_j(1+\eta_j)}{b_{0j}-2}.\label{priorvariance1}
+E(e^{x_j^\top\boldsymbol{\beta}}\vert\hat{\alpha}, \boldsymbol{y})&=&E\bigg(\frac{G(b_{1j})}{G(b_{0j})}\bigg)=\frac{b_{1j}}{b_{0j}-1}\equiv\eta_j,\label{priormean1}\\
+~~~~~Var(e^{x_j^\top\boldsymbol{\beta}}\vert\hat{\alpha}, \boldsymbol{y})&=&Var\bigg(\frac{G(b_{1j})}{G(b_{0j})}\bigg)=\frac{\eta_j(1+\eta_j)}{b_{0j}-2}.\label{priorvariance1}
 \end{eqnarray}
 
-In order to estimate $b_{1j}$ and $b_{0j}$, we assume that the conditional posterior distribution of $\beta$ follows $N[\hat{\beta}, \hat{\Sigma}]$, where $\hat{\beta}$ is the mode of $p(\beta\vert \hat{\alpha}, \boldsymbol{y})$  and $\hat{\Sigma}$ is a negative Hessian matrix at the mode. Then the posterior distribution of $x_j^\top\beta$ is also Normal with mean $x_j^\top\hat{\beta}$ and variance $x_j^\top\hat{\Sigma} x_j$.
+In order to estimate $b_{1j}$ and $b_{0j}$, we assume that the conditional posterior distribution of $\beta$ follows $N[\hat{\beta}, \hat{\Sigma}]$, where $\hat{\boldsymbol{\beta}}$ is the mode of $p(\boldsymbol{\beta}\vert \hat{\alpha}, \boldsymbol{y})$  and $\hat{\Sigma}$ is a negative Hessian matrix at the mode. Then the posterior distribution of $x_j^\top\boldsymbol{\beta}$ is also Normal with mean $x_j^\top\hat{\boldsymbol{\beta}}$ and variance $x_j^\top\hat{\Sigma} x_j$.
 
 Using the property of the log-Normal distribution, we get the estimates of posterior mean and variance in Equation (\ref{priormean1}) and (\ref{priorvariance1}) as
 \begin{eqnarray}
-\eta^\ast_j&=&e^{x_j^\top\hat{\beta}+x_j^\top\hat{\Sigma} x_j/2},\label{priormean2}\\
-~~~~~\widehat{Var}(e^{x_j^\top\beta}\vert\boldsymbol{y})&=&\eta^{\ast 2}_j\big(e^{x_j^{T}\hat{\Sigma} x_j}-1\big).\label{priorvariance2}
+\hat{\eta}_j&=&e^{x_j^\top\hat{\boldsymbol{\beta}}+x_j^\top\hat{\Sigma} x_j/2},\label{priormean2}\\
+~~~~~\widehat{Var}(e^{x_j^\top\boldsymbol{\beta}}\vert\boldsymbol{y})&=&\hat{\eta}^2_j\big(e^{x_j^{T}\hat{\Sigma} x_j}-1\big).\label{priorvariance2}
 \end{eqnarray}
 
 By matching the estimated mean and variance in Equation (\ref{priormean2}) and (\ref{priorvariance2}) to $b_{1j}$ and $b_{0j}$ in Equation (\ref{priormean1}) and (\ref{priorvariance1}), we obtain the estimates of $b_{1j}$ and $b_{0j}$ as follows;
 \begin{equation}\label{priormeanpara}
-\hat{b}_{1j}=\eta^\ast_j+\frac{\eta^\ast_j + 1}{e^{x_j^{T}\hat{\Sigma} x_j}-1}~~\textrm{and}~~\hat{b}_{0j}=\frac{\eta^\ast_j + 1}{\eta^\ast_j(e^{x_j^{T}\hat{\Sigma} x_j}-1)}+2.
+\hat{b}_{1j}=\hat{\eta}_j+\frac{\hat{\eta}_j + 1}{e^{x_j^{T}\hat{\Sigma} x_j}-1}~~\textrm{and}~~\hat{b}_{0j}=\frac{\hat{\eta}_j + 1}{\hat{\eta}_j(e^{x_j^{T}\hat{\Sigma} x_j}-1)}+2.
 \end{equation}
 
-The unconditional posterior moments of expected random effects can be estimated similarly to those of shrinkage factors; since $E((p^E_{j})^d\vert\boldsymbol{y})=B(b_{1j} + d, b_{0j})/B(b_{1j}, b_{0j})$ for $d\ge0$, 
+The conditional posterior moments of expected random effects can be estimated similarly to those of shrinkage factors;  $E((p^E_{j})^d\vert\hat{\alpha}, \boldsymbol{y})=B(b_{1j} + d, b_{0j})/B(b_{1j}, b_{0j})$ for $d\ge0$. Finally, we estimate the unconditional posterior moments of expected random effects by their estimated conditional posterior moments as follows.
 \begin{equation}\label{priormeanmoments}
-\widehat{E}((p^E_{j})^d\vert\boldsymbol{y})= B(\hat{b}_{1j} + d, \hat{b}_{0j})/B(\hat{b}_{1j}, \hat{b}_{0j}).
+\widehat{E}((p^E_{j})^d\vert\boldsymbol{y})= \frac{B(\hat{b}_{1j} + d, \hat{b}_{0j})}{B(\hat{b}_{1j}, \hat{b}_{0j})}.
 \end{equation}
 
 %Considering the histogram in the middle of Fig \ref{fig2},  we can see that the ADM approximation (density line) to 20,000 posterior samples of $p_{01}$ obtained via grid-sampling based on 18 baseball data look satisfactory.
@@ -339,7 +341,7 @@ and each random effect of the Poisson model has a Gamma distribution as
 \lambda_j\vert \boldsymbol{y} \sim \textrm{Gamma}(s_{1j}, s_{0j}),~\textrm{for}~ j=1, 2, \ldots, k.
 \end{equation}
 
-The unconditional posterior mean and variance for the Binomial model specified in Equation \ref{postmean} and \ref{approximate_var} and those for the Poisson model in Equation \ref{postmean_poisson} and \ref{approximate_var_poisson}  are functions of the unconditional posterior moments of shrinkage factors and expected random effect. Once we plug-in the estimated unconditional posterior moments of shrinkage factors in Equation \ref{shrinkagemoments} and those of expected random effect in Equation \ref{priormeanmoments}, we get the estimates of the mean and variance in Equation \ref{postmean}  and \ref{postvar}, i.e., $\hat{\mu}_{p_j}$ and $\hat{\sigma}^2_{p_j}$, respectively. For the Poisson model, let  $\hat{\mu}_{\lambda_j}$ and $\hat{\sigma}^2_{\lambda_j}$ denote the estimates of the mean and variance in Equation \ref{postmean_poisson} and \ref{approximate_var_poisson}. The estimates of two parameters $t_{1j}$ and $t_{0j}$ in Equation \ref{truebeta} come as follows;
+The unconditional posterior mean and variance of each random effect for the Binomial model specified in Equation \ref{postmean} and \ref{approximate_var} and those for the Poisson model in Equation \ref{postmean_poisson} and \ref{approximate_var_poisson}  are functions of the unconditional posterior moments of shrinkage factors and expected random effect. Once we plug-in the estimated unconditional posterior moments of shrinkage factors in Equation \ref{shrinkagemoments} and those of expected random effect in Equation \ref{priormeanmoments}, we get the estimates of the unconditional posterior mean and variance of each random effect in Equation \ref{postmean}  and \ref{postvar} denoted by $\hat{\mu}_{p_j}$ and $\hat{\sigma}^2_{p_j}$, respectively. For the Poisson model, let  $\hat{\mu}_{\lambda_j}$ and $\hat{\sigma}^2_{\lambda_j}$ denote the estimates of the unconditional posterior mean and variance in Equation \ref{postmean_poisson} and \ref{approximate_var_poisson}. The estimates of two parameters $t_{1j}$ and $t_{0j}$ in Equation \ref{truebeta} come as follows;
 \begin{equation}\label{posttrueprob}
 \hat{t}_{1j}=\bigg(\frac{\hat{\mu}_{p_j}(1-\hat{\mu}_{p_j})}{\hat{\sigma}^2_{p_j}}-1\bigg)\hat{\mu}_{p_j},~\textrm{and}~~\hat{t}_{0j}=\bigg(\frac{\hat{\mu}_{p_j}(1-\hat{\mu}_{p_j})}{\hat{\sigma}^2_{p_j}}-1\bigg)(1-\hat{\mu}_{p_j}).
 \end{equation}
@@ -349,7 +351,7 @@ The estimates of two parameters $s_{1j}$ and $s_{0j}$ in Equation \ref{truebeta_
 \end{equation}
 
 
-Finally, the approximate posterior distribution of random effect $j$ for the Binomial model is
+Finally, the approximate unconditional posterior distribution of random effect $j$ for the Binomial model is
 \begin{equation}\label{trueapprox}
 p_j\vert \boldsymbol{y} \stackrel{.}{\sim} \textrm{Beta}(\hat{t}_{1j}, \hat{t}_{0j}),
 \end{equation}
@@ -358,7 +360,9 @@ and that for the Poisson model is
 \lambda_j\vert \boldsymbol{y} \stackrel{.}{\sim} \textrm{Gamma}(\hat{s}_{1j}, \hat{s}_{0j}).
 \end{equation}
 
-The ADM approximation is accurate if the true distribution of $p_j$ is close to the the Beta distribution \citep{tang2011, morris2012}.
+The ADM approximation is accurate if the true distribution of $p_j$ is close to the the Beta distribution \citep{morris1997, tang2011, morris2012}.
+
+We use the posterior mean and (2.5\%, 97.5\%) quantiles (if we assign 95\% confidence level) of the posterior distribution in Equation \ref{trueapprox} for the Binomial model or in Equation \ref{trueapprox_poisson} for the Poisson model as the point and interval estimates of the random effect.
 
 %The histogram on the right in Fig \ref{fig2} shows the ADM approximation to the 20,000 posterior samples of the true probability of the first player $p_1$ obtained via grid-sampling. In this case, the  approximation by the Beta distribution was not complete enough to catch the right-skewness of posterior distribution, the effect called the regression towards the mean. See section \ref{baseballex} for detailed analysis.
 
@@ -383,19 +387,94 @@ The ADM approximation is accurate if the true distribution of $p_j$ is close to 
 %After estimating the two posterior moments, for example $E(\mu_{j}\vert \boldsymbol{y})$ and $Var(\mu_{j}\vert \boldsymbol{y})$, \code{gbp} approximates a posterior distribution of the mean effects given the data by assuming a reasonable distribution and matching moments. For the Normal-Normal model we actually estimate the first three moments and approximate $\pi(\mu_{j}\vert \boldsymbol{y})$ with a skewed-Normal distribution \citep{sn2013}. For the Poisson-Gamma model we approximate $\pi(\lambda_{j}\vert \boldsymbol{y})$ with a Gamma distribution and finally for the Binomial-Beta model we approximate the posterior distribution of $p_{j}$, $\pi(p_{j}\vert \boldsymbol{y})$, with a Beta distribution.
 
 
-\section[Frequency method checking]{Frequency Method Checking}\label{sec4}
-Like the two sides of the same coin, checking a statistical model comes hand in hand with fitting the model. If a fitted model cannot pass a validation or checking process, we usually go back and forth from estimation and checking steps iteratively. In this sense, checking a fitted model is an interactive procedure for the model justification.
+\section[Estimation]{The acceptance-rejection method for the Binomial model}\label{sec_accept}
+As for the Binomial model, the package \pkg{Rgbp} also provides a way to  independently draw exact posterior samples of random effects and hyper-parameters via the acceptance-rejection method. We continue working on a logarithmic scale of $r$, $\alpha=\log(1/r)=-\log(r)$. The joint posterior density function of $\alpha$ and $\boldsymbol{\beta}$ based on their joint hyper-prior density function in Equation \ref{eq:hyper} is 
+\begin{equation}
+f(\alpha, \boldsymbol{\beta} \vert \boldsymbol{y})\propto f(\alpha, \boldsymbol{\beta})L(\alpha, \boldsymbol{\beta})\propto e^{\alpha}L(\alpha, \boldsymbol{\beta})d\alpha d\boldsymbol{\beta}.
+\end{equation}
+
+The Acceptance-Rejection (A-R) method \citep{everson2000inference, tang2002fitting} is useful when it is difficult to sample a parameter of interest $\theta$ directly from its target probability density $f(\theta)$, which is known up to a normalizing constant, but an easy-to-sample envelope function $g(\theta)$ is available. The A-R method samples $\theta$  from the envelope $g(\theta)$ and accepts it with a probability $\frac{f(\theta)}{Mg(\theta)}$, where $M$ is a constant making $f(\theta)/g(\theta)\le M$ for all $\theta$. The distribution of the accepted $\theta$ exactly follows $f(\theta)$. The A-R method is stable as long as the tails of the envelop function are thicker than those of the target density function. 
+
+The goal of the A-R method  for the  Binomial model is to independently draw  posterior samples of hyper-parameters from $f(\alpha, \boldsymbol{\beta}\vert \boldsymbol{y})$, using an easy-to-sample envelop function $g(\alpha, \boldsymbol{\beta})$ that has thicker tails than the target density function. 
+
+We factor the envelope function into two parts, $g(\alpha, \boldsymbol{\beta})=g_1(\alpha)g_2(\boldsymbol{\beta})$ to model the tails of each function separately. We consider the tail behavior of the conditional posterior density function $f(\alpha \vert \boldsymbol{\beta},  \boldsymbol{y})$ to come up with $g_1(\alpha)$; $f(\alpha \vert \boldsymbol{\beta},  \boldsymbol{y})$ behaves as $e^{-\alpha(k-1)}$ when $\alpha$ goes to $\infty$ and as $e^{\alpha}$ when $\alpha$ goes to $-\infty$. It indicates that $f(\alpha \vert \boldsymbol{\beta},  \boldsymbol{y})$ is skewed to the left because the right tail touches the $x$-axis faster than the left tail does it as long as $k>1$.  A skewed $t$-distribution  is a good candidate for $g_1(\alpha)$ because it behaves as a power law on both tails, leading to thicker tails than those of $f(\alpha \vert \boldsymbol{\beta},  \boldsymbol{y})$. 
+
+It is too complicated to figure out the tail behaviors of $f(\boldsymbol{\beta} \vert \alpha,  \boldsymbol{y})$. However, since $f(\boldsymbol{\beta} \vert \alpha,  \boldsymbol{y})$ of the approximate Gaussian counterpart has a multivariate Gaussian density function \citep{tang2011, kelly2014advances}, we consider a multivariate $t$-distribution with 4  degrees of freedom as a good candidate for $g_2(\boldsymbol{\beta})$.
 
 
-There are two kinds of model justification processes; one is model checking and the other is method checking. The model checking is for the justification of the hierarchical model on a specific dataset. One possible question is, ``Can this dataset benefit from such hierarchical modeling?'' \cite{modelchecking1996} answered this question by using the Negative-Binomial mixture model on Poisson data to justify the second-level hierarchy. They found that their data had more variation than expected of the first-level Poisson distribution and two-level Poisson hierarchical model could successfully account for such additional variation.
+Specifically, we assume
+\begin{eqnarray}\label{env}
+g_1(\alpha) &=& g_1(\alpha; \mu, \sigma, a, b)~\equiv~\textrm{Skewed-}t(\alpha\vert\mu, \sigma, a, b),\\
+g_2(\boldsymbol{\beta}) &=& g_2(\boldsymbol{\beta}; \boldsymbol{\mu}^\ast, S_{(m\times m)})~\equiv~t_{4}(\boldsymbol{\beta}\vert \boldsymbol{\mu}^\ast, S),\label{g2approx}
+\end{eqnarray}
+where the notation Skewed-$t(\alpha\vert\mu, \sigma, a, b)$ represents a density function of a skewed $t$-distribution  at $\alpha$ with location $\mu$, scale $\sigma$, degree of freedom $a+b$, and skewness $a-b$ for any positive constants $a$ and $b$ \citep{jones2003skew}. The article of \cite{jones2003skew} derives the mode of $g_1(\alpha)$ as
+\begin{equation}\label{mode}
+\mu+\frac{(a-b)\sqrt{a+b}}{\sqrt{(2a+1)(2b+1)}}.
+\end{equation} 
+It shows that the tails follow a power law as $\alpha^{-(2a+1)}$ on the left and $\alpha^{-(2b+1)}$ on the right when $b>a$. It also provides a representation to generate the random variable following their skewed-$t$ distribution as
+\begin{equation}
+\alpha\sim \mu+\sigma\frac{\sqrt{a+b}(2T-1)}{2\sqrt{T(1-T)}}, ~\textrm{where}~ T\sim \textrm{Beta}(a, b).
+\end{equation}
+The notation $t_{4}(\boldsymbol{\beta}\vert\boldsymbol{\mu}^\ast, S)$ in Equation \ref{g2approx} indicates a density function of a multivariate $t$-distribution at $\boldsymbol{\beta}$ with 4 degrees of freedom, a location vector $\boldsymbol{\mu}^\ast$, and a $m\times m$ scale matrix $S$ that leads to the variance-covariance matrix $2S$. 
+
+We set the parameters of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$, i.e., $\mu$, $\sigma$, $a$, $b$, $\boldsymbol{\mu}^\ast$, and $S$, to make the product of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$ similar to the target joint posterior density $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$. First, we obtain the  mode of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$ and the inverse of the  negative Hessian matrix at the modes, $-H^{-1}$. Let $(\hat{\alpha}, \hat{\boldsymbol{\beta}})$ denote the modes of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$, $-H^{-1}_{\hat{\alpha}}$ indicate (1, 1) element of $-H^{-1}$, and $-H^{-1}_{\hat{\boldsymbol{\beta}}}$ represent  $-H^{-1}$ without the first row and  column. 
+%(1, 1)  and $(2:(m+1), 2:(m+1))$ elements of the  inverse of the negative Hessian matrix at the modes, respectively.
+% $f(\alpha, \boldsymbol{\beta} \vert \boldsymbol{y})\propto e^\alpha L(\alpha, \boldsymbol{\beta})d\alpha d\boldsymbol{\beta}$. 
+
+Next, we set ($a,~ b$) to $(k,~ 2k)$ if $k<10$ (or otherwise $(\log(k),~ 2\log(k))$)   to maintain a left-skewness of $g_1(\alpha)$ and to keep  $a$ and $b$ small enough for thick tails. We match the mode of $g_1(\alpha)$ specified in Equation \ref{mode} to $\hat{\alpha}$ by fixing the location parameter $\mu$ at $\hat{\alpha}-(a-b)\sqrt{a+b}/\sqrt{(2a+1)(2b+1)}$. We set  the scale parameter $\sigma$ to $(-H^{-1}_{\hat{\alpha}})^{0.5}\eta$, where $\eta$ is a tuning parameter; $\eta=1.3$ is the default. When the A-R method produces extreme values of weights defined in Equation \ref{weight} below, we increase the value of $\eta$.  %To summarize, we use
+%\begin{equation}
+%g_1(\alpha)\equiv\textrm{Skewed-}t(\alpha\vert\mu=\hat{\alpha}+\zeta, \sigma=(-H^{-1}_{\hat{\alpha}})^{0.5}\eta, a=\log(k), b=2\log(k)),
+%\end{equation}
+%where $\zeta$ is a mode correction term defined as $-(a-b)\sqrt{a+b}/\sqrt{(2a+1)(2b+1)}$. 
+%It is desirable to have a larger $\delta$ when $c$ in the class of hyper-prior distributions is closer to 0 because a smaller $c$ makes a thicker left tail of $\alpha$ a priori.
+%, considering an asymptotic normality of the target density as $k$ increases. 
+%In case of using the hyper-prior distribution $dr/r^{1.5}$, whose right tail is thicker than $dr/r^2$ a priori, we set a larger scale $\phi=5*\sqrt{-H^{-1}_{\hat{\alpha}}}$ to cover its thicker tail. The multiplication constants were chosen after simulation studies. We fix the skewness parameter $\delta$ at -2 because in many cases, combined with a large scale parameter, it helped the skewed-normal density cover a long left-tail of the marginal distribution of $\alpha$, known to have a left skewness \citep{morris2012shrinkage}. 
+
+As for $g_2(\boldsymbol{\beta})$, we matches the location vector $\boldsymbol{\mu}^\ast$ to the mode $\hat{\boldsymbol{\beta}}$ and the scale matrix $S$ to $-H^{-1}_{\hat{\boldsymbol{\beta}}}/2$ so that the variance-covariance matrix becomes $-H^{-1}_{\hat{\boldsymbol{\beta}}}$;
+\begin{equation}
+g_2(\boldsymbol{\beta})\equiv t_4(\boldsymbol{\beta}\vert \boldsymbol{\mu}^\ast=\hat{\boldsymbol{\beta}}, S=-H^{-1}_{\hat{\boldsymbol{\beta}}}/2).
+\end{equation}
+%; when the sample size was small, it increased the acceptance rate of the A-R method
 
 
-Once we make sure that the hierarchical model is appropriate for our data, the following question will be about the validity of the interval estimates, ``Does the 95\% (can be specified differently) confidence interval obtained via this Bayesian model-fitting process achieve 95\% confidence level  for any true parameter values?'' \pkg{Rgbp} has a function called \code{coverage} to answer this question and it comprises of two parts, generating pseudo-datasets and estimating coverage probabilities.
+For the  implementation of the acceptance-rejection method, we obtain four times more trial samples than the desired number of samples $N$ independently from $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$. We calculate $4N$ weights, each of which is defined as
+\begin{equation}\label{weight}
+w_i\equiv w(\alpha^{(i)}, \boldsymbol{\beta}^{(i)})=\frac{f(\alpha^{(i)}, \boldsymbol{\beta}^{(i)}\vert \boldsymbol{y})}{g_1(\alpha^{(i)})g_2( \boldsymbol{\beta}^{(i)})}, ~\textrm{for}~ i=1, 2, \ldots, 4N.
+\end{equation}
+We accept each pair of $(\alpha^{(i)}, \boldsymbol{\beta}^{(i)})$ with a probability $w_i/M$ where $M$ is set to the maximum of all the $4N$ weights. The usual acceptance rates from  our data examples are around 25\%. In a case where we accept more than the desired number of samples $N$, we discard the redundant. If the number of accepted samples is smaller than $N$, then we sample additional pairs (6 times more than the shortage) and calculate a new maximum $M'$ from all the previous and new weights, accepting or rejecting the entire pairs again with new probabilities $w_i/M'$.
+
+
+
+
+%Using the A-R method, for example, we fit the  Bayesian BBLR with $drd\beta_1/r^2$ on the data of 18 baseball players with $\boldsymbol{x}^T_j\boldsymbol{\beta}=\beta_1$ \citep{efron1975data}. To obtain 5,000 posterior samples of $(\alpha, \beta_1)$, we sample 20,000 trial pairs and make sure that there are not extremely large weights via the histogram of the 20,000 weights in the first plot of Figure \ref{fig1}. The method accepts 5,504 pairs out of 20,000 (27.52\%) based on the probabilities $w_i/M$ for $i=1, 2, \ldots, 20,000$.  The histograms of posterior samples of  $\alpha$ and $\beta_1$ and their scatter plot follow in Figure \ref{fig1}. For a comparison, we draw red density curves  representing 20,000 posterior samples of $(\alpha, \beta_1)$ obtained via a two-dimensional grid sampling method \citep{gelman2013bayesian}. The red contour lines in the scatter plot whose levels are $(0.05, 0.25, 0.50, 0.75, 0.95)$  indicate the target joint posterior density $\pi_{hyp.post}(\alpha, \beta_1\vert \boldsymbol{y})$.   The whole procedure of the A-R method takes less than a second to produce these posterior samples.
+
+%\begin{figure}[h!]
+%\includegraphics[scale = 0.4]{fig1_1.png}
+%\caption[]{The result of fitting the Bayesian BBLR with $drd\boldsymbol{\beta}/r^2$  via the A-R method on the data of 18 baseball players  without any covariates. We display histograms of 20,000 weights (1st plot), the histograms of the posterior samples of $\alpha$ (2nd) and $\beta_1$ (3rd), and their scatter plot (4th).  The red density curves in the histograms of $\alpha$ and $\beta_1$ represent 20,000 posterior samples obtained via a grid sampling method. The red contour lines whose levels are (0.05, 0.25, 0.50, 0.75, 0.95) in the scatter plot indicate the joint posterior density $f(\alpha, \beta_1\vert\boldsymbol{y})$. }
+%\label{fig1}
+%\end{figure}
+
+
+Once we have posterior samples of hyper-parameters, it is easy to obtain posterior samples of random effects via a Monte Carlo integration below.
+\begin{equation}\label{mcintegration}
+f(\boldsymbol{p}\vert \boldsymbol{y})=\int  f(\boldsymbol{p}\vert \alpha, \boldsymbol{\beta}, \boldsymbol{y})\cdot f(\alpha, \boldsymbol{\beta}\vert \boldsymbol{y})d\alpha d\boldsymbol{\beta}.
+\end{equation}
+The integration can be done by sampling $(p_1, p_2, \ldots, p_k)$ from the independent Beta conditional posterior distributions $f(p_j\vert \boldsymbol{\beta}, r, \boldsymbol{y})$ in Equation \ref{betapost}  given $r~(=e^{-\alpha})$ and $\boldsymbol{\beta}$ already sampled from $f(\alpha, \boldsymbol{\beta}\vert \boldsymbol{y})$ via the A-R method. 
+
+
+
+
+\section{Frequency method checking}\label{sec4}
+Whether the 95\%  interval estimates of random effects obtained by a specific model achieve the nominal 95\% confidence level  for any true parameter values is one of the key model evaluation criteria. A frequency method checking is a procedure to evaluate it, which is different from a model checking that tests whether a two-level model is appropriate for data (overdispersion exists in data) \citep{dean1992testing, modelchecking1996}.   Conditioning that the two-level model is appropriate, the frequency method checking   generates pseudo-data sets given specific values of hyper-parameters (a parametric bootstrapping) and estimates unknown coverage probabilities based on these mock data sets.
+
 
 From now on, the explanation will be based on the Normal-Normal model because the idea can be easily applied to the other two models.
 
-\subsection{Pseudo-data generation process}
-Figure \ref{fig:pseudo} will be helpful to understand this process. As we can see in (\ref{normalprior}), the distribution of each parameter ($\mu_{j},~j=1,\ldots, k$) is completely determined by two hyper-parameters, $A$ and $\boldsymbol{\beta}_{(m\times1)}$. So, once we fix these hyper-parameters at specific values, we can generate as many parameters as we want. Suppose we generated an $N_{sim}$ (default: $N_{sim} = 100$) number of {\boldmath $\mu$}$_{(k\times1)}$'s, (i.e., \{{\boldmath $\mu$}$^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$), from the prior distribution in (\ref{normalprior}), where values of $A$ and $\boldsymbol{\beta}$ are specifically given and the superscript $(i)$ indicates the $i$-th simulation. Then using the distribution of observed data in (\ref{normalobs}), we can also generate $\{\boldsymbol{y}^{(i)}_{(k\times1)},~i=1, \ldots, N_{sim}\}$ given each {\boldmath$\mu$}$^{(i)}_{(k\times1)}$. Note that we generate one dataset per one parameter set.
+
+
+
+\subsection{Pseudo-data generation}\label{data_generation}
+Figure \ref{fig:pseudo} displays the process of generating pseudo-data sets. It is noted that  the conjugate prior distribution of each random effect in Equation \ref{normalprior} is completely determined by two hyper-parameters, $A$ and $\boldsymbol{\beta}$. Fixing these hyper-parameters at specific values, we generate  $N_{sim}$ sets of random effects from the conjugate prior distribution, i.e., \{{\boldmath $\mu$}$^{(i)},~i=1, \ldots, N_{sim}\}$, where the superscript $(i)$ indicates the $i$-th simulation. Next, using the distribution of observed data in Equation \ref{normalobs}, we generate $N_{sim}$ sets of observed data sets $\{\boldsymbol{y}^{(i)},~i=1, \ldots, N_{sim}\}$ given each {\boldmath$\mu$}$^{(i)}$. Note that we generate one observed data set per one set of random effects.
 
 \begin{figure}[h]
 \begin{center}
@@ -405,43 +484,78 @@ Figure \ref{fig:pseudo} will be helpful to understand this process. As we can se
 \end{center}
 \end{figure}
 
-\subsection{Coverage estimation process}
-Next, \code{coverage} fits the Normal-Normal model  $N_{sim}$ number of times using the $N_{sim}$ pseudo-datasets in order to obtain $N_{sim}$ $\times k$ interval estimates,  \{$(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, N_{sim}$\}.  Here, we introduce both simple and Rao-Blackwellized unbiased coverage estimators but the function \code{coverage} in \pkg{Rgbp} displays only the Rao-Blackwellized one.
 
-\subsubsection{Simple unbiased coverage estimates}
-Let's define an indicator variable, $I^{(i)}_{j}$, which is 1 if the $j$-th group's interval estimate from the $i$-th pseudo-dataset includes $\mu^{(i)}_{j}$ and 0 otherwise. Then \code{coverage} estimates the coverage probability via the sample mean of these indicator variables for each group $j$, averaging over all the possible $\mu^{(i)}_{j}$ and $y^{(i)}_{j}$ for given $A$ and $\boldsymbol{\beta}$. 
-\begin{equation}
-\bar{I}_{j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}I^{(i)}_{j},~ j=1, 2, \ldots, k.
+
+\subsection{Coverage probability estimation}
+After fitting a Normal-Normal model on each simulated data set, we obtain interval estimates of random effects $\boldsymbol{\mu}$. Let $(\hat{\mu}^{(l)}_{j, ~low}, ~\hat{\mu}^{(l)}_{j, ~upp})$ represent the lower and upper bounds of the interval estimate of random effect $j$ based on the $i$-th simulated data set given a specific confidence level.  Let's define a coverage indicator of random effect $j$ on the $i$-th mock data set as 
+\begin{equation}\label{coverage_indicator}
+I_{A, \boldsymbol{\beta}}(\mu_j^{(i)}) = \left\{ \begin{array}{ll}
+1, & \textrm{if $\mu_j^{(i)}\in(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp})$}\\
+0, & \textrm{otherwise}
+\end{array} \right.
 \end{equation}
+We consider the coverage indicators as functions of $A$ and $\boldsymbol{\beta}$ because outcomes of indicators depend on the simulated random effects and mock data generated by these hyper-parameters. 
 
-This provides $k$ simple unbiased coverage estimates. For example, $\frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}I^{(i)}_{1}$ is the simple unbiased coverage estimate for the first group ($j=1$), accounting for possible randomness in $\mu^{(i)}_{1}$ and $y^{(i)}_{1}$, $i=1, \ldots, N_{sim},$ given specific values of $A$ and $\boldsymbol{\beta}$. 
+%Let's suppress the subscript $(r, \boldsymbol{\beta})$ from the coverage indicator for simplicity.
 
-Each indicator has an independent and identically distributed (\emph{iid}) Bernoulli($p_{cov, j}$) distribution, where $p_{cov, j}$ is the true coverage probability for the $j$-th group depending on specific values of $A$ and $\boldsymbol{\beta}$. 
+
+%B$^3$LM model to $N_{sim}$ pseudo-datasets in order to obtain $k\times N_{sim}$ interval estimates,  \{$(\hat{p}^{(l)}_{j, ~low}, ~\hat{p}^{(l)}_{j, ~upp}), ~j=1,\ldots, k,~ i=1, \ldots, N_{sim}$\}.  
+
+%The simple and Rao-Blackwellized unbiased coverage estimators and their unbiased variance estimators for the coverage evaluation.  
+
+\subsubsection{Simple unbiased coverage estimator.}
+When the confidence level is 95\%, the proportion of 95\% interval estimates that contain random effect $j$ is an intuitive choice for  the coverage rate estimator of random effect $j$. This estimator  implicitly assumes that there exist $k$ unknown coverage probabilities of random effects, denoted by $C_{A, \boldsymbol{\beta}}(\mu_j)$ for $j=1, 2, \ldots, k$, depending on the values of the hyper-parameters that generate random effects and mock data sets. The coverage indicators for random effect $j$ in Equation \ref{coverage_indicator} follow an independent and identically distributed  Bernoulli distribution given the unknown coverage rate $C_{A, \boldsymbol{\beta}}(\mu_j)$. The sample mean of these coverage indicators is a simple unbiased coverage estimator for $C_{A, \boldsymbol{\beta}}(\mu_j)$.  %estimates the coverage probability via the sample mean of these indicator variables for each group $j$, 
+\begin{equation}
+\bar{I}_{A, \boldsymbol{\beta}}(\mu_j)= \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}I_{A, \boldsymbol{\beta}}(\mu_j^{(i)}),~ j=1, 2, \ldots, k.
+\end{equation}
+Note that $\bar{I}_{A, \boldsymbol{\beta}}(\mu_j)$ averages over possible values of $\mu_{j}$ and $y_{j}$ generated by specific values of $A$ and $\boldsymbol{\beta}$. 
+
+ %true coverage probability for the $j$th group depending on specific values of $(r, \boldsymbol{\beta})$. 
 %For reference, even if we sample $L$ datasets per one parameter set, $L\cdot N_{sim}$ indicators $I^{(i, l)}_{j}, i = 1, \ldots, N_{sim}, l = 1, \ldots, L$, have still $iid$ Bernoulli($p_{cov, j}$) distribution.
 
-Then, its unbiased variance estimator  for $Var(\bar{I}_{j})$ is simply the sample variance of indicators over the number of simulations.
+The unbiased variance estimator of $Var(\bar{I}_{A, \boldsymbol{\beta}}(\mu_j))$ is 
 \begin{equation}\label{svar}
-\widehat{Var}(\bar{I}_{j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}(I^{(i)}_{j}-\bar{I}_{j})^{2},~ j=1, 2, \ldots, k.
+\widehat{Var}(\bar{I}_{A, \boldsymbol{\beta}}(\mu_j))=\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}(I_{A, \boldsymbol{\beta}}(\mu_j^{(i)})-\bar{I}_{A, \boldsymbol{\beta}}(\mu_j))^{2},~ j=1, 2, \ldots, k.
 \end{equation}
 
-
-\subsubsection{Rao-Blackwellized unbiased coverage estimates}
-Rao-Blackwellization improves accuracy of an unbiased estimator by taking more information (the sufficient statistic) into account. Based on this idea, we use $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \boldsymbol{\beta}$), where $A$ and $\boldsymbol{\beta}$ are given and $y^{(i)}_{j}$ is the sufficient statistic for the $j$-th group in the $i$-th pseudo-dataset. 
-\begin{equation}\label{RB}
-\bar{I}_{RB, j}\equiv \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \boldsymbol{\beta}),~ j=1, 2, \ldots, k.
+\subsubsection{Rao-Blackwellized unbiased coverage estimator.}
+The frequency method checking is computationally expensive in nature because it  fits a model on every mock data set. The situation deteriorates if the number of simulations or the size of data is large, or the estimation method is computationally demanding. \citet{morris1997} and \cite{tang2002fitting} used a Rao-Blackwellized (RB) unbiased coverage estimator for the unknown coverage rate of each random effects, which is more efficient than the simple indicator-based coverage estimator.  For $j=1, 2, \ldots, k$,
+\begin{equation}\label{RB_theory}
+C_{A, \boldsymbol{\beta}}(\mu_j)=E(\bar{I}_{A, \boldsymbol{\beta}}(\mu_j)\vert A, \boldsymbol{\beta})=E\bigg[\frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I_{A, \boldsymbol{\beta}}(\mu_j^{(i)})\vert A, \boldsymbol{\beta}, \boldsymbol{y}^{(i)})\bigg\vert A, \boldsymbol{\beta}\bigg],
 \end{equation}
+where the sample mean of conditional expectations inside the outer expectation is the RB unbiased coverage estimator. To be specific,
+\begin{eqnarray}\label{RB}
+\bar{I}^{RB}_{A, \boldsymbol{\beta}}(\mu_j) &=& \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I_{A, \boldsymbol{\beta}}(\mu_j^{(i)})\vert A, \boldsymbol{\beta}, \boldsymbol{y}^{(i)})\\
+&=& \frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}} Pr(\mu_j^{(i)}\in(\hat{\mu}^{(i)}_{j, ~low}, ~\hat{\mu}^{(i)}_{j, ~upp})\vert A, \boldsymbol{\beta},  \boldsymbol{y}^{(i)}).\nonumber
+\end{eqnarray}
+We  can easily compute the above conditional posterior probabilities using the cumulative density function of the Normal conditional posterior distribution of each random effect in Equation \ref{normalpost}. The variance of  $\bar{I}^{RB}_{A, \boldsymbol{\beta}}(\mu_j)$ is smaller than or equal to the variance of a simple coverage estimator $\bar{I}_{A, \boldsymbol{\beta}}(\mu_j)$ \citep{radhakrishna1945information, blackwell1947conditional}.
 
-The expectation part in (\ref{RB}) is Pr$(\hat{\mu}^{(i)}_{j, low}\le \mu^{(i)}_{j} \le\hat{\mu}^{(i)}_{j, upp}\vert y^{(i)}_{j}, A, \boldsymbol{\beta})$, where ($\hat{\mu}^{(i)}_{j, low}$, $\hat{\mu}^{(i)}_{j, upp}$) is the $j$-th group's interval estimate on the $i$-th dataset. We can calculate this probability  because we know the distribution of ($\mu^{(i)}_{j} \vert y^{(i)}_{j}, A, \boldsymbol{\beta}$) in (\ref{normalpost}). Note that conditioning on $y^{(i)}_{j}$ is equivalent to conditioning on $\boldsymbol{y}^{(i)}_{(k\times1)}$ as long as $A$ and $\boldsymbol{\beta}$ are known. 
 
-For example, we estimate the first group's true coverage probability $p_{cov, 1}$ (which depends on specific values of $A$ and $\boldsymbol{\beta}$) by $\frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}E(I^{(i)}_{1}\vert y^{(i)}_{1}, A, \boldsymbol{\beta})$, which is also unbiased but with smaller variance than the previous simple estimator, $\frac{1}{N_{sim}}\sum_{i=1}^{N_{sim}}I^{(i)}_{1}$.
 
-Under the setting where one dataset ($\boldsymbol{y}^{(i)}_{(k\times1)}$) is simulated per one true parameter set ({\boldmath $\mu$}$^{(i)}_{(k\times1)})$, the unbiased variance estimator for Var($\bar{I}_{RB, j}$) follows.
+
+%, i.e., $Pr(p_j^{(l)}<\hat{p}^{(l)}_{j, ~upp}\vert r, \boldsymbol{\beta}, \boldsymbol{y}^{(l)})-Pr(p_j^{(l)}<\hat{p}^{(l)}_{j, ~low},\vert r, \boldsymbol{\beta}, \boldsymbol{y}^{(l)})$.
+
+
+If one dataset $\boldsymbol{y}^{(l)}$ is simulated per one set of random effects $\boldsymbol{\mu}^{(l)}$, the variance estimator below is an unbiased estimator of $Var(\bar{I}^{RB}_{A, \boldsymbol{\beta}}(\mu_j) )$. For $j=1, 2, \ldots, k,$
 \begin{equation}\label{RBvar}
-\widehat{Var}(\bar{I}_{RB, j})\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}\bigg(E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \boldsymbol{\beta})-\bar{I}_{RB, j}\bigg)^{2},~ j=1, 2, \ldots, k.
+\widehat{Var}(\bar{I}^{RB}_{A, \boldsymbol{\beta}}(\mu_j) )\equiv\frac{1}{N_{sim}(N_{sim}-1)}\sum_{i=1}^{N_{sim}}\bigg(E(I_{A, \boldsymbol{\beta}}(\mu_j^{(i)})\vert A, \boldsymbol{\beta}, \boldsymbol{y}^{(i)})-\bar{I}^{RB}_{A, \boldsymbol{\beta}}(\mu_j) \bigg)^{2}.
 \end{equation}
+
 
 
 \section[packageoverview]{Usage of functions in \pkg{Rgbp}}\label{sec5}
+In this section, we describe the usage of the two main functions of \pkg{Rgbp}, i.e., \code{gbp} for model fitting and \code{coverage} for frequency method checking.
+
+The basic usage of fitting a Normal-Normal model via the function \code{gbp} is simply
+\begin{CodeChunk}
+\begin{CodeInput}
+R> output <- gbp(y, se, model = "gaussian")
+\end{CodeInput}
+\end{CodeChunk}
+
+The argument \code{y} is a vector of $k$ observed sufficient statistics, the argument  \code{se} for the Normal model is a vector of $k$ standard errors of the corresponding sufficient statistics, and the argument \code{model} indicates that  \code{gbp} fits a Normal-Normal model.
+
+There are many optional arguments for \code{gbp}.
 
 \section[Examples]{Examples}\label{sec6}
 \subsection[Known Second-level Mean]{Data of 31 hospitals with a known second-level mean}

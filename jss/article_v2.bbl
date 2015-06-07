@@ -1,4 +1,4 @@
-\begin{thebibliography}{22}
+\begin{thebibliography}{26}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -9,19 +9,17 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
 
-\bibitem[{Azzalini(2013)}]{sn2013}
-Azzalini A (2013).
-\newblock \emph{{R} package \texttt{sn}: The skew-normal and skew-$t$
-  distributions (version 0.4-18)}.
-\newblock Universit\`a di Padova, Italia.
-\newblock \urlprefix\url{http://azzalini.stat.unipd.it/SN}.
-
 \bibitem[{Berger \emph{et~al.}(1999)Berger, Liseo, Wolpert
   \emph{et~al.}}]{berger1999integrated}
 Berger JO, Liseo B, Wolpert RL, \emph{et~al.} (1999).
 \newblock \enquote{Integrated likelihood methods for eliminating nuisance
   parameters.}
 \newblock \emph{Statistical Science}, \textbf{14}(1), 1--28.
+
+\bibitem[{Blackwell(1947)}]{blackwell1947conditional}
+Blackwell D (1947).
+\newblock \enquote{Conditional expectation and unbiased sequential estimation.}
+\newblock \emph{The Annals of Mathematical Statistics}, pp. 105--110.
 
 \bibitem[{Christiansen and Morris(1996)}]{modelchecking1996}
 Christiansen C, Morris C (1996).
@@ -43,6 +41,13 @@ Daniels MJ (1999).
 \newblock \enquote{A prior for the variance in hierarchical models.}
 \newblock \emph{Canadian Journal of Statistics}, \textbf{27}(3), 567--578.
 
+\bibitem[{Dean(1992)}]{dean1992testing}
+Dean CB (1992).
+\newblock \enquote{Testing for overdispersion in Poisson and binomial
+  regression models.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{87}(418), 451--457.
+
 \bibitem[{Efron and Morris(1975)}]{1975}
 Efron B, Morris C (1975).
 \newblock \enquote{Data Analysis Using Stein's Estimator and its
@@ -52,6 +57,12 @@ Efron B, Morris C (1975).
 \newblock ISSN 01621459.
 \newblock \urlprefix\url{http://www.jstor.org/stable/2285814}.
 
+\bibitem[{Everson and Morris(2000)}]{everson2000inference}
+Everson PJ, Morris CN (2000).
+\newblock \enquote{Inference for multivariate normal hierarchical models.}
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, \textbf{62}(2), 399--412.
+
 \bibitem[{Gelman \emph{et~al.}(2014)Gelman, Su, Yajima, Hill, Pittau, Kerman,
   and Zheng}]{gelman2014arm}
 Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T (2014).
@@ -59,6 +70,12 @@ Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T (2014).
   multilevel/hierarchical models, 2010.}
 \newblock \emph{URL http://CRAN. R-project. org/package= arm. R package
   version}, pp. 1--3.
+
+\bibitem[{Jones and Faddy(2003)}]{jones2003skew}
+Jones M, Faddy M (2003).
+\newblock \enquote{A skew extension of the t-distribution, with applications.}
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, \textbf{65}(1), 159--174.
 
 \bibitem[{Kelly(2014)}]{kelly2014advances}
 Kelly J (2014).
@@ -117,6 +134,13 @@ Patterson HD, Thompson R (1971).
   unequal.}
 \newblock \emph{Biometrika}, \textbf{58}(3), 545--554.
 
+\bibitem[{Rao(1945)}]{radhakrishna1945information}
+Rao CR (1945).
+\newblock \enquote{Information and accuracy attainable in the estimation of
+  statistical parameters.}
+\newblock \emph{Bulletin of the Calcutta Mathematical Society}, \textbf{37}(3),
+  81--91.
+
 \bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2010)R{\"o}nneg{\aa}rd, Shen, and
   Alam}]{hglm2010}
 R{\"o}nneg{\aa}rd L, Shen X, Alam M (2010).
@@ -147,11 +171,11 @@ Skellam J (1948).
 \newblock \emph{Journal of the Royal Statistical Society. Series B
   (Methodological)}, \textbf{10}(2), 257--261.
 
-\bibitem[{Tak and Morris(in progress)}]{tak2016propriety}
-Tak H, Morris C (in progress).
+\bibitem[{Tak and Morris(in preparation)}]{tak2016propriety}
+Tak H, Morris C (in preparation).
 \newblock \enquote{Posterior Propriety and Frequency Coverage Evaluation of
   Bayesian Beta-Binomial Logistic Regression Model.}
-\newblock \emph{in progress}.
+\newblock \emph{in preparation}.
 
 \bibitem[{Tang(2002)}]{tang2002fitting}
 Tang R (2002).
