@@ -13,7 +13,7 @@ gbp.default <- function(x, w, covariates, mean.PriorDist, model = "gaussian",
   }  
   
   if(intercept == "FALSE" & missing(covariates)) {
-    warning("When there are no covariates and no intercept term, model cannot fit the model")
+    warning("When there are no covariates and no intercept term, model cannot fit the model. Please set the argument mean.PriorDist or use the intercept term.")
     quit()
   }  
   
