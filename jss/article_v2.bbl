@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{27}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -8,6 +8,11 @@
   \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Azzalini(1985)}]{azzalini1985class}
+Azzalini A (1985).
+\newblock \enquote{A class of distributions which includes the normal ones.}
+\newblock \emph{Scandinavian journal of statistics}, pp. 171--178.
 
 \bibitem[{Berger \emph{et~al.}(1999)Berger, Liseo, Wolpert
   \emph{et~al.}}]{berger1999integrated}
