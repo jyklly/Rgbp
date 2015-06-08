@@ -6,15 +6,15 @@
   \code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
 }
 
-\usage{gbp(x, w, covariates, mean.PriorDist, model, intercept, 
+\usage{gbp(y, se.or.n, covariates, mean.PriorDist, model, intercept, 
            Alpha, n.AR, n.AR.factor, trial.scale, save.result,
            normal.CI, t, u)}
 
 \arguments{
-  \item{x}{
+  \item{y}{
     a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
   }
-  \item{w}{
+  \item{se.or.n}{
     a (\emph{k} by 1) vector composed of the standard errors of all groups for Gaussian or 
     of each group's total number of trials for Binomial and Poisson data.
   }
@@ -93,9 +93,9 @@
   For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{d(1 / r)} 
   (= \eqn{\frac{dr}{r^{2}}}{dr / r^2}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{\theta_j}) or variance of ensemble information.
 
-  Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
+  Under this setting, the argument \code{y} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{y_j's} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{z_j's}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
 
-  The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{V_{j}'s}{V_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
+  The argument \code{se.or.n} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{V_{j}'s}{V_j's}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{n_j's}) for Binomial and Poisson data.
 
   As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
   combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
