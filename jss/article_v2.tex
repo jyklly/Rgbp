@@ -641,7 +641,7 @@ R> ?gbp
 \end{CodeInput}
 \end{CodeChunk}
 
-The G3 object makes use of some functions, \code{print}, \code{summary}, and \code{plot}. The estimation result for all the random effects pops up if we type the ``gbp'' object at the \proglang{R} console, which is the same as the following function \code{print} with its default argument ``\code{sort = TRUE}'' that prints out the estimation result for all the groups in the ascending order of $n$ for the Binomial and Poisson model and the descending order of standard errors for the Gaussian model. When the argument \code{sort} is \code{FALSE}, the estimation result comes out as the order of data input.
+The G3 object makes use of some functions, \code{print}, \code{summary}, and \code{plot}. The estimation result for all the random effects pops up if we type the ``gbp'' object at the \proglang{R} console, which is the same as the following function \code{print} with its default argument ``\code{sort = TRUE}'' that prints out the estimation result for all the groups in the ascending order of $n$ for the Binomial and Poisson model and the ascending order of standard errors for the Gaussian model. When the argument \code{sort} is \code{FALSE}, the estimation result comes out as the order of data input.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> b.output
@@ -871,8 +871,8 @@ In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represen
 The following code provides specific values of the 31 RB unbiased coverage estimates and their standard errors for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> pcv$coverageRB
-R> pcv$se.coverageRB
+R> p.coverage$coverageRB
+R> p.coverage$se.coverageRB
 \end{CodeInput}
 %\begin{CodeOutput}
 % [1] 0.955 0.954 0.955 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954
@@ -884,8 +884,8 @@ R> pcv$se.coverageRB
 And the code below shows 31 simple unbiased coverage estimates and their standard errors for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> pcv$coverageS
-R> pcv$se.coverageS
+R> p.coverage$coverageS
+R> p.coverage$se.coverageS
 \end{CodeInput}
 %\begin{CodeOutput}
 % [1] 0.949 0.960 0.958 0.958 0.950 0.945 0.960 0.953 0.960 0.956 0.955 0.946 
@@ -964,7 +964,7 @@ This output from \code{gbp} summarizes the results. In this Gaussian hierarchica
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> summary(g)
+R> summary(g.output)
 \end{CodeInput}
 \begin{CodeOutput}
 Main summary:
@@ -986,24 +986,24 @@ Overall Mean                   12.5       8.17     0.552    -9.16      8.17
 Second-level Variance Component Estimation Summary:
 alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha post.mode.A
-1            4.77          1.14         118
+post.mode.alpha post.sd.alpha post.mode.A
+           4.77          1.14         118
 
 
 Regression Summary:
 
       estimate   se z.val p.val
-beta0    8.168 5.73 1.425 0.154
+beta1    8.168 5.73 1.425 0.154
 \end{CodeOutput}
 \end{CodeChunk}
-The summary provides results regarding the second level hierarchy parameters. It can be seen that the estimate of the second level mean, \code{beta0}, is not significantly different from 0 suggesting that there was no effect of the coaching program on SAT math scores. 
+The summary provides results regarding the second level hierarchy parameters. It can be seen that the estimate of the expected random effect, $\mu^E$ (\code{beta1}), is not significantly different from 0 suggesting that there was no effect of the coaching program on SAT math scores. 
 
 
-\pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}. Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small.
+\pkg{Rgbp} also provides functionality to plot the results of the analysis as seen in Figure \ref{fig:8schoolsplot}. Plotting the results provides a visual aid to understanding but is only largely beneficial when the number of groups $(k)$ is small. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> plot(g)
+R> plot(g.output)
 \end{CodeInput}
 \end{CodeChunk}
 
@@ -1016,11 +1016,11 @@ R> plot(g)
 \end{figure}
 
 
-The frequency method checking, assuming the model is correct, generates new pseudo-data from our assumed model. Unless otherwise specified, the procedure fixes the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\boldsymbol{\beta}}_0$ in this example) and then simulates ``true'' $\theta_j$ for each group $j$. The model is then estimated and this is repeated an \code{nsim} number of times to estimate the coverage probabilities of the procedure.  
+The frequency method checking generates new pseudo-data from our assumed model. Unless otherwise specified, the procedure fixes the hyper-parameter values at their estimates ($\hat{A}$ and $\hat{\boldsymbol{\beta}}_1$ in this example) and then simulates random effects $\theta_j$ for each group $j$. The model is then estimated and this is repeated an $N_{sim}$ (\code{nsim}) number of times to estimate the coverage probabilities of the procedure.  
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> gcv <- coverage(g, nsim = 1000)
+R> g.coverage <- coverage(g.output, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h] 
@@ -1031,13 +1031,13 @@ R> gcv <- coverage(g, nsim = 1000)
 \end{center}
 \end{figure}
 
-As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence (black horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Note that all the coverage estimates depend on the chosen true values of $A$ and $\beta_{0}$, and the assumption that the model is valid.
+As seen in Figure \ref{fig:schoolcoverage} the desired $95\%$ confidence level (black horizontal line at 0.95) is achieved (actually, exceeded) for each school in this example. Note that all the coverage estimates depend on the chosen generative values of $A$ and $\beta_{1}$, and the assumption that the model is valid.
 
 
 In addition, Rao-Blackwellized (RB) unbiased coverage estimate and its standard error for each school can be gotten with the command below.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> gcv$coverageRB
+R> g.coverage$coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
  [1] 0.966 0.959 0.967 0.960 0.959 0.962 0.960 0.966
@@ -1045,14 +1045,21 @@ R> gcv$coverageRB
 \end{CodeChunk}
 \begin{CodeChunk}
 \begin{CodeInput}
-R> gcv$se.coverageRB
+R> g.coverage$se.coverageRB
 \end{CodeInput}
 \begin{CodeOutput}
  [1] 0.0013 0.0012 0.0013 0.0013 0.0011 0.0011 0.0010 0.0017
 \end{CodeOutput}
 \end{CodeChunk}
 
-All the individual RB coverage estimates are saved in the $8\times1,000$ matrix, \code{gcv$raw.resultRB}, each row of which is about each school.
+All the individual RB coverage estimates are saved in the $8\times1,000$ matrix, each row of which is about each school. We can load this matrix by the following code.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> g.coverage$raw.resultRB 
+\end{CodeInput}
+\end{CodeChunk}
+
+
 
 
 % For reference, it took 188 seconds for 10,000 simulations  on one of authors' MacBook Pro with a 2.3 GHz dual-core Intel i5 CPU. In MCMC, the exact simulation would be too time-consuming. One could compare curve in Figure \ref{fig:schoolcoverage} with a curve from MCMC.
@@ -1074,34 +1081,26 @@ All the individual RB coverage estimates are saved in the $8\times1,000$ matrix,
 %\end{figure}
 
 
-\subsection[Unknown Second-level Mean and One Covariate]{Data of 18 baseball players with unknown second-level mean and one covariate} 
+\subsection[Unknown Second-level Mean and One Covariate]{Data of 18 baseball players with unknown expected random effect and one covariate} 
 
-The following dataset from the New York Times published on 26 April 1970 contains information on the batting averages and positions (outfielder=1,otherwise=0) of 18 major league baseball players through their first 45 official at-bats of the 1970 season \citep{1975}.
-
+The data of 18 major league baseball players contain the batting averages through their first 45 official at-bats of the 1970 season \citep{1975}. We add a covariate about their outfielder indicators taking on 1 if a player is an outfielder and 0 otherwise. We can load the data into \proglang{R} with the following codes.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
-R> n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
-R> x <- c( 1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0) 
-\end{CodeInput}
-\end{CodeChunk}
-or
-\begin{CodeChunk}
-\begin{CodeInput}
-R> data(``baseball'')
-R> z <- baseball$Hits
+R> library(Rgbp)
+R> data(baseball)
+R> y <- baseball$Hits
 R> n <- baseball$At.Bats
 R> x <- ifelse(baseball$Position == "fielder", 1, 0)
 \end{CodeInput}
 \end{CodeChunk}
 %$
-Conditioning on the true batting average for each player we assume that the at-bats are independent and therefore, $z_{j}\vert p_{j}\stackrel{ind}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to obtain point and interval estimates of the true batting average, $p_{j}$, for each player, whilst considering the additional information on whether the player is an outfielder or not. \code{gbp} provides a way to incorporate such covariate information seamlessly into the second-level hierarchy such that information is shared and regression towards the mean (RTTM) occurs within outfielders and non-outfielders separately. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
+Conditioning on the unknown true batting average (random effect) for each player we assume that the at-bats are independent and therefore, $y_{j}\vert p_{j}\stackrel{indep.}{\sim} \textrm{Binomial}(45, p_{j}), ~j=1, \ldots, 18$. Our goal is to obtain point and interval estimates of each random effect, $p_j$, whilst considering the additional information on whether the player is an outfielder or not. The function \code{gbp} provides a way to incorporate such covariate information seamlessly into the conjugate Beta prior distribution so that the regression towards the mean (RTTM) occurs within outfielders and non-outfielders separately. %For reference, we can also assume the Normal distribution using $y_{j}=z_{j} / n_{j}$ and $V_{j}=\bar{y}(1-\bar{y})/n$, where $\bar{y}=\sum_{j} z_{j} / \sum_{j} n_{j}$, $j=1,\ldots, 18$. 
 
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> b <- gbp(z, n, x, model = "binomial")
-R> b
+R> b.output <- gbp(z, n, x, model = "binomial")
+R> b.output
 \end{CodeInput}
 \begin{CodeOutput}
 Summary for each unit (sorted by n):
@@ -1129,12 +1128,13 @@ colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.04
 \end{CodeOutput}
 \end{CodeChunk}
 % Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also
-Note that the shrinkage estimates are the same for all players due to the fact that they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $113 / (113+45)$ = 0.715). 
+
+Note that the shrinkage estimates are the same for all players because all players have the same 45 at-bats. %they are determined solely by the relative amount of information between the first-level and the second-level hierarchies, ($\hat{B}_{j}\equiv \hat{r} / (\hat{r}+45)$ = $113 / (113+45)$ = 0.715). 
 
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> summary(b)
+R> summary(b.output)
 \end{CodeInput}
 \begin{CodeOutput}
 Main summary:
@@ -1157,26 +1157,26 @@ Overall Mean                         45 0.444      0.267     0.715    0.191
 Second-level Variance Component Estimation Summary:
 alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha post.mode.r
-1           -4.73         0.957         113
+post.mode.alpha post.sd.alpha post.mode.r
+          -4.73         0.957         113
 
 
 Regression Summary:
 
       estimate    se  z.val p.val
-beta0   -1.194 0.131 -9.129 0.000
-beta1    0.389 0.187  2.074 0.038
+beta1   -1.194 0.131 -9.129 0.000
+beta2    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-From the \code{Regression Summary}, one of the outputs of \code{summary}, we see that the two prior means distinguishing outfielders from other positions are significantly different (p-value for $\hat{\beta}_1$= 0.038). Also, the positive sign of $\hat{\beta}_{1}$ indicates that the population mean batting average for all outfielders tends to be higher than that for those in the other positions (estimated odds ratio = exp(0.389)=1.48).
+The regression coefficient for the outfielder indicator is significant, considering that p-value for $\hat{\beta}_2$ is 0.038. It means that the  two estimates for the expected random effects for the outfielders and infielders are significantly different. Also, the positive sign of $\hat{\beta}_{2}$ indicates that the population batting average for all outfielders tends to be higher than that for infielders. The  estimated odds ratio is $\exp(0.389)=1.48$.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> plot(b)
+R> plot(b.output)
 \end{CodeInput}
 \end{CodeChunk}
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width = 3.2in]{baseball1.png}
 \caption{Shrinkage plot and 95\% interval plot for 18 baseball players}
@@ -1184,22 +1184,22 @@ R> plot(b)
 \end{center}
 \end{figure}
 
-It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the sample means (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. For reference, the short red line symbols on dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same sample mean (0.222) and at this point on the upper horizontal line, there are short red lines toward five directions.
+It is evident in the shrinkage plot in Figure \ref{fig:baseball} that shrinkage occurs from the observed batting averages (empty dots) on the upper horizontal line towards the two prior means, 0.233 and 0.310. The short red line symbols near some empty dots are for when two or more points have the same mean and are plotted over each other. For example, five players (from the 11th player to the 15th) have the same batting average, 0.222, and at this point on the upper horizontal line, there are short red lines toward five directions.
 
 %For reference, the observed sample mean among outfielders is 0.308 and that among other positions is 0.231. But why are the estimated two prior means from this Binomial model 0.310 and 0.233 each? This can be attributed to the logistic regression which estimates prior mean by a non-linear logit function of $x'\beta$, causing a small bias (see 3.3). The Normal model can avoid this small bias because it uses a linear regression to estimate these prior means.
 
 
-The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. This can likely be attributed to their bad luck because their observed batting averages are close to the lower bounds of their interval estimates. RTTM suggests that their batting averages will shrink towards the expected prior mean of outfielders (0.310) in the long run.
+The 95\% interval plot shows the range of true batting average for each player, which clarifies the regression toward the mean (RTTM) within two groups. The 10th, 14th, and 15th players, for example, are outfielders but their observed batting averages are far lower than the first five outfielders. This can  be attributed to their bad luck because their observed batting averages are close to the lower bounds of their interval estimates. The RTTM suggests that their batting averages will shrink towards the expected random effect of outfielders (0.310) in the long run.
 
 
-As in the previous examples in Section \ref{sec:ex:hosp} and \ref{sec:ex:8schools}, in order to check the level of trust in these interval estimates, we can proceed to frequency method checking by assuming the estimates, 112.95 for $\hat{r}$ and (-1.194, ~0.389) for $\hat{\boldsymbol{\beta}}$, are given values. 
+To check the level of trust in these interval estimates, we  proceed to frequency method checking by assuming the estimates, 112.95 for $\hat{r}$ and (-1.194, ~0.389) for $\hat{\boldsymbol{\beta}}$, are given generative values. 
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> bcv <- coverage(b, nsim = 1000) 
+R> b.coverage <- coverage(b.output, nsim = 1000) 
 \end{CodeInput}
 \end{CodeChunk}
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width = 3in]{baseball2.png}
 \caption{Coverage plot via frequency method checking for 18 players}
@@ -1207,13 +1207,13 @@ R> bcv <- coverage(b, nsim = 1000)
 \end{center}
 \end{figure}
 
-For reference, to do the frequency method checking at different true values, we need to specify additional arguments in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)}.
+%For reference, to do the frequency method checking at different true values, we need to specify additional arguments in the coverage function. For example, if we want to try different true values, either 100 for $r$ or (-1, 0.2) for $(\beta_{0}, \beta_{1})$, the additional arguments are \code{A.or.r = 100} and \code{reg.coef = c(-1, 0.2)}; \code{coverage(b, A.or.r = 100, reg.coef = c(-1, 0.2), nsim = 1000)}.
 
 
-Finally, in Figure \ref{fig:baseball2}, we see that the overall Rao-Blackwellized unbiased coverage estimate is 0.972 (across all the players), conservatively satisfying the definition of the 95\% confidence interval. Note that each coverage estimate depends on given true values of $r$ and $\beta_{(2\times1)}$, and the assumption that the model is valid.
+In Figure \ref{fig:baseball2},  the estimated coverage probabilities for random effects are beyond 0.95, conservatively satisfying the definition of the 95\% confidence interval. The Rao-Blackwellized (RB) overall unbiased coverage estimate is 0.972 (across all the players). Note that each coverage estimate depends on given true values of $r$ and $\boldsymbol{\beta}_{(2\times1)}$, and the assumption that the model is valid (overdispersion exists).
 
 
-The Rao-Blackwellized unbiased coverage estimates and their standard errors for each player follow.
+The RB unbiased coverage estimates and their standard errors for each player follow.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> bcv$coverageRB
@@ -1236,7 +1236,7 @@ R> bcv$se.coverageRB
 
 %$
 
-All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$raw.resultRB}, each row of which is for each player.
+%All the simulation results are saved in the $18\times1,000$ matrix, each row of which is for each player.
 
 %$
 
@@ -1245,15 +1245,15 @@ All the simulation results are saved in the $18\times1,000$ matrix, \code{bcv$ra
 \section[Discussion]{Discussion and summary} \label{discussion}
 \pkg{Rgbp} is an \proglang{R} package for estimating and validating two-level Gaussian, Binomial and Poisson hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``frequency method checking'' functionality to examine repeated sampling properties and to test that the method is valid at specified hyper-parameter values.
 
-As an alternative to other maximization based estimation methods such as MLE and REML, \pkg{Rgbp} provides point and interval estimates of parameters via ADM. Using the ADM approach, with our specified choice of priors, protects from cases of overshrinkage and undercoverage from which the aforementioned methods suffer from \citep{accuracy1988}.
+As an alternative to other maximization based estimation methods such as MLE and REML, \pkg{Rgbp} provides point and interval estimates of parameters via ADM. Using the ADM approach, with our specified choice of priors, protects from cases of overshrinkage and undercoverage from which the aforementioned methods suffer  \citep{accuracy1988}.
 
 
-A benefit of \pkg{Rgbp} is that it produces non-random output and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
+A benefit of \pkg{Rgbp} is that it produces non-random output (except the acceptance-rejection method for the Binomial model) and so results are easily reproduced and compared across studies. In addition to being a standalone analysis tool the package can be used as an aid in a broader estimation procedure. For example, by checking the similarity of output of \pkg{Rgbp} and that of another estimation procedure (such as MCMC) the package can be used as a confirmatory tool to check whether the alternative procedure has been programmed correctly. In addition, the parameter estimates obtained via \pkg{Rgbp} can be used to initialize a MCMC thus decreasing time to convergence. % Note, however, that this is only valid when the same model under both procedures is assumed. 
 
 Due to its speed and ease of use, \pkg{Rgbp} can be used as a method of preliminary data analysis. Such results may tell statisticians and practitioners alike whether a more intensive method in terms of implementation and computational time, such as MCMC, is needed. 
 
 
-In addition to the built in ``frequency method checking'' procedure the package can be used to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in (\ref{normalmarginal}). By substituting the point estimates of $A$ and $\boldsymbol{\beta}$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
+In addition to the built-in ``frequency method checking'' procedure, we may use the package to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in Equation \ref{marginal_normal} as part of the likelihood function. By substituting the point estimates of $A$ and $\boldsymbol{\beta}$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
 
 
 \section[acknowledgments]{Acknowledgments}

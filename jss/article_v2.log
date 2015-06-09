@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  9 JUN 2015 19:28
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  9 JUN 2015 22:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -656,17 +656,17 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 25
  []
 
-[25] <school1.png, id=568, 531.9875pt x 549.05125pt>
+[25] <school1.png, id=568, 531.9875pt x 558.085pt>
 File: school1.png Graphic file (type png)
  <use school1.png>
 Package pdftex.def Info: school1.png used on input line 1012.
-(pdftex.def)             Requested size: 231.26378pt x 238.67618pt.
+(pdftex.def)             Requested size: 231.26378pt x 242.60323pt.
 
-<school2.png, id=569, 552.0625pt x 514.92375pt>
+<school2.png, id=569, 537.00626pt x 515.9275pt>
 File: school2.png Graphic file (type png)
  <use school2.png>
 Package pdftex.def Info: school2.png used on input line 1028.
-(pdftex.def)             Requested size: 216.81pt x 202.22586pt.
+(pdftex.def)             Requested size: 216.81pt x 208.29608pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -677,16 +677,6 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [26 <./school1.png>]
-LaTeX Font Info:    Try loading font information for TS1+aett on input line 109
-1.
-LaTeX Font Info:    No file TS1aett.fd. on input line 1091.
-
-
-LaTeX Font Warning: Font shape `TS1/aett/m/sl' undefined
-(Font)              using `TS1/cmr/m/n' instead
-(Font)              for symbol `textasciigrave' on input line 1091.
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 27
  []
@@ -696,60 +686,51 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 28 []
  []
 
-[28] <baseball1.png, id=592, 543.02875pt x 553.06625pt>
+[28] <baseball1.png, id=591, 546.04pt x 556.0775pt>
 File: baseball1.png Graphic file (type png)
  <use baseball1.png>
 Package pdftex.def Info: baseball1.png used on input line 1181.
-(pdftex.def)             Requested size: 231.26378pt x 235.5353pt.
+(pdftex.def)             Requested size: 231.26378pt x 235.511pt.
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 29
  []
 
-[29] <baseball2.png, id=601, 552.0625pt x 515.9275pt>
+[29] <baseball2.png, id=598, 539.01375pt x 508.90125pt>
 File: baseball2.png Graphic file (type png)
  <use baseball2.png>
 Package pdftex.def Info: baseball2.png used on input line 1204.
-(pdftex.def)             Requested size: 216.81pt x 202.62007pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+(pdftex.def)             Requested size: 216.81pt x 204.69838pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 30 []
  []
 
-[30 <./baseball1.png>]
-
-LaTeX Warning: Reference `normalmarginal' on page 31 undefined on input line 12
-56.
-
-
+[30 <./baseball1.png> <./baseball2.png>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 31
  []
 
-[31 <./baseball2.png>] (./article_v2.bbl
+[31] (./article_v2.bbl
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 32 []
  []
 
-[32]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/aer/m/n/10.95 33
- []
-
-[33])
+[32])
 Underfull \hbox (badness 10000) in paragraph at lines 1272--1272
 
  []
 
 
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 33
+ []
+
+[33]
 Underfull \hbox (badness 10000) in paragraph at lines 1272--1272
 
  []
@@ -773,56 +754,48 @@ Package rerunfilecheck Info: File `article_v2.out' has not changed.
 (rerunfilecheck)             Checksum: E02036853C5C8012048D91255970D9D1;3562.
 
 
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1272.
  ) 
 Here is how much of TeX's memory you used:
- 7917 strings out of 493315
- 116117 string characters out of 6137904
+ 7906 strings out of 493315
+ 115975 string characters out of 6137904
  203796 words of memory out of 5000000
- 11000 multiletter control sequences out of 15000+600000
- 68845 words of font info for 116 fonts, out of 8000000 for 9000
+ 10992 multiletter control sequences out of 15000+600000
+ 68504 words of font info for 115 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  36i,12n,34p,1598b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
-}{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/te
-xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/local/texl
-ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texli
-ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texliv
-e/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/
-2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxsl10.pfb></usr/local/texlive
-/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/
-2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2
-013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/201
-3/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2013/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2013/
-texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/local/texlive/2
-013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/201
-3/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2013/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2013/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local/texlive/2013/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/local/texlive/2013/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2013/texmf
--dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2013/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2013/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2013/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dist/f
-onts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2013/texmf-dist/fon
-ts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v2.pdf (34 pages, 1232896 bytes).
+{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/local/tex
+live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texl
+ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texli
+ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive
+/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxsl10.pfb></usr/local/texliv
+e/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive
+/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/
+2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/20
+13/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2013
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2013
+/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/local/texlive/
+2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/20
+13/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2013/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2013/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local/texlive/2013/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/local/texlive/2013/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2013/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2013/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2013/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2013/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dist/
+fonts/type1/urw/zapfchan/uzcmi8a.pfb>
+Output written on article_v2.pdf (34 pages, 1246528 bytes).
 PDF statistics:
- 769 PDF objects out of 1000 (max. 8388607)
- 685 compressed objects within 7 object streams
+ 763 PDF objects out of 1000 (max. 8388607)
+ 680 compressed objects within 7 object streams
  185 named destinations out of 1000 (max. 500000)
  289 words of extra memory for PDF output out of 10000 (max. 10000000)
 
