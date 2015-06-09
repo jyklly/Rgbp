@@ -276,11 +276,8 @@ summary.gbp <- function(object, ...) {
   
   if (any(is.na(object$prior.mean))) {
     estimate <- as.vector(object$beta.new)
-    if (object$intercept == TRUE) {
-      names(estimate) <- paste("beta", 0 : (length(estimate) - 1), sep = "")
-    } else {
-      names(estimate) <- paste("beta", 1 : (length(estimate)), sep = "")
-    }
+    names(estimate) <- paste("beta", 1 : length(estimate), sep = "")
+
     if ((sum(is.na(object$weight)) == 1)) {
       se <- as.vector(sqrt(diag(object$beta.var)))
     } else {

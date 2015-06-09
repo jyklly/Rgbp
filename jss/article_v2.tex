@@ -581,6 +581,11 @@ If one dataset $\boldsymbol{y}^{(l)}$ is simulated per one set of random effects
 \end{equation}
 
 
+\subsubsection{Rao-Blackwellized overall unbiased coverage estimator}\label{overallRB} Assuming that the unknown  coverage probabilities are the same for all random effects, we use the Rao-Blackwellized overall coverage estimator and its variance estimator as follows.
+\begin{equation}\label{RBoverall}
+\bar{\bar{I}}^{RB}_{r, \boldsymbol{\beta}} = \frac{1}{k}\sum_{j=1}^k\bar{I}^{RB}_{r, \boldsymbol{\beta}}(p_j)~~\textrm{and}~~ \widehat{Var}(\bar{\bar{I}}_{RB})=\frac{1}{k^2}\sum_{j=1}^k\widehat{Var}(\bar{I}^{RB}_{r, \boldsymbol{\beta}}(p_j)).
+\end{equation}
+
 
 \section[packageoverview]{Usage of functions in \pkg{Rgbp}}\label{sec5}
 In this section, we describe the usage of the two main functions of \pkg{Rgbp}, i.e., \code{gbp} for model fitting and \code{coverage} for frequency method checking. 
@@ -681,6 +686,13 @@ R> cov <- coverage(p.output, mean.PriorDist = 30, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 
+Although the function \code{coverage} does not produce a G3 object, a detailed summary appears in a plot that automatically pops up after running the function \code{coverage}. In addition, the object \code{cov} that contains the result of \code{coverage} as shown above contains numerical details, see \code{names(cov)} for the list of detailed outcomes. If we save the result into an object such as \code{cov} above, then we can always recall the plot, using the function \code{coverage.plot}.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> names(cov)
+R> coverage.plot(cov)
+\end{CodeInput}
+\end{CodeChunk}
 
 
 %  So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
@@ -704,44 +716,35 @@ R> cov <- coverage(p.output, mean.PriorDist = 30, nsim = 1000)
 %  Rao-Blackwellized unbiased estimator for group \emph{j} is a conditional expectation of the simple unbiased estimator given a sufficient statistic, \eqn{y_{j}}{y_j} for Gaussian or \eqn{z_{j}}{z_j} for Binomial and Poisson data.
 
 \section[Examples]{Examples}\label{sec6}
-\subsection[Known Second-level Mean]{Data of 31 hospitals with a known second-level mean}
+\subsection[Known Second-level Mean]{Data of 31 hospitals with a known expected random effect}
 \label{sec:ex:hosp}
-In this example we adopt the perspective of a person living in the state of New York (NY) who has been suffering from severe coronary heart disease. If this person must receive coronary artery bypass graft (CABG) surgery soon, he or she might want to find the most reliable hospital for such a procedure.
 
 
-For this purpose, data were gathered from 31 hospitals in NY composed of the number of deaths ($\textbf{z}_{(31\times1)}$) for a specified period after CABG surgeries and the total number of patients ($\textbf{n}_{(31\times1)}$) receiving CABG surgeries in each hospital. For reference, caseloads ($n_{j}$) can be interpreted as exposures. These data can be loaded into \proglang{R} using the following code where the symbol `\code{R>}' represents a command prompt and is not to be typed into \proglang{R}.
+We analyze a data set of 31 hospitals in New York state comprising of the outcomes of the coronary artery bypass graft (CABG) surgery \citep{morris2012}. The data set contains the number of deaths, $\boldsymbol{y}$, for a specified period after CABG surgeries out of the total number of patients, $\boldsymbol{n}$, receiving CABG surgeries in each hospital. Health care providers may use these data to improve their care qualities, and patients may refer to the data to select a better hospital. Our goal is to obtain the point and interval estimates for the unknown true mortality rates of 31 hospitals (random effects) to evaluate  each hospital's reliability on the CABG surgery. We interpret the caseloads, $\boldsymbol{n}$,  as exposures and assume that the state-level death rate per exposure of this surgery is known as 0.030 ($\lambda^E$) to fit the Poisson model for an illustrative purpose.  If covariate information is available or the expected random effect is not known, we recommend using the Binomial model for these data.
 
+
+These data can be loaded into \proglang{R} using the following code.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> z <- c( 3,   2,   5,  11,   9,  12,  12,   4,  10,  13,  14,   7,  12,
-          11,  13,  22,  15,  11,  14,  11,  16,  14,   9,  15,  13,  35,
-          26,  25,  20,  35,  27)
-R> n <- c(67,  68, 210, 256, 269, 274, 278, 295, 347, 349, 358, 396, 431,
-         441, 477, 484, 494, 501, 505, 540, 563, 593, 602, 629, 636, 729,
-         849, 914, 940, 1193, 1340)
-\end{CodeInput}
-\end{CodeChunk}
-or
-\begin{CodeChunk}
-\begin{CodeInput}
-R> data(``hospital'')
-R> z <- hospital$d
+R> library(Rgbp)
+R> data(hospital)
+R> y <- hospital$d
 R> n <- hospital$n
 \end{CodeInput}
 \end{CodeChunk}
 
 
-In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death rate ($\lambda_{j}$) so that one can evaluate each hospital's reliability. 
+%In addition, suppose one knows that the state-level death rate per exposure of this surgery is 0.030 ($\lambda_{0}$). Using these data and the known second-level mean ($\lambda_{0}$), \pkg{Rgbp} provides point and interval estimates of the true death rate ($\lambda_{j}$) so that one can evaluate each hospital's reliability. 
 
 
-The independent Poisson distribution, i.e.,  $z_{j}\vert \lambda_{j}\stackrel{ind}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively large. 
+%The independent Poisson distribution, i.e.,  $y_j\vert \lambda_j\stackrel{indep.}{\sim} \textrm{Poisson}(n_{j}\lambda_{j})$, $j=1, \ldots, 31,$ would be an ideal choice to describe these data based on the Poisson approximation when $\lambda$ is small and $n$ is relatively large. 
 
 
-Next, \code{gbp} fits the Poisson hierarchical model with the Gamma conjugate prior distribution as the NY state-level population distribution of the death rates whose mean is 0.030 ($\lambda_{0}=0.030$). For reference, the number of regression coefficients ($m$) is 0 because we do not need to estimate the prior mean (the second-level mean) via regression for this Poisson-Gamma model. 
+The function \code{gbp} fits the Poisson hierarchical model with the Gamma conjugate prior distribution as a population distribution of the death rates in New York states whose mean ($\lambda^E$) is 0.030. The number of regression coefficients ($m$) is 0 because we do not need to estimate the expected random effect via a log-linear regression for this Poisson-Gamma model. 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
-R> p
+R> p.output <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+R> p.output
 \end{CodeInput}
 \begin{CodeOutput}
 Summary for each unit (sorted by n):
@@ -782,18 +785,14 @@ colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 \end{CodeOutput}
 \end{CodeChunk}
 
-For reference, we need to type `\code{R> print(p, sort = FALSE)}' instead of `\code{R> p}' in order to list hospitals by the order of data input in the above output. `\code{R> p}' automatically sorts the output by the increasing order of caseload ($n_{j}$), as shown above.
+The output contains information about the observed death rates $y_{j}$, caseloads $n_{j}$, known prior mean $\lambda^E$, shrinkage estimates $\hat{B}_{j}$, lower bounds of interval estimates $\hat{\lambda}_{j, low}$, posterior means $\hat{\lambda}_j\equiv E(\lambda_{j}\vert \boldsymbol{y})$, upper bounds  of interval estimates $\hat{\lambda}_{j, upp}$, and posterior standard deviations  for each random effect based on the assumed unconditional Gamma posterior distributions. %The lower and upper bounds of an interval estimate for a random effect are 2.5\% and 97.5\% percentiles of the assumed unconditional Gamma posterior distributions if 95\% confidence level is used.
+
+Note that the conditional posterior mean of random effect $j$ in Equation \ref{gammapost_mean_var} is $(1-B_{j})\bar{y}_{j} + B_{j}\lambda^E$,  a convex combination of the observed death rate and expected random effect with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, i.e., ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the  state-level (second-level) conjugate Gamma prior distribution.
 
 
-The output contains information about observed death rates ($y_{j}$), caseloads ($n_{j}$), known prior mean ($\lambda_{0}$), shrinkage estimates ($\hat{B}_{j}$), lower bounds of interval estimates ($\hat{\lambda}_{j, low}$, 2.5\% percentiles of the approximate posterior distributions if 95\% confidence level is given), approximate posterior means ($\hat{\lambda}_{j}=E(\lambda_{j}\vert \boldsymbol{y})$), upper bounds  of interval estimates ($\hat{\lambda}_{j, upp}$, 97.5\% percentiles of the approximate posterior distributions), and standard deviations of the approximate posterior distributions ($sd(\lambda_{j}\vert \boldsymbol{y})$).
-
-
-As we can see in (\ref{gammapost}), the posterior mean, $(1-B_{j})y_{j} + B_{j}\lambda_{0}$, is a convex combination of the sample mean and prior mean ($\lambda_{0}=0.030$) with the shrinkage factor, $B_{j}\equiv r / (r + n_{j})$, determining the weight. This makes intuitive sense because $r$ and $n_{j}$ can be interpreted as the degree (sample sizes) of prior and observed information respectively. If the second level has more information than the first level, i.e., ensemble sample size $r$ exceeds individual sample size $n_{j}$, then the estimator will shrink towards the prior mean more than 50\%. This is clear because, as caseload increases, shrinkage decreases, depending less on the NY state-level (second-level) information.
-
-
-A function \code{summary} shows selective information on hospitals and more detailed estimation results, as below. To be specific, it displays some hospitals (not all as above) with minimum, median, and maximum caseloads ($n_{j}$). On top of that, more specific estimation results, such as the posterior mode and standard deviation of $\alpha\equiv\log(1/r)$, follow. \begin{CodeChunk}
+A function \code{summary} shows selective information about hospitals with minimum, median, and maximum exposures and more detailed estimation results about the hyper-parameter $\alpha=-\log(r)$.  \begin{CodeChunk}
 \begin{CodeInput}
-R> summary(p)
+R> summary(p.output)
 \end{CodeInput}
 \begin{CodeOutput}
 Main summary:
@@ -813,18 +812,18 @@ Overall Mean                  517       0.03     0.600   0.0201    0.0293
 Second-level Variance Component Estimation Summary:
 alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
 
-  post.mode.alpha post.sd.alpha post.mode.r
-1           -6.53         0.576         684
+post.mode.alpha post.sd.alpha post.mode.r
+          -6.53         0.576         684
 \end{CodeOutput}
 \end{CodeChunk}
-The output of \code{summary} also provides $\hat{r}=\textrm{exp}(6.53)=684$, which is an indicator of how valuable and informative the hypothetical second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 684 will shrink toward the prior mean (0.030) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.911$) was calculated by 684 / (684 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.911)*0.0448 + 0.911 * 0.030=0.0313$. As for this hospital, using more information from the prior distribution is an appropriate choice because the observed amount of information (67) is far less than the amount of state-level information (684).
+The output of \code{summary} also provides $\hat{r}=\textrm{exp}(6.53)=684$, which is an indicator of how valuable and informative the second-level hierarchy is. It means that observed sample means of hospitals whose caseloads are less than 684 will shrink toward the prior mean (0.030) more than 50\%. For example, the shrinkage estimate of the first hospital ($\hat{B}_{1}= 0.911$) was calculated by 684 / (684 + 67), where 67 is its caseload ($n_{1}$), and its posterior mean is $(1-0.911)*0.0448 + 0.911 * 0.030=0.0313$. As for this hospital, using more information from the conjugate prior distribution is an appropriate choice because the amount  of observed information (67) is far less than the amount of state-level information (684).
 
 
-To obtain a graphical summary the function \code{plot} can be used, as seen in Figure \ref{fig:hospshr}.
+To obtain a graphical summary, we use the function \code{plot}.%, as seen in Figure \ref{fig:hospshr}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> plot(p)
+R> plot(p.output)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h]
@@ -835,25 +834,26 @@ R> plot(p)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed sample means, empty dots on the upper horizontal line, are shrinking towards the known second-level mean (a blue vertical line at 0.030) to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than others. For example, the empty square symbol at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that  the seemingly safest hospital among 31 hospitals in terms of the observed death rate is probably not the safest in terms of the estimated posterior means. 
+In Figure \ref{fig:hospshr} the regression towards the mean (RTTM) is obvious in the first graph; the observed death rates, denoted by empty dots on the upper horizontal line, are shrinking towards the known expected random effect, denoted by a blue vertical line at 0.030, to the different extents. Note that some hospitals' ranks have changed by shrinking much harder towards 0.030 than the others. For example, an empty square at the crossing point of the two left-most lines (8th and 23rd hospitals on the list above) indicates that  the seemingly safest hospital among 31 hospitals in terms of the observed death rate is probably not the safest in terms of the estimated posterior mean accounting for the different caseloads of these two hospitals. 
 
 
-Intuitively, switching ranks for these two hospitals makes sense. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602 each. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the death rate estimate for the former hospital shrink toward the state-level mean ($\lambda_{0}$=0.030) much harder than that for the latter hospital.
+Intuitively, switching ranks for these two hospitals is reasonable. To be specific, their observed death rates ($y_{j}$, $j=8, 23$) are 0.0136 and 0.0150 and caseloads ($n_{j}$, $j=8, 23$) are 295 and 602, respectively. Considering solely the observed death rates may lead to an unfair comparison because the latter hospital handled twice the caseload. \pkg{Rgbp} accounts for this caseload difference, making the posterior mean for the random effect of the former hospital shrink toward the state-level mean ($\lambda^E$=0.030) much harder than that for of the latter hospital.
 
 
-Note that the point estimates are not enough to evaluate hospital reliability because one hospital may have a lower point estimate but  bigger uncertainty (variance) than the other. In the second plot of Figure \ref{fig:hospshr}, the estimated 95\% intervals are displayed. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the second-level mean (a blue horizontal line). For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
+Note that the point estimates are not enough to evaluate hospital reliability because one hospital may have a lower point estimate but  larger uncertainty (variance) than the other. The second plot of Figure \ref{fig:hospshr} displays the estimated 95\% intervals. We see that each posterior mean (red dot) is between the sample mean (empty dot) and the known expected random effect (a blue horizontal line). %For reference, we could plot this 95\% interval plot by the order of data input via \code{plot(p, sort = FALSE)}.
 
-This 95\% interval plot reveals that the 31st hospital has the lowest upper bound even though its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly bigger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). The observed death rates for these two hospitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the NY state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
-
-
-When fitting a model it is always a good idea to question how reliable the estimation procedure is. For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question the \code{coverage} function generates pseudo-datasets assuming the estimated $r~(=683.53)$ is a true value. For reference, we can designate any other value of $r$, for example $r=600$, by adding another argument, \code{A.or.r = 600}, into the code below; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
+This 95\% interval plot reveals that the 31st hospital has the lowest upper bound even though its point estimate ($\hat{\lambda}_{31}=0.0235$) is slightly larger than that of the 23rd hospital ($\hat{\lambda}_{23}=0.0230$). The observed death rates for these two hospitals ($y_{j}, j=23, 31$) are 0.0150 and 0.0201 and the caseloads ($n_{j}, j =23, 31$) are 602 and 1340 each. The 31st hospital has twice the caseload, which leads to borrowing less information from the New York state-level hierarchy (or shrinking less toward the state-level mean, 0.030) with smaller variance. Based on the point and interval estimates, the 31st hospital seems the most reliable one among all candidates. 
 
 
-In addition, \code{gbp} also provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the code for fitting the model, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
+When fitting a model it is always a good idea to question how reliable the estimation procedure is. The function \code{coverage}  generates pseudo-datasets given the estimated value of $r$, 683.53, as a generative value. For reference, we can designate any generative values of $r$ and $\lambda^E$ by adding two arguments into the code below, for example, \code{A.or.r = 600} and \code{mean.PriorDist = 0.05}.
+%; \code{R> pcv <- coverage(p, A.or.r = 600, nsim = 1000)}.
+%For example, does our procedure generate interval estimates that have good repeated sampling properties? To answer this question 
+
+%In addition, \code{gbp} also provides interval estimates with different confidence levels, for example 90\%. For this, we need to go back to the code for fitting the model, adding another argument, \code{Alpha = 0.9}; \code{R> p <- gbp(z, n, Alpha = 0.9, mean.PriorDist = 0.03, model = "poisson")}.  Then, the code below will evaluate whether interval estimates achieve the 90\% confidence level.
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> pcv <- coverage(p, nsim = 1000)
+R> p.coverage <- coverage(p.output, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 \begin{figure}[h] 
@@ -864,75 +864,72 @@ R> pcv <- coverage(p, nsim = 1000)
 \end{center}
 \end{figure}
 
-In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level and the red circles indicate Rao-Blackwellized (RB) unbiased coverage estimates for 31 hospitals. The overall RB unbiased coverage estimate across all the hospitals is 0.953. And none of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence under repeated sampling. Note that these estimates depend on the given true value of $r$, the known prior mean, and the assumption that the model is true.
+In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represents the nominal confidence level (\code{Alpha = 0.95} as a default) and the red circles indicate Rao-Blackwellized (RB) unbiased coverage estimates, $\bar{I}^{RB}_{r, \lambda^E}(\lambda_j)$ for $j=1, 2, \ldots, 31$. The overall RB unbiased coverage estimate across all the hospitals is 0.955. None of RB unbiased coverage estimates for 31 hospitals are less than 0.95 regardless of their caseloads ($n_{j}$). This result shows that the interval estimates for this particular dataset accurately achieves 95\% confidence level. 
 
-The following code provides 31 RB unbiased coverage estimates for each hospital.
+%Note that these estimates depend on the given true value of $r$ the known prior mean, and the assumption that the model is true.
+
+The following code provides specific values of the 31 RB unbiased coverage estimates and their standard errors for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$coverageRB
+R> pcv$se.coverageRB
 \end{CodeInput}
-\begin{CodeOutput}
- [1] 0.955 0.954 0.955 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954
-[13] 0.954 0.953 0.953 0.954 0.953 0.954 0.954 0.953 0.953 0.953 0.954 0.953
-[25] 0.953 0.953 0.952 0.953 0.952 0.952 0.952
-\end{CodeOutput}
+%\begin{CodeOutput}
+% [1] 0.955 0.954 0.955 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954 0.954
+%[13] 0.954 0.953 0.953 0.954 0.953 0.954 0.954 0.953 0.953 0.953 0.954 0.953
+%[25] 0.953 0.953 0.952 0.953 0.952 0.952 0.952
+%\end{CodeOutput}
 \end{CodeChunk}
 
-And the code below shows 31 simple unbiased coverage estimates for each hospital.
+And the code below shows 31 simple unbiased coverage estimates and their standard errors for each hospital.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> pcv$coverageS
-\end{CodeInput}
-\begin{CodeOutput}
- [1] 0.949 0.960 0.958 0.958 0.950 0.945 0.960 0.953 0.960 0.956 0.955 0.946 
-[13] 0.955 0.954 0.960 0.965 0.955 0.952 0.960 0.956 0.959 0.955 0.964 0.960 
-[25] 0.945 0.942 0.947 0.960 0.940 0.946 0.956
-\end{CodeOutput}
-\end{CodeChunk}
-
-The function \code{coverage} also calculates the standard errors for each hospital's RB unbiased coverage estimate defined in (\ref{RBvar}). The following code provides 31 standard errors for RB estimates.
-\begin{CodeChunk}
-\begin{CodeInput}
-R> pcv$se.coverageRB
-\end{CodeInput}
-\begin{CodeOutput}
- [1] 0.0016 0.0016 0.0014 0.0014 0.0013 0.0013 0.0013 0.0013 0.0012 0.0013 0.0012 
-[12] 0.0012 0.0011 0.0011 0.00110.0011 0.0011 0.0011 0.0011 0.0011 0.0010 0.0010 
-[23] 0.0010 0.0010 0.0010 0.0009 0.0009 0.0008 0.0008 0.0007 0.0007
-\end{CodeOutput}
-\end{CodeChunk}
-Similarly, 31 standard errors for each simple unbiased coverage estimate defined in (\ref{svar}) are
-\begin{CodeChunk}
-\begin{CodeInput}
 R> pcv$se.coverageS
 \end{CodeInput}
-\begin{CodeOutput}
- [1] 0.0070 0.0062 0.0063 0.0063 0.0069 0.0072 0.0062 0.0067 0.0062 0.0065 0.0066
-[12] 0.0072 0.0066 0.0066 0.0062 0.0058 0.0066 0.0068 0.0062 0.0065 0.0063 0.0066 
-[23] 0.0059 0.0062 0.0072 0.0074 0.0071 0.0062 0.0075 0.0072 0.0065
-\end{CodeOutput}
+%\begin{CodeOutput}
+% [1] 0.949 0.960 0.958 0.958 0.950 0.945 0.960 0.953 0.960 0.956 0.955 0.946 
+%[13] 0.955 0.954 0.960 0.965 0.955 0.952 0.960 0.956 0.959 0.955 0.964 0.960 
+%[25] 0.945 0.942 0.947 0.960 0.940 0.946 0.956
+%\end{CodeOutput}
 \end{CodeChunk}
 
-Taking the first hospital as an example, the variance estimate of RB unbiased coverage estimate is about 19 times smaller than that of simple one. It means that 1,000 RB unbiased coverage estimates are as precise as 19,000 simple unbiased coverage estimates in terms of estimating true coverage probability for the first hospital, $p_{cov, 1}$.
+%The function \code{coverage} also calculates the standard errors for each hospital's RB unbiased coverage estimate defined in (\ref{RBvar}). The following code provides 31 standard errors for RB estimates.
+%\begin{CodeChunk}
+%\begin{CodeInput}
+%\end{CodeInput}
+%\begin{CodeOutput}
+% [1] 0.0016 0.0016 0.0014 0.0014 0.0013 0.0013 0.0013 0.0013 0.0012 0.0013 0.0012 
+%[12] 0.0012 0.0011 0.0011 0.00110.0011 0.0011 0.0011 0.0011 0.0011 0.0010 0.0010 
+%[23] 0.0010 0.0010 0.0010 0.0009 0.0009 0.0008 0.0008 0.0007 0.0007
+%\end{CodeOutput}
+%\end{CodeChunk}
+%Similarly, 31 standard errors for each simple unbiased coverage estimate defined in (\ref{svar}) are
+%\begin{CodeChunk}
+%\begin{CodeInput}
 
-For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates, $I^{(i)}_{j}$ and $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \boldsymbol{\beta})$.
+%\end{CodeInput}
+%\begin{CodeOutput}
+% [1] 0.0070 0.0062 0.0063 0.0063 0.0069 0.0072 0.0062 0.0067 0.0062 0.0065 0.0066
+%[12] 0.0072 0.0066 0.0066 0.0062 0.0058 0.0066 0.0068 0.0062 0.0065 0.0063 0.0066 
+%[23] 0.0059 0.0062 0.0072 0.0074 0.0071 0.0062 0.0075 0.0072 0.0065
+%\end{CodeOutput}
+%\end{CodeChunk}
 
-\cite{1995} also investigated a similar ranking problem in hierarchical modeling, taking shrinkage into account.
+It turns out that the variance estimate of the RB unbiased coverage estimate for the first hospital ($0.0016^2$) is about 19 times smaller than that of the simple one ($0.0070^2$). It means that the RB unbiased coverage estimates based on 1,000 simulations ($N_{sim}$) are as precise as the simple unbiased coverage estimates based on 19,000 simulations in terms of estimating the coverage probability for the first hospital, $C_{r, \lambda^E}(\lambda_1)$.
+
+%For reference, two $31 \times 1,000$ matrices \code{raw.resultRB} and \code{raw.resultS}, each row of which is about each hospital, in \code{pcv} contain all the individual estimates, $I^{(i)}_{j}$ and $E(I^{(i)}_{j}\vert y^{(i)}_{j}, A, \boldsymbol{\beta})$.
+
+See \cite{1995} for a similar ranking problem using a Poisson hierarchical modeling with a different parametrization.
 
 
-\subsection[Unknown Second-level Mean and No Covariate]{Data of 8 schools with unknown second-level mean with no covariates} \label{sec:ex:8schools}
+\subsection[Unknown Second-level Mean and No Covariate]{Data of 8 schools with unknown expected random effect and no covariates} \label{sec:ex:8schools}
 
-The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (groups) to test whether students (units) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}.
+The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (groups) to test whether students (units) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}. We can load this data set into \proglang{R} by the following codes.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> y  <- c(12, -3, 28,  7,  1,  8, 18, -1)
-R> se <- c(18, 16, 15, 11, 11, 10, 10,  9)
-\end{CodeInput}
-\end{CodeChunk}
-or
-\begin{CodeChunk}
-\begin{CodeInput}
-R> data(``schools'')
+R> library(Rgbp)
+R> data(schools)
 R> y  <- schools$y
 R> se <- schools$se
 \end{CodeInput}
@@ -940,13 +937,13 @@ R> se <- schools$se
 
 
 
-Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, i.e., standard error of each school is assumed to be known. At the second hierarchy, the mean for each school is assumed to be drawn from a common Normal distribution and hence, we can use the Gaussian component of \code{gbp} to fit this Normal-Normal hierarchical model.
+Due to the nature of the test each school's coaching effect has an approximately Normal sampling distribution with known sampling variance, i.e., standard error of each school is completely known. At the second hierarchy, the mean for each school is assumed to be drawn from a common Normal distribution and hence, we can use the Gaussian component of \code{gbp} to fit this Gaussian hierarchical model.
 
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> g <- gbp(y, se, model = "gaussian")
-R> g
+R> g.output <- gbp(y, se, model = "gaussian")
+R> g.output
 \end{CodeInput}
 \begin{CodeOutput}
 Summary for each unit (sorted by se):
@@ -963,7 +960,7 @@ Summary for each unit (sorted by se):
 colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
-This output from \code{gbp} summarizes the results. In this Normal-Normal hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between school variation ($A$) will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
+This output from \code{gbp} summarizes the results. In this Gaussian hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between school variation ($A$) will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
 
 \begin{CodeChunk}
 \begin{CodeInput}

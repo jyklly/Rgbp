@@ -16,15 +16,16 @@
 \BOOKMARK [2][-]{Subsection.6.1.Coverage probability estimation.2}{Coverage probability estimation}{Section.5.Frequency method checking.1}% 16
 \BOOKMARK [3][-]{Subsubsection.6.2.0.Simple unbiased coverage estimator..3}{Simple unbiased coverage estimator.}{Subsection.6.1.Coverage probability estimation.2}% 17
 \BOOKMARK [3][-]{Subsubsection.6.2.1.Rao-Blackwellized unbiased coverage estimator..3}{Rao-Blackwellized unbiased coverage estimator.}{Subsection.6.1.Coverage probability estimation.2}% 18
-\BOOKMARK [1][-]{Section.6.packageoverview.1}{packageoverview}{}% 19
-\BOOKMARK [2][-]{Subsection.7.0.Model fitting.2}{Model fitting}{Section.6.packageoverview.1}% 20
-\BOOKMARK [2][-]{Subsection.7.1.Frequency method checking.2}{Frequency method checking}{Section.6.packageoverview.1}% 21
-\BOOKMARK [1][-]{Section.7.Examples.1}{Examples}{}% 22
-\BOOKMARK [2][-]{Subsection.8.0.Known Second-level Mean.2}{Known Second-level Mean}{Section.7.Examples.1}% 23
-\BOOKMARK [2][-]{Subsection.8.1.Unknown Second-level Mean and No Covariate.2}{Unknown Second-level Mean and No Covariate}{Section.7.Examples.1}% 24
-\BOOKMARK [2][-]{Subsection.8.2.Unknown Second-level Mean and One Covariate.2}{Unknown Second-level Mean and One Covariate}{Section.7.Examples.1}% 25
-\BOOKMARK [1][-]{Section.8.Discussion.1}{Discussion}{}% 26
-\BOOKMARK [1][-]{Section.9.acknowledgments.1}{acknowledgments}{}% 27
-\BOOKMARK [1][-]{Section..Unconditional posterior variance of the Binomial model.1}{Unconditional posterior variance of the Binomial model}{}% 28
-\BOOKMARK [1][-]{Section.A.Unconditional posterior variance of the Gaussian model.1}{Unconditional posterior variance of the Gaussian model}{}% 29
-\BOOKMARK [1][-]{Section.B.Unconditional posterior variance of the Poisson model.1}{Unconditional posterior variance of the Poisson model}{}% 30
+\BOOKMARK [3][-]{Subsubsection.6.2.2.Rao-Blackwellized overall unbiased coverage estimator.3}{Rao-Blackwellized overall unbiased coverage estimator}{Subsection.6.1.Coverage probability estimation.2}% 19
+\BOOKMARK [1][-]{Section.6.packageoverview.1}{packageoverview}{}% 20
+\BOOKMARK [2][-]{Subsection.7.0.Model fitting.2}{Model fitting}{Section.6.packageoverview.1}% 21
+\BOOKMARK [2][-]{Subsection.7.1.Frequency method checking.2}{Frequency method checking}{Section.6.packageoverview.1}% 22
+\BOOKMARK [1][-]{Section.7.Examples.1}{Examples}{}% 23
+\BOOKMARK [2][-]{Subsection.8.0.Known Second-level Mean.2}{Known Second-level Mean}{Section.7.Examples.1}% 24
+\BOOKMARK [2][-]{Subsection.8.1.Unknown Second-level Mean and No Covariate.2}{Unknown Second-level Mean and No Covariate}{Section.7.Examples.1}% 25
+\BOOKMARK [2][-]{Subsection.8.2.Unknown Second-level Mean and One Covariate.2}{Unknown Second-level Mean and One Covariate}{Section.7.Examples.1}% 26
+\BOOKMARK [1][-]{Section.8.Discussion.1}{Discussion}{}% 27
+\BOOKMARK [1][-]{Section.9.acknowledgments.1}{acknowledgments}{}% 28
+\BOOKMARK [1][-]{Section..Unconditional posterior variance of the Binomial model.1}{Unconditional posterior variance of the Binomial model}{}% 29
+\BOOKMARK [1][-]{Section.A.Unconditional posterior variance of the Gaussian model.1}{Unconditional posterior variance of the Gaussian model}{}% 30
+\BOOKMARK [1][-]{Section.B.Unconditional posterior variance of the Poisson model.1}{Unconditional posterior variance of the Poisson model}{}% 31
