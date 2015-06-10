@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 JUN 2015 18:53
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 JUN 2015 21:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -575,7 +575,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [12]
-Overfull \hbox (3.96419pt too wide) in paragraph at lines 465--467
+Overfull \hbox (3.96419pt too wide) in paragraph at lines 469--471
 \T1/aer/m/n/10.95 where the no-ta-tion Skewed-$\OML/cmm/m/it/10.95 t\OT1/cmr/m/
 n/10.95 (\OML/cmm/m/it/10.95 \OMS/cmsy/m/n/10.95 j\OML/cmm/m/it/10.95 ^^V; ^^[
 ; a; b\OT1/cmr/m/n/10.95 )$ \T1/aer/m/n/10.95 rep-re-sents a den-sity func-tion
@@ -592,10 +592,10 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 14 []
  []
 
-[14] <process.png, id=459, 1044.90375pt x 469.755pt>
+[14] <process.png, id=463, 1044.90375pt x 469.755pt>
 File: process.png Graphic file (type png)
  <use process.png>
-Package pdftex.def Info: process.png used on input line 537.
+Package pdftex.def Info: process.png used on input line 541.
 (pdftex.def)             Requested size: 170.71652pt x 76.74643pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -632,21 +632,21 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 21
  []
 
-[21] <hospital1.png, id=537, 541.02126pt x 559.08875pt>
+[21] <hospital1.png, id=541, 541.02126pt x 559.08875pt>
 File: hospital1.png Graphic file (type png)
  <use hospital1.png>
-Package pdftex.def Info: hospital1.png used on input line 849.
+Package pdftex.def Info: hospital1.png used on input line 853.
 (pdftex.def)             Requested size: 180.67499pt x 186.70938pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 22 []
  []
 
-[22 <./hospital1.png>] <hospital2.png, id=546, 538.01pt x 513.92pt>
+[22 <./hospital1.png>] <hospital2.png, id=550, 538.01pt x 513.92pt>
 File: hospital2.png Graphic file (type png)
 
 <use hospital2.png>
-Package pdftex.def Info: hospital2.png used on input line 879.
+Package pdftex.def Info: hospital2.png used on input line 883.
 (pdftex.def)             Requested size: 180.67499pt x 172.58183pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -663,16 +663,16 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 25
  []
 
-[25] <school1.png, id=571, 531.9875pt x 558.085pt>
+[25] <school1.png, id=575, 531.9875pt x 558.085pt>
 File: school1.png Graphic file (type png)
  <use school1.png>
-Package pdftex.def Info: school1.png used on input line 1030.
+Package pdftex.def Info: school1.png used on input line 1034.
 (pdftex.def)             Requested size: 180.67499pt x 189.5335pt.
 
-<school2.png, id=572, 537.00626pt x 515.9275pt>
+<school2.png, id=576, 537.00626pt x 515.9275pt>
 File: school2.png Graphic file (type png)
  <use school2.png>
-Package pdftex.def Info: school2.png used on input line 1046.
+Package pdftex.def Info: school2.png used on input line 1050.
 (pdftex.def)             Requested size: 180.67499pt x 173.57875pt.
 
 
@@ -693,21 +693,21 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 28 []
  []
 
-[28] <baseball1.png, id=594, 546.04pt x 556.0775pt>
+[28] <baseball1.png, id=598, 546.04pt x 556.0775pt>
 File: baseball1.png Graphic file (type png)
  <use baseball1.png>
-Package pdftex.def Info: baseball1.png used on input line 1199.
+Package pdftex.def Info: baseball1.png used on input line 1203.
 (pdftex.def)             Requested size: 180.67499pt x 183.99828pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 29
  []
 
-[29 <./baseball1.png>] <baseball2.png, id=602, 539.01375pt x 508.90125pt>
+[29 <./baseball1.png>] <baseball2.png, id=606, 539.01375pt x 508.90125pt>
 File: baseball2.png Graphic file (type png)
 
 <use baseball2.png>
-Package pdftex.def Info: baseball2.png used on input line 1222.
+Package pdftex.def Info: baseball2.png used on input line 1226.
 (pdftex.def)             Requested size: 180.67499pt x 170.5781pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -730,29 +730,29 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [33])
-Underfull \hbox (badness 10000) in paragraph at lines 1298--1298
+Underfull \hbox (badness 10000) in paragraph at lines 1302--1302
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1298--1298
+Underfull \hbox (badness 10000) in paragraph at lines 1302--1302
 
  []
 
 LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
-(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 1298.
+(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 1302.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1298.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1302.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 34 []
  []
 
 [34]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1298.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1302.
  (./article_v2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1298.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1298.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1302.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1302.
 
 Package rerunfilecheck Info: File `article_v2.out' has not changed.
 (rerunfilecheck)             Checksum: E02036853C5C8012048D91255970D9D1;3562.
@@ -760,13 +760,13 @@ Package rerunfilecheck Info: File `article_v2.out' has not changed.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1298.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1302.
  ) 
 Here is how much of TeX's memory you used:
- 7928 strings out of 493315
- 116129 string characters out of 6137904
- 205937 words of memory out of 5000000
- 10998 multiletter control sequences out of 15000+600000
+ 7930 strings out of 493315
+ 116170 string characters out of 6137904
+ 205966 words of memory out of 5000000
+ 10999 multiletter control sequences out of 15000+600000
  75882 words of font info for 130 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  36i,12n,34p,1422b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -798,10 +798,10 @@ onts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2013/texmf-dist/font
 s/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dist/fonts
 /type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v2.pdf (34 pages, 1272916 bytes).
+Output written on article_v2.pdf (34 pages, 1272706 bytes).
 PDF statistics:
- 773 PDF objects out of 1000 (max. 8388607)
- 688 compressed objects within 7 object streams
- 186 named destinations out of 1000 (max. 500000)
+ 778 PDF objects out of 1000 (max. 8388607)
+ 693 compressed objects within 7 object streams
+ 187 named destinations out of 1000 (max. 500000)
  289 words of extra memory for PDF output out of 10000 (max. 10000000)
 
