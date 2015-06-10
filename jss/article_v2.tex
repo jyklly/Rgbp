@@ -17,7 +17,7 @@
 \Shorttitle{\pkg{Rgbp}: Hierarchical Modeling and Frequency Method Checking on Overdispersed Data} %% a short title (if necessary)
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an \proglang{R} package that utilizes  approximate Bayesian machinery to fit two-level conjugate hierarchical models on overdispersed Gaussian, Poisson, and Binomial data. The data that \pkg{Rgbp} assumes comprise of observed sufficient statistics for each random effect, such as averages or proportions, possibly together with covariates of each group but without population-level data. The approximate Bayesian tool equipped with the adjustment for density maximization produces point and interval estimates for each random effect, point estimates and standard errors for regression coefficients, and a point estimate and its standard error for a second-level variance component. For the Binomial data, the package provides an option to produce  posterior samples of all the model parameters via the acceptance-rejection method.  The main goal of \pkg{Rgb} is to produce approximate Bayesian interval estimates for the random effects that meet their nominal confidence levels, and the package uses unique improper hyper-prior distributions for that purpose.  \pkg{Rgbp} provides a quick way to check whether the resultant Bayesian interval estimates for the random effects achieve the nominal confidence levels via a repeated sampling coverage evaluation, which we call  ``frequency method checking."  }
+\pkg{Rgbp} is an \proglang{R} package that utilizes  approximate Bayesian machinery to fit two-level conjugate hierarchical models on overdispersed Gaussian, Poisson, and Binomial data. The data that \pkg{Rgbp} assumes comprise of observed sufficient statistics for each random effect, such as averages or proportions, possibly together with covariates of each group but without population-level data. The approximate Bayesian tool equipped with the adjustment for density maximization produces point and interval estimates for each random effect, point estimates and standard errors for regression coefficients, and a point estimate and its standard error for a second-level variance component. For the Binomial data, the package provides an option to produce  posterior samples of all the model parameters via the acceptance-rejection method.  The main goal of \pkg{Rgb} is to produce approximate Bayesian interval estimates for the random effects that meet their nominal confidence levels.   For this purpose, our models adopt unique improper hyper-prior distributions and \pkg{Rgbp} provides a quick way to check whether the resultant Bayesian interval estimates for the random effects achieve the nominal confidence levels via a repeated sampling coverage evaluation, which we call  ``frequency method checking."  }
 % and evaluates repeated sampling frequency property of the resulting approximate Bayesian interval estimates for random effects
 %It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
 \Keywords{overdispersion, hierarchical model, adjustment for density maximization, repeated sampling coverage evaluation, \proglang{R}}
@@ -86,7 +86,7 @@ When it comes to fitting the model, \pkg{Rgbp} adopts the adjustment for density
 For the Binomial  multilevel model, \pkg{Rgbp} provides an option to draw independent posterior samples of all the model parameters via an acceptance-rejection method instead of the approximate tool.
 
 
-In addition to fitting hierarchical models, \pkg{Rgbp} provides a quick way to evaluate the repeated sampling coverage rates of the resulting Bayesian interval estimates for random effects \citep{morris1997, daniels1999prior, tang2002fitting, tang2011, morris2012}. It is a unique procedure that distinguishes \pkg{Rgbp}  from any other \proglang{R} packages for hierarchical modeling such as \pkg{hglm} \citep{hglm2010, ronnegaard2011hglm} for conjugate hierarchical generalized models and \pkg{arm} \citep{gelman2014arm} for Bayesian hierarchical regression models. The evaluation procedure which we call ``frequency method checking'' adopts a parametric bootstrapping that generates mock data sets given the values of the hyper-parameters and estimates the coverage rates based on the generated mock data sets.
+In addition to fitting hierarchical models, \pkg{Rgbp} provides a quick way to evaluate the repeated sampling coverage rates of the resulting Bayesian interval estimates for random effects \citep{morris1997, daniels1999prior, tang2002fitting, tang2011, morris2012}. It is a unique procedure that distinguishes \pkg{Rgbp}  from any other \proglang{R} packages for hierarchical modeling such as \pkg{hglm} \citep{hglm2010, ronnegaard2011hglm} for conjugate hierarchical generalized models and \pkg{arm} \citep{gelman2014arm} for Bayesian hierarchical regression models. The evaluation procedure which we call ``frequency method checking'' adopts a parametric bootstrapping, a Monte Carlo simulation, that generates mock data sets given the values of the hyper-parameters and estimates the coverage rates based on the generated mock data sets.
 
 The rest of this paper is organized as follows. We specify the Bayesian hierarchical models and discuss their posterior propriety in Section \ref{sec2}. We describe the estimation procedures including the ADM and the acceptance-rejection method in Section  \ref{sec3}, and the frequency method checking in Section \ref{sec4}.  We explain the usages of main functions in \pkg{Rgbp} in Section \ref{sec5}, and apply them to three examples in Section \ref{sec6}.
 
@@ -95,17 +95,19 @@ The rest of this paper is organized as follows. We specify the Bayesian hierarch
 \section[Hierarchical Structure]{Conjugate hierarchical modeling structure} \label{sec2}
 %A two-level  multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
-One of the functions in \pkg{Rgbp}, \code{gbp}, fits a conjugate hierarchical model whose first-level has distributions of observed data and whose second-level has conjugate distributions on the first-level mean parameters (random effects). The \code{gbp} function allows users to choose one of three types of hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. 
+One of the functions in \pkg{Rgbp}, \code{gbp}, fits a conjugate hierarchical model in which the first-level has distributions of observed data and the second-level has conjugate distributions on the first-level mean parameters (random effects) without any observed data on this level. Specifically, the observed data of the first-level are sufficient statistics, sample mean or proportions, for random effects with an assumption of the homogeneity within each group. These data appear often in a biological analysis on litter data, a meta analysis on independent studies, or small area estimation problems. The \code{gbp} function allows users to choose one of three types of hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. There are possibly more hierarchical models depending on the types of data such as Exponential-Gamma \citep{tang2002fitting}, but we choose the three models because these are the most commonly-used models.
+
+In this section, we specify the modeling details. Our motivation for the parametrization is to provide an intuitive shrinkage interpretation in inference and to facilitate the estimation procedure, considering that the shrinkage factors under our parametrization are a function of only a second-level variance component.
  
 \subsection[Normal-Normal]{Normal-Normal (``g''=Gaussian data)}
-The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. For reference,  $V_{j}~(\equiv \sigma^{2}/n_{j})$ below is assumed to be known, and subscript \emph{j} indicates the \emph{j}-th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
+The following is the general Normal-Normal hierarchical model assumed by \code{gbp}. The subscript \emph{j} below indicates the \emph{j}-th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
 \begin{eqnarray}
 y_{j}\vert \mu_{j} & \stackrel{indep.}{\sim} &\textrm{Normal}(\mu_{j}, V_{j}),\label{normalobs}\\
 \mu_{j}\vert \boldsymbol{\beta}, A & \stackrel{indep.}{\sim} &\textrm{Normal}(\mu^E_{j}, A),\label{normalprior}
 \end{eqnarray}
 
 
-where $\mu^E_{j} = E(\mu_j\vert \boldsymbol{\beta}, A) = \boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_{1}x_{j, 1}+\beta_{2}x_{j, 2} + \cdots + \beta_{m}x_{j, m}$ is the expected random effect and $m$ is the number of regression coefficients to be estimated. The default of the function \code{gbp} is to set $x_{j, 1}$ to 1 for an intercept term, though \code{gbp} also provides a usage without the intercept term.  It is assumed that the second-level variance $A$ is unknown and that the $m\times1$ regression coefficient vector $\boldsymbol{\beta}$ is also unknown unless otherwise specified. If no covariates are available with an intercept term, then $\boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_1$ ($m=1$) and thus $\mu^E_{j}=\mu^E=\beta_1$ for all $j$, resulting in an exchangeable conjugate prior distribution for the random effects.  Based on these conjugate prior distributions for random effects, it is easy to derive the conditional posterior distributions of the random effects. For $j=1, 2, \ldots, k$,
+where $y_j$ is an observed unbiased estimate (sample mean) for random effect $j$, $V_{j}~(\equiv \sigma^{2}/n_{j})$ is a completely known standard error of $y_j$, $\mu^E_{j}$ is an expected random effect defined as $E(\mu_j\vert \boldsymbol{\beta}, A) = \boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_{1}x_{j, 1}+\beta_{2}x_{j, 2} + \cdots + \beta_{m}x_{j, m}$, and $m$ is the number of regression coefficients to be estimated. The default of the function \code{gbp} is to set $x_{j, 1}$ to 1 for an intercept term, though \code{gbp} also provides a usage without the intercept term.  It is assumed that the second-level variance $A$ is unknown and that the $m\times1$ regression coefficient vector $\boldsymbol{\beta}$ is also unknown unless otherwise specified. If no covariates are available with an intercept term, then $\boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_1$ ($m=1$) and thus $\mu^E_{j}=\mu^E=\beta_1$ for all $j$, resulting in an exchangeable conjugate prior distribution for the random effects.  Based on these conjugate prior distributions for random effects, it is easy to derive the conditional posterior distributions of the random effects. For $j=1, 2, \ldots, k$,
 
 \begin{equation} \label{normalpost}
 \mu_{j}\vert  \boldsymbol{\beta}, A, \boldsymbol{y} \stackrel{indep.}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu^E_{j},~(1-B_{j})V_{j}~),
@@ -114,7 +116,7 @@ where $B_{j}\equiv V_{j}/(V_{j} + A),~j=1, \ldots, k$, are called shrinkage fact
 
 
 \subsection[Poisson-Gamma]{Poisson-Gamma (``p''=Poisson data)}\label{poissonsubsec}
-The function \code{gbp} is also capable of estimating a conjugate Poisson-Gamma hierarchical model, though its usage is limited to the case where the expected random effects are known ($m=0$).  For $j=1, 2, \ldots, k$, 
+The function \code{gbp} is also capable of estimating a conjugate Poisson-Gamma hierarchical model, though its usage is limited to the case where the expected random effects are known ($m=0$), for example, we may have some information about the mean of the population (second-level) from which we collect the first-level group data.  For $j=1, 2, \ldots, k$, 
 \begin{eqnarray}
 y_j\vert \lambda_j &\stackrel{indep.}{\sim} & \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim}& \textrm{Gamma}(r\lambda^E, r),
@@ -131,7 +133,7 @@ where $B_{j}\equiv r / (r+n_{j})$ for $j=1, 2, \ldots, k$.  The conditional post
 
 
 
-Note that the conditional posterior variance in Equation \ref{gammapost_mean_var} is linear in the conditional posterior mean, whereas a slightly different Poisson-Gamma model specification has been used elsewhere \citep{morris1997} that makes the variances in the prior and conditional posterior distributions  quadratic functions of their means respectively.
+Note that the conditional posterior variance in Equation \ref{gammapost_mean_var} is linear in the conditional posterior mean, whereas a slightly different Poisson-Gamma model specification has been used elsewhere \citep{morris1997} that makes the variances in the prior and conditional posterior distributions  quadratic functions of their means respectively. The parametrization of the Poisson-Gamma model adopted in \pkg{Rgbp} makes shrinkage factors as a function of only the hyper-parameter $r$, while the shrinkage factors based on the parametrization in \cite{morris1997} are functions of $r$ and $\boldsymbol{\beta}$. Thus, the estimation procedure and the interpretation of the shrinkage factors are more intuitive under the parametrization in \pkg{Rgbp}.
 
 \subsection[Binomial-Beta]{Binomial-Beta (``b''=Binomial data)}
 The Binomial-Beta hierarchical model is the last model that \code{gbp} can fit. The notation $y_{j}$ is the number of successes (or failures) out of $n_{j}$ trials. Unlike the Poisson-Gamma model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$) a priori.
@@ -174,30 +176,33 @@ The likelihood function of hyper-parameters $A$ and $\boldsymbol{\beta}$ for the
 \begin{equation}\label{marginal_normal}
 L_g(A, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k f(y_j\vert A, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k \frac{1}{\sqrt{2\pi (A+V_j)}}\exp\big(-\frac{(y_j-\mu^E_j)^2}{2(A+V_j)}\big),
 \end{equation}
-where $\mu^E_j=\boldsymbol{x}^\top\boldsymbol{\beta}$. The likelihood function of hyper-parameters $r$ and $\boldsymbol{\beta}$ for the Binomial hierarchical model is derived from the independent Beta-Binomial marginal distributions of the observed data with random effects, $p_1, p_2, \ldots, p_k$, integrated out \citep{skellam1948}; %For reference, the marginal distribution of the observed datum for the Normal model  still follows a Normal distribution and that for the Poisson model follows a Negative-Binomial distribution.
-\begin{equation}\label{marginal_binomial}
-L_b(r, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k f(y_j\vert r, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k\binom{n_j}{y_j}\frac{B(y_j+rp^E_j, ~n_j-y_j+r(1-p^E_j))}{B(rp^E_j, ~r(1-p^E_j))},
-\end{equation}
-where $p^E_j=\exp(\boldsymbol{x}^\top\boldsymbol{\beta})/(1+\exp(\boldsymbol{x}^\top\boldsymbol{\beta}))$ and the notation $B(a, b)~(\equiv\int_0^1 v^{a-1}(1-v)^{b-1}dv)$ indicates a beta function for positive constants $a$ and $b$. Similarly, the likelihood function of $r$ for the Poisson hierarchical model, without a regression coefficient (a known expected random effect, $\lambda^E$), comes from the independent Negative-Binomial marginal distributions of the observed data with the random effects, $\lambda_1, \lambda_2, \ldots, \lambda_k$, integrated out;
-\begin{equation}\label{marginal_poisson}
-L_p(r)=\prod_{j=1}^k f(y_j\vert r)=\prod^{k}_{j=1} \frac{\Gamma(r \lambda^E+y_j)}{\Gamma(r\lambda^E)(y_j!)}(1-B_{j})^{y_{i}}B_{j}^{r \lambda^E},
-\end{equation}
-where $\Gamma(a)$ is a gamma function defined as $\int_0^\infty x^{a-1}e^{x}dx$ for a positive constant $a$.
-
-%If all the observed data are extreme, i.e., $y_j$ is either 0 or $n_j$ for all $j$, the likelihood becomes a decreasing function with respect to $r$ for finite values of $\boldsymbol{\beta}$. In this case, the MLE of $r$ is 0.
-
-The joint posterior density  function of hyper-parameters $f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})$ for the Gaussian hierarchical model is proportional to their likelihood functions in Equation \ref{marginal_normal} because we use flat improper hyper-prior density functions for $A$ and $\boldsymbol{\beta}$ shown in Equation \ref{eq:hyper};
+where $\mu^E_j=\boldsymbol{x}^\top\boldsymbol{\beta}$. The joint posterior density  function of hyper-parameters $f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})$ for the Gaussian hierarchical model is proportional to their likelihood functions in Equation \ref{marginal_normal} because we use flat improper hyper-prior density functions for $A$ and $\boldsymbol{\beta}$ in Equation \ref{eq:hyper};
 \begin{equation}\label{marginal_post_normal}
 f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})\propto L_g(A, \boldsymbol{\boldsymbol{\beta}})d\boldsymbol{\beta}dA.
 \end{equation}
-The joint posterior density  function of hyper-parameters $f(r, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})$ for the Binomial hierarchical model is proportional to their likelihood functions in Equation \ref{marginal_binomial} multiplied by the hyper-prior density functions of $r$ and $\boldsymbol{\beta}$ in Equation \ref{eq:hyper} as follows;
+
+
+The likelihood function of hyper-parameters $r$ and $\boldsymbol{\beta}$ for the Binomial hierarchical model is derived from the independent Beta-Binomial marginal distributions of the observed data with random effects, $p_1, p_2, \ldots, p_k$, integrated out \citep{skellam1948}; %For reference, the marginal distribution of the observed datum for the Normal model  still follows a Normal distribution and that for the Poisson model follows a Negative-Binomial distribution.
+\begin{equation}\label{marginal_binomial}
+L_b(r, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k f(y_j\vert r, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k\binom{n_j}{y_j}\frac{B(y_j+rp^E_j, ~n_j-y_j+r(1-p^E_j))}{B(rp^E_j, ~r(1-p^E_j))},
+\end{equation}
+where $p^E_j=\exp(\boldsymbol{x}^\top\boldsymbol{\beta})/(1+\exp(\boldsymbol{x}^\top\boldsymbol{\beta}))$ and the notation $B(a, b)~(\equiv\int_0^1 v^{a-1}(1-v)^{b-1}dv)$ indicates a beta function for positive constants $a$ and $b$. The joint posterior density  function of hyper-parameters $f(r, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})$ for the Binomial hierarchical model is proportional to their likelihood functions in Equation \ref{marginal_binomial} multiplied by the hyper-prior density functions of $r$ and $\boldsymbol{\beta}$ in Equation \ref{eq:hyper} as follows;
 \begin{equation}\label{marginal_post_binomial}
 f(r, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})\propto L_b(r, \boldsymbol{\boldsymbol{\beta}})d\boldsymbol{\beta}dr/r^2.
 \end{equation}
-The posterior density function of $r$, $f(r\vert \boldsymbol{y})$, for the Poisson hierarchical model is  the likelihood function in Equation \ref{marginal_poisson} times the hyper-prior density function of $r$, $dr/r^2$;
+
+
+Similarly, the likelihood function of $r$ for the Poisson hierarchical model, without a regression coefficient (a known expected random effect, $\lambda^E$), comes from the independent Negative-Binomial marginal distributions of the observed data with the random effects, $\lambda_1, \lambda_2, \ldots, \lambda_k$, integrated out;
+\begin{equation}\label{marginal_poisson}
+L_p(r)=\prod_{j=1}^k f(y_j\vert r)=\prod^{k}_{j=1} \frac{\Gamma(r \lambda^E+y_j)}{\Gamma(r\lambda^E)(y_j!)}(1-B_{j})^{y_{i}}B_{j}^{r \lambda^E},
+\end{equation}
+where $\Gamma(a)$ is a gamma function defined as $\int_0^\infty x^{a-1}e^{x}dx$ for a positive constant $a$. The posterior density function of $r$, $f(r\vert \boldsymbol{y})$, for the Poisson hierarchical model is  the likelihood function in Equation \ref{marginal_poisson} times the hyper-prior density function of $r$, $dr/r^2$;
 \begin{equation}\label{marginal_post_poisson}
 f(r \vert \boldsymbol{y})\propto L_p(r)dr/r^2.
 \end{equation}
+
+
+%If all the observed data are extreme, i.e., $y_j$ is either 0 or $n_j$ for all $j$, the likelihood becomes a decreasing function with respect to $r$ for finite values of $\boldsymbol{\beta}$. In this case, the MLE of $r$ is 0.
 
 Our goal is to obtain the point and interval estimates of the random effects from their unconditional posterior distributions; for the Gaussian hierarchical model, 
 \begin{equation}\label{mcintegration_normal}
@@ -371,14 +376,14 @@ where $X\equiv (\boldsymbol{x}_1, \boldsymbol{x}_2, \ldots, \boldsymbol{x}_k)^\t
 
 
 \subsection{Estimation for random effects}
-It is intractable to derive the unconditional posterior distribution of each random effect analytically for all three models. Instead, we  assume again that each random effect has a skewed Normal distribution \cite{azzalini1985class} for the Gaussian model, a Beta distribution for the Binomial model, or a Gamma distribution for the Poisson model; for $j=1, 2, \ldots, k$,
+It is intractable to derive analytically the unconditional posterior distribution of each random effect  for our three models, which motivate us to assume again that each random effect has a skewed Normal distribution \cite{azzalini1985class} for the Gaussian model, a Beta distribution for the Binomial model, or a Gamma distribution for the Poisson model; for $j=1, 2, \ldots, k$,
 \begin{eqnarray}
 \mu_j\vert\boldsymbol{y} &\sim& \textrm{skewed-Normal}(\phi, \omega, \delta),\label{skewnormal}\\
 p_j\vert \boldsymbol{y} &\sim& \textrm{Beta}(t_{1j}, t_{0j}),\label{betapost}\\
 \lambda_j\vert \boldsymbol{y} &\sim& \textrm{Gamma}(s_{1j}, s_{0j}).\label{gammapost}
 \end{eqnarray}
 
-\cite{kelly2014advances}  matches estimated three unconditional posterior  moments of the random effects to the three parameters $(\phi, \omega, \delta$) of the skewed-Normal distribution in Equation \ref{skewnormal}.
+\cite{kelly2014advances}  matches the estimated three unconditional posterior  moments of the random effects to the three parameters $(\phi, \omega, \delta$) of the skewed-Normal distribution in Equation \ref{skewnormal}, i.e., location parameter $\phi$, scale parameter $\omega$, and a skewness parameter $\delta$. \cite{kelly2014advances} also shows that the skewed-Normal approximation improves the Normal approximation \citep{tang2011, morris2012} in terms of the repeated sampling coverage rates of random effects.
 
 The unconditional posterior mean and variance of each random effect for the Binomial model specified in Equation \ref{postmean} and \ref{approximate_var} and those for the Poisson model in Equation \ref{postmean_poisson} and \ref{approximate_var_poisson}  are functions of the unconditional posterior moments of shrinkage factors and expected random effect. By plugging-in the estimated unconditional posterior moments of shrinkage factors and those of expected random effect, we obtain the estimates of the unconditional posterior mean and variance of each random effect, denoted by $\hat{\mu}_{p_j}$ and $\hat{\sigma}^2_{p_j}$, respectively. For the Poisson model, let  $\hat{\mu}_{\lambda_j}$ and $\hat{\sigma}^2_{\lambda_j}$ denote the estimates of the unconditional posterior mean and variance. The estimates of two parameters $t_{1j}$ and $t_{0j}$ in Equation \ref{betapost} come as follows;
 \begin{equation}\label{posttrueprob}
@@ -450,7 +455,7 @@ where the notation Skewed-$t(\alpha\vert\mu, \sigma, a, b)$ represents a density
 \begin{equation}\label{mode}
 \mu+\frac{(a-b)\sqrt{a+b}}{\sqrt{(2a+1)(2b+1)}}.
 \end{equation} 
-It shows that the tails follow a power law as $\alpha^{-(2a+1)}$ on the left and $\alpha^{-(2b+1)}$ on the right when $b>a$. It also provides a representation to generate the random variable following their skewed-$t$ distribution as
+The article also show that the tails of the skewed-$t$ density function  follow a power law as $\alpha^{-(2a+1)}$ on the left and $\alpha^{-(2b+1)}$ on the right when $b>a$. It also provides a representation to generate the random variable following their skewed-$t$ distribution as
 \begin{equation}
 \alpha\sim \mu+\sigma\frac{\sqrt{a+b}(2T-1)}{2\sqrt{T(1-T)}}, ~\textrm{where}~ T\sim \textrm{Beta}(a, b).
 \end{equation}
@@ -591,7 +596,7 @@ If one dataset $\boldsymbol{y}^{(l)}$ is simulated per one set of random effects
 In this section, we describe the usage of the two main functions of \pkg{Rgbp}, i.e., \code{gbp} for model fitting and \code{coverage} for frequency method checking. 
 
 \subsection{Model fitting}
-The function \code{gbp} creates an G3 object ``gbp'' which provides three relevant functions \code{plot}, \code{print}, and \code{summary}. To use these relevant functions, we need to save the outcome of \code{gbp} into an object (see the code below).
+The function \code{gbp} creates an S3 object ``gbp'' on which  three generic functions \code{plot}, \code{print}, and \code{summary} are defined. To use these relevant functions, we need to save the outcome of \code{gbp} into an object (see the code below).
 
 There are two cases according to whether covariates are available or not. When no covariates are available, the function \code{gbp} requires fitting an intercept term  or knowing the value of the  the expected random effect, meaning that the intercept term must be either estimated or known. The default of \code{gbp} in this case is to fit an intercept term. We can assign the value of the known expected random effect through an optional argument \code{mean.PriorDist}. Note that \code{gbp} can fit the Poisson model only when the value of expected random effect, $\lambda^E$, is known. The usage of \code{gbp} to  fit each model without any covariates is 
 \begin{CodeChunk}
@@ -624,7 +629,7 @@ R> g.output <- gbp(y, se.or.n, X, model = "gaussian", intercept = FALSE)
 \end{CodeInput}
 \end{CodeChunk}
 
-The function \code{gbp} contains several optional arguments. The argument \code{Alpha}, whose default is 0.95, sets the confidence level, producing $100\times$\code{Alpha}\% interval estimates of the random effects. For the Gaussian model, setting the argument \code{normal.CI} to \code{TRUE} makes \code{gbp} use a Normal approximation to the unconditional posterior distribution of the random effect. The default of \code{normal.CI} is \code{FALSE} for the skewed Normal approximation. 
+The function \code{gbp} contains several optional arguments. The argument \code{Alpha}, whose default is 0.95, sets the confidence level, producing $100\times$\code{Alpha}\% interval estimates of the random effects. For the Gaussian model, setting the argument \code{normal.CI} to \code{TRUE} lets the function \code{gbp} to use a Normal approximation to the unconditional posterior distribution of the random effect \citep{tang2011}. The default of \code{normal.CI} is \code{FALSE} for the skewed Normal approximation \citep{kelly2014advances}. 
 
 The function \code{gbp} uses the acceptance-rejection method to fit the Binomial model if we assign the desired number of posterior samples ($N$ in Equation \ref{weight}) to the argument \code{n.AR}; its default value is 0. There are several arguments related to the acceptance-rejection method. The argument \code{n.AR.factor} determines how many trial samples the method draws; its default value is 4, meaning that the method draws \code{n.AR} $\times4$ trial samples and accepts some of them. The argument \code{trial.scale} is $\psi$ determining the scale parameter of the skewed-$t$ distribution (the envelope function); its default value is 1.3. The argument \code{save.result} indicates whether we save the whole posterior samples of the random effects and hyper-parameters; its default value is \code{TRUE}. The two arguments \code{t} and \code{u}, taking on positive values, allow users to chose the joint hyper-prior distribution $f(r, \boldsymbol{\beta})\propto d\boldsymbol{\beta}dr/(t+r)^{u+1}$; the default values for \code{t} and \code{u} are 0 and 1 for the joint hyper-prior distribution specified in Equation \ref{eq:hyper}. For example, when there are two covariates, the following code produces 2,000 posterior samples of random effects and hyper-parameters, $r$ and $\boldsymbol{\beta}_{3\times1}$ including an intercept term, via the acceptance-rejection method with 8,000 trial samples.
 \begin{CodeChunk}
@@ -633,7 +638,7 @@ R> b.output <- gbp(y, se.or.n, X, model = "binomial", n.AR = 2000)
 \end{CodeInput}
 \end{CodeChunk}
 
-The G3 object ``gbp'', for example \code{b.output} above, contains detailed outcomes. The function \code{names} will show the list of outcomes (too many to be listed in this article); see the document of \code{gbp} to check the details of the items.
+The S3 object ``gbp'', for example \code{b.output} above, contains detailed outcomes. The function \code{names} will show the list of outcomes (too many to be listed in this article); see the document of \code{gbp} to check the details of the items.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> names(b.output)
@@ -641,7 +646,7 @@ R> ?gbp
 \end{CodeInput}
 \end{CodeChunk}
 
-The G3 object makes use of some functions, \code{print}, \code{summary}, and \code{plot}. The estimation result for all the random effects pops up if we type the ``gbp'' object at the \proglang{R} console, which is the same as the following function \code{print} with its default argument ``\code{sort = TRUE}'' that prints out the estimation result for all the groups in the ascending order of $n$ for the Binomial and Poisson model and the ascending order of standard errors for the Gaussian model. When the argument \code{sort} is \code{FALSE}, the estimation result comes out as the order of data input.
+The S3 object makes use of some functions, \code{print}, \code{summary}, and \code{plot}. The estimation result for all the random effects pops up if we type the ``gbp'' object at the \proglang{R} console, which is the same as the following function \code{print} with its default argument ``\code{sort = TRUE}'' that prints out the estimation result for all the groups in the ascending order of $n$ for the Binomial and Poisson model and the ascending order of standard errors for the Gaussian model. When the argument \code{sort} is \code{FALSE}, the estimation result comes out as the order of data input.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> b.output
@@ -686,7 +691,7 @@ R> cov <- coverage(p.output, mean.PriorDist = 30, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 
-Although the function \code{coverage} does not produce a G3 object, a detailed summary appears in a plot that automatically pops up after running the function \code{coverage}. In addition, the object \code{cov} that contains the result of \code{coverage} as shown above contains numerical details, see \code{names(cov)} for the list of detailed outcomes. If we save the result into an object such as \code{cov} above, then we can always recall the plot, using the function \code{coverage.plot}.
+Although the function \code{coverage} does not produce the S3 object, a detailed summary appears in a plot that automatically pops up after running the function \code{coverage}. In addition, the object \code{cov} that contains the result of \code{coverage} as shown above contains numerical details, see \code{names(cov)} for the list of detailed outcomes. If we save the result into an object such as \code{cov} above, then we can always recall the plot, using the function \code{coverage.plot}.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> names(cov)
@@ -720,7 +725,7 @@ R> coverage.plot(cov)
 \label{sec:ex:hosp}
 
 
-We analyze a data set of 31 hospitals in New York state comprising of the outcomes of the coronary artery bypass graft (CABG) surgery \citep{morris2012}. The data set contains the number of deaths, $\boldsymbol{y}$, for a specified period after CABG surgeries out of the total number of patients, $\boldsymbol{n}$, receiving CABG surgeries in each hospital. Health care providers may use these data to improve their care qualities, and patients may refer to the data to select a better hospital. Our goal is to obtain the point and interval estimates for the unknown true mortality rates of 31 hospitals (random effects) to evaluate  each hospital's reliability on the CABG surgery. We interpret the caseloads, $\boldsymbol{n}$,  as exposures and assume that the state-level death rate per exposure of this surgery is known as 0.030 ($\lambda^E$) to fit the Poisson model for an illustrative purpose.  If covariate information is available or the expected random effect is not known, we recommend using the Binomial model for these data.
+We analyze a data set of 31 hospitals in New York state comprising of the outcomes of the coronary artery bypass graft (CABG) surgery \citep{morris2012}\footnote{Visit \emph{http://www.health.ny.gov/statistics/diseases/cardiovascular/} for more profile data of the CABG surgery in New York state.}. The data set contains the number of deaths, $\boldsymbol{y}$, for a specified period after CABG surgeries out of the total number of patients, $\boldsymbol{n}$, receiving CABG surgeries in each hospital. Health care providers may use these data to improve their care qualities, and patients may refer to the data to select a better hospital. Our goal is to obtain the point and interval estimates for the unknown true mortality rates of 31 hospitals (random effects) to evaluate  each hospital's reliability on the CABG surgery. We interpret the caseloads, $\boldsymbol{n}$,  as exposures and assume that the state-level death rate per exposure of this surgery is known as 0.030 ($\lambda^E$) to fit the Poisson model for an illustrative purpose.  If covariate information is available or the expected random effect is not known, we recommend using the Binomial model for these data.
 
 
 These data can be loaded into \proglang{R} using the following code.
@@ -868,7 +873,7 @@ In Figure \ref{fig:hospitalcoverage}, the black horizontal line at 0.95 represen
 
 %Note that these estimates depend on the given true value of $r$ the known prior mean, and the assumption that the model is true.
 
-The following code provides specific values of the 31 RB unbiased coverage estimates and their standard errors for each hospital.
+The following code provides specific values of the 31 RB unbiased coverage estimates and their standard errors for each hospital (the output is omitted for a space concern).
 \begin{CodeChunk}
 \begin{CodeInput}
 R> p.coverage$coverageRB
@@ -1240,7 +1245,15 @@ R> bcv$se.coverageRB
 
 %$
 
+If we want to draw 2,000 posterior samples of random effects and hyper-parameters from their full posterior distribution via the acceptance-rejection method, we use the following \proglang{R} code.
+\begin{CodeChunk}
+\begin{CodeInput}
+R> b.output <- gbp(y, n, x, model = "binomial", n.AR = 2000)
+\end{CodeInput}
+\end{CodeChunk}
+The ``gbp'' object \code{b.output} contains 2,000 posterior samples of $\alpha$ (\code{b.output$alpha}), a $2,000\times2$ matrix of $\beta$ (\code{b.output$beta}) with each column corresponding to posterior samples of each regression coefficient, and a $k\times2,000$ matrix of random effects with each row contains posterior samples of each random effect.
 
+If we run the frequency method checking using this ``gbp'' object obtained via the acceptance-rejection method, the $N_{sim}$ simulations also run the acceptance-rejection method.
 
 \section[Discussion]{Discussion and summary} \label{discussion}
 \pkg{Rgbp} is an \proglang{R} package for estimating and validating two-level Gaussian, Binomial and Poisson hierarchical models. The package aims to provide a procedure that is computationally efficient with good frequency properties and includes ``frequency method checking'' functionality to examine repeated sampling properties and to test that the method is valid at specified hyper-parameter values.
