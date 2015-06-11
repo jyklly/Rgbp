@@ -2,7 +2,7 @@
 gbp <- function(y, se.or.n, covariates, mean.PriorDist, model, intercept, Alpha, n.AR, n.AR.factor,
                 trial.scale, save.result, normal.CI, t, u) UseMethod("gbp")
 ######
-gbp.default <- function(y, se.or.n, covariates, mean.PriorDist, model = "gaussian", 
+gbp <- function(y, se.or.n, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, Alpha = 0.95, 
                         n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE, 
                         normal.CI = FALSE, t = 0, u = 1) {
