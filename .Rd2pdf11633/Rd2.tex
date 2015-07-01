@@ -1,0 +1,1436 @@
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `Rgbp'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\item[Version]\AsIs{1.0.7}
+\item[Date]\AsIs{2014-09-02}
+\item[Title]\AsIs{Gaussian, Poisson, and Binomial Hierarchical Modeling}
+\item[Author]\AsIs{Joseph Kelly, Hyungsuk Tak, and Carl Morris}
+\item[Maintainer]\AsIs{Joseph Kelly }\email{josephkelly@google.com}\AsIs{}
+\item[Depends]\AsIs{R (>= 2.2.0), sn (>= 0.4-18), mnormt (>= 1.5-1)}
+\item[Description]\AsIs{Rgbp is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking. It is found that such Bayesian-frequentist reconciliation allows Rgbp to have attributes desirable both sides of the aisle, working well in small samples and yielding good coverage probabilities for its interval estimates.}
+\item[License]\AsIs{GPL-2}
+\item[BugReports]\AsIs{}\url{https://github.com/jyklly/Rgbp/issues}\AsIs{}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{baseball}{Baseball Data}{baseball}
+\keyword{datasets}{baseball}
+%
+\begin{Description}\relax
+Batting averages of 18 major league players through their first 45 official at bats of the 1970 season. These batting averages were published weekly in the New York Times, and by April 26, 1970.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(baseball)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data set of 18 players with 12 covariates:
+\begin{description}
+
+\item[\code{FirstName}] each player's first name
+\item[\code{LastName}] each player's last name
+\item[\code{At.Bats}] number of times batted
+\item[\code{Hits}] each player's number of hits among 45 at bats
+\item[\code{BattingAverage}] batting averages among 45 at bats
+\item[\code{RemainingAt.Bats}] number of times batted after 45 at bats until the end of season
+\item[\code{RemainingAverage}] batting averages after 45 at bats until the end of season
+\item[\code{SeasonAt.Bats}] number of times batted over the whole season
+\item[\code{SeasonHits}] each player's number of hits over the whole season
+\item[\code{SeasonAverage}] batting averages over the whole season
+\item[\code{League}] 1 if a player is in the National league
+\item[\code{Position}] each player's position
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+Efron, B. and Morris, C. (1975). Data Analysis Using Stein's Estimator and its Generalizations. \emph{Journal of the American Statistical Association}. \bold{70}. 311-319.
+\end{Source}
+%
+\begin{Examples}
+\begin{ExampleCode}
+  data(baseball)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{coverage}{Estimating Coverage Probability}{coverage}
+\keyword{methods}{coverage}
+%
+\begin{Description}\relax
+\code{coverage} estimates Rao-Blackwellized and simple unbiased coverage probabilities.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+coverage(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{gbp.object}] 
+a resultant object of \code{gbp} function. 
+
+\item[\code{A.or.r}] 
+(optional) a given true numeric value of \emph{A} for Gaussian data or of \emph{r} for Binomial and Poisson data. If not designated, the estimated value in the \code{gbp.object} object will be considered as a true value.
+
+\item[\code{reg.coef}] 
+(optional) a given true (\emph{m} by 1) vector for regression coefficients, \eqn{\beta}{}, where \emph{m} is the number of regression coefficients including an intercept. If not designated, the estimated value in the \code{gbp.object} object will be considered as a true value.
+
+\item[\code{mean.PriorDist}] 
+(optional) a given true numeric value for the mean of (second-level) prior distribution. If not designated, the previously known value in the \code{gbp.object} object will be considered as a known prior mean.
+
+\item[\code{nsim}] 
+number of datasets to be generated. Default is 100.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+As for the argument \code{gbp.object}, if the result of \code{gbp} is designated to 
+\code{b}, for example \\{} "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{gbp.object} indicates this \code{b}.
+
+Data generating process is based on a second-level hierarchical model. The first-level hierarchy is 
+a distribution of observed data and the second-level is a conjugate prior distribution 
+on the first-level parameter.
+
+To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal 2-level model. \eqn{\sigma^{2}_{j}}{} below is assumed to be known or to be accurately estimated (\eqn{s^{2}_{j}}{}) and subscript \emph{j} indicates \emph{j}-th group in a dataset.
+\deqn{(y_{j} | \theta_{j}) \stackrel{ind}{\sim} N(\theta_{j}, \sigma^{2}_{j})}{}
+\deqn{(\theta_{j} |\mu_{0j} , A) \stackrel{ind}{\sim} N(\mu_{0j}, A)}{}
+\deqn{\mu_{0j} = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multi-level model. A square bracket below indicates [mean, variance] of distribution and a constant multiplied to the notation representing Gamma distribution (Gam) is a scale. Also, for consistent notation, \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{} and \eqn{n_{j}}{} can be interpreted as \emph{j}-th group's exposure only in this Poisson-Gamma hierarchical model.
+\deqn{(z_{j} | \theta_{j}) \stackrel{ind}{\sim} Pois(n_{j}\theta_{j})}{}
+\deqn{(\theta_{j} | r, \mu_{0j}) \stackrel{ind}{\sim} \frac{1}{r}Gam(r\mu_{0j})\stackrel{ind}{\sim}Gam[\mu_{0j}, \mu_{0j} / r] }{}
+\deqn{log(\mu_{0j}) = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+For Binomial data, \code{gbp} sets a two-level Binomial-Beta multi-level model. For reference, a square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{}.
+\deqn{(z_{j} | \theta_{j}) \stackrel{ind}{\sim} Bin(n_{j}, \theta_{j})}{}
+\deqn{(\theta_{j} | r, \mu_{0j}) \stackrel{ind}{\sim} Beta(r\mu_{0j}, r(1-\mu_{0j})) \stackrel{ind}{\sim} Beta[\mu_{0j}, \mu_{0j}(1 - \mu_{0j}) / (r + 1)]}{}
+\deqn{logit(\mu_{0j}) = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+From now on, the subscript \emph{(i)} means \emph{i}-th simulation and the subscript \emph{j} indicates \emph{j}-th group. So, notations with a subscript \emph{(i)} are (\emph{k} by 1) vectors, for example \eqn{\theta_{(i)}' = (\theta_{(i)1}, \theta_{(i)2}, \ldots, \theta_{(i)k})}{}.
+
+Pseudo-data generating process starts from the second-level hierarchy to the first-level. \code{coverage} first generates true parameters (\eqn{\theta_{(i)}}{}) for \emph{k} groups at the second-level and then moves onto the first-level to simulate pseudo-data sets, \eqn{y_{(i)}}{} for Gaussian or \eqn{z_{(i)}}{} for Binomial and Poisson data, given previously generated true parameters (\eqn{\theta_{(i)}}{}). 
+
+So, in order to generate pseudo-datasets, \code{coverage} needs parameters of prior distribution,  
+(\emph{A} (or \emph{r}) and \eqn{\beta}{} (\code{reg.coef})) 
+or (\emph{A} (or \emph{r}) and \eqn{\mu_{0}}{}). From here, we have four options to run \code{coverage}.
+
+First, if any values related to the prior distribution are not designated like 
+\code{coverage(b, nsim = 10)}, then \code{coverage} will regard estimated values (or known prior mean, \eqn{\mu_{0}}{}) in \code{b} (\code{gbp.object}) as given true values when it generates lots of pseudo-datasets. After sampling \eqn{\theta_{(i)}}{} from the prior distribution determined by these estimated values (or known prior mean) in \code{b} (\code{gbp.object}), \code{coverage} creates an \emph{i}-th pseudo-dataset based on \eqn{\theta_{(i)}}{} just sampled.
+
+Second, \code{coverage} allows us to try different true values in generating datasets. Suppose \code{gbp.object} is based on the model with a known prior mean, \eqn{\mu_{0}}{}. Then, we can try either different \code{A.or.r} or \code{mean.PriorDist}. For example, \code{coverage(b, A.or.r = 20, nsim = 10)}, \\{}
+\code{coverage(b, mean.PriorDist = 0.5, nsim = 10)}, or \\{}
+\code{coverage(b, A.or.r = 20, mean.PriorDist = 0.5, nsim = 10)}. Note that we cannot set \code{reg.coef} because the second-level mean (prior mean) is known in \code{gbp.object} to begin with.
+
+Suppose \code{gbp.object} is based on the model with an unknown prior mean. In this case, \code{gbp.object} has the estimation result of regression model, linear regression for Normal-Normal, log-linear regression for Poisson-Gamma, or logistic regression for Binomial-Beta, (only intercept term if there is no covariate) to estimate the unknown prior mean. Then, we can try some options: one or two of (\code{A.or.r}, \code{mean.PriorDist}, \code{reg.coef}). For example, \code{coverage(b, A.or.r = 20, nsim = 10)}, \code{coverage(b, mean.PriorDist = 0.5, nsim = 10)}, or \code{coverage(b, reg.coef = 0.1, nsim = 10)} with no covariate where \code{reg.coef} is a designated intercept term. Estimates in \code{gbp.object} will be used for undesignated values. Also, we can try appropriate combinations of two arguments. For example, \code{coverage(b, A.or.r = 20, mean.PriorDist = 0.5, nsim = 10)} and \\{}
+\code{coverage(b, A.or.r = 20, reg.coef = 0.1, nsim = 10)}. If we have one covariate, a 2 by 1 vector should be designated for \code{reg.coef}, one for an intercept term and the other for a regression coefficient of the covariate. Note that the two arguments, \code{mean.PriorDist} and \code{reg.coef}, cannot be assigned together because we do not need \code{reg.coef} given \code{mean.PriorDist}. 
+
+The simple unbiased estimator of coverage probability in \emph{j}-th group is a sample mean of indicators over all simulated datasets. The \emph{j}-th indicator in \emph{i}-th simulation is 1 if the estimated interval of the \emph{j}-th group on \emph{i}-th simulated dataset contains a true parameter 
+\eqn{\theta_{(i)j}}{} that generated the observed value of the \emph{j}-th group in the 
+\emph{i}-th dataset.
+
+Rao-Blackwellized unbiased estimator for group \emph{j} is a conditional expectation of the simple unbiased estimator given a sufficient statistic, \eqn{y_{j}}{} for Gaussian or \eqn{z_{j}}{} for Binomial and Poisson data.
+\end{Details}
+%
+\begin{Value}
+\begin{ldescription}
+\item[\code{coverageRB}] 
+Rao-Blackwellized unbiased coverage estimate for each group averaged over all simulations.
+
+\item[\code{coverageS}] 
+Simple unbiased coverage estimate for each group averaged over all simulations.
+
+\item[\code{average.coverageRB}] 
+Overall Rao-Blackwellized unbiased coverage estimate across all the groups and simulations.
+
+\item[\code{average.coverageS}] 
+Overall simple unbiased coverage estimate across all the groups and simulations.
+
+\item[\code{se.coverageRB}] 
+Standard error of Rao-Blackwellized unbiased coverage estimate for each group.
+
+\item[\code{se.coverageS}] 
+Standard error of simple unbiased coverage estimate for each group.
+
+\item[\code{raw.resultRB}] 
+All the Rao-Blackwellized unbiased coverage estimates for every group and for every simulation.
+
+\item[\code{raw.resultS}] 
+All the simple unbiased coverage estimates for every group and for every simulation.
+
+\item[\code{Alpha}] 
+Nominal confidence level 
+
+\item[\code{effective.n}] 
+The number of simulated data sets used to calculate the coverage estimates. The data sets may cause some errors in fitting models. For example, the data set may be against the conditions for the posteiror propriety in Binomial data.
+
+\item[\code{model}] 
+The model being used, "br", "pr", or "gr".
+
+\item[\code{case}] 
+One of the cases used to re-draw the coverage plot by \code{coverage.plot}.
+
+\item[\code{betas}] 
+The regression coefficient used to generate simulated data sets.
+
+\item[\code{A.r}] 
+The hyper-parameter value (A for Gaussian model, and r for both Binomial and Poisson models) used to generate simulated data sets.
+
+\item[\code{priormeanused}] 
+The value of the prior mean(s) used to generate simulated data sets.
+
+
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{References}\relax
+Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}. 618-632.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  # Loading datasets
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+
+  # Arbitrary covariate for schools data
+  x2 <- rep(c(-1, 0, 1, 2), 2)
+
+  # baseball data where z is Hits and n is AtBats
+  z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+  n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+  
+  #################################################################
+  # Gaussian Regression Interactive Multi-level Modeling (GRIMM) #
+  #################################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    g <- gbp(y, se, model = "gaussian")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+
+    ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+    ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+
+    ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 150, nsim = 100)
+    ### gcv <- coverage(g, reg.coef = 10, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 150, mean.PriorDist = 3, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 150, reg.coef = 10, nsim = 100)
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    g <- gbp(y, se, x2, model = "gaussian")
+ 
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+ 
+    ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+    ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+
+    ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 200, nsim = 100)
+    ### gcv <- coverage(g, reg.coef = c(10, 2), nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 200, mean.PriorDist = 3, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 200, reg.coef = c(10, 2), nsim = 100)
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+
+    ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+    ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+
+    ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 150, nsim = 100)
+    ### gcv <- coverage(g, A.or.r = 150, mean.PriorDist = 3, nsim = 100)
+
+  ################################################################
+  # Binomial Regression Interactive Multi-level Modeling (BRIMM) #
+  ################################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    b <- gbp(z, n, model = "binomial")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+    ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+
+    ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+    ### bcv <- coverage(b, reg.coef = -1.5, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 50, mean.PriorDist = 0.2, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 50, reg.coef = -1.5, nsim = 100)
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    b <- gbp(z, n, x1, model = "binomial")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+    ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+
+    ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+    ### bcv <- coverage(b, reg.coef = c(-1.5, 0), nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 40, mean.PriorDist = 0.2, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 40, reg.coef = c(-1.5, 0), nsim = 100)
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+    ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+
+    ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+    ### bcv <- coverage(b, A.or.r = 40, mean.PriorDist = 0.2, nsim = 100)
+
+  ###############################################################
+  # Poisson Regression Interactive Multi-level Modeling (PRIMM) #
+  ###############################################################
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    pcv <- coverage(p, nsim = 10)  
+
+    ### pcv$coverageRB, pcv$coverageS, pcv$average.coverageRB, pcv$average.coverageS,
+    ### pcv$minimum.coverageRB, pcv$raw.resultRB, pcv$raw.resultS
+
+    ### pcv <- coverage(p, mean.PriorDist = 0.265, nsim = 100)
+    ### pcv <- coverage(p, A.or.r = 150, nsim = 100)
+    ### pcv <- coverage(p, A.or.r = 150, mean.PriorDist = 0.265, nsim = 100)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{coverage.plot}{Drawing the coverage plot}{coverage.plot}
+\keyword{methods}{coverage.plot}
+%
+\begin{Description}\relax
+In a case where users closed the default coverage plot that the \code{coverage} function generated, the function \code{coverage.plot} redraws the coverage plot using the coverage object.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+coverage.plot(cov)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{cov}] 
+Any saved result of the \code{coverage} function. 
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+It is possible that a user want to redraw the coverage plot for any reasons. If the result of the \code{coverage} function was saved into a variable, this \code{coverage.plot} redraw the coverage plot using the saved result.
+\end{Details}
+%
+\begin{Value}
+The coverage plot will be displayed again.
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  # baseball data where z is Hits and n is AtBats
+  z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+  n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  b <- gbp(z, n, model = "binomial")
+  cov <- coverage(b, nsim = 10)  
+  coverage.plot(cov)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{gbp}{Fitting Gaussian, Poisson, and Binomial Hierarchical Models}{gbp}
+\methaliasA{gbp.default}{gbp}{gbp.default}
+\keyword{methods}{gbp}
+%
+\begin{Description}\relax
+\code{gbp} fits Bayesian hierarchical models using the Uniform distribution on the second level variance component (variance of the prior distribution), which enables good frequentist repeated sampling properties. 
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## Default S3 method:
+gbp(x, w, covariates, mean.PriorDist, model =
+"gaussian", intercept = TRUE, Alpha = 0.95, n.AR = 0, n.AR.factor = 4,
+trial.scale = NA, save.result = TRUE, normal.CI = FALSE, c = 0, u = 1)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 
+a (\emph{k} by 1) vector of \emph{k} groups' sample means for Gaussian or of each group's number of successful trials for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
+
+\item[\code{w}] 
+a (\emph{k} by 1) vector composed of the standard errors of all groups for Gaussian or 
+of each group's total number of trials for Binomial and Poisson data.
+
+\item[\code{covariates}] 
+(optional) a matrix of covariate(s) each column of which corresponds to one covariate.
+
+\item[\code{mean.PriorDist}] 
+(optional) a numeric value for the second-level mean parameter, \emph{i.e.} the mean of prior
+distribution, if you know this value a priori.
+
+\item[\code{model}] 
+a character string indicating which hierarchical model to fit. "gaussian" for Gaussian data, 
+"poisson" for Poisson, and "binomial" for Binomial. Default is "gaussian"
+
+\item[\code{intercept}] 
+\code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
+included in the regression. Default is \code{TRUE}.
+
+\item[\code{Alpha}] 
+a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
+
+
+\item[\code{n.AR}] 
+Only for Binomial model. If \code{n.AR = 1000}, all the results will be based on 1000 posterior samples using the acceptance-rejection sampling. Default is 0.
+
+\item[\code{n.AR.factor}] 
+Only for Binomial model. If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial samples, and accept or reject them until the method gets n.AR posterior samples. Default is 4.
+
+
+\item[\code{trial.scale}] 
+A scale used in the trial distribution of \eqn{\alpha}{}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be larger than before. If there are relatively huge weights, scale should be larger than before. Default is NA.
+
+
+\item[\code{save.result}] 
+Only for Binomial model with the acceptance-rejection sampling. If \code{save.result} is TRUE, all the results of weights and posterior samples will be saved in the gbp object. Default is TRUE.
+
+
+\item[\code{normal.CI}] 
+Only applicable for Gaussian data. If \code{TRUE} then a Normal
+approximation is used to construct intervals for the level 1 group
+means. If \code{FALSE} (default) then a Skew-Normal distribution is
+used. Setting the value to \code{TRUE} may result in speed
+improvements but may lead to intervals that under cover. 
+
+
+\item[\code{c}] 
+Non-negative constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. If c is positive, then the hyper-prior distribution of r is proper, otherwise improper. \eqn{dr/(c + r)^{u+1}}{}.
+
+
+\item[\code{u}] 
+A positive constant to determine the hyper-prior distribution of r for the Binomial model with the acceptance-rejection method. \eqn{dr/(c + r)^{u+1}}{}.
+
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+\code{gbp} fits a hierarchical model whose first-level hierarchy is a distribution of observed data and second-level is a conjugate prior distribution on the first-level parameter. To be specific, for Normal data, \code{gbp} constructs a two-level Normal-Normal multilevel model. \eqn{V_{j}}{} (=\eqn{\sigma^{2}/n_{j}}{}) is assumed to be known or to be accurately estimated, and subscript \emph{j} indicates \emph{j}-th group 
+(or unit) in a dataset.
+\deqn{(y_{j} | \theta_{j}) \stackrel{ind}{\sim} N(\theta_{j}, \sigma^{2}_{j})}{}
+\deqn{(\theta_{j} |\mu_{0j} , A) \stackrel{ind}{\sim} N(\mu_{0j}, A)}{}
+\deqn{\mu_{0j} = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+For Poisson data, \code{gbp} builds a two-level Poisson-Gamma multilevel model. A square bracket below indicates [mean, variance] of distribution, a constant multiplied to the notation representing Gamma distribution (Gam) is a scale, and \eqn{y_{j}=\frac{z_{j}}{n_{j}}}{}.
+\deqn{(z_{j} | \theta_{j}) \stackrel{ind}{\sim} Pois(n_{j}\theta_{j})}{}
+\deqn{(\theta_{j} | r, \mu_{0j}) \stackrel{ind}{\sim} \frac{1}{r}Gam(r\mu_{0j})\stackrel{ind}{\sim}Gam[\mu_{0j}, \mu_{0j} / r] }{}
+\deqn{log(\mu_{0j}) = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+For Binomial data, \code{gbp} sets a two-level Binomial-Beta multilevel model. A square bracket below indicates [mean, variance] of distribution and \eqn{y_{j} = \frac{z_{j}}{n_{j}}}{}.
+\deqn{(z_{j} | \theta_{j}) \stackrel{ind}{\sim} Bin(n_{j}, \theta_{j})}{}
+\deqn{(\theta_{j} | r, \mu_{0j}) \stackrel{ind}{\sim} Beta(r\mu_{0j}, r(1-\mu_{0j})) \stackrel{ind}{\sim} Beta[\mu_{0j}, \mu_{0j}(1 - \mu_{0j}) / (r + 1)]}{}
+\deqn{logit(\mu_{0j}) = x_{j}'\beta}{}
+for \eqn{j = 1, \ldots, k}{}, where \emph{k} is the number of groups (units) in a dataset.
+
+For reference, based on the above notations, the Uniform prior distribution on the second level variance component (variance of the prior distribution) is \emph{dA} for Gaussian and \eqn{d(\frac{1}{r})}{} 
+(= \eqn{\frac{dr}{r^{2}}}{}) for Binomial and Poisson data. The second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{}) or variance of ensemble information.
+
+Under this setting, the argument \code{x} in \code{gbp} is a (\emph{k} by 1) vector of \emph{k} groups' sample means (\eqn{y_{j}'s}{} in the description of Normal-Normal model above) for Gaussian or of each group's number of successful trials (\eqn{z_{j}'s}{}) for Binomial and Poisson data, where \emph{k} is the number of groups (or units) in a dataset.
+
+The argument \code{w} is a (\emph{k} by 1) vector composed of the standard errors (\eqn{V_{j}'s}{}) of all groups for Gaussian or of each group's total number of trials (\eqn{n_{j}'s}{}) for Binomial and Poisson data.
+
+As for two optional arguments, \code{covariates} and \code{mean.PriorDist}, there are three feasible 
+combinations of them to run \code{gbp}. The first situation is when we do not have any covariate and do not 
+know a mean of the prior distribution (\eqn{\mu_{0}}{}) a priori. In this case, assigning none of two
+optional arguments, such as "\code{gbp(z, n, model = "binomial")}", will lead to a correct model. \code{gbp} 
+will automatically fit a regression with only an intercept term to estimate a common mean of the prior
+distribution (exchangeability).
+
+The second situation is when we have covariate(s) and do not know a mean of the prior distribution (\eqn{\mu_{0}}{}) a priori. In this case, assigning a matrix, \emph{X}, each column of which corresponds to one covariate, such as "\code{gbp(z, n, X, model = "poisson")}", will lead to a correct model. Default of \code{gbp} is to fit a regression including an intercept term to estimate a mean of the prior distribution. Double exchangeability will hold in this case.
+
+The last case is when we know a mean of the prior distribution (\eqn{\mu_{0}}{}) a priori. Now, we do
+not need to estimate regression coefficients at all because we know a true value of \eqn{\mu_{0}}{} (strong assumption).
+Designating this value into the argument of \code{gbp} like 
+"\code{gbp(y, se, mean.PriorDist = 3)}" is enough to account for it. For reference, 
+\code{mean.PriorDist} has a stronger priority than \code{covariates}, which means that when both
+arguments are designated, \code{gbp} will fit a hierarchical model using the known mean of prior distribution, \code{mean.PriorDist}.
+
+\code{gbp} returns an object of class "\code{gbp}" which provides three relevant functions \code{plot}, \code{print}, and \code{summary}.
+\end{Details}
+%
+\begin{Value}
+An object of class \code{gbp} comprises of:
+\begin{ldescription}
+\item[\code{sample.mean}] sample mean of each group (or unit)
+\item[\code{se}] if Gaussian data, standard error of sample mean in each group (or unit)
+\item[\code{n}] if Binomial and Poisson data, total number of trials of each group (or unit)
+\item[\code{prior.mean}] numeric if entered, NA if not entered
+\item[\code{prior.mean.hat}] estimate of prior mean by a regression if prior mean is not assigned a priori
+\item[\code{shrinkage}] shrinkage estimate of each group (adjusted posterior mean)
+\item[\code{sd.shrinkage}] posterior standard deviation of shrinkage
+\item[\code{post.mean}] posterior mean of each group
+\item[\code{post.sd}] posterior standard deviation of each group
+\item[\code{post.intv.low}] lower bound of 100*Alpha\% posterior interval (quantile of posterior distribution)
+\item[\code{post.intv.upp}] upper bound of 100*Alpha\% posterior interval (quantile of posterior distribution)
+\item[\code{model}] "gaussian" for Gaussian, "poisson" for Poisson, and "binomial" for Binomial data
+\item[\code{X}] a covariate vector or matrix if designated. NA if not
+\item[\code{beta.new}] regression coefficient estimates
+\item[\code{beta.var}] estimated variance matrix of regression coefficient
+\item[\code{intercept}] whether TRUE or FALSE
+\item[\code{a.new}] a posterior mode of \eqn{\alpha}{} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha}{} will appear in \code{summary(gbp.object)}.
+\item[\code{a.var}] posterior variance of \eqn{\alpha}{}
+\item[\code{Alpha}] confidence level based on which confidence interval is constructed 
+\item[\code{weight}] (only for Binomial model) weights for acceptance-rejection method
+\item[\code{p}] (only for Binomial model) posterior samples of p based on the acceptance-rejection method, if this method was used. This is a (k by nsim) matrix. Each row contains posteiror samples of each random effect.
+\item[\code{alpha}] (only for Binomial model) posterior samples of alpha based on the acceptance-rejection method, if this method was used
+\item[\code{beta}] (only for Binomial model) posterior samples of beta based on the acceptance-rejection method, if this method was used
+\item[\code{accept.rate}] (only for Binomial model) the acceptance rate of the acceptance-rejection method, if this method was used
+\item[\code{n.AR}] (Only for Binomial model) If \code{n.AR = 1000}, all the results will be based on 1000 posterior samples using the acceptance-rejection sampling. Default is 0.
+
+\item[\code{n.AR.factor}] (only for Binomial model) If \code{n.AR = 1000} and \code{n.AR.factor = 4}, then the acceptance-rejection method will sample 4 * 1000 trial posteior samples, and accept or reject them. Default is 4.
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{References}\relax
+Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. 
+\emph{Statistical Science}. \bold{27}. 115-134.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  # Loading datasets
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+
+  # Arbitrary covariate for schools data
+  x2 <- rep(c(-1, 0, 1, 2), 2)
+  
+  # baseball data where z is Hits and n is AtBats
+  z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+  n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+
+  ################################################################
+  # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+  ################################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of A
+    ### and a regression coefficient (intercept), 
+    ### not using estimated values as true ones.
+    gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    g <- gbp(y, se, x2, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+ 
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of A
+    ### and regression coefficients, not using estimated values 
+    ### as true ones. Two values of reg.coef are for beta0 and beta1
+    gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    gcv <- coverage(g, nsim = 10)  
+
+    ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+    ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of A and
+    ### 2nd level mean as true ones, not using estimated values as true ones.
+    coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    b <- gbp(z, n, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and a regression coefficient (intercept), 
+    ### not using estimated values as true ones.
+    bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    b <- gbp(z, n, x1, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of r
+    ### and regression coefficients, not using estimated values 
+    ### as true ones. Two values of reg.coef are for beta0 and beta1
+    bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    bcv <- coverage(b, nsim = 10)  
+
+    ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+    ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of r and
+    ### 2nd level mean as true ones, not using estimated values as true ones.
+    bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+    p
+    print(p, sort = FALSE)
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    pcv <- coverage(p, nsim = 10)  
+
+    ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
+    ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
+
+    ### when we want to simulate pseudo datasets based on different values of r and
+    ### 2nd level mean as true ones, not using estimated values as true ones.
+    pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{hospital}{Thirty-one Hospital Data}{hospital}
+\keyword{datasets}{hospital}
+%
+\begin{Description}\relax
+Medical profiling evaluation of 31 New York hospitals in 1992. We are to consider these as Normally-distributed indices of successful outcome rates for patients at these 31 hospitals following Coronary Artery Bypass Graft (CABG) surgeries. The indices are centered so that the New York statewide average outcome over all hospitals lies near 0. Larger estimates of \code{y} indicate hospitals that performed better for these surgeries.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(hospital)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A dataset of 31 hospitals comprises of:
+\begin{description}
+
+\item[\code{y}] values obtained through a variance stabilizing transformation of the unbiased death rate estimates, \code{d} / \code{n}, assuming Binomial data. Details in the reference.
+\item[\code{se}] approximated standard error of y.
+\item[\code{d}] the number of deaths within a month of CABG surgeries in each hospital
+\item[\code{n}] total number of patients receiving CABG surgeries (case load) in each hospital
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
+\end{Source}
+%
+\begin{Examples}
+\begin{ExampleCode}
+  data(hospital)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{plot.gbp}{Drawing Shrinkage and Posterior Interval Plots}{plot.gbp}
+\keyword{methods}{plot.gbp}
+%
+\begin{Description}\relax
+\code{plot(gbp.object)} draws shrinkage and posterior interval plots
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'gbp'
+plot(x, sort = TRUE, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 
+a resultant object of \code{gbp} function. 
+
+\item[\code{sort}] 
+\code{TRUE} or \code{FALSE} flag. If \code{TRUE}, the interval plot (second plot) will be drawn by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data. If \code{FALSE}, it will be by the order of data input. Default is \code{TRUE}.
+
+\item[\code{...}] 
+further arguments passed to other methods.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+As for the argument \code{x}, if the result of \code{gbp} is designated to 
+\code{b} like "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
+
+This function produces two plots containing information about the prior, sample, and posterior means.
+
+The first plot is a shrinkage plot representing sample means (black circle) on the
+upper horizontal line and prior (blue line) and posterior means (red
+circle) on the lower horizontal line. The aim of this plot is to get a sense of the
+magnitude of the shrinkage and to observe if any change in ordering of the
+groups has occurred. Crossovers (changes of order) are noted by a
+black square as indicated in the legend. If the points plotted have
+the same value then a sunflower plot is produced where each petal
+(line protruding from the point) represent the count of points with
+that value. The plot also aims to incorporate the uncertainty and the lengths of the violet and green lines are
+proportional to the standard error and the posterior standard
+deviation respectively.
+
+The final plot shows interval estimates of all the groups (units) in a dataset. Two short horizontal ticks at both ends of each black vertical line indicate 97.5\% and 2.5\% quantiles of a posterior distribution for each group (Normal for Gaussian, Beta for Binomial, and Gamma for Poisson). Red dots (posterior mean) are between black circles (sample mean) and blue line(s) (prior mean) as a result of shrinkage (regression toward the mean).
+
+If we want to see the interval plot (the second plot) NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{plot(b, sort = FALSE)} will show this plot by the order of data input.
+\end{Details}
+%
+\begin{Value}
+Two plots described in \emph{details} will be displayed.
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  data(hospital)
+
+  z <- hospital$d
+  n <- hospital$n
+  y <- hospital$y
+  se <- hospital$se
+  
+  
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
+
+    b <- gbp(z, n, model = "binomial")
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+    plot(p)
+    plot(p, sort = FALSE)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{print.gbp}{Displaying 'gbp' Class}{print.gbp}
+\keyword{methods}{print.gbp}
+%
+\begin{Description}\relax
+\code{print.gbp} enables users to see a compact group-level (unit-level) estimation result of \code{gbp} function.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'gbp'
+print(x, sort = TRUE, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 
+a resultant object of \code{gbp} function. 
+
+\item[\code{sort}] 
+\code{TRUE} or \code{FALSE} flag. If \code{TRUE}, the result will appear by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data. If \code{FALSE}, it will do by the order of data input. Default is \code{TRUE}.
+
+\item[\code{...}] 
+further arguments passed to other methods.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+As for the argument \code{x}, if the result of \code{gbp} is designated to 
+\code{b} like "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
+
+We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
+\end{Details}
+%
+\begin{Value}
+\code{print(gbp.object)} will display:
+\begin{ldescription}
+\item[\code{obs.mean}] sample mean of each group
+\item[\code{se}] if Gaussian data, standard error of each group
+\item[\code{n}] if Binomial or Poisson data, total number of trials of each group
+\item[\code{X}] a covariate vector or matrix if designated. NA if not
+\item[\code{prior.mean}] numeric if entered, NA if not entered
+\item[\code{prior.mean.hat}] estimate of prior mean by a regression if prior mean is not assigned a priori. The variable name on the display will be "prior.mean"
+\item[\code{prior.mean.AR}] the posterior mean(s) of the expected random effects, if the acceptance-rejection method is used for the binomial model. The variable name on the display will be "prior.mean".
+\item[\code{shrinkage}] shrinkage estimate of each group (adjusted posterior mean)
+\item[\code{shrinkage.AR}] the posterior mean of the shrinkage factor, if the acceptance-rejection method is used for the binomial model. The variable name on the display will be "shrinkage".
+\item[\code{low.intv}] lower bound of 100*Alpha\% posterior interval
+\item[\code{post.mean}] posterior mean of each group
+\item[\code{upp.intv}] upper bound of 100*Alpha\% posterior interval
+\item[\code{post.sd}] posterior standard deviation of each group
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  data(hospital)
+
+  z <- hospital$d
+  n <- hospital$n
+  y <- hospital$y
+  se <- hospital$se
+  
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
+
+    b <- gbp(z, n, model = "binomial")
+    b
+    print(b, sort = FALSE)
+
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+    p
+    print(p, sort = FALSE)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{print.summary.gbp}{Displaying 'summary.gbp' Class}{print.summary.gbp}
+\keyword{methods}{print.summary.gbp}
+%
+\begin{Description}\relax
+\code{summary(gbp.object)} enables users to see a compact summary of estimation result.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'summary.gbp'
+print(x, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 
+a resultant object of \code{gbp} function. 
+
+\item[\code{...}] 
+further arguments passed to other methods.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The summary has three parts depending on the model fitted by \code{gbp}; \code{Main Summary}, \\{}\code{Second-level Variance Component Estimation Summary}, and \code{Regression Summary} (if fitted).
+
+A display of \code{Main Summary} changes depending on whether all the groups (units) has the same standard error for Gaussian data (or the same total number of trials for Binomial and Poisson data). If they are not the same, 
+\code{Main Summary} lists groups (units) with minimum, median, and maximum values of the standard error for Gaussian data (or of the total number of trials for Binomial and Poisson data). And the last row of \code{Main Summary} is about the overall average for all the groups (units) within each column. Note that this last row is not an average over displayed groups (units) above.
+
+If groups (units) have the same standard error for Gaussian (or the same total number of trials for Binomial and Poisson), \code{Main Summary} lists groups (units) with minimum, median, and maximum values of the sample mean. 
+
+For reference, if there are several units with the same median value, they will show up with numbering.
+
+The second part is about the \code{Second-level Variance Component Estimation Summary}. For reference, the second level variance component can be interpreted as variation among the first-level parameters (\eqn{\theta_{j}}{}) or variance in ensemble information. It is \emph{A} for Gaussian, \eqn{\frac{\mu_{0j}}{r}}{} for Poisson, and \eqn{\frac{\mu_{0j}(1 - \mu_{0j})}{r}}{} for Binomial data. To be specific, this part shows estimate of \eqn{\alpha}{} (a posterior mode) defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{}) for Binomial and Poisson data, and its standard error. 
+
+The last part depends on whether \code{gbp} fitted a regression or not. For reference, \code{gbp} fits a regression if the second-level mean (\code{mean.PriorDist}) was not designated. In this case, \code{summary(gbp.object)} will display the result of regression fit.
+
+\end{Details}
+%
+\begin{Value}
+\code{summary(gbp.object)} shows a compact summary of estimation result such as:
+\begin{ldescription}
+\item[\code{Main summary}] 
+\begin{description}
+
+\item[Unit w/ min(se or n)] an estimation result of a group (unit) with the minimum standard error for Gaussian or the minimum total number of trials for Binomial and Poisson data.
+\item[Unit w/ min(sample.mean)] appears instead of \code{Group w/ min(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.
+\item[Unit w/ median(se or n)] an estimation result of group(s) (unit(s)) with the median standard error for Gaussian or the median total number of trials for Binomial and Poisson data.
+\item[Unit w/ median(sample.mean)] appears instead of \code{Group w/ median(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.
+\item[Unit w/ max(se or n)] an estimation result of a group (unit) with the maximum standard error for Gaussian or the maximum total number of trials for Binomial and Poisson data.
+\item[Unit w/ max(sample.mean)] appears instead of \code{Group w/ max(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.
+\item[Overall Means] the overall average for all the groups (units) within each column.
+
+\end{description}
+
+
+\item[\code{Second-level Variance Component Estimation Summary}] 
+\begin{description}
+
+\item[post.mode.alpha] a posterior mode of \eqn{\alpha}{} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{}) for Binomial and Poisson data.
+\item[post.sd.alpha] standard deviation of the posterior distribution of alpha
+\item[post.mode.r] posterior mode of either \eqn{r}{} for Bianomial and Poisson models or \eqn{A}{} for Gaussian model.
+\item[post.median.alpha] posterior median of \eqn{\alpha}{} for Bianomial model, if the acceptance-rejection method is used.
+\item[post.median.r] posterior median of \eqn{r}{} for Bianomial model, if the acceptance-rejection method is used.
+
+\end{description}
+
+
+\item[\code{Regression Summary (if fitted)}] 
+\begin{description}
+
+\item[estimate] regression coefficient estimates.
+\item[se] estimated standard error of regression coefficients.
+\item[z.val] estimate / se.
+\item[p.val] two-sided p-values.
+
+\end{description}
+
+
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  data(hospital)
+
+  z <- hospital$d
+  n <- hospital$n
+  y <- hospital$y
+  se <- hospital$se
+  
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    summary(g)
+
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
+
+    b <- gbp(z, n, model = "binomial")
+    summary(b)
+
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+    summary(p)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{Rgbp}{Gaussian, Poisson, and Binomial Hierarchical Modeling}{Rgbp}
+\aliasA{Rgbp-package}{Rgbp}{Rgbp.Rdash.package}
+\keyword{package}{Rgbp}
+%
+\begin{Description}\relax
+Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeling and frequency method checking for over-dispersed Gaussian, Binomial, and Poisson data.
+\end{Description}
+%
+\begin{Details}\relax
+
+\Tabular{ll}{
+Package: & Rgbp\\{}
+Type: & Package\\{}
+Version: & 1.0.0\\{}
+Date: & 2013-03-16\\{}
+License: & GPL-2\\{}
+Main functions: & \code{\LinkA{gbp}{gbp}}, \code{\LinkA{coverage}{coverage}}\\{}
+}
+
+\code{Rgbp} is an R package that utilizes approximate Bayesian machinery to provide a method of estimating two-level hierarchical models for Gaussian, Poisson, and Binomial data in a fast and computationally efficient manner. The main products of this package are point and interval estimates for the true parameters, whose good frequency properties can be validated via its repeated sampling procedure called frequency method checking.  It is found that such Bayesian-frequentist reconciliation allows \code{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
+\end{Details}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+
+Maintainer: Joseph Kelly <josephkelly@google.com>
+\end{Author}
+%
+\begin{References}\relax
+Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. \emph{Statistical Science}. \bold{27}. 115-134.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  # Loading datasets
+  data(schools)
+  y <- schools$y
+  se <- schools$se
+
+  # Arbitrary covariate for schools data
+  x2 <- rep(c(-1, 0, 1, 2), 2)
+  
+  # baseball data where z is Hits and n is AtBats
+  z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+  n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+
+  # One covariate: 1 if a player is an outfielder and 0 otherwise
+  x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+
+  ################################################################
+  # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+  ################################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### gcv <- coverage(g, nsim = 10)  
+    ### more details in ?coverage
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    g <- gbp(y, se, x2, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### gcv <- coverage(g, nsim = 10)  
+    ### more details in ?coverage 
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+    g
+    print(g, sort = FALSE)
+    summary(g)
+    plot(g)
+    plot(g, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### gcv <- coverage(g, nsim = 10)  
+    ### more details in ?coverage 
+
+  ###############################################################
+  # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+  ###############################################################
+
+    ####################################################################################
+    # If we do not have any covariate and do not know a mean of the prior distribution #
+    ####################################################################################
+
+    b <- gbp(z, n, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### bcv <- coverage(b, nsim = 10)  
+    ### more details in ?coverage 
+
+    ##################################################################################
+    # If we have one covariate and do not know a mean of the prior distribution yet, #
+    ##################################################################################
+
+    b <- gbp(z, n, x1, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### bcv <- coverage(b, nsim = 10)  
+    ### more details in ?coverage 
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+    b
+    print(b, sort = FALSE)
+    summary(b)
+    plot(b)
+    plot(b, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### bcv <- coverage(b, nsim = 10)  
+    ### more details in ?coverage 
+
+  ##############################################################
+  # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+  ##############################################################
+
+    ################################################
+    # If we know a mean of the prior distribution, #
+    ################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+    p
+    print(p, sort = FALSE)
+    summary(p)
+    plot(p)
+    plot(p, sort = FALSE)
+
+    ### when we want to simulate pseudo datasets considering the estimated values 
+    ### as true ones.
+    ### pcv <- coverage(p, nsim = 10)  
+    ### more details in ?coverage 
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{schools}{Eight Schools Data}{schools}
+\keyword{datasets}{schools}
+%
+\begin{Description}\relax
+Dataset as seen in Rubin (1981) which was an analysis of coaching
+effects on SAT scores from eight schools.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(schools)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A dataset of 8 schools containing
+\begin{description}
+
+\item[\code{y}] The observed coaching effect of each school
+\item[\code{se}] The standard error of the coaching effect of each school.
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+Rubin, D. B. (1981). \emph{Estimation in parallel randomized
+experiments.} Journal of Educational Statistics, 6:377-401.
+\end{Source}
+%
+\begin{Examples}
+\begin{ExampleCode}
+  data(schools)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{summary.gbp}{Summarizing Estimation Result}{summary.gbp}
+\keyword{method}{summary.gbp}
+%
+\begin{Description}\relax
+\code{summary.gbp} prepares a summary of estimation result saved in the object defined as "gbp" class creating "summary.gbp" class
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'gbp'
+summary(object, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{object}] 
+a resultant object of \code{gbp} function. 
+
+\item[\code{...}] 
+further arguments passed to other methods.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+\code{summary.gbp} prepares below contents:
+\begin{ldescription}
+\item[\code{main}] 
+a table to be displayed by \code{summary(gbp.object)}. \code{\LinkA{print.summary.gbp}{print.summary.gbp}}.
+
+\item[\code{sec.var}] 
+a vector containing an estimation result of the second-level variance component. \code{\LinkA{print.summary.gbp}{print.summary.gbp}}.
+
+\item[\code{reg}] 
+a vector composed of a summary of regression fit (if fitted). \code{\LinkA{print.summary.gbp}{print.summary.gbp}}.
+
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Hyungsuk Tak, Joseph Kelly, and Carl Morris
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+  data(hospital)
+
+  z <- hospital$d
+  n <- hospital$n
+  y <- hospital$y
+  se <- hospital$se
+  
+  ###################################################################################
+  # We do not have any covariates and do not know a mean of the prior distribution. #
+  ###################################################################################
+
+    ###############################################################
+    # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+    ###############################################################
+
+    g <- gbp(y, se, model = "gaussian")
+    summary(g)
+
+    ###############################################################
+    # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+    ###############################################################
+
+    b <- gbp(z, n, model = "binomial")
+    summary(b)
+
+    ##############################################################
+    # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+    ##############################################################
+
+    p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+    summary(p)
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

@@ -1,0 +1,2283 @@
+
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "Rgbp"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "Rgbp-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('Rgbp')
+Loading required package: sn
+Loading required package: stats4
+
+Attaching package: ‘sn’
+
+The following object is masked from ‘package:stats’:
+
+    sd
+
+Loading required package: mnormt
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("Rgbp-package")
+> ### * Rgbp-package
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: Rgbp
+> ### Title: Hierarchical Modeling and Frequency Method Checking on
+> ###   Overdispersed Gaussian, Poisson, and Binomial Data
+> ### Aliases: Rgbp-package Rgbp
+> ### Keywords: package
+> 
+> ### ** Examples
+> 
+> 
+>   # Loading datasets
+>   data(schools)
+>   y <- schools$y
+>   se <- schools$se
+> 
+>   # Arbitrary covariate for schools data
+>   x2 <- rep(c(-1, 0, 1, 2), 2)
+>   
+>   # baseball data where z is Hits and n is AtBats
+>   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+>   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+> 
+>   # One covariate: 1 if a player is an outfielder and 0 otherwise
+>   x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+> 
+>   ################################################################
+>   # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>   ################################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5           -1.00  9.0       8.17     0.408   -13.30      2.74     16.7    7.63
+2            8.00 10.0       8.17     0.459    -7.25      8.08     23.4    7.81
+7           18.00 10.0       8.17     0.459    -1.29     13.48     30.8    8.18
+4            7.00 11.0       8.17     0.507    -8.78      7.59     23.6    8.26
+6            1.00 11.0       8.17     0.507   -13.03      4.63     20.1    8.44
+1           28.00 15.0       8.17     0.657    -2.32     14.98     38.8   10.56
+3           -3.00 16.0       8.17     0.685   -17.13      4.65     22.5   10.10
+8           12.00 18.0       8.17     0.734   -10.21      9.19     29.9   10.23
+colMeans          12.5       8.17     0.552    -9.16      8.17     25.7    8.90
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           28.00 15.0       8.17     0.657    -2.32     14.98     38.8   10.56
+2            8.00 10.0       8.17     0.459    -7.25      8.08     23.4    7.81
+3           -3.00 16.0       8.17     0.685   -17.13      4.65     22.5   10.10
+4            7.00 11.0       8.17     0.507    -8.78      7.59     23.6    8.26
+5           -1.00  9.0       8.17     0.408   -13.30      2.74     16.7    7.63
+6            1.00 11.0       8.17     0.507   -13.03      4.63     20.1    8.44
+7           18.00 10.0       8.17     0.459    -1.29     13.48     30.8    8.18
+8           12.00 18.0       8.17     0.734   -10.21      9.19     29.9   10.23
+colMeans          12.5       8.17     0.552    -9.16      8.17     25.7    8.90
+>     summary(g)
+Main summary:
+
+                       obs.mean   se prior.mean shrinkage low.intv post.mean
+Group with min(se)        -1.00  9.0       8.17     0.408   -13.30      2.74
+Group with median(se)1     1.00 11.0       8.17     0.507   -13.03      4.63
+Group with median(se)2     7.00 11.0       8.17     0.507    -8.78      7.59
+Group with max(se)        12.00 18.0       8.17     0.734   -10.21      9.19
+Overall Mean                    12.5       8.17     0.552    -9.16      8.17
+                       upp.intv post.sd
+Group with min(se)         16.7    7.63
+Group with median(se)1     20.1    8.44
+Group with median(se)2     23.6    8.26
+Group with max(se)         29.9   10.23
+Overall Mean               25.7    8.90
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            4.77          1.14         118
+
+
+Estimation summary for the regression coefficient :
+
+      estimate   se z.val p.val
+beta1    8.168 5.73 1.425 0.154
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### gcv <- coverage(g, nsim = 10)  
+>     ### more details in ?coverage
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     g <- gbp(y, se, x2, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
+5           -1.00  9.0 -1.0       8.07     0.333   -15.14      2.02     17.7
+2            8.00 10.0  0.0       8.20     0.381    -8.15      8.08     24.3
+7           18.00 10.0  1.0       8.32     0.381    -1.59     14.31     32.3
+4            7.00 11.0  2.0       8.45     0.427   -11.30      7.62     26.2
+6            1.00 11.0  0.0       8.20     0.427   -14.51      4.07     20.8
+1           28.00 15.0 -1.0       8.07     0.581    -5.14     16.43     43.4
+3           -3.00 16.0  1.0       8.32     0.612   -20.05      3.93     23.9
+8           12.00 18.0  2.0       8.45     0.666   -14.83      9.64     35.2
+colMeans          12.5  0.5       8.26     0.476   -11.34      8.26     28.0
+         post.sd
+5           8.35
+2           8.27
+7           8.63
+4           9.56
+6           8.98
+1          12.39
+3          11.20
+8          12.74
+colMeans   10.02
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           28.00 15.0 -1.0       8.07     0.581    -5.14     16.43     43.4
+2            8.00 10.0  0.0       8.20     0.381    -8.15      8.08     24.3
+3           -3.00 16.0  1.0       8.32     0.612   -20.05      3.93     23.9
+4            7.00 11.0  2.0       8.45     0.427   -11.30      7.62     26.2
+5           -1.00  9.0 -1.0       8.07     0.333   -15.14      2.02     17.7
+6            1.00 11.0  0.0       8.20     0.427   -14.51      4.07     20.8
+7           18.00 10.0  1.0       8.32     0.381    -1.59     14.31     32.3
+8           12.00 18.0  2.0       8.45     0.666   -14.83      9.64     35.2
+colMeans          12.5  0.5       8.26     0.476   -11.34      8.26     28.0
+         post.sd
+1          12.39
+2           8.27
+3          11.20
+4           9.56
+5           8.35
+6           8.98
+7           8.63
+8          12.74
+colMeans   10.02
+>     summary(g)
+Main summary:
+
+                       obs.mean   se   X1 prior.mean shrinkage low.intv
+Group with min(se)        -1.00  9.0 -1.0       8.07     0.333    -15.1
+Group with median(se)1     1.00 11.0  0.0       8.20     0.427    -14.5
+Group with median(se)2     7.00 11.0  2.0       8.45     0.427    -11.3
+Group with max(se)        12.00 18.0  2.0       8.45     0.666    -14.8
+Overall Mean                    12.5  0.5       8.26     0.476    -11.3
+                       post.mean upp.intv post.sd
+Group with min(se)          2.02     17.7    8.35
+Group with median(se)1      4.07     20.8    8.98
+Group with median(se)2      7.62     26.2    9.56
+Group with max(se)          9.64     35.2   12.74
+Overall Mean                8.26     28.0   10.02
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            5.09          1.17         162
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se z.val p.val
+beta1    8.198 6.656 1.232 0.218
+beta2    0.126 5.698 0.022 0.982
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### gcv <- coverage(g, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5           -1.00  9.0          8     0.478  -11.516      3.30     15.4    6.87
+2            8.00 10.0          8     0.531   -5.426      8.00     21.4    6.85
+7           18.00 10.0          8     0.531    0.123     12.69     28.6    7.27
+4            7.00 11.0          8     0.578   -6.642      7.58     21.4    7.15
+6            1.00 11.0          8     0.578  -10.701      5.04     18.1    7.34
+1           28.00 15.0          8     0.718    0.595     13.64     34.6    8.95
+3           -3.00 16.0          8     0.743  -13.448      5.18     19.3    8.38
+8           12.00 18.0          8     0.786   -6.767      8.86     26.1    8.36
+colMeans          12.5          8     0.618   -6.723      8.04     23.1    7.65
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           28.00 15.0          8     0.718    0.595     13.64     34.6    8.95
+2            8.00 10.0          8     0.531   -5.426      8.00     21.4    6.85
+3           -3.00 16.0          8     0.743  -13.448      5.18     19.3    8.38
+4            7.00 11.0          8     0.578   -6.642      7.58     21.4    7.15
+5           -1.00  9.0          8     0.478  -11.516      3.30     15.4    6.87
+6            1.00 11.0          8     0.578  -10.701      5.04     18.1    7.34
+7           18.00 10.0          8     0.531    0.123     12.69     28.6    7.27
+8           12.00 18.0          8     0.786   -6.767      8.86     26.1    8.36
+colMeans          12.5          8     0.618   -6.723      8.04     23.1    7.65
+>     summary(g)
+Main summary:
+
+                       obs.mean   se prior.mean shrinkage low.intv post.mean
+Group with min(se)        -1.00  9.0          8     0.478   -11.52      3.30
+Group with median(se)1     1.00 11.0          8     0.578   -10.70      5.04
+Group with median(se)2     7.00 11.0          8     0.578    -6.64      7.58
+Group with max(se)        12.00 18.0          8     0.786    -6.77      8.86
+Overall Mean                    12.5          8     0.618    -6.72      8.04
+                       upp.intv post.sd
+Group with min(se)         15.4    6.87
+Group with median(se)1     18.1    7.34
+Group with median(se)2     21.4    7.15
+Group with max(se)         26.1    8.36
+Overall Mean               23.1    7.65
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            4.48          1.13        88.4
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### gcv <- coverage(g, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+>   ###############################################################
+>   # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>   ###############################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.267     0.622    0.222     0.317    0.421  0.0507
+2           0.378 45      0.267     0.622    0.218     0.309    0.408  0.0487
+3           0.356 45      0.267     0.622    0.213     0.300    0.396  0.0469
+4           0.333 45      0.267     0.622    0.207     0.292    0.385  0.0453
+5           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+6           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+7           0.289 45      0.267     0.622    0.195     0.275    0.363  0.0431
+8           0.267 45      0.267     0.622    0.188     0.267    0.354  0.0424
+9           0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+10          0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+11          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+12          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+13          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+14          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+15          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+16          0.200 45      0.267     0.622    0.163     0.242    0.330  0.0426
+17          0.178 45      0.267     0.622    0.154     0.233    0.323  0.0433
+18          0.156 45      0.267     0.622    0.144     0.225    0.318  0.0444
+colMeans          45      0.267     0.622    0.185     0.266    0.357  0.0439
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.267     0.622    0.222     0.317    0.421  0.0507
+2           0.378 45      0.267     0.622    0.218     0.309    0.408  0.0487
+3           0.356 45      0.267     0.622    0.213     0.300    0.396  0.0469
+4           0.333 45      0.267     0.622    0.207     0.292    0.385  0.0453
+5           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+6           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+7           0.289 45      0.267     0.622    0.195     0.275    0.363  0.0431
+8           0.267 45      0.267     0.622    0.188     0.267    0.354  0.0424
+9           0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+10          0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+11          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+12          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+13          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+14          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+15          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+16          0.200 45      0.267     0.622    0.163     0.242    0.330  0.0426
+17          0.178 45      0.267     0.622    0.154     0.233    0.323  0.0433
+18          0.156 45      0.267     0.622    0.144     0.225    0.318  0.0444
+colMeans          45      0.267     0.622    0.185     0.266    0.357  0.0439
+>     summary(b)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.267     0.622    0.144
+Group with median(obs.mean)1    0.244 45      0.267     0.622    0.180
+Group with median(obs.mean)2    0.244 45      0.267     0.622    0.180
+Group with max(obs.mean)        0.400 45      0.267     0.622    0.222
+Overall Mean                          45      0.267     0.622    0.185
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.225    0.318  0.0444
+Group with median(obs.mean)1     0.258    0.345  0.0421
+Group with median(obs.mean)2     0.258    0.345  0.0421
+Group with max(obs.mean)         0.317    0.421  0.0507
+Overall Mean                     0.266    0.357  0.0439
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.31          0.82        74.1
+
+
+Estimation summary for the regression coefficient :
+
+      estimate  se   z.val p.val
+beta1   -1.012 0.1 -10.153     0
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### bcv <- coverage(b, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     b <- gbp(z, n, x1, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351
+         post.sd
+1         0.0462
+2         0.0448
+3         0.0437
+4         0.0429
+5         0.0424
+6         0.0415
+7         0.0400
+8         0.0388
+9         0.0380
+10        0.0432
+11        0.0377
+12        0.0377
+13        0.0377
+14        0.0441
+15        0.0441
+16        0.0377
+17        0.0381
+18        0.0389
+colMeans  0.0410
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351
+         post.sd
+1         0.0462
+2         0.0448
+3         0.0437
+4         0.0429
+5         0.0424
+6         0.0415
+7         0.0400
+8         0.0388
+9         0.0380
+10        0.0432
+11        0.0377
+12        0.0377
+13        0.0377
+14        0.0441
+15        0.0441
+16        0.0377
+17        0.0381
+18        0.0389
+colMeans  0.0410
+>     summary(b)
+Main summary:
+
+                             obs.mean  n    X1 prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45 0.000      0.233     0.715    0.140
+Group with median(obs.mean)1    0.244 45 0.000      0.233     0.715    0.166
+Group with median(obs.mean)2    0.244 45 1.000      0.310     0.715    0.210
+Group with max(obs.mean)        0.400 45 1.000      0.310     0.715    0.248
+Overall Mean                          45 0.444      0.267     0.715    0.191
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.211    0.292  0.0389
+Group with median(obs.mean)1     0.237    0.315  0.0380
+Group with median(obs.mean)2     0.291    0.379  0.0432
+Group with max(obs.mean)         0.335    0.429  0.0462
+Overall Mean                     0.267    0.351  0.0410
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.73         0.957         113
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se  z.val p.val
+beta1   -1.194 0.131 -9.129 0.000
+beta2    0.389 0.187  2.074 0.038
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### bcv <- coverage(b, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265      0.65    0.230     0.312    0.401  0.0439
+2           0.378 45      0.265      0.65    0.224     0.304    0.391  0.0428
+3           0.356 45      0.265      0.65    0.218     0.297    0.382  0.0418
+4           0.333 45      0.265      0.65    0.212     0.289    0.372  0.0409
+5           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+6           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+7           0.289 45      0.265      0.65    0.200     0.273    0.354  0.0395
+8           0.267 45      0.265      0.65    0.193     0.266    0.345  0.0390
+9           0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+10          0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+11          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+12          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+13          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+14          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+15          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+16          0.200 45      0.265      0.65    0.172     0.242    0.321  0.0381
+17          0.178 45      0.265      0.65    0.164     0.234    0.313  0.0381
+18          0.156 45      0.265      0.65    0.156     0.227    0.306  0.0383
+colMeans          45      0.265      0.65    0.191     0.265    0.346  0.0395
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265      0.65    0.230     0.312    0.401  0.0439
+2           0.378 45      0.265      0.65    0.224     0.304    0.391  0.0428
+3           0.356 45      0.265      0.65    0.218     0.297    0.382  0.0418
+4           0.333 45      0.265      0.65    0.212     0.289    0.372  0.0409
+5           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+6           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+7           0.289 45      0.265      0.65    0.200     0.273    0.354  0.0395
+8           0.267 45      0.265      0.65    0.193     0.266    0.345  0.0390
+9           0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+10          0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+11          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+12          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+13          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+14          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+15          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+16          0.200 45      0.265      0.65    0.172     0.242    0.321  0.0381
+17          0.178 45      0.265      0.65    0.164     0.234    0.313  0.0381
+18          0.156 45      0.265      0.65    0.156     0.227    0.306  0.0383
+colMeans          45      0.265      0.65    0.191     0.265    0.346  0.0395
+>     summary(b)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.265      0.65    0.156
+Group with median(obs.mean)1    0.244 45      0.265      0.65    0.186
+Group with median(obs.mean)2    0.244 45      0.265      0.65    0.186
+Group with max(obs.mean)        0.400 45      0.265      0.65    0.230
+Overall Mean                          45      0.265      0.65    0.191
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.227    0.306  0.0383
+Group with median(obs.mean)1     0.258    0.337  0.0386
+Group with median(obs.mean)2     0.258    0.337  0.0386
+Group with max(obs.mean)         0.312    0.401  0.0439
+Overall Mean                     0.265    0.346  0.0395
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.42         0.837        83.5
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### bcv <- coverage(b, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+>   ##############################################################
+>   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>   ##############################################################
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+>     p
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265     0.741    0.213     0.300    0.402  0.0483
+2           0.378 45      0.265     0.741    0.211     0.294    0.391  0.0461
+3           0.356 45      0.265     0.741    0.208     0.288    0.381  0.0442
+4           0.333 45      0.265     0.741    0.206     0.283    0.372  0.0424
+5           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+6           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+7           0.289 45      0.265     0.741    0.199     0.271    0.355  0.0399
+8           0.267 45      0.265     0.741    0.194     0.265    0.347  0.0391
+9           0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+10          0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+11          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+12          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+13          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+14          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+15          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+16          0.200 45      0.265     0.741    0.178     0.248    0.330  0.0388
+17          0.178 45      0.265     0.741    0.171     0.242    0.326  0.0394
+18          0.156 45      0.265     0.741    0.164     0.237    0.322  0.0404
+colMeans          45      0.265     0.741    0.192     0.265    0.350  0.0406
+>     print(p, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265     0.741    0.213     0.300    0.402  0.0483
+2           0.378 45      0.265     0.741    0.211     0.294    0.391  0.0461
+3           0.356 45      0.265     0.741    0.208     0.288    0.381  0.0442
+4           0.333 45      0.265     0.741    0.206     0.283    0.372  0.0424
+5           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+6           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+7           0.289 45      0.265     0.741    0.199     0.271    0.355  0.0399
+8           0.267 45      0.265     0.741    0.194     0.265    0.347  0.0391
+9           0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+10          0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+11          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+12          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+13          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+14          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+15          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+16          0.200 45      0.265     0.741    0.178     0.248    0.330  0.0388
+17          0.178 45      0.265     0.741    0.171     0.242    0.326  0.0394
+18          0.156 45      0.265     0.741    0.164     0.237    0.322  0.0404
+colMeans          45      0.265     0.741    0.192     0.265    0.350  0.0406
+>     summary(p)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.265     0.741    0.164
+Group with median(obs.mean)1    0.244 45      0.265     0.741    0.190
+Group with median(obs.mean)2    0.244 45      0.265     0.741    0.190
+Group with max(obs.mean)        0.400 45      0.265     0.741    0.213
+Overall Mean                          45      0.265     0.741    0.192
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.237    0.322  0.0404
+Group with median(obs.mean)1     0.260    0.341  0.0386
+Group with median(obs.mean)2     0.260    0.341  0.0386
+Group with max(obs.mean)         0.300    0.402  0.0483
+Overall Mean                     0.265    0.350  0.0406
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.86         0.955         129
+>     plot(p)
+>     plot(p, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     ### pcv <- coverage(p, nsim = 10)  
+>     ### more details in ?coverage 
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("Rgbp-package", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("baseball")
+> ### * baseball
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: baseball
+> ### Title: Baseball Data
+> ### Aliases: baseball
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+>   data(baseball)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("baseball", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("coverage")
+> ### * coverage
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: coverage
+> ### Title: Estimating Coverage Probability
+> ### Aliases: coverage
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   # Loading datasets
+>   data(schools)
+>   y <- schools$y
+>   se <- schools$se
+> 
+>   # Arbitrary covariate for schools data
+>   x2 <- rep(c(-1, 0, 1, 2), 2)
+> 
+>   # baseball data where z is Hits and n is AtBats
+>   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+>   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+> 
+>   # One covariate: 1 if a player is an outfielder and 0 otherwise
+>   x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+>   
+>   #################################################################
+>   # Gaussian Regression Interactive Multi-level Modeling (GRIMM) #
+>   #################################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+> 
+>     ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+>     ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+> 
+>     ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 150, nsim = 100)
+>     ### gcv <- coverage(g, reg.coef = 10, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 150, mean.PriorDist = 3, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 150, reg.coef = 10, nsim = 100)
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     g <- gbp(y, se, x2, model = "gaussian")
+>  
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+>  
+>     ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+>     ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+> 
+>     ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 200, nsim = 100)
+>     ### gcv <- coverage(g, reg.coef = c(10, 2), nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 200, mean.PriorDist = 3, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 200, reg.coef = c(10, 2), nsim = 100)
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+> 
+>     ### gcv$coverageRB, gcv$coverageS, gcv$average.coverageRB, gcv$average.coverageS,
+>     ### gcv$minimum.coverageRB, gcv$raw.resultRB, gcv$raw.resultS
+> 
+>     ### gcv <- coverage(g, mean.PriorDist = 3, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 150, nsim = 100)
+>     ### gcv <- coverage(g, A.or.r = 150, mean.PriorDist = 3, nsim = 100)
+> 
+>   ################################################################
+>   # Binomial Regression Interactive Multi-level Modeling (BRIMM) #
+>   ################################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+>     ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+> 
+>     ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+>     ### bcv <- coverage(b, reg.coef = -1.5, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 50, mean.PriorDist = 0.2, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 50, reg.coef = -1.5, nsim = 100)
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     b <- gbp(z, n, x1, model = "binomial")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+>     ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+> 
+>     ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+>     ### bcv <- coverage(b, reg.coef = c(-1.5, 0), nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 40, mean.PriorDist = 0.2, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 40, reg.coef = c(-1.5, 0), nsim = 100)
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverageS, bcv$average.coverageRB, bcv$average.coverageS,
+>     ### bcv$minimum.coverageRB, bcv$raw.resultRB, bcv$raw.resultS
+> 
+>     ### bcv <- coverage(b, mean.PriorDist = 0.2, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 50, nsim = 100)
+>     ### bcv <- coverage(b, A.or.r = 40, mean.PriorDist = 0.2, nsim = 100)
+> 
+>   ###############################################################
+>   # Poisson Regression Interactive Multi-level Modeling (PRIMM) #
+>   ###############################################################
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     pcv <- coverage(p, nsim = 10)  
+> 
+>     ### pcv$coverageRB, pcv$coverageS, pcv$average.coverageRB, pcv$average.coverageS,
+>     ### pcv$minimum.coverageRB, pcv$raw.resultRB, pcv$raw.resultS
+> 
+>     ### pcv <- coverage(p, mean.PriorDist = 0.265, nsim = 100)
+>     ### pcv <- coverage(p, A.or.r = 150, nsim = 100)
+>     ### pcv <- coverage(p, A.or.r = 150, mean.PriorDist = 0.265, nsim = 100)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("coverage", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("coverage.plot")
+> ### * coverage.plot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: coverage.plot
+> ### Title: Drawing the coverage plot
+> ### Aliases: coverage.plot
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   # baseball data where z is Hits and n is AtBats
+>   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+>   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+> 
+>   b <- gbp(z, n, model = "binomial")
+>   cov <- coverage(b, nsim = 10)  
+>   coverage.plot(cov)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("coverage.plot", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("gbp")
+> ### * gbp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: gbp
+> ### Title: Fitting Gaussian, Poisson, and Binomial Hierarchical Models
+> ### Aliases: gbp
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   # Loading datasets
+>   data(schools)
+>   y <- schools$y
+>   se <- schools$se
+> 
+>   # Arbitrary covariate for schools data
+>   x2 <- rep(c(-1, 0, 1, 2), 2)
+>   
+>   # baseball data where z is Hits and n is AtBats
+>   z <- c(18, 17, 16, 15, 14, 14, 13, 12, 11, 11, 10, 10, 10, 10, 10,  9,  8,  7)
+>   n <- c(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)
+> 
+>   # One covariate: 1 if a player is an outfielder and 0 otherwise
+>   x1 <- c(1,  1,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0)
+> 
+>   ################################################################
+>   # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>   ################################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5           -1.00  9.0       8.17     0.408   -13.30      2.74     16.7    7.63
+2            8.00 10.0       8.17     0.459    -7.25      8.08     23.4    7.81
+7           18.00 10.0       8.17     0.459    -1.29     13.48     30.8    8.18
+4            7.00 11.0       8.17     0.507    -8.78      7.59     23.6    8.26
+6            1.00 11.0       8.17     0.507   -13.03      4.63     20.1    8.44
+1           28.00 15.0       8.17     0.657    -2.32     14.98     38.8   10.56
+3           -3.00 16.0       8.17     0.685   -17.13      4.65     22.5   10.10
+8           12.00 18.0       8.17     0.734   -10.21      9.19     29.9   10.23
+colMeans          12.5       8.17     0.552    -9.16      8.17     25.7    8.90
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           28.00 15.0       8.17     0.657    -2.32     14.98     38.8   10.56
+2            8.00 10.0       8.17     0.459    -7.25      8.08     23.4    7.81
+3           -3.00 16.0       8.17     0.685   -17.13      4.65     22.5   10.10
+4            7.00 11.0       8.17     0.507    -8.78      7.59     23.6    8.26
+5           -1.00  9.0       8.17     0.408   -13.30      2.74     16.7    7.63
+6            1.00 11.0       8.17     0.507   -13.03      4.63     20.1    8.44
+7           18.00 10.0       8.17     0.459    -1.29     13.48     30.8    8.18
+8           12.00 18.0       8.17     0.734   -10.21      9.19     29.9   10.23
+colMeans          12.5       8.17     0.552    -9.16      8.17     25.7    8.90
+>     summary(g)
+Main summary:
+
+                       obs.mean   se prior.mean shrinkage low.intv post.mean
+Group with min(se)        -1.00  9.0       8.17     0.408   -13.30      2.74
+Group with median(se)1     1.00 11.0       8.17     0.507   -13.03      4.63
+Group with median(se)2     7.00 11.0       8.17     0.507    -8.78      7.59
+Group with max(se)        12.00 18.0       8.17     0.734   -10.21      9.19
+Overall Mean                    12.5       8.17     0.552    -9.16      8.17
+                       upp.intv post.sd
+Group with min(se)         16.7    7.63
+Group with median(se)1     20.1    8.44
+Group with median(se)2     23.6    8.26
+Group with max(se)         29.9   10.23
+Overall Mean               25.7    8.90
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            4.77          1.14         118
+
+
+Estimation summary for the regression coefficient :
+
+      estimate   se z.val p.val
+beta1    8.168 5.73 1.425 0.154
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+> 
+>     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+>     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and a regression coefficient (intercept), 
+>     ### not using estimated values as true ones.
+>     gcv <- coverage(g, A.or.r = 9, reg.coef = 10, nsim = 10)  
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     g <- gbp(y, se, x2, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
+5           -1.00  9.0 -1.0       8.07     0.333   -15.14      2.02     17.7
+2            8.00 10.0  0.0       8.20     0.381    -8.15      8.08     24.3
+7           18.00 10.0  1.0       8.32     0.381    -1.59     14.31     32.3
+4            7.00 11.0  2.0       8.45     0.427   -11.30      7.62     26.2
+6            1.00 11.0  0.0       8.20     0.427   -14.51      4.07     20.8
+1           28.00 15.0 -1.0       8.07     0.581    -5.14     16.43     43.4
+3           -3.00 16.0  1.0       8.32     0.612   -20.05      3.93     23.9
+8           12.00 18.0  2.0       8.45     0.666   -14.83      9.64     35.2
+colMeans          12.5  0.5       8.26     0.476   -11.34      8.26     28.0
+         post.sd
+5           8.35
+2           8.27
+7           8.63
+4           9.56
+6           8.98
+1          12.39
+3          11.20
+8          12.74
+colMeans   10.02
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           28.00 15.0 -1.0       8.07     0.581    -5.14     16.43     43.4
+2            8.00 10.0  0.0       8.20     0.381    -8.15      8.08     24.3
+3           -3.00 16.0  1.0       8.32     0.612   -20.05      3.93     23.9
+4            7.00 11.0  2.0       8.45     0.427   -11.30      7.62     26.2
+5           -1.00  9.0 -1.0       8.07     0.333   -15.14      2.02     17.7
+6            1.00 11.0  0.0       8.20     0.427   -14.51      4.07     20.8
+7           18.00 10.0  1.0       8.32     0.381    -1.59     14.31     32.3
+8           12.00 18.0  2.0       8.45     0.666   -14.83      9.64     35.2
+colMeans          12.5  0.5       8.26     0.476   -11.34      8.26     28.0
+         post.sd
+1          12.39
+2           8.27
+3          11.20
+4           9.56
+5           8.35
+6           8.98
+7           8.63
+8          12.74
+colMeans   10.02
+>     summary(g)
+Main summary:
+
+                       obs.mean   se   X1 prior.mean shrinkage low.intv
+Group with min(se)        -1.00  9.0 -1.0       8.07     0.333    -15.1
+Group with median(se)1     1.00 11.0  0.0       8.20     0.427    -14.5
+Group with median(se)2     7.00 11.0  2.0       8.45     0.427    -11.3
+Group with max(se)        12.00 18.0  2.0       8.45     0.666    -14.8
+Overall Mean                    12.5  0.5       8.26     0.476    -11.3
+                       post.mean upp.intv post.sd
+Group with min(se)          2.02     17.7    8.35
+Group with median(se)1      4.07     20.8    8.98
+Group with median(se)2      7.62     26.2    9.56
+Group with max(se)          9.64     35.2   12.74
+Overall Mean                8.26     28.0   10.02
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            5.09          1.17         162
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se z.val p.val
+beta1    8.198 6.656 1.232 0.218
+beta2    0.126 5.698 0.022 0.982
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+>  
+>     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+>     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of A
+>     ### and regression coefficients, not using estimated values 
+>     ### as true ones. Two values of reg.coef are for beta0 and beta1
+>     gcv <- coverage(g, A.or.r = 9, reg.coef = c(10, 1), nsim = 10)  
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     g <- gbp(y, se, mean.PriorDist = 8, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5           -1.00  9.0          8     0.478  -11.516      3.30     15.4    6.87
+2            8.00 10.0          8     0.531   -5.426      8.00     21.4    6.85
+7           18.00 10.0          8     0.531    0.123     12.69     28.6    7.27
+4            7.00 11.0          8     0.578   -6.642      7.58     21.4    7.15
+6            1.00 11.0          8     0.578  -10.701      5.04     18.1    7.34
+1           28.00 15.0          8     0.718    0.595     13.64     34.6    8.95
+3           -3.00 16.0          8     0.743  -13.448      5.18     19.3    8.38
+8           12.00 18.0          8     0.786   -6.767      8.86     26.1    8.36
+colMeans          12.5          8     0.618   -6.723      8.04     23.1    7.65
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           28.00 15.0          8     0.718    0.595     13.64     34.6    8.95
+2            8.00 10.0          8     0.531   -5.426      8.00     21.4    6.85
+3           -3.00 16.0          8     0.743  -13.448      5.18     19.3    8.38
+4            7.00 11.0          8     0.578   -6.642      7.58     21.4    7.15
+5           -1.00  9.0          8     0.478  -11.516      3.30     15.4    6.87
+6            1.00 11.0          8     0.578  -10.701      5.04     18.1    7.34
+7           18.00 10.0          8     0.531    0.123     12.69     28.6    7.27
+8           12.00 18.0          8     0.786   -6.767      8.86     26.1    8.36
+colMeans          12.5          8     0.618   -6.723      8.04     23.1    7.65
+>     summary(g)
+Main summary:
+
+                       obs.mean   se prior.mean shrinkage low.intv post.mean
+Group with min(se)        -1.00  9.0          8     0.478   -11.52      3.30
+Group with median(se)1     1.00 11.0          8     0.578   -10.70      5.04
+Group with median(se)2     7.00 11.0          8     0.578    -6.64      7.58
+Group with max(se)        12.00 18.0          8     0.786    -6.77      8.86
+Overall Mean                    12.5          8     0.618    -6.72      8.04
+                       upp.intv post.sd
+Group with min(se)         15.4    6.87
+Group with median(se)1     18.1    7.34
+Group with median(se)2     21.4    7.15
+Group with max(se)         26.1    8.36
+Overall Mean               23.1    7.65
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+            4.48          1.13        88.4
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     gcv <- coverage(g, nsim = 10)  
+> 
+>     ### gcv$coverageRB, gcv$coverage10, gcv$average.coverageRB, gcv$average.coverage10,
+>     ### gcv$minimum.coverageRB, gcv$minimum.coverage10, gcv$raw.resultRB, gcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of A and
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
+>     coverage(g, A.or.r = 9, mean.PriorDist = 5, nsim = 10)  
+$coverageRB
+[1] 1.000 0.998 0.999 0.998 0.997 0.923 0.998 0.999
+
+$coverageS
+[1] 1.0 0.9 1.0 1.0 1.0 1.0 1.0 1.0
+
+$average.coverageRB
+[1] 0.989
+
+$average.coverageS
+[1] 0.988
+
+$se.coverageRB
+[1] 0.0000 0.0013 0.0011 0.0012 0.0017 0.0753 0.0015 0.0007
+
+$se.coverageS
+[1] 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0
+
+$raw.resultRB
+          [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
+[1,] 0.9999263 0.9999784 0.9999992 0.9998798 0.9997049 0.9998918 1.0000000
+[2,] 0.9999999 0.9999938 0.9999723 0.9983170 0.9999999 0.9892392 0.9999994
+[3,] 1.0000000 0.9999998 0.9889193 0.9999879 0.9967635 0.9999860 0.9999999
+[4,] 0.9999999 0.9999994 0.9999996 0.9991515 0.9999993 0.9991418 0.9998190
+[5,] 0.9995894 0.9887787 0.9853800 0.9999480 0.9999589 0.9999947 0.9999941
+[6,] 0.9924135 0.9977277 0.9999992 0.9988575 0.9999505 0.9998792 0.2459135
+[7,] 0.9993767 0.9999213 0.9999991 0.9999908 0.9999988 0.9999204 0.9999901
+[8,] 0.9984157 0.9999999 0.9999945 0.9999993 0.9960455 1.0000000 0.9974160
+          [,8]      [,9]     [,10]
+[1,] 1.0000000 0.9999978 0.9999990
+[2,] 0.9913679 0.9986467 0.9999989
+[3,] 0.9999987 0.9999097 0.9999999
+[4,] 0.9993726 0.9874191 0.9999984
+[5,] 0.9999875 0.9999927 0.9985488
+[6,] 0.9995729 0.9999992 0.9999289
+[7,] 0.9998942 0.9845657 0.9999861
+[8,] 1.0000000 1.0000000 0.9934484
+
+$raw.resultS
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    1    1    1    1    1    1    1    1    1     1
+[2,]    1    1    1    1    1    0    1    1    1     1
+[3,]    1    1    1    1    1    1    1    1    1     1
+[4,]    1    1    1    1    1    1    1    1    1     1
+[5,]    1    1    1    1    1    1    1    1    1     1
+[6,]    1    1    1    1    1    1    1    1    1     1
+[7,]    1    1    1    1    1    1    1    1    1     1
+[8,]    1    1    1    1    1    1    1    1    1     1
+
+$Alpha
+[1] 0.95
+
+$effective.n
+[1] 10
+
+$model
+[1] "gr"
+
+$case
+[1] 5
+
+$betas
+[1] NA
+
+$A.r
+[1] 9
+
+$priormeanused
+[1] 5
+
+> 
+>   ###############################################################
+>   # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>   ###############################################################
+> 
+>     ####################################################################################
+>     # If we do not have any covariate and do not know a mean of the prior distribution #
+>     ####################################################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.267     0.622    0.222     0.317    0.421  0.0507
+2           0.378 45      0.267     0.622    0.218     0.309    0.408  0.0487
+3           0.356 45      0.267     0.622    0.213     0.300    0.396  0.0469
+4           0.333 45      0.267     0.622    0.207     0.292    0.385  0.0453
+5           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+6           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+7           0.289 45      0.267     0.622    0.195     0.275    0.363  0.0431
+8           0.267 45      0.267     0.622    0.188     0.267    0.354  0.0424
+9           0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+10          0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+11          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+12          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+13          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+14          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+15          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+16          0.200 45      0.267     0.622    0.163     0.242    0.330  0.0426
+17          0.178 45      0.267     0.622    0.154     0.233    0.323  0.0433
+18          0.156 45      0.267     0.622    0.144     0.225    0.318  0.0444
+colMeans          45      0.267     0.622    0.185     0.266    0.357  0.0439
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.267     0.622    0.222     0.317    0.421  0.0507
+2           0.378 45      0.267     0.622    0.218     0.309    0.408  0.0487
+3           0.356 45      0.267     0.622    0.213     0.300    0.396  0.0469
+4           0.333 45      0.267     0.622    0.207     0.292    0.385  0.0453
+5           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+6           0.311 45      0.267     0.622    0.202     0.284    0.374  0.0440
+7           0.289 45      0.267     0.622    0.195     0.275    0.363  0.0431
+8           0.267 45      0.267     0.622    0.188     0.267    0.354  0.0424
+9           0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+10          0.244 45      0.267     0.622    0.180     0.258    0.345  0.0421
+11          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+12          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+13          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+14          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+15          0.222 45      0.267     0.622    0.172     0.250    0.337  0.0422
+16          0.200 45      0.267     0.622    0.163     0.242    0.330  0.0426
+17          0.178 45      0.267     0.622    0.154     0.233    0.323  0.0433
+18          0.156 45      0.267     0.622    0.144     0.225    0.318  0.0444
+colMeans          45      0.267     0.622    0.185     0.266    0.357  0.0439
+>     summary(b)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.267     0.622    0.144
+Group with median(obs.mean)1    0.244 45      0.267     0.622    0.180
+Group with median(obs.mean)2    0.244 45      0.267     0.622    0.180
+Group with max(obs.mean)        0.400 45      0.267     0.622    0.222
+Overall Mean                          45      0.267     0.622    0.185
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.225    0.318  0.0444
+Group with median(obs.mean)1     0.258    0.345  0.0421
+Group with median(obs.mean)2     0.258    0.345  0.0421
+Group with max(obs.mean)         0.317    0.421  0.0507
+Overall Mean                     0.266    0.357  0.0439
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.31          0.82        74.1
+
+
+Estimation summary for the regression coefficient :
+
+      estimate  se   z.val p.val
+beta1   -1.012 0.1 -10.153     0
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+>     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and a regression coefficient (intercept), 
+>     ### not using estimated values as true ones.
+>     bcv <- coverage(b, A.or.r = 60, reg.coef = -1, nsim = 10)  
+> 
+>     ##################################################################################
+>     # If we have one covariate and do not know a mean of the prior distribution yet, #
+>     ##################################################################################
+> 
+>     b <- gbp(z, n, x1, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351
+         post.sd
+1         0.0462
+2         0.0448
+3         0.0437
+4         0.0429
+5         0.0424
+6         0.0415
+7         0.0400
+8         0.0388
+9         0.0380
+10        0.0432
+11        0.0377
+12        0.0377
+13        0.0377
+14        0.0441
+15        0.0441
+16        0.0377
+17        0.0381
+18        0.0389
+colMeans  0.0410
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv
+1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429
+2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420
+3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411
+4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403
+5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396
+6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341
+7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331
+8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323
+9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315
+10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379
+11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308
+14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375
+16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302
+17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297
+18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292
+colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351
+         post.sd
+1         0.0462
+2         0.0448
+3         0.0437
+4         0.0429
+5         0.0424
+6         0.0415
+7         0.0400
+8         0.0388
+9         0.0380
+10        0.0432
+11        0.0377
+12        0.0377
+13        0.0377
+14        0.0441
+15        0.0441
+16        0.0377
+17        0.0381
+18        0.0389
+colMeans  0.0410
+>     summary(b)
+Main summary:
+
+                             obs.mean  n    X1 prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45 0.000      0.233     0.715    0.140
+Group with median(obs.mean)1    0.244 45 0.000      0.233     0.715    0.166
+Group with median(obs.mean)2    0.244 45 1.000      0.310     0.715    0.210
+Group with max(obs.mean)        0.400 45 1.000      0.310     0.715    0.248
+Overall Mean                          45 0.444      0.267     0.715    0.191
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.211    0.292  0.0389
+Group with median(obs.mean)1     0.237    0.315  0.0380
+Group with median(obs.mean)2     0.291    0.379  0.0432
+Group with max(obs.mean)         0.335    0.429  0.0462
+Overall Mean                     0.267    0.351  0.0410
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.73         0.957         113
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se  z.val p.val
+beta1   -1.194 0.131 -9.129 0.000
+beta2    0.389 0.187  2.074 0.038
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+>     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of r
+>     ### and regression coefficients, not using estimated values 
+>     ### as true ones. Two values of reg.coef are for beta0 and beta1
+>     bcv <- coverage(b, A.or.r = 60, reg.coef = c(-1, 0), nsim = 10)  
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     b <- gbp(z, n, mean.PriorDist = 0.265, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265      0.65    0.230     0.312    0.401  0.0439
+2           0.378 45      0.265      0.65    0.224     0.304    0.391  0.0428
+3           0.356 45      0.265      0.65    0.218     0.297    0.382  0.0418
+4           0.333 45      0.265      0.65    0.212     0.289    0.372  0.0409
+5           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+6           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+7           0.289 45      0.265      0.65    0.200     0.273    0.354  0.0395
+8           0.267 45      0.265      0.65    0.193     0.266    0.345  0.0390
+9           0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+10          0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+11          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+12          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+13          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+14          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+15          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+16          0.200 45      0.265      0.65    0.172     0.242    0.321  0.0381
+17          0.178 45      0.265      0.65    0.164     0.234    0.313  0.0381
+18          0.156 45      0.265      0.65    0.156     0.227    0.306  0.0383
+colMeans          45      0.265      0.65    0.191     0.265    0.346  0.0395
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265      0.65    0.230     0.312    0.401  0.0439
+2           0.378 45      0.265      0.65    0.224     0.304    0.391  0.0428
+3           0.356 45      0.265      0.65    0.218     0.297    0.382  0.0418
+4           0.333 45      0.265      0.65    0.212     0.289    0.372  0.0409
+5           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+6           0.311 45      0.265      0.65    0.206     0.281    0.363  0.0401
+7           0.289 45      0.265      0.65    0.200     0.273    0.354  0.0395
+8           0.267 45      0.265      0.65    0.193     0.266    0.345  0.0390
+9           0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+10          0.244 45      0.265      0.65    0.186     0.258    0.337  0.0386
+11          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+12          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+13          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+14          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+15          0.222 45      0.265      0.65    0.179     0.250    0.329  0.0383
+16          0.200 45      0.265      0.65    0.172     0.242    0.321  0.0381
+17          0.178 45      0.265      0.65    0.164     0.234    0.313  0.0381
+18          0.156 45      0.265      0.65    0.156     0.227    0.306  0.0383
+colMeans          45      0.265      0.65    0.191     0.265    0.346  0.0395
+>     summary(b)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.265      0.65    0.156
+Group with median(obs.mean)1    0.244 45      0.265      0.65    0.186
+Group with median(obs.mean)2    0.244 45      0.265      0.65    0.186
+Group with max(obs.mean)        0.400 45      0.265      0.65    0.230
+Overall Mean                          45      0.265      0.65    0.191
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.227    0.306  0.0383
+Group with median(obs.mean)1     0.258    0.337  0.0386
+Group with median(obs.mean)2     0.258    0.337  0.0386
+Group with max(obs.mean)         0.312    0.401  0.0439
+Overall Mean                     0.265    0.346  0.0395
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.42         0.837        83.5
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     bcv <- coverage(b, nsim = 10)  
+> 
+>     ### bcv$coverageRB, bcv$coverage10, bcv$average.coverageRB, bcv$average.coverage10,
+>     ### bcv$minimum.coverageRB, bcv$minimum.coverage10, bcv$raw.resultRB, bcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of r and
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
+>     bcv <- coverage(b, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+> 
+>   ##############################################################
+>   # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>   ##############################################################
+> 
+>     ################################################
+>     # If we know a mean of the prior distribution, #
+>     ################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.265, model = "poisson")
+>     p
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265     0.741    0.213     0.300    0.402  0.0483
+2           0.378 45      0.265     0.741    0.211     0.294    0.391  0.0461
+3           0.356 45      0.265     0.741    0.208     0.288    0.381  0.0442
+4           0.333 45      0.265     0.741    0.206     0.283    0.372  0.0424
+5           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+6           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+7           0.289 45      0.265     0.741    0.199     0.271    0.355  0.0399
+8           0.267 45      0.265     0.741    0.194     0.265    0.347  0.0391
+9           0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+10          0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+11          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+12          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+13          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+14          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+15          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+16          0.200 45      0.265     0.741    0.178     0.248    0.330  0.0388
+17          0.178 45      0.265     0.741    0.171     0.242    0.326  0.0394
+18          0.156 45      0.265     0.741    0.164     0.237    0.322  0.0404
+colMeans          45      0.265     0.741    0.192     0.265    0.350  0.0406
+>     print(p, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           0.400 45      0.265     0.741    0.213     0.300    0.402  0.0483
+2           0.378 45      0.265     0.741    0.211     0.294    0.391  0.0461
+3           0.356 45      0.265     0.741    0.208     0.288    0.381  0.0442
+4           0.333 45      0.265     0.741    0.206     0.283    0.372  0.0424
+5           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+6           0.311 45      0.265     0.741    0.202     0.277    0.363  0.0410
+7           0.289 45      0.265     0.741    0.199     0.271    0.355  0.0399
+8           0.267 45      0.265     0.741    0.194     0.265    0.347  0.0391
+9           0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+10          0.244 45      0.265     0.741    0.190     0.260    0.341  0.0386
+11          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+12          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+13          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+14          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+15          0.222 45      0.265     0.741    0.184     0.254    0.335  0.0385
+16          0.200 45      0.265     0.741    0.178     0.248    0.330  0.0388
+17          0.178 45      0.265     0.741    0.171     0.242    0.326  0.0394
+18          0.156 45      0.265     0.741    0.164     0.237    0.322  0.0404
+colMeans          45      0.265     0.741    0.192     0.265    0.350  0.0406
+>     summary(p)
+Main summary:
+
+                             obs.mean  n prior.mean shrinkage low.intv
+Group with min(obs.mean)        0.156 45      0.265     0.741    0.164
+Group with median(obs.mean)1    0.244 45      0.265     0.741    0.190
+Group with median(obs.mean)2    0.244 45      0.265     0.741    0.190
+Group with max(obs.mean)        0.400 45      0.265     0.741    0.213
+Overall Mean                          45      0.265     0.741    0.192
+                             post.mean upp.intv post.sd
+Group with min(obs.mean)         0.237    0.322  0.0404
+Group with median(obs.mean)1     0.260    0.341  0.0386
+Group with median(obs.mean)2     0.260    0.341  0.0386
+Group with max(obs.mean)         0.300    0.402  0.0483
+Overall Mean                     0.265    0.350  0.0406
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -4.86         0.955         129
+>     plot(p)
+>     plot(p, sort = FALSE)
+> 
+>     ### when we want to simulate pseudo datasets considering the estimated values 
+>     ### as true ones.
+>     pcv <- coverage(p, nsim = 10)  
+> 
+>     ### pcv$coverageRB, pcv$coverage10, pcv$average.coverageRB, pcv$average.coverage10,
+>     ### pcv$minimum.coverageRB, pcv$minimum.coverage10, pcv$raw.resultRB, pcv$raw.result10.
+> 
+>     ### when we want to simulate pseudo datasets based on different values of r and
+>     ### 2nd level mean as true ones, not using estimated values as true ones.
+>     pcv <- coverage(p, A.or.r = 60, mean.PriorDist = 0.3, nsim = 10)  
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("gbp", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("hospital")
+> ### * hospital
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: hospital
+> ### Title: Thirty-one Hospital Data
+> ### Aliases: hospital
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+>   data(hospital)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("hospital", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("plot.gbp")
+> ### * plot.gbp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: plot.gbp
+> ### Title: Drawing Shrinkage and Posterior Interval Plots
+> ### Aliases: plot.gbp
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   data(hospital)
+> 
+>   z <- hospital$d
+>   n <- hospital$n
+>   y <- hospital$y
+>   se <- hospital$se
+>   
+>   
+>   ###################################################################################
+>   # We do not have any covariates and do not know a mean of the prior distribution. #
+>   ###################################################################################
+> 
+>     ###############################################################
+>     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>     ###############################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     plot(g)
+>     plot(g, sort = FALSE)
+> 
+>     ###############################################################
+>     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>     ###############################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     plot(b)
+>     plot(b, sort = FALSE)
+> 
+>     ##############################################################
+>     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>     ##############################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+>     plot(p)
+>     plot(p, sort = FALSE)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plot.gbp", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("print.gbp")
+> ### * print.gbp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: print.gbp
+> ### Title: Displaying 'gbp' Class
+> ### Aliases: print.gbp
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   data(hospital)
+> 
+>   z <- hospital$d
+>   n <- hospital$n
+>   y <- hospital$y
+>   se <- hospital$se
+>   
+>   ###################################################################################
+>   # We do not have any covariates and do not know a mean of the prior distribution. #
+>   ###################################################################################
+> 
+>     ###############################################################
+>     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>     ###############################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     g
+Summary for each group (sorted by the ascending order of se): 
+
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+31           1.14 0.6     0.0184     0.352   -0.254   0.74563   1.8226   0.529
+30          -0.21 0.7     0.0184     0.381   -1.169  -0.12306   0.9034   0.529
+29           0.96 0.7     0.0184     0.436   -0.548   0.54962   1.7388   0.582
+28           0.07 0.8     0.0184     0.442   -1.068   0.04718   1.1678   0.570
+27          -0.38 0.8     0.0184     0.462   -1.367  -0.19598   0.9318   0.586
+26          -2.42 0.8     0.0184     0.499   -2.700  -1.20357   0.0732   0.706
+25           1.10 0.9     0.0184     0.533   -0.684   0.52319   1.8622   0.648
+24           0.57 0.9     0.0184     0.539   -0.942   0.27281   1.5578   0.637
+22           0.61 0.9     0.0184     0.550   -0.941   0.28488   1.5873   0.644
+23           2.05 0.9     0.0184     0.550   -0.336   0.93347   2.4303   0.704
+21          -0.08 1.0     0.0184     0.565   -1.301  -0.02437   1.2392   0.648
+20           1.11 1.0     0.0184     0.575   -0.768   0.48195   1.8740   0.673
+19           0.01 1.0     0.0184     0.590   -1.284   0.01497   1.3128   0.662
+17          -0.34 1.0     0.0184     0.595   -1.460  -0.12682   1.1574   0.667
+18           0.86 1.0     0.0184     0.595   -0.911   0.35945   1.7437   0.676
+16          -2.15 1.0     0.0184     0.599   -2.426  -0.85010   0.4629   0.736
+15           0.08 1.0     0.0184     0.604   -1.268   0.04280   1.3618   0.671
+14           0.41 1.1     0.0184     0.622   -1.146   0.16644   1.5340   0.683
+13           0.00 1.1     0.0184     0.631   -1.334   0.01162   1.3548   0.686
+12           1.56 1.1     0.0184     0.647   -0.759   0.56249   2.0931   0.726
+11          -1.43 1.2     0.0184     0.670   -2.000  -0.45937   0.8814   0.733
+9           -0.14 1.2     0.0184     0.677   -1.441  -0.03269   1.3531   0.713
+10          -1.21 1.2     0.0184     0.677   -1.897  -0.37787   0.9703   0.730
+8            2.31 1.3     0.0184     0.711   -0.703   0.68108   2.3684   0.783
+7           -1.90 1.4     0.0184     0.723   -2.158  -0.51309   0.8736   0.772
+6           -1.97 1.4     0.0184     0.726   -2.183  -0.52667   0.8627   0.776
+5           -0.74 1.4     0.0184     0.732   -1.704  -0.18514   1.2291   0.747
+4           -1.87 1.4     0.0184     0.740   -2.125  -0.47276   0.9273   0.777
+3            0.58 1.6     0.0184     0.777   -1.326   0.14385   1.6871   0.768
+2           -0.22 2.8     0.0184     0.915   -1.648  -0.00188   1.6277   0.836
+1           -2.07 2.8     0.0184     0.916   -1.883  -0.15703   1.4226   0.842
+colMeans          1.2     0.0184     0.614   -1.346   0.01842   1.3681   0.692
+>     print(g, sort = FALSE)
+Summary for each group: 
+
+         obs.mean  se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1           -2.07 2.8     0.0184     0.916   -1.883  -0.15703   1.4226   0.842
+2           -0.22 2.8     0.0184     0.915   -1.648  -0.00188   1.6277   0.836
+3            0.58 1.6     0.0184     0.777   -1.326   0.14385   1.6871   0.768
+4           -1.87 1.4     0.0184     0.740   -2.125  -0.47276   0.9273   0.777
+5           -0.74 1.4     0.0184     0.732   -1.704  -0.18514   1.2291   0.747
+6           -1.97 1.4     0.0184     0.726   -2.183  -0.52667   0.8627   0.776
+7           -1.90 1.4     0.0184     0.723   -2.158  -0.51309   0.8736   0.772
+8            2.31 1.3     0.0184     0.711   -0.703   0.68108   2.3684   0.783
+9           -0.14 1.2     0.0184     0.677   -1.441  -0.03269   1.3531   0.713
+10          -1.21 1.2     0.0184     0.677   -1.897  -0.37787   0.9703   0.730
+11          -1.43 1.2     0.0184     0.670   -2.000  -0.45937   0.8814   0.733
+12           1.56 1.1     0.0184     0.647   -0.759   0.56249   2.0931   0.726
+13           0.00 1.1     0.0184     0.631   -1.334   0.01162   1.3548   0.686
+14           0.41 1.1     0.0184     0.622   -1.146   0.16644   1.5340   0.683
+15           0.08 1.0     0.0184     0.604   -1.268   0.04280   1.3618   0.671
+16          -2.15 1.0     0.0184     0.599   -2.426  -0.85010   0.4629   0.736
+17          -0.34 1.0     0.0184     0.595   -1.460  -0.12682   1.1574   0.667
+18           0.86 1.0     0.0184     0.595   -0.911   0.35945   1.7437   0.676
+19           0.01 1.0     0.0184     0.590   -1.284   0.01497   1.3128   0.662
+20           1.11 1.0     0.0184     0.575   -0.768   0.48195   1.8740   0.673
+21          -0.08 1.0     0.0184     0.565   -1.301  -0.02437   1.2392   0.648
+22           0.61 0.9     0.0184     0.550   -0.941   0.28488   1.5873   0.644
+23           2.05 0.9     0.0184     0.550   -0.336   0.93347   2.4303   0.704
+24           0.57 0.9     0.0184     0.539   -0.942   0.27281   1.5578   0.637
+25           1.10 0.9     0.0184     0.533   -0.684   0.52319   1.8622   0.648
+26          -2.42 0.8     0.0184     0.499   -2.700  -1.20357   0.0732   0.706
+27          -0.38 0.8     0.0184     0.462   -1.367  -0.19598   0.9318   0.586
+28           0.07 0.8     0.0184     0.442   -1.068   0.04718   1.1678   0.570
+29           0.96 0.7     0.0184     0.436   -0.548   0.54962   1.7388   0.582
+30          -0.21 0.7     0.0184     0.381   -1.169  -0.12306   0.9034   0.529
+31           1.14 0.6     0.0184     0.352   -0.254   0.74563   1.8226   0.529
+colMeans          1.2     0.0184     0.614   -1.346   0.01842   1.3681   0.692
+> 
+>     ###############################################################
+>     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>     ###############################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     b
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1          0.0448   67     0.0285     0.914   0.0187    0.0299   0.0437 0.00640
+2          0.0294   68     0.0285     0.913   0.0178    0.0286   0.0419 0.00619
+3          0.0238  210     0.0285     0.772   0.0176    0.0275   0.0393 0.00556
+4          0.0430  256     0.0285     0.736   0.0214    0.0323   0.0454 0.00612
+5          0.0335  269     0.0285     0.726   0.0198    0.0299   0.0419 0.00564
+6          0.0438  274     0.0285     0.722   0.0218    0.0328   0.0458 0.00614
+7          0.0432  278     0.0285     0.719   0.0218    0.0326   0.0456 0.00610
+8          0.0136  295     0.0285     0.707   0.0149    0.0241   0.0354 0.00525
+9          0.0288  347     0.0285     0.672   0.0192    0.0286   0.0398 0.00527
+10         0.0372  349     0.0285     0.671   0.0213    0.0314   0.0433 0.00564
+11         0.0391  358     0.0285     0.665   0.0218    0.0321   0.0442 0.00573
+12         0.0177  396     0.0285     0.643   0.0159    0.0247   0.0353 0.00497
+13         0.0278  431     0.0285     0.623   0.0193    0.0283   0.0389 0.00503
+14         0.0249  441     0.0285     0.618   0.0184    0.0272   0.0376 0.00493
+15         0.0273  477     0.0285     0.599   0.0192    0.0280   0.0384 0.00491
+16         0.0455  484     0.0285     0.595   0.0246    0.0354   0.0480 0.00600
+17         0.0304  494     0.0285     0.590   0.0203    0.0293   0.0398 0.00499
+18         0.0220  501     0.0285     0.587   0.0174    0.0258   0.0359 0.00474
+19         0.0277  505     0.0285     0.585   0.0195    0.0282   0.0385 0.00486
+20         0.0204  540     0.0285     0.569   0.0167    0.0250   0.0349 0.00465
+21         0.0284  563     0.0285     0.558   0.0199    0.0285   0.0385 0.00477
+22         0.0236  593     0.0285     0.546   0.0181    0.0263   0.0360 0.00458
+23         0.0150  602     0.0285     0.542   0.0142    0.0223   0.0321 0.00458
+24         0.0238  629     0.0285     0.531   0.0182    0.0263   0.0359 0.00451
+25         0.0204  636     0.0285     0.528   0.0167    0.0247   0.0342 0.00447
+26         0.0480  729     0.0285     0.494   0.0277    0.0384   0.0508 0.00591
+27         0.0306  849     0.0285     0.456   0.0217    0.0297   0.0389 0.00439
+28         0.0274  914     0.0285     0.438   0.0203    0.0279   0.0366 0.00416
+29         0.0213  940     0.0285     0.431   0.0172    0.0244   0.0328 0.00400
+30         0.0293 1193     0.0285     0.374   0.0219    0.0290   0.0372 0.00391
+31         0.0201 1340     0.0285     0.347   0.0166    0.0231   0.0305 0.00354
+colMeans           517     0.0285     0.609   0.0193    0.0285   0.0393 0.00509
+>     print(b, sort = FALSE)
+Summary for each group: 
+
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1          0.0448   67     0.0285     0.914   0.0187    0.0299   0.0437 0.00640
+2          0.0294   68     0.0285     0.913   0.0178    0.0286   0.0419 0.00619
+3          0.0238  210     0.0285     0.772   0.0176    0.0275   0.0393 0.00556
+4          0.0430  256     0.0285     0.736   0.0214    0.0323   0.0454 0.00612
+5          0.0335  269     0.0285     0.726   0.0198    0.0299   0.0419 0.00564
+6          0.0438  274     0.0285     0.722   0.0218    0.0328   0.0458 0.00614
+7          0.0432  278     0.0285     0.719   0.0218    0.0326   0.0456 0.00610
+8          0.0136  295     0.0285     0.707   0.0149    0.0241   0.0354 0.00525
+9          0.0288  347     0.0285     0.672   0.0192    0.0286   0.0398 0.00527
+10         0.0372  349     0.0285     0.671   0.0213    0.0314   0.0433 0.00564
+11         0.0391  358     0.0285     0.665   0.0218    0.0321   0.0442 0.00573
+12         0.0177  396     0.0285     0.643   0.0159    0.0247   0.0353 0.00497
+13         0.0278  431     0.0285     0.623   0.0193    0.0283   0.0389 0.00503
+14         0.0249  441     0.0285     0.618   0.0184    0.0272   0.0376 0.00493
+15         0.0273  477     0.0285     0.599   0.0192    0.0280   0.0384 0.00491
+16         0.0455  484     0.0285     0.595   0.0246    0.0354   0.0480 0.00600
+17         0.0304  494     0.0285     0.590   0.0203    0.0293   0.0398 0.00499
+18         0.0220  501     0.0285     0.587   0.0174    0.0258   0.0359 0.00474
+19         0.0277  505     0.0285     0.585   0.0195    0.0282   0.0385 0.00486
+20         0.0204  540     0.0285     0.569   0.0167    0.0250   0.0349 0.00465
+21         0.0284  563     0.0285     0.558   0.0199    0.0285   0.0385 0.00477
+22         0.0236  593     0.0285     0.546   0.0181    0.0263   0.0360 0.00458
+23         0.0150  602     0.0285     0.542   0.0142    0.0223   0.0321 0.00458
+24         0.0238  629     0.0285     0.531   0.0182    0.0263   0.0359 0.00451
+25         0.0204  636     0.0285     0.528   0.0167    0.0247   0.0342 0.00447
+26         0.0480  729     0.0285     0.494   0.0277    0.0384   0.0508 0.00591
+27         0.0306  849     0.0285     0.456   0.0217    0.0297   0.0389 0.00439
+28         0.0274  914     0.0285     0.438   0.0203    0.0279   0.0366 0.00416
+29         0.0213  940     0.0285     0.431   0.0172    0.0244   0.0328 0.00400
+30         0.0293 1193     0.0285     0.374   0.0219    0.0290   0.0372 0.00391
+31         0.0201 1340     0.0285     0.347   0.0166    0.0231   0.0305 0.00354
+colMeans           517     0.0285     0.609   0.0193    0.0285   0.0393 0.00509
+> 
+>     ##############################################################
+>     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>     ##############################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+>     p
+Summary for each group (sorted by  the ascending order of n): 
+
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1          0.0448   67       0.03     0.911   0.0199    0.0313   0.0454 0.00653
+2          0.0294   68       0.03     0.910   0.0189    0.0299   0.0435 0.00631
+3          0.0238  210       0.03     0.765   0.0185    0.0285   0.0407 0.00566
+4          0.0430  256       0.03     0.728   0.0225    0.0335   0.0467 0.00619
+5          0.0335  269       0.03     0.718   0.0208    0.0310   0.0432 0.00573
+6          0.0438  274       0.03     0.714   0.0229    0.0339   0.0472 0.00621
+7          0.0432  278       0.03     0.711   0.0228    0.0338   0.0469 0.00617
+8          0.0136  295       0.03     0.699   0.0157    0.0250   0.0366 0.00534
+9          0.0288  347       0.03     0.663   0.0200    0.0296   0.0410 0.00536
+10         0.0372  349       0.03     0.662   0.0222    0.0325   0.0446 0.00571
+11         0.0391  358       0.03     0.656   0.0228    0.0331   0.0454 0.00579
+12         0.0177  396       0.03     0.633   0.0165    0.0255   0.0363 0.00506
+13         0.0278  431       0.03     0.613   0.0200    0.0292   0.0400 0.00511
+14         0.0249  441       0.03     0.608   0.0191    0.0280   0.0387 0.00502
+15         0.0273  477       0.03     0.589   0.0199    0.0289   0.0394 0.00499
+16         0.0455  484       0.03     0.585   0.0256    0.0364   0.0491 0.00601
+17         0.0304  494       0.03     0.580   0.0211    0.0302   0.0409 0.00506
+18         0.0220  501       0.03     0.577   0.0180    0.0266   0.0369 0.00483
+19         0.0277  505       0.03     0.575   0.0202    0.0290   0.0395 0.00494
+20         0.0204  540       0.03     0.559   0.0173    0.0258   0.0358 0.00474
+21         0.0284  563       0.03     0.548   0.0206    0.0293   0.0395 0.00485
+22         0.0236  593       0.03     0.535   0.0187    0.0270   0.0369 0.00466
+23         0.0150  602       0.03     0.532   0.0147    0.0230   0.0329 0.00466
+24         0.0238  629       0.03     0.521   0.0188    0.0271   0.0368 0.00460
+25         0.0204  636       0.03     0.518   0.0173    0.0254   0.0351 0.00455
+26         0.0480  729       0.03     0.484   0.0286    0.0393   0.0516 0.00587
+27         0.0306  849       0.03     0.446   0.0223    0.0303   0.0397 0.00445
+28         0.0274  914       0.03     0.428   0.0208    0.0285   0.0374 0.00423
+29         0.0213  940       0.03     0.421   0.0176    0.0249   0.0335 0.00407
+30         0.0293 1193       0.03     0.364   0.0223    0.0296   0.0379 0.00397
+31         0.0201 1340       0.03     0.338   0.0170    0.0235   0.0310 0.00360
+colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
+>     print(p, sort = FALSE)
+Summary for each group: 
+
+         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1          0.0448   67       0.03     0.911   0.0199    0.0313   0.0454 0.00653
+2          0.0294   68       0.03     0.910   0.0189    0.0299   0.0435 0.00631
+3          0.0238  210       0.03     0.765   0.0185    0.0285   0.0407 0.00566
+4          0.0430  256       0.03     0.728   0.0225    0.0335   0.0467 0.00619
+5          0.0335  269       0.03     0.718   0.0208    0.0310   0.0432 0.00573
+6          0.0438  274       0.03     0.714   0.0229    0.0339   0.0472 0.00621
+7          0.0432  278       0.03     0.711   0.0228    0.0338   0.0469 0.00617
+8          0.0136  295       0.03     0.699   0.0157    0.0250   0.0366 0.00534
+9          0.0288  347       0.03     0.663   0.0200    0.0296   0.0410 0.00536
+10         0.0372  349       0.03     0.662   0.0222    0.0325   0.0446 0.00571
+11         0.0391  358       0.03     0.656   0.0228    0.0331   0.0454 0.00579
+12         0.0177  396       0.03     0.633   0.0165    0.0255   0.0363 0.00506
+13         0.0278  431       0.03     0.613   0.0200    0.0292   0.0400 0.00511
+14         0.0249  441       0.03     0.608   0.0191    0.0280   0.0387 0.00502
+15         0.0273  477       0.03     0.589   0.0199    0.0289   0.0394 0.00499
+16         0.0455  484       0.03     0.585   0.0256    0.0364   0.0491 0.00601
+17         0.0304  494       0.03     0.580   0.0211    0.0302   0.0409 0.00506
+18         0.0220  501       0.03     0.577   0.0180    0.0266   0.0369 0.00483
+19         0.0277  505       0.03     0.575   0.0202    0.0290   0.0395 0.00494
+20         0.0204  540       0.03     0.559   0.0173    0.0258   0.0358 0.00474
+21         0.0284  563       0.03     0.548   0.0206    0.0293   0.0395 0.00485
+22         0.0236  593       0.03     0.535   0.0187    0.0270   0.0369 0.00466
+23         0.0150  602       0.03     0.532   0.0147    0.0230   0.0329 0.00466
+24         0.0238  629       0.03     0.521   0.0188    0.0271   0.0368 0.00460
+25         0.0204  636       0.03     0.518   0.0173    0.0254   0.0351 0.00455
+26         0.0480  729       0.03     0.484   0.0286    0.0393   0.0516 0.00587
+27         0.0306  849       0.03     0.446   0.0223    0.0303   0.0397 0.00445
+28         0.0274  914       0.03     0.428   0.0208    0.0285   0.0374 0.00423
+29         0.0213  940       0.03     0.421   0.0176    0.0249   0.0335 0.00407
+30         0.0293 1193       0.03     0.364   0.0223    0.0296   0.0379 0.00397
+31         0.0201 1340       0.03     0.338   0.0170    0.0235   0.0310 0.00360
+colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("print.gbp", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("print.summary.gbp")
+> ### * print.summary.gbp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: print.summary.gbp
+> ### Title: Displaying 'summary.gbp' Class
+> ### Aliases: print.summary.gbp
+> ### Keywords: methods
+> 
+> ### ** Examples
+> 
+> 
+>   data(hospital)
+> 
+>   z <- hospital$d
+>   n <- hospital$n
+>   y <- hospital$y
+>   se <- hospital$se
+>   
+>   ###################################################################################
+>   # We do not have any covariates and do not know a mean of the prior distribution. #
+>   ###################################################################################
+> 
+>     ###############################################################
+>     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>     ###############################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     summary(g)
+Main summary:
+
+                      obs.mean  se prior.mean shrinkage low.intv post.mean
+Group with min(se)        1.14 0.6     0.0184     0.352   -0.254    0.7456
+Group with median(se)    -2.15 1.0     0.0184     0.599   -2.426   -0.8501
+Group with max(se)       -2.07 2.8     0.0184     0.916   -1.883   -0.1570
+Overall Mean                   1.2     0.0184     0.614   -1.346    0.0184
+                      upp.intv post.sd
+Group with min(se)       1.823   0.529
+Group with median(se)    0.463   0.736
+Group with max(se)       1.423   0.842
+Overall Mean             1.368   0.692
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+          -0.344          0.62       0.709
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se z.val p.val
+beta1    0.018 0.243 0.076  0.94
+> 
+>     ###############################################################
+>     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>     ###############################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     summary(b)
+Main summary:
+
+                     obs.mean    n prior.mean shrinkage low.intv post.mean
+Group with min(n)      0.0448   67     0.0285     0.914   0.0187    0.0299
+Group with median(n)   0.0455  484     0.0285     0.595   0.0246    0.0354
+Group with max(n)      0.0201 1340     0.0285     0.347   0.0166    0.0231
+Overall Mean                   517     0.0285     0.609   0.0193    0.0285
+                     upp.intv post.sd
+Group with min(n)      0.0437 0.00640
+Group with median(n)   0.0480 0.00600
+Group with max(n)      0.0305 0.00354
+Overall Mean           0.0393 0.00509
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -6.57         0.606         712
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se   z.val p.val
+beta1    -3.53 0.064 -55.225     0
+> 
+>     ##############################################################
+>     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>     ##############################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+>     summary(p)
+Main summary:
+
+                     obs.mean    n prior.mean shrinkage low.intv post.mean
+Group with min(n)      0.0448   67       0.03     0.911   0.0199    0.0313
+Group with median(n)   0.0455  484       0.03     0.585   0.0256    0.0364
+Group with max(n)      0.0201 1340       0.03     0.338   0.0170    0.0235
+Overall Mean                   517       0.03     0.600   0.0201    0.0293
+                     upp.intv post.sd
+Group with min(n)      0.0454 0.00653
+Group with median(n)   0.0491 0.00601
+Group with max(n)      0.0310 0.00360
+Overall Mean           0.0403 0.00517
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -6.53         0.576         684
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("print.summary.gbp", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("schools")
+> ### * schools
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: schools
+> ### Title: Eight Schools Data
+> ### Aliases: schools
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+>   data(schools)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("schools", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("summary.gbp")
+> ### * summary.gbp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: summary.gbp
+> ### Title: Summarizing Estimation Result
+> ### Aliases: summary.gbp
+> ### Keywords: method
+> 
+> ### ** Examples
+> 
+> 
+>   data(hospital)
+> 
+>   z <- hospital$d
+>   n <- hospital$n
+>   y <- hospital$y
+>   se <- hospital$se
+>   
+>   ###################################################################################
+>   # We do not have any covariates and do not know a mean of the prior distribution. #
+>   ###################################################################################
+> 
+>     ###############################################################
+>     # Gaussian Regression Interactive Multilevel Modeling (GRIMM) #
+>     ###############################################################
+> 
+>     g <- gbp(y, se, model = "gaussian")
+>     summary(g)
+Main summary:
+
+                      obs.mean  se prior.mean shrinkage low.intv post.mean
+Group with min(se)        1.14 0.6     0.0184     0.352   -0.254    0.7456
+Group with median(se)    -2.15 1.0     0.0184     0.599   -2.426   -0.8501
+Group with max(se)       -2.07 2.8     0.0184     0.916   -1.883   -0.1570
+Overall Mean                   1.2     0.0184     0.614   -1.346    0.0184
+                      upp.intv post.sd
+Group with min(se)       1.823   0.529
+Group with median(se)    0.463   0.736
+Group with max(se)       1.423   0.842
+Overall Mean             1.368   0.692
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.A
+          -0.344          0.62       0.709
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se z.val p.val
+beta1    0.018 0.243 0.076  0.94
+> 
+>     ###############################################################
+>     # Binomial Regression Interactive Multilevel Modeling (BRIMM) #
+>     ###############################################################
+> 
+>     b <- gbp(z, n, model = "binomial")
+>     summary(b)
+Main summary:
+
+                     obs.mean    n prior.mean shrinkage low.intv post.mean
+Group with min(n)      0.0448   67     0.0285     0.914   0.0187    0.0299
+Group with median(n)   0.0455  484     0.0285     0.595   0.0246    0.0354
+Group with max(n)      0.0201 1340     0.0285     0.347   0.0166    0.0231
+Overall Mean                   517     0.0285     0.609   0.0193    0.0285
+                     upp.intv post.sd
+Group with min(n)      0.0437 0.00640
+Group with median(n)   0.0480 0.00600
+Group with max(n)      0.0305 0.00354
+Overall Mean           0.0393 0.00509
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -6.57         0.606         712
+
+
+Estimation summary for the regression coefficient :
+
+      estimate    se   z.val p.val
+beta1    -3.53 0.064 -55.225     0
+> 
+>     ##############################################################
+>     # Poisson Regression Interactive Multilevel Modeling (PRIMM) #
+>     ##############################################################
+> 
+>     p <- gbp(z, n, mean.PriorDist = 0.03, model = "poisson")
+>     summary(p)
+Main summary:
+
+                     obs.mean    n prior.mean shrinkage low.intv post.mean
+Group with min(n)      0.0448   67       0.03     0.911   0.0199    0.0313
+Group with median(n)   0.0455  484       0.03     0.585   0.0256    0.0364
+Group with max(n)      0.0201 1340       0.03     0.338   0.0170    0.0235
+Overall Mean                   517       0.03     0.600   0.0201    0.0293
+                     upp.intv post.sd
+Group with min(n)      0.0454 0.00653
+Group with median(n)   0.0491 0.00601
+Group with max(n)      0.0310 0.00360
+Overall Mean           0.0403 0.00517
+
+
+Estimation summary for the second-level variance component:
+alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+
+ post.mode.alpha post.sd.alpha post.mode.r
+           -6.53         0.576         684
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summary.gbp", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  4.728 0.143 4.976 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')
