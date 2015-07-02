@@ -353,7 +353,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     temp.data <- as.data.frame(cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp))
     if (x$model == "gr") {
       temp.data <- temp.data[order(temp.data$se, decreasing = TRUE), ]
-    } else
+    } else {
       temp.data <- temp.data[order(temp.data$se), ]
     }
     y <- temp.data$y
