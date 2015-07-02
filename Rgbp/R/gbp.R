@@ -80,11 +80,15 @@ print.gbp <- function(x, sort = TRUE, ...) {
   }
   
   if (sort == TRUE) {
-    temp <- temp[order(temp[, 2]), ]
+    if (x$model == "gr") {
+      temp <- temp[order(temp[, 2], decreasing = TRUE), ]
+    } else {
+      temp <- temp[order(temp[, 2]), ]
+    }
   }
 
   temp.mean <- colMeans(temp)
-  temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "colMeans"))
+  temp <- data.frame(rbind(temp, temp.mean), row.names = c(rownames(temp), "Mean"))
   temp[, 1] <- format.default(temp[, 1], digits = 3)
   temp[dim(temp)[1], 1] <- ""
 
@@ -100,7 +104,7 @@ print.gbp <- function(x, sort = TRUE, ...) {
 
   if (sort == TRUE) {
     if (x$model == "gr") {
-      cat("Summary for each group (sorted by the ascending order of se): \n")
+      cat("Summary for each group (sorted by the descending order of se): \n")
     } else {
       cat("Summary for each group (sorted by  the ascending order of n): \n")
     }
@@ -347,7 +351,11 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   if (sort == TRUE) {
     temp.data <- as.data.frame(cbind(y, se, pr.m, po.m, po.sd, po.low, po.upp))
-    temp.data <- temp.data[order(temp.data$se), ]
+    if (x$model == "gr") {
+      temp.data <- temp.data[order(temp.data$se, decreasing = TRUE), ]
+    } else
+      temp.data <- temp.data[order(temp.data$se), ]
+    }
     y <- temp.data$y
     se <- temp.data$se
     pr.m <- temp.data[, 3]
@@ -404,12 +412,12 @@ plot.gbp <- function(x, sort = TRUE, ...) {
 
   if (sort == TRUE) {
     if (x$model == "gr") {
-      xl <- c("Groups sorted by the ascending order of se")
+      xl <- c("Groups sorted by the descending order of se")
     } else {
       xl <- c("Groups sorted by the ascending order of n")
     }
   } else {
-    xl <- c("Groups sorted by the ascending order of n")
+    xl <- c("Groups in the order of data input")
   }
 
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = "",

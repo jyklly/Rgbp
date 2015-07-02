@@ -13,7 +13,7 @@
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Hyungsuk Tak, Joseph Kelly, Carl Morris} %% comma-separated
-\Plaintitle{Rgbp: Hierarchical Modeling and Frequency Method Checking} %% without formatting
+\Plaintitle{Rgbp: An R Package for Conjugate Gaussian, Poisson, and Binomial Hierarchical Modeling and Frequency Method Checking on Overdispersed Data} %% without formatting
 \Shorttitle{\pkg{Rgbp}: Hierarchical Modeling and Frequency Method Checking on Overdispersed Data} %% a short title (if necessary)
 %% an abstract and keywords
 \Abstract{
@@ -157,7 +157,7 @@ p_j^\ast\equiv E(p_j\vert \boldsymbol{\beta}, r, \boldsymbol{y} )=(1-B_{j})\bar{
 The conditional posterior mean is  a convex combination of the unbiased estimate $\bar{y}_{j} = y_j/n_j$ and the expected random effect  $p^E_j$ weighted by $B_j\equiv r / (r + n_j)$ like the Poisson model.  If the conjugate prior distribution contains more information than the observed distribution does ($r>n_j$), then the resulting conditional posterior mean shrinks towards the expected random effect by more than 50\%.
 
 
-\subsection[Hyper-prior distributions]{Hyper-prior Distribution}
+\subsection[Hyper-prior distributions]{Hyper-prior distribution}
 Hyper-prior distributions are the distributions assigned to the second-level parameters called hyper-parameters. With the goal of objectivity in mind, our choice for the hyper-prior distributions is
 \begin{equation}\label{eq:hyper}
 \boldsymbol{\beta} \sim \textrm{Uniform on}~ \textbf{R}^{m}~~\textrm{and}~~A \sim \textrm{Uniform}(0, \infty) ~~(\textrm{or} ~\frac{1}{r}\sim \textrm{Uniform}(0, \infty)),
@@ -293,7 +293,7 @@ E(B_j\vert\boldsymbol{y})&=&\frac{a_{1j}}{a_{1j}+a_{0j}}=\argmax_{B_j}~ A(B_j\ve
 Var(B_j\vert\boldsymbol{y})&=&\frac{B^\ast_j(1-B^\ast_j)}{a_{1j}+a_{0j}+1}=\frac{B^\ast_j(1-B^\ast_j)}{B^\ast_j(1-B^\ast_j)[-\frac{d^2}{dB^2_j}\log(A(B_j\vert \boldsymbol{y}))\vert_{B_j=B^\ast_j}] +1}.\label{admvar}
 \end{eqnarray}
 
-The ADM estimates these mean and variance using the marginal posterior distribution of $r$, $f(r\vert\boldsymbol{y})\propto L(r)dr/r^2$, where the marginal likelihood $L(r)=\int L(\boldsymbol{\beta}, r)d\boldsymbol{\beta}$ for the Binomial model is obtained via the Laplace approximation with a Lebesque measure on $\boldsymbol{\beta}$ and that for the Poisson model is specified in Equation \ref{marginal_poisson}; see \cite{berger1999integrated} for the integrated likelihood in detail. For the Gaussian model, the marginal likelihood function of $A$ is available in a closed form with $\boldsymbol{\beta}$ integrated out, see  \cite{tang2011}. 
+The ADM estimates these mean and variance using the marginal posterior distribution of $r$, $f(r\vert\boldsymbol{y})\propto L(r)dr/r^2$, where the marginal likelihood $L(r)=\int L(\boldsymbol{\beta}, r)d\boldsymbol{\beta}$ for the Binomial model is obtained via the Laplace approximation with a Lebesque measure on $\boldsymbol{\beta}$ and that for the Poisson model is specified in Equation \ref{marginal_poisson}; see \citep[see]{berger1999integrated} for the integrated likelihood in detail. For the Gaussian model, the marginal likelihood function of $A$ is available in a closed form with $\boldsymbol{\beta}$ integrated out, see  \cite{tang2011}. 
 
 Considering that Equation \ref{admmean} and  \ref{admvar} involve the maximization and Hessian calculation, we work on a logarithmic scale of $r$, i.e., $\alpha=-\log(r)$ (or $\alpha=\log(A)$ for the Gaussian model), because the distribution of $\alpha$ is more symmetric than that of $r$ and $\alpha$ is defined on a real line without any boundary issues. Since $A(B_j\vert\boldsymbol{y})$ is proportional to the marginal posterior density $f(\alpha\vert\boldsymbol{y})\propto \exp(\alpha) L(\alpha)$, the estimated posterior mean in Equation \ref{admmean} is 
 \begin{equation}\label{meaninvariance}
@@ -539,7 +539,7 @@ Figure \ref{fig:pseudo} displays the process of generating pseudo-data sets. It 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=6cm]{process.png}
-\caption{Pseudo-data generating process}
+\caption{Pseudo-data generating process.}
 \label{fig:pseudo}
 \end{center}
 \end{figure}
@@ -748,8 +748,8 @@ We analyze a data set of 31 hospitals in New York state comprising of the outcom
 These data can be loaded into \proglang{R} using the following code.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> library(Rgbp)
-R> data(hospital)
+R> library(``Rgbp'')
+R> data(``hospital'')
 R> y <- hospital$d
 R> n <- hospital$n
 \end{CodeInput}
@@ -771,39 +771,39 @@ R> p.output
 \begin{CodeOutput}
 Summary for each unit (sorted by n):
 
-         obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
-1          0.0448   67       0.03     0.911   0.0199    0.0313   0.0454 0.00653
-2          0.0294   68       0.03     0.910   0.0189    0.0299   0.0435 0.00631
-3          0.0238  210       0.03     0.765   0.0185    0.0285   0.0407 0.00566
-4          0.0430  256       0.03     0.728   0.0225    0.0335   0.0467 0.00619
-5          0.0335  269       0.03     0.718   0.0208    0.0310   0.0432 0.00573
-6          0.0438  274       0.03     0.714   0.0229    0.0339   0.0472 0.00621
-7          0.0432  278       0.03     0.711   0.0228    0.0338   0.0469 0.00617
-8          0.0136  295       0.03     0.699   0.0157    0.0250   0.0366 0.00534
-9          0.0288  347       0.03     0.663   0.0200    0.0296   0.0410 0.00536
-10         0.0372  349       0.03     0.662   0.0222    0.0325   0.0446 0.00571
-11         0.0391  358       0.03     0.656   0.0228    0.0331   0.0454 0.00579
-12         0.0177  396       0.03     0.633   0.0165    0.0255   0.0363 0.00506
-13         0.0278  431       0.03     0.613   0.0200    0.0292   0.0400 0.00511
-14         0.0249  441       0.03     0.608   0.0191    0.0280   0.0387 0.00502
-15         0.0273  477       0.03     0.589   0.0199    0.0289   0.0394 0.00499
-16         0.0455  484       0.03     0.585   0.0256    0.0364   0.0491 0.00601
-17         0.0304  494       0.03     0.580   0.0211    0.0302   0.0409 0.00506
-18         0.0220  501       0.03     0.577   0.0180    0.0266   0.0369 0.00483
-19         0.0277  505       0.03     0.575   0.0202    0.0290   0.0395 0.00494
-20         0.0204  540       0.03     0.559   0.0173    0.0258   0.0358 0.00474
-21         0.0284  563       0.03     0.548   0.0206    0.0293   0.0395 0.00485
-22         0.0236  593       0.03     0.535   0.0187    0.0270   0.0369 0.00466
-23         0.0150  602       0.03     0.532   0.0147    0.0230   0.0329 0.00466
-24         0.0238  629       0.03     0.521   0.0188    0.0271   0.0368 0.00460
-25         0.0204  636       0.03     0.518   0.0173    0.0254   0.0351 0.00455
-26         0.0480  729       0.03     0.484   0.0286    0.0393   0.0516 0.00587
-27         0.0306  849       0.03     0.446   0.0223    0.0303   0.0397 0.00445
-28         0.0274  914       0.03     0.428   0.0208    0.0285   0.0374 0.00423
-29         0.0213  940       0.03     0.421   0.0176    0.0249   0.0335 0.00407
-30         0.0293 1193       0.03     0.364   0.0223    0.0296   0.0379 0.00397
-31         0.0201 1340       0.03     0.338   0.0170    0.0235   0.0310 0.00360
-colMeans           517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
+      obs.mean    n prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1       0.0448   67       0.03     0.911   0.0199    0.0313   0.0454 0.00653
+2       0.0294   68       0.03     0.910   0.0189    0.0299   0.0435 0.00631
+3       0.0238  210       0.03     0.765   0.0185    0.0285   0.0407 0.00566
+4       0.0430  256       0.03     0.728   0.0225    0.0335   0.0467 0.00619
+5       0.0335  269       0.03     0.718   0.0208    0.0310   0.0432 0.00573
+6       0.0438  274       0.03     0.714   0.0229    0.0339   0.0472 0.00621
+7       0.0432  278       0.03     0.711   0.0228    0.0338   0.0469 0.00617
+8       0.0136  295       0.03     0.699   0.0157    0.0250   0.0366 0.00534
+9       0.0288  347       0.03     0.663   0.0200    0.0296   0.0410 0.00536
+10      0.0372  349       0.03     0.662   0.0222    0.0325   0.0446 0.00571
+11      0.0391  358       0.03     0.656   0.0228    0.0331   0.0454 0.00579
+12      0.0177  396       0.03     0.633   0.0165    0.0255   0.0363 0.00506
+13      0.0278  431       0.03     0.613   0.0200    0.0292   0.0400 0.00511
+14      0.0249  441       0.03     0.608   0.0191    0.0280   0.0387 0.00502
+15      0.0273  477       0.03     0.589   0.0199    0.0289   0.0394 0.00499
+16      0.0455  484       0.03     0.585   0.0256    0.0364   0.0491 0.00601
+17      0.0304  494       0.03     0.580   0.0211    0.0302   0.0409 0.00506
+18      0.0220  501       0.03     0.577   0.0180    0.0266   0.0369 0.00483
+19      0.0277  505       0.03     0.575   0.0202    0.0290   0.0395 0.00494
+20      0.0204  540       0.03     0.559   0.0173    0.0258   0.0358 0.00474
+21      0.0284  563       0.03     0.548   0.0206    0.0293   0.0395 0.00485
+22      0.0236  593       0.03     0.535   0.0187    0.0270   0.0369 0.00466
+23      0.0150  602       0.03     0.532   0.0147    0.0230   0.0329 0.00466
+24      0.0238  629       0.03     0.521   0.0188    0.0271   0.0368 0.00460
+25      0.0204  636       0.03     0.518   0.0173    0.0254   0.0351 0.00455
+26      0.0480  729       0.03     0.484   0.0286    0.0393   0.0516 0.00587
+27      0.0306  849       0.03     0.446   0.0223    0.0303   0.0397 0.00445
+28      0.0274  914       0.03     0.428   0.0208    0.0285   0.0374 0.00423
+29      0.0213  940       0.03     0.421   0.0176    0.0249   0.0335 0.00407
+30      0.0293 1193       0.03     0.364   0.0223    0.0296   0.0379 0.00397
+31      0.0201 1340       0.03     0.338   0.0170    0.0235   0.0310 0.00360
+Mean            517       0.03     0.600   0.0201    0.0293   0.0403 0.00517
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -832,7 +832,7 @@ Overall Mean                  517       0.03     0.600   0.0201    0.0293
                       0.0403  0.00517
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian or alpha = log(1/r) for Binomial and Poisson data:
+alpha=log(A) for Gaussian or alpha=log(1/r) for Binomial and Poisson data:
 
 post.mode.alpha post.sd.alpha post.mode.r
           -6.53         0.576         684
@@ -850,8 +850,8 @@ R> plot(p.output)
 \end{CodeChunk}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width = 2.5in]{hospital1.png}
-\caption{Shrinkage plot and 95\% interval plot for 31 hospitals}
+\includegraphics[width = 2.8in]{hospital1.png}
+\caption{Shrinkage plot and 95\% interval plot for 31 hospitals.}
 \label{fig:hospshr}
 \end{center}
 \end{figure}
@@ -880,8 +880,8 @@ R> p.coverage <- coverage(p.output, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 2.5in]{hospital2.png}
-\caption{Coverage plot via frequency method checking for 31 hospitals}
+\includegraphics[width = 2.8in]{hospital2.png}
+\caption{Coverage plot via frequency method checking for 31 hospitals.}
 \label{fig:hospitalcoverage}
 \end{center}
 \end{figure}
@@ -950,8 +950,8 @@ See \cite{1995} for a similar ranking problem using a Poisson hierarchical model
 The Education Testing Service (ETS) conducted randomized experiments in eight separate schools (groups) to test whether students (units) SAT scores are effected by coaching. The dataset contains the estimated coaching effects on SAT scores ($y_{j}, j=1, \ldots, 8$) and standard errors ($se_{j}, j=1, \ldots, 8$) of the eight schools \citep{1981}. We can load this data set into \proglang{R} by the following codes.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> library(Rgbp)
-R> data(schools)
+R> library(``Rgbp'')
+R> data(``schools'')
 R> y  <- schools$y
 R> se <- schools$se
 \end{CodeInput}
@@ -970,16 +970,16 @@ R> g.output
 \begin{CodeOutput}
 Summary for each unit (sorted by se):
 
-         obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
-5           -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
-2            8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
-7           18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
-4            7.00 11.0      8.168     0.507   -8.780     7.592   23.602   8.257
-6            1.00 11.0      8.168     0.507  -13.027     4.633   20.131   8.441
-1           28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
-3           -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
-8           12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
-colMeans          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
+     obs.mean   se prior.mean shrinkage low.intv post.mean upp.intv post.sd
+5       -1.00  9.0      8.168     0.408  -13.297     2.737   16.692   7.634
+2        8.00 10.0      8.168     0.459   -7.255     8.077   23.361   7.810
+7       18.00 10.0      8.168     0.459   -1.289    13.484   30.821   8.176
+4        7.00 11.0      8.168     0.507   -8.780     7.592   23.602   8.257
+6        1.00 11.0      8.168     0.507  -13.027     4.633   20.131   8.441
+1       28.00 15.0      8.168     0.657   -2.315    14.979   38.763  10.560
+3       -3.00 16.0      8.168     0.685  -17.130     4.650   22.477  10.096
+8       12.00 18.0      8.168     0.734  -10.208     9.189   29.939  10.227
+Mean          12.5      8.168     0.552   -9.163     8.168   25.723   8.900
 \end{CodeOutput}
 \end{CodeChunk}
 This output from \code{gbp} summarizes the results. In this Gaussian hierarchical model the amount of shrinkage for each unit is governed by the shrinkage factor, $B_j = V_j/(V_j + A)$. As such, schools whose variation within the school ($V_{j}$) is less than the between school variation ($A$) will shrink greater than $50\%$. The results provided by \code{gpb} suggests that there is little evidence that the training provided much added benefit due to the fact that every school's $95\%$ posterior interval contains 0. In the case where the number of groups is large \pkg{Rgbp} provides a summary feature:
@@ -1006,7 +1006,7 @@ Overall Mean                   12.5       8.17     0.552    -9.16      8.17
                           25.7    8.90
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+alpha=log(A) for Gaussian or alpha=log(1/r) for Binomial and Poisson data:
 
 post.mode.alpha post.sd.alpha post.mode.A
            4.77          1.14         118
@@ -1031,8 +1031,8 @@ R> plot(g.output)
 
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 2.5in]{school1.png}
-\caption{Shrinkage plot and 95\% interval plot for 8 schools}
+\includegraphics[width = 2.8in]{school1.png}
+\caption{Shrinkage plot and 95\% interval plot for 8 schools.}
 \label{fig:8schoolsplot}
 \end{center}
 \end{figure}
@@ -1047,8 +1047,8 @@ R> g.coverage <- coverage(g.output, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h] 
 \begin{center}
-\includegraphics[width = 2.5in]{school2.png}
-\caption{Coverage plot via frequency method checking for 8 schools}
+\includegraphics[width = 2.8in]{school2.png}
+\caption{Coverage plot via frequency method checking for 8 schools.}
 \label{fig:schoolcoverage}
 \end{center}
 \end{figure}
@@ -1108,8 +1108,8 @@ R> g.coverage$raw.resultRB
 The data of 18 major league baseball players contain the batting averages through their first 45 official at-bats of the 1970 season \citep{1975}. We add a covariate about their outfielder indicators taking on 1 if a player is an outfielder and 0 otherwise. We can load the data into \proglang{R} with the following codes.
 \begin{CodeChunk}
 \begin{CodeInput}
-R> library(Rgbp)
-R> data(baseball)
+R> library(``Rgbp'')
+R> data(``baseball'')
 R> y <- baseball$Hits
 R> n <- baseball$At.Bats
 R> x <- ifelse(baseball$Position == "fielder", 1, 0)
@@ -1127,26 +1127,26 @@ R> b.output
 \begin{CodeOutput}
 Summary for each unit (sorted by n):
 
-         obs.mean  n   X1 prior.mean shrinkage low.intv post.mean upp.intv post.sd
-1           0.400 45 1.00      0.310     0.715    0.248     0.335    0.429  0.0462
-2           0.378 45 1.00      0.310     0.715    0.244     0.329    0.420  0.0448
-3           0.356 45 1.00      0.310     0.715    0.240     0.323    0.411  0.0437
-4           0.333 45 1.00      0.310     0.715    0.236     0.316    0.403  0.0429
-5           0.311 45 1.00      0.310     0.715    0.230     0.310    0.396  0.0424
-6           0.311 45 0.00      0.233     0.715    0.179     0.256    0.341  0.0415
-7           0.289 45 0.00      0.233     0.715    0.175     0.249    0.331  0.0400
-8           0.267 45 0.00      0.233     0.715    0.171     0.243    0.323  0.0388
-9           0.244 45 0.00      0.233     0.715    0.166     0.237    0.315  0.0380
-10          0.244 45 1.00      0.310     0.715    0.210     0.291    0.379  0.0432
-11          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
-12          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
-13          0.222 45 0.00      0.233     0.715    0.161     0.230    0.308  0.0377
-14          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375  0.0441
-15          0.222 45 1.00      0.310     0.715    0.202     0.285    0.375  0.0441
-16          0.200 45 0.00      0.233     0.715    0.155     0.224    0.302  0.0377
-17          0.178 45 0.00      0.233     0.715    0.148     0.218    0.297  0.0381
-18          0.156 45 0.00      0.233     0.715    0.140     0.211    0.292  0.0389
-colMeans          45 0.44      0.267     0.715    0.191     0.267    0.351  0.0410
+     obs.mean  n  X1 prior.mean shrinkage low.intv post.mean upp.intv post.sd
+1       0.400 45 1.0      0.310     0.715    0.248     0.335    0.429  0.0462
+2       0.378 45 1.0      0.310     0.715    0.244     0.329    0.420  0.0448
+3       0.356 45 1.0      0.310     0.715    0.240     0.323    0.411  0.0437
+4       0.333 45 1.0      0.310     0.715    0.236     0.316    0.403  0.0429
+5       0.311 45 1.0      0.310     0.715    0.230     0.310    0.396  0.0424
+6       0.311 45 0.0      0.233     0.715    0.179     0.256    0.341  0.0415
+7       0.289 45 0.0      0.233     0.715    0.175     0.249    0.331  0.0400
+8       0.267 45 0.0      0.233     0.715    0.171     0.243    0.323  0.0388
+9       0.244 45 0.0      0.233     0.715    0.166     0.237    0.315  0.0380
+10      0.244 45 1.0      0.310     0.715    0.210     0.291    0.379  0.0432
+11      0.222 45 0.0      0.233     0.715    0.161     0.230    0.308  0.0377
+12      0.222 45 0.0      0.233     0.715    0.161     0.230    0.308  0.0377
+13      0.222 45 0.0      0.233     0.715    0.161     0.230    0.308  0.0377
+14      0.222 45 1.0      0.310     0.715    0.202     0.285    0.375  0.0441
+15      0.222 45 1.0      0.310     0.715    0.202     0.285    0.375  0.0441
+16      0.200 45 0.0      0.233     0.715    0.155     0.224    0.302  0.0377
+17      0.178 45 0.0      0.233     0.715    0.148     0.218    0.297  0.0381
+18      0.156 45 0.0      0.233     0.715    0.140     0.211    0.292  0.0389
+Mean          45 0.4      0.267     0.715    0.191     0.267    0.351  0.0410
 \end{CodeOutput}
 \end{CodeChunk}
 % Our model reflects on the additional information, \emph{i.e.}, indicator covariate (1 for outfielder and 0 for other positions), estimating two different prior means, 0.310 and 0.233. Also
@@ -1177,7 +1177,7 @@ Overall Mean                         45 0.444      0.267     0.715    0.191
                                 0.267    0.351  0.0410
 
 Second-level Variance Component Estimation Summary:
-alpha = log(A) for Gaussian or alpha =  log(1/r) for Binomial and Poisson data:
+alpha=log(A) for Gaussian or alpha=log(1/r) for Binomial and Poisson data:
 
 post.mode.alpha post.sd.alpha post.mode.r
           -4.73         0.957         113
@@ -1191,7 +1191,7 @@ beta2    0.389 0.187  2.074 0.038
 \end{CodeOutput}
 \end{CodeChunk}
 
-The regression coefficient for the outfielder indicator is significant, considering that p-value for $\hat{\beta}_2$ is 0.038. It means that the  two estimates for the expected random effects for the outfielders and infielders are significantly different. Also, the positive sign of $\hat{\beta}_{2}$ indicates that the population batting average for all outfielders tends to be higher than that for infielders. The  estimated odds ratio is $\exp(0.389)=1.48$.
+The regression coefficient for the outfielder indicator is significant, considering that $p$~value for $\hat{\beta}_2$ is 0.038. It means that the  two estimates for the expected random effects for the outfielders and infielders are significantly different. Also, the positive sign of $\hat{\beta}_{2}$ indicates that the population batting average for all outfielders tends to be higher than that for infielders. The  estimated odds ratio is $\exp(0.389)=1.48$.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1200,8 +1200,8 @@ R> plot(b.output)
 \end{CodeChunk}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width = 2.5in]{baseball1.png}
-\caption{Shrinkage plot and 95\% interval plot for 18 baseball players}
+\includegraphics[width = 2.8in]{baseball1.png}
+\caption{Shrinkage plot and 95\% interval plot for 18 baseball players.}
 \label{fig:baseball}
 \end{center}
 \end{figure}
@@ -1223,8 +1223,8 @@ R> b.coverage <- coverage(b.output, nsim = 1000)
 \end{CodeChunk}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width = 2.5in]{baseball2.png}
-\caption{Coverage plot via frequency method checking for 18 players}
+\includegraphics[width = 2.8in]{baseball2.png}
+\caption{Coverage plot via frequency method checking for 18 players.}
 \label{fig:baseball2}
 \end{center}
 \end{figure}
@@ -1285,15 +1285,16 @@ Due to its speed and ease of use, \pkg{Rgbp} can be used as a method of prelimin
 
 In addition to the built-in ``frequency method checking'' procedure, we may use the package to undergo ``model checking''. For example, in the Gaussian hierarchical model, the assumed marginal distribution of the data is given in Equation \ref{marginal_normal} as part of the likelihood function. By substituting the point estimates of $A$ and $\boldsymbol{\beta}$ from the package into this marginal distribution a test can be constructed to see whether the data follow the marginal distribution suggested by the hierarchical model.
 
-
-\section[acknowledgments]{Acknowledgments}
-The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
-
 \appendix
 \section{Unconditional posterior variance of the Binomial model}\label{apppostvar}
 \section{Unconditional posterior variance of the Gaussian model}\label{apppostvar_normal}
 
 \section{Unconditional posterior variance of the Poisson model}\label{apppostvar_poisson}
+
+
+\section*{Acknowledgments}
+The authors thank Professor Cindy Christiansen, Professor Phil Everson and the 2012 class of Harvard's Stat 324r: Parametric Statistical Inference and Modeling for their valuable inputs.
+
 
 \bibliography{bibliography}
 

@@ -1,4 +1,4 @@
-\begin{thebibliography}{27}
+\begin{thebibliography}{26}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -11,19 +11,19 @@
 
 \bibitem[{Azzalini(1985)}]{azzalini1985class}
 Azzalini A (1985).
-\newblock \enquote{A class of distributions which includes the normal ones.}
+\newblock \enquote{A Class of Distributions which Includes the Normal Ones.}
 \newblock \emph{Scandinavian journal of statistics}, pp. 171--178.
 
 \bibitem[{Berger \emph{et~al.}(1999)Berger, Liseo, Wolpert
   \emph{et~al.}}]{berger1999integrated}
 Berger JO, Liseo B, Wolpert RL, \emph{et~al.} (1999).
-\newblock \enquote{Integrated likelihood methods for eliminating nuisance
-  parameters.}
+\newblock \enquote{Integrated Likelihood Methods for Eliminating Nuisance
+  Parameters.}
 \newblock \emph{Statistical Science}, \textbf{14}(1), 1--28.
 
 \bibitem[{Blackwell(1947)}]{blackwell1947conditional}
 Blackwell D (1947).
-\newblock \enquote{Conditional expectation and unbiased sequential estimation.}
+\newblock \enquote{Conditional Expectation and Unbiased Sequential Estimation.}
 \newblock \emph{The Annals of Mathematical Statistics}, pp. 105--110.
 
 \bibitem[{Christiansen and Morris(1996)}]{modelchecking1996}
@@ -43,13 +43,13 @@ Christiansen C, Morris C (1997).
 
 \bibitem[{Daniels(1999)}]{daniels1999prior}
 Daniels MJ (1999).
-\newblock \enquote{A prior for the variance in hierarchical models.}
+\newblock \enquote{A Prior for the Variance in Hierarchical Models.}
 \newblock \emph{Canadian Journal of Statistics}, \textbf{27}(3), 567--578.
 
 \bibitem[{Dean(1992)}]{dean1992testing}
 Dean CB (1992).
-\newblock \enquote{Testing for overdispersion in Poisson and binomial
-  regression models.}
+\newblock \enquote{Testing for Overdispersion in Poisson and Binomial
+  Regression Models.}
 \newblock \emph{Journal of the American Statistical Association},
   \textbf{87}(418), 451--457.
 
@@ -64,21 +64,20 @@ Efron B, Morris C (1975).
 
 \bibitem[{Everson and Morris(2000)}]{everson2000inference}
 Everson PJ, Morris CN (2000).
-\newblock \enquote{Inference for multivariate normal hierarchical models.}
+\newblock \enquote{Inference for Multivariate Normal Hierarchical Models.}
 \newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
   Methodology)}, \textbf{62}(2), 399--412.
 
 \bibitem[{Gelman \emph{et~al.}(2014)Gelman, Su, Yajima, Hill, Pittau, Kerman,
   and Zheng}]{gelman2014arm}
 Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T (2014).
-\newblock \enquote{arm: data analysis using regression and
-  multilevel/hierarchical models, 2010.}
-\newblock \emph{URL http://CRAN. R-project. org/package= arm. R package
-  version}, pp. 1--3.
+\newblock \emph{\pkg{arm}: Data Analysis Using Regression and
+  Multilevel/Hierarchical Models, 2010}.
+\newblock \proglang{R}~package version~1.8-5.
 
 \bibitem[{Jones and Faddy(2003)}]{jones2003skew}
 Jones M, Faddy M (2003).
-\newblock \enquote{A skew extension of the t-distribution, with applications.}
+\newblock \enquote{A Skew Extension of the t-Distribution, with Applications.}
 \newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
   Methodology)}, \textbf{65}(1), 159--174.
 
@@ -89,14 +88,14 @@ Kelly J (2014).
 
 \bibitem[{Lee and Nelder(1996)}]{lee1996hierarchical}
 Lee Y, Nelder JA (1996).
-\newblock \enquote{Hierarchical generalized linear models.}
+\newblock \enquote{Hierarchical Generalized Linear Models.}
 \newblock \emph{Journal of the Royal Statistical Society. Series B
   (Methodological)}, pp. 619--678.
 
 \bibitem[{Lee \emph{et~al.}(2006)Lee, Nelder, and Pawitan}]{hglm2006}
 Lee Y, Nelder JA, Pawitan Y (2006).
-\newblock \emph{Generalized linear models with random effects: a unified
-  analysis via h-likelihood}.
+\newblock \emph{Generalized Linear Models with Random Effects: A Unified
+  Analysis via h-Likelihood}.
 \newblock Chapman \& Hall/ CRC, New York.
 
 \bibitem[{Morris(1988{\natexlab{a}})}]{carl1988}
@@ -116,7 +115,7 @@ Morris C (1988{\natexlab{b}}).
 \bibitem[{Morris and Christiansen(1995)}]{1995}
 Morris C, Christiansen C (1995).
 \newblock \enquote{Hierarchical Models for Ranking and for Identifying
-  Extremes, With Application.}
+  Extremes, with Application.}
 \newblock In J~Bernardo, J~Berger, A~Dawid, A~Smith (eds.), \emph{Bayesian
   Statistics 5}, pp. 227--296. New York: Oxford University Press.
 
@@ -133,32 +132,26 @@ Morris C, Tang R (2011).
 \newblock ISSN 08834237.
 \newblock \urlprefix\url{http://www.jstor.org/stable/23059992}.
 
-\bibitem[{Patterson and Thompson(1971)}]{patterson1971recovery}
-Patterson HD, Thompson R (1971).
-\newblock \enquote{Recovery of inter-block information when block sizes are
-  unequal.}
-\newblock \emph{Biometrika}, \textbf{58}(3), 545--554.
-
 \bibitem[{Rao(1945)}]{radhakrishna1945information}
 Rao CR (1945).
-\newblock \enquote{Information and accuracy attainable in the estimation of
-  statistical parameters.}
+\newblock \enquote{Information and Accuracy Attainable in the Estimation of
+  Statistical Parameters.}
 \newblock \emph{Bulletin of the Calcutta Mathematical Society}, \textbf{37}(3),
   81--91.
 
 \bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2010)R{\"o}nneg{\aa}rd, Shen, and
   Alam}]{hglm2010}
 R{\"o}nneg{\aa}rd L, Shen X, Alam M (2010).
-\newblock \enquote{hglm: A Package for Fitting Hierarchical Generalized Linear
-  Models.}
+\newblock \enquote{\pkg{hglm}: A Package for Fitting Hierarchical Generalized
+  Linear Models.}
 \newblock \emph{The R Journal}, \textbf{2}(2), 20--28.
 \newblock ISSN 20734859.
 
 \bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2011)R{\"o}nneg{\aa}rd, Shen, and
   Alam}]{ronnegaard2011hglm}
 R{\"o}nneg{\aa}rd L, Shen X, Alam M (2011).
-\newblock \enquote{The hglm package.}
-\newblock \emph{R package version}, \textbf{1}.
+\newblock \emph{The \pkg{hglm} Package}.
+\newblock \urlprefix\url{http://CRAN.R-project.org/package=hglm}.
 
 \bibitem[{Rubin(1981)}]{1981}
 Rubin DB (1981).
@@ -170,9 +163,9 @@ Rubin DB (1981).
 
 \bibitem[{Skellam(1948)}]{skellam1948}
 Skellam J (1948).
-\newblock \enquote{A probability distribution derived from the binomial
-  distribution by regarding the probability of success as variable between the
-  sets of trials.}
+\newblock \enquote{A Probability Distribution Derived from the Binomial
+  Distribution by Regarding the Probability of Success as Variable between the
+  Sets of Trials.}
 \newblock \emph{Journal of the Royal Statistical Society. Series B
   (Methodological)}, \textbf{10}(2), 257--261.
 
@@ -180,11 +173,10 @@ Skellam J (1948).
 Tak H, Morris C (in preparation).
 \newblock \enquote{Posterior Propriety and Frequency Coverage Evaluation of
   Bayesian Beta-Binomial Logistic Regression Model.}
-\newblock \emph{in preparation}.
 
 \bibitem[{Tang(2002)}]{tang2002fitting}
 Tang R (2002).
-\newblock \emph{Fitting and evaluating certain two-level hierarchical models}.
+\newblock \emph{Fitting and Evaluating Certain Two-Level Hierarchical Models}.
 \newblock Ph.D. thesis, Harvard University.
 
 \end{thebibliography}
