@@ -1,0 +1,207 @@
+\begin{thebibliography}{30}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Albert(1988)}]{albert1988computational}
+Albert JH (1988).
+\newblock \enquote{Computational methods using a Bayesian hierarchical
+  generalized linear model.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{83}(404), 1037--1044.
+
+\bibitem[{Azzalini(1985)}]{azzalini1985class}
+Azzalini A (1985).
+\newblock \enquote{A Class of Distributions which Includes the Normal Ones.}
+\newblock \emph{Scandinavian journal of statistics}, pp. 171--178.
+
+\bibitem[{Blackwell(1947)}]{blackwell1947conditional}
+Blackwell D (1947).
+\newblock \enquote{Conditional Expectation and Unbiased Sequential Estimation.}
+\newblock \emph{The Annals of Mathematical Statistics}, pp. 105--110.
+
+\bibitem[{Christiansen and Morris(1996)}]{modelchecking1996}
+Christiansen C, Morris C (1996).
+\newblock \enquote{Fitting and Checking a Two-Level Poisson Model: Modeling
+  Patient Mortality Rates in Heart Transplant Patients.}
+\newblock In D~Berry, D~Stangl (eds.), \emph{Bayesian Biostatistics}, pp.
+  467--501. CRC press.
+
+\bibitem[{Christiansen and Morris(1997)}]{morris1997}
+Christiansen C, Morris C (1997).
+\newblock \enquote{Hierarchical Poisson Regression Modeling.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{92}(438), pp. 618--632.
+\newblock ISSN 01621459.
+\newblock \urlprefix\url{http://www.jstor.org/stable/2965709}.
+
+\bibitem[{Daniels(1999)}]{daniels1999prior}
+Daniels MJ (1999).
+\newblock \enquote{A Prior for the Variance in Hierarchical Models.}
+\newblock \emph{Canadian Journal of Statistics}, \textbf{27}(3), 567--578.
+
+\bibitem[{Dean(1992)}]{dean1992testing}
+Dean CB (1992).
+\newblock \enquote{Testing for Overdispersion in Poisson and Binomial
+  Regression Models.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{87}(418), 451--457.
+
+\bibitem[{Efron and Morris(1975)}]{1975}
+Efron B, Morris C (1975).
+\newblock \enquote{Data Analysis Using Stein's Estimator and its
+  Generalizations.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{70}(350), pp. 311--319.
+\newblock ISSN 01621459.
+\newblock \urlprefix\url{http://www.jstor.org/stable/2285814}.
+
+\bibitem[{Everson and Morris(2000)}]{everson2000inference}
+Everson PJ, Morris CN (2000).
+\newblock \enquote{Inference for Multivariate Normal Hierarchical Models.}
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, \textbf{62}(2), 399--412.
+
+\bibitem[{Gelman \emph{et~al.}(2014{\natexlab{a}})Gelman, Carlin, Stern, and
+  Rubin}]{gelman2014bayesian}
+Gelman A, Carlin JB, Stern HS, Rubin DB (2014{\natexlab{a}}).
+\newblock \emph{Bayesian data analysis}, volume~2.
+\newblock Taylor \& Francis.
+
+\bibitem[{Gelman \emph{et~al.}(2014{\natexlab{b}})Gelman, Su, Yajima, Hill,
+  Pittau, Kerman, and Zheng}]{gelman2014arm}
+Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T
+  (2014{\natexlab{b}}).
+\newblock \emph{\pkg{arm}: Data Analysis Using Regression and
+  Multilevel/Hierarchical Models, 2010}.
+\newblock \proglang{R}~package version~1.8-5.
+
+\bibitem[{Jones and Faddy(2003)}]{jones2003skew}
+Jones M, Faddy M (2003).
+\newblock \enquote{A Skew Extension of the t-Distribution, with Applications.}
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, \textbf{65}(1), 159--174.
+
+\bibitem[{Kass and Steffey(1989)}]{kass1989approximate}
+Kass RE, Steffey D (1989).
+\newblock \enquote{Approximate Bayesian Inference in Conditionally Independent
+  Hierarchical Models (Parametric Empirical Bayes Models).}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{84}(407), pp. 717--726.
+\newblock ISSN 01621459.
+\newblock \urlprefix\url{http://www.jstor.org/stable/2289653}.
+
+\bibitem[{Kelly(2014)}]{kelly2014advances}
+Kelly J (2014).
+\newblock \emph{Advances in the Normal-Normal Hierarchical Model}.
+\newblock Ph.D. thesis, Harvard University.
+
+\bibitem[{Lee and Nelder(1996)}]{lee1996hierarchical}
+Lee Y, Nelder JA (1996).
+\newblock \enquote{Hierarchical Generalized Linear Models.}
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, pp. 619--678.
+
+\bibitem[{Lee \emph{et~al.}(2006)Lee, Nelder, and Pawitan}]{hglm2006}
+Lee Y, Nelder JA, Pawitan Y (2006).
+\newblock \emph{Generalized Linear Models with Random Effects: A Unified
+  Analysis via h-Likelihood}.
+\newblock Chapman \& Hall/ CRC, New York.
+
+\bibitem[{Morris(1988{\natexlab{a}})}]{carl1988}
+Morris C (1988{\natexlab{a}}).
+\newblock \enquote{Approximating Posterior Distributions and Posterior
+  Moments.}
+\newblock In J~Bernardo, MH~DeGroot, DV~Lindley, AFM Smith (eds.),
+  \emph{Bayesian Statistics 3}, pp. 327--344. Oxford University Press.
+
+\bibitem[{Morris(1988{\natexlab{b}})}]{accuracy1988}
+Morris C (1988{\natexlab{b}}).
+\newblock \enquote{Determining the Accuracy of Bayesian Empirical Bayes
+  Estimates in the Familiar Exponential Families.}
+\newblock In S~Gupta, J~Berger (eds.), \emph{Statistical Decision Theory and
+  Related Topics IV}, pp. 251--263. Springer-Verlag.
+
+\bibitem[{Morris and Lysy(2012)}]{morris2012}
+Morris C, Lysy M (2012).
+\newblock \enquote{Shrinkage Estimation in Multilevel Normal Models.}
+\newblock \emph{Statistical Science}, \textbf{27}(1), 115--134.
+
+\bibitem[{Morris and Tang(2011)}]{tang2011}
+Morris C, Tang R (2011).
+\newblock \enquote{Estimating Random Effects via Adjustment for Density
+  Maximization.}
+\newblock \emph{Statistical Science}, \textbf{26}(2), pp. 271--287.
+\newblock ISSN 08834237.
+\newblock \urlprefix\url{http://www.jstor.org/stable/23059992}.
+
+\bibitem[{Rao(1945)}]{radhakrishna1945information}
+Rao CR (1945).
+\newblock \enquote{Information and Accuracy Attainable in the Estimation of
+  Statistical Parameters.}
+\newblock \emph{Bulletin of the Calcutta Mathematical Society}, \textbf{37}(3),
+  81--91.
+
+\bibitem[{Rao(2003)}]{rao2003small}
+Rao JN (2003).
+\newblock \emph{Small area estimation}.
+\newblock Wiley Online Library.
+
+\bibitem[{Robert and Casella(2013)}]{robert2013monte}
+Robert C, Casella G (2013).
+\newblock \emph{Monte Carlo statistical methods}.
+\newblock Springer Science \& Business Media.
+
+\bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2010)R{\"o}nneg{\aa}rd, Shen, and
+  Alam}]{hglm2010}
+R{\"o}nneg{\aa}rd L, Shen X, Alam M (2010).
+\newblock \enquote{\pkg{hglm}: A Package for Fitting Hierarchical Generalized
+  Linear Models.}
+\newblock \emph{The R Journal}, \textbf{2}(2), 20--28.
+\newblock ISSN 20734859.
+
+\bibitem[{R{\"o}nneg{\aa}rd \emph{et~al.}(2011)R{\"o}nneg{\aa}rd, Shen, and
+  Alam}]{ronnegaard2011hglm}
+R{\"o}nneg{\aa}rd L, Shen X, Alam M (2011).
+\newblock \emph{The \pkg{hglm} Package}.
+\newblock \urlprefix\url{http://CRAN.R-project.org/package=hglm}.
+
+\bibitem[{Rubin(1981)}]{1981}
+Rubin DB (1981).
+\newblock \enquote{Estimation in Parallel Randomized Experiments.}
+\newblock \emph{Journal of Educational Statistics}, \textbf{6}(4), pp.
+  377--401.
+\newblock ISSN 03629791.
+\newblock \urlprefix\url{http://www.jstor.org/stable/1164617}.
+
+\bibitem[{Skellam(1948)}]{skellam1948}
+Skellam J (1948).
+\newblock \enquote{A Probability Distribution Derived from the Binomial
+  Distribution by Regarding the Probability of Success as Variable between the
+  Sets of Trials.}
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, \textbf{10}(2), 257--261.
+
+\bibitem[{Tak and Morris(in preparation)}]{tak2016propriety}
+Tak H, Morris C (in preparation).
+\newblock \enquote{Posterior Propriety and Frequency Coverage Evaluation of
+  Bayesian Beta-Binomial Logistic Regression Model.}
+
+\bibitem[{Tamura and Young(1987)}]{tamura1987stabilized}
+Tamura RN, Young SS (1987).
+\newblock \enquote{A stabilized moment estimator for the beta-binomial
+  distribution.}
+\newblock \emph{Biometrics}, pp. 813--824.
+
+\bibitem[{Tang(2002)}]{tang2002fitting}
+Tang R (2002).
+\newblock \emph{Fitting and Evaluating Certain Two-Level Hierarchical Models}.
+\newblock Ph.D. thesis, Harvard University.
+
+\end{thebibliography}
