@@ -71,13 +71,14 @@
 
 \section[Introduction]{Introduction (v3; 2 July 2015)}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-Gaussian, Poisson, or Binomial data from several independent groups sometimes have more variation than the assumed Gaussian, Poisson, or Binomial distributions of the first-level observed data. To account for this extra-variability, called overdispersion, a  two-level conjugate hierarchical model regards first-level mean parameters as random effects that come from a population-level conjugate prior distribution. 
+Gaussian, Poisson, or Binomial data from several independent groups sometimes have more variation than the assumed Gaussian, Poisson, or Binomial distributions of the first-level observed data. To account for this extra-variability, called overdispersion, a  two-level conjugate hierarchical model regards first-level mean parameters as random effects that come from a population-level conjugate prior distribution. The main  goal of our two-level conjugate modeling is to estimate these random effects for a comparison between groups.
 
 %The conjugate prior distribution is non-exchangeable if the model incorporates covariate information of each group via a linear, log-linear, or logistic regression according to the data type, and exchangeable if no covariates are available with only an intercept term for the regression. 
 
 
-With an assumption of homogeneity within each group, the observed data are sufficient statistics for the random effects without the population-level data; each group's sample mean for the Gaussian model, each group's number of outcomes happening given some exposure for the Poisson data, and each group's number of successful outcomes out of total number of trials for the Binomial model. The data may contain each group's covariate information. This type of  data is common for a biological analysis on litter data \citep{tamura1987stabilized}, a meta analysis on independent studies \citep{gelman2014bayesian}, or small area estimation problems \citep{rao2003small}.  For these data with  homogeneity within each group, the two-level model that \pkg{Rgbp} assumes can be considered as a conjugate hierarchical generalized linear model \citep{lee1996hierarchical, hglm2006} where each random effect has a conjugate prior distribution.
+With an assumption of homogeneity within each group, the observed data are group-level aggregate data from independent $k$ groups, composed of sufficient statistics for the random effects without the population-level data. Specifically, the data for the Gaussian model comprise of each group's sample mean and its standard error, those for the Poisson model have each group's number of outcomes happening given some exposure for the Poisson data, and those for the Binomial model contain each group's number of successful outcomes out of total number of trials. The data may contain each group's covariate information. This type of  data is common for a biological analysis on litter data \citep{tamura1987stabilized}, a meta analysis on independent studies (Chapter 5 in \cite{gelman2014bayesian}), or small area estimation problems \citep{ghosh1994small, rao2003small}.  
 
+For these data with the assumption of homogeneity within each group, the two-level model that \pkg{Rgbp} assumes can be considered as a conjugate hierarchical generalized linear model (HGLM) \citep{lee1996hierarchical, hglm2006} where each random effect has a conjugate prior distribution. However, the HGLM mainly focuses on estimating regression coefficients to explore associations between covariates and observed data, while we are more concerned about estimating random effects.
 
 \pkg{Rgbp} takes a Bayesian approach with our unique improper hyper-prior distributions on the parameters of the conjugate prior distribution, to produce  Bayesian interval   estimates for the random effects that achieve nominal confidence levels. The hyper-prior distributions lead to Stein's harmonic prior known to produce good repeated sampling coverage rates of the Bayesian interval estimates for random effects in a two-level Gaussian hierarchical model \citep{tang2011, morris2012, kelly2014advances}.  We apply an analog to Stein's harmonic prior to Poisson and Binomial hierarchical models. 
 %The main goal of our Bayesian hierarchical models is to compare random effects between groups by their Bayesian interval estimates that have good frequency properties.
@@ -90,7 +91,7 @@ When it comes to fitting the model, \pkg{Rgbp} adopts the adjustment for density
 For the Binomial  hierarchical model, \pkg{Rgbp} provides an option to draw independent posterior samples of all the model parameters including random effects via an acceptance-rejection method \citep{everson2000inference, tang2002fitting} instead of the approximate Bayesian tool.
 
 
-In addition to fitting hierarchical models, \pkg{Rgbp} evaluates the repeated sampling coverage rates of the resulting Bayesian interval estimates for random effects \citep{morris1997, daniels1999prior, tang2002fitting, tang2011, morris2012}. It is a unique procedure that distinguishes \pkg{Rgbp}  from any other \proglang{R} packages for hierarchical modeling such as \pkg{hglm} \citep{hglm2010, ronnegaard2011hglm} for conjugate hierarchical generalized models and \pkg{arm} \citep{gelman2014arm} for Bayesian hierarchical regression models. The evaluation procedure which we call ``frequency method checking'' uses a parametric bootstrapping  that generates mock data sets given the values of the hyper-parameters and estimates the coverage rates based on the generated mock data sets.
+In addition to fitting hierarchical models, \pkg{Rgbp} evaluates the repeated sampling coverage rates of the resulting Bayesian interval estimates for random effects \citep{morris1997, daniels1999prior, tang2002fitting, tang2011, morris2012}. It is a unique procedure that distinguishes \pkg{Rgbp}  from any other \proglang{R} packages for similar hierarchical modeling such as \pkg{hglm} \citep{hglm2010, ronnegaard2011hglm} for conjugate hierarchical generalized models. The evaluation procedure which we call ``frequency method checking'' uses a parametric bootstrapping  that generates mock data sets given the values of the hyper-parameters and estimates the coverage rates based on the generated mock data sets.
 
 %:
 The rest of this paper is organized as follows. We specify the Bayesian hierarchical models and discuss their posterior propriety in Section \ref{sec2}. In Section \ref{inference}, we explain the inferential models used to estimate the model parameters. We describe the estimation procedures including the ADM and the acceptance-rejection method in Section  \ref{sec3} and \ref{sec_accept}, respectively. We introduce the frequency method checking in Section \ref{sec4}.  We explain the usages of main functions in \pkg{Rgbp} in Section \ref{sec5}, and apply them to three examples in Section \ref{sec6}.
@@ -100,12 +101,13 @@ The rest of this paper is organized as follows. We specify the Bayesian hierarch
 \section[Hierarchical Structure]{Conjugate hierarchical modeling structure} \label{sec2}
 %A two-level  multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
-\pkg{Rgbp} allows users to choose one of three hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. Although there are possibly more hierarchical models such as Exponential-Gamma \citep{tang2002fitting}, we choose the three models because these are based on the most common data types we encounter in practice. 
+
+\pkg{Rgbp} allows users to choose one of three hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. Although there are possibly more hierarchical models such as Exponential-Gamma \citep{tang2002fitting}, we choose the three models because these are based on the most common data types we may encounter in practice and the conjugacy leads to a simple posterior computation.
 
 Our parametrization of the three hierarchical models leads to an intuitive shrinkage interpretation in inference and  facilitates the estimation procedure because the shrinkage factors under our parametrization are a function of only a second-level variance component.
  
 \subsection[Normal-Normal]{Normal-Normal model for Gaussian data}
-The following is the Normal-Normal hierarchical model (or the Gaussian model) assumed by \pkg{Rgbp}. The subscript \emph{j} below indicates the \emph{j}th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
+The following Normal-Normal hierarchical model (or the Gaussian model) assumed by \pkg{Rgbp} is useful when the group-level aggregate data from independent $k$ groups are continuous variables with known standard errors. The subscript \emph{j} below indicates the \emph{j}th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_{j}\vert \mu_{j} & \stackrel{\textrm{indep.}}{\sim} \textrm{Normal}(\mu_{j}, V_{j}),\label{normalobs}\\
 \mu_{j}\vert \boldsymbol{\beta}, A & \stackrel{\textrm{indep.}}{\sim} \textrm{Normal}(\mu^E_{j}, A),\label{normalprior}
@@ -122,7 +124,7 @@ where $B_{j}\equiv V_{j}/(V_{j} + A)$ is a shrinkage factor of group $j$ and $\b
 %; sometimes we may be able to obtain  information about the mean of the population from previous studies.
 %; in the limit of $r$ going to 0, the conjugate prior distribution gets flatter. 
 \subsection[Poisson-Gamma]{Poisson-Gamma model for Poisson data}\label{poissonsubsec}
-\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model), though its usage is limited to the case where the expected random effects are known ($m=0$). For $j=1, 2, \ldots, k$, 
+\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from independent $k$ groups comprise of non-negative count data without upper limitation. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may obtain its information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_j\vert \lambda_j &\stackrel{\textrm{indep.}}{\sim}  \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim} \textrm{Gamma}(r\lambda^E, r),
@@ -145,7 +147,7 @@ Note that the conditional posterior variance in  \eqref{gammapost_mean_var} is l
 %in the prior and conditional posterior distributions 
 
 \subsection[Binomial-Beta]{Binomial-Beta model for Binomial data}
-\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model. Unlike the Poisson model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
+\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from independent $k$ groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
 \begin{align}
 y_{j} \vert p_{j} &\stackrel{\textrm{indep.}}{\sim} \textrm{Binomial}(n_{j}, ~p_{j}),\\
 p_{j} \vert \boldsymbol{\beta}, r &\stackrel{\textrm{indep.}}{\sim} \textrm{Beta}(rp^E_j,~ r(1-p^E_j)),
@@ -257,8 +259,8 @@ B_j\vert\boldsymbol{y}\sim \textrm{Beta}(a_{1j},~ a_{0j}).
 
 Note that the mean of Beta distribution $a_{1j}/(a_{1j}+a_{0j})$ is not the same as its mode $(a_{j1}-1)/(a_{j1}+a_{j0}-2)$. The ADM works on an adjusted posterior distribution $f^A(B_j\vert \boldsymbol{y})dB_j\propto B_j(1-B_j)f(B_j\vert \boldsymbol{y})dB_j$ so that the mode of $f^A(B_j\vert \boldsymbol{y})$ is the same as the mean of the original Beta distribution. The assumed posterior mean and variance of the $j$th shrinkage factor are
 \begin{align}
-\E(B_j\vert\boldsymbol{y})&=\frac{a_{1j}}{a_{1j}+a_{0j}}=\argmax_{B_j}~ f^A(B_j\vert \boldsymbol{y})\equiv B^\ast_j,\label{admmean}\\
-\VAR(B_j\vert\boldsymbol{y})&=\frac{B^\ast_j(1-B^\ast_j)}{a_{1j}+a_{0j}+1}=\frac{B^\ast_j(1-B^\ast_j)}{B^\ast_j(1-B^\ast_j)[-\frac{d^2}{dB^2_j}\log(A(B_j\vert \boldsymbol{y}))\vert_{B_j=B^\ast_j}] +1}.\label{admvar}
+\E(B_j\vert\boldsymbol{y})&=\frac{a_{1j}}{a_{1j}+a_{0j}}=\argmax_{B_j}~ f^A(B_j\vert \boldsymbol{y})\equiv B'_j,\label{admmean}\\
+\VAR(B_j\vert\boldsymbol{y})&=\frac{B'_j(1-B'_j)}{a_{1j}+a_{0j}+1}=\frac{B'_j(1-B'_j)}{B'_j(1-B'_j)[-\frac{d^2}{dB^2_j}\log(A(B_j\vert \boldsymbol{y}))\vert_{B_j=B'_j}] +1}.\label{admvar}
 \end{align}
 
 The ADM estimates these mean and variance using the marginal posterior distribution of $r$, $f(r\vert\boldsymbol{y})\propto L(r)dr/r^2$, where the marginal likelihood, $L(r)=\int L(\boldsymbol{\beta}, r)d\boldsymbol{\beta}$, for the Binomial model is obtained via the Laplace approximation with a Lebesque measure on $\boldsymbol{\beta}$ and that for the Poisson model is specified in  \eqref{marginal_poisson}. %For the Gaussian model, the marginal likelihood function of $A$ is available in a closed form with $\boldsymbol{\beta}$ integrated out  \citep{tang2011, kelly2014advances}. 
@@ -266,7 +268,7 @@ The ADM estimates these mean and variance using the marginal posterior distribut
 
 Considering that  \eqref{admmean} and  \eqref{admvar} involve the maximization and Hessian calculation, we work on a logarithmic scale of $r$, i.e., $\alpha=-\log(r)$ (or $\alpha=\log(A)$ for the Gaussian model), because the distribution of $\alpha$ is more symmetric than that of $r$, and $\alpha$ is defined on a real line without any boundary issues. Because $f^A(B_j\vert\boldsymbol{y})$ is proportional to the marginal posterior density $f(\alpha\vert\boldsymbol{y})\propto \exp(\alpha) L(\alpha)d\alpha$ \citep{tang2011}, the  posterior mean in  \eqref{admmean} is estimated by
 \begin{equation}\label{meaninvariance}
-\hat{B}^\ast_j=\frac{\exp(-\hat{\alpha})}{n_j+\exp(-\hat{\alpha})},
+\hat{B}'_j=\frac{\exp(-\hat{\alpha})}{n_j+\exp(-\hat{\alpha})},
 \end{equation}
 
 %This is because the marginal posterior distribution of the shrinkage factor, $p(B_j\vert\boldsymbol{y})dB_j \propto L(B_j)dB_j/B^2_j$ can be obtained via its variable transformation.
@@ -276,19 +278,19 @@ where $\hat{\alpha}$ is the mode of $f(\alpha\vert\boldsymbol{y})$, \emph{i.e.},
 
 We need  invariance information introduced in \cite{tang2011} to estimate the variance in  \eqref{admvar}, which is defined as 
 \begin{eqnarray}
-I_\textrm{inv} &\equiv& -\frac{d^2 \log(f^A(B_j\vert \boldsymbol{y}))}{d[\textrm{logit}(B_j)]^2}\bigg\vert_{B_j=\hat{B}^\ast_j}=-\frac{d^2 \log(f^A(B_j(r)\vert \boldsymbol{y}))}{d[\log(r)]^2}\bigg\vert_{r=\hat{r}}\label{invariance}\\
+I_\textrm{inv} &\equiv& -\frac{d^2 \log(f^A(B_j\vert \boldsymbol{y}))}{d[\textrm{logit}(B_j)]^2}\bigg\vert_{B_j=\hat{B}'_j}=-\frac{d^2 \log(f^A(B_j(r)\vert \boldsymbol{y}))}{d[\log(r)]^2}\bigg\vert_{r=\hat{r}}\label{invariance}\\
 &=& -\frac{d^2 \log(f^A(B_j(r(\alpha))\vert \boldsymbol{y}))}{d\alpha^2}\bigg\vert_{\alpha=\hat{\alpha}}\nonumber
 \end{eqnarray}
 
 Note that this invariance information is  the negative Hessian value of $\alpha+\log(L(\alpha))$ at the mode $\hat{\alpha}$. Using the invariance information, we  estimate the unconditional posterior variance of shrinkage factor in  \eqref{admvar} by
 \begin{equation}\label{varianceinvariance}
-\widehat{\VAR}(B_j\vert\boldsymbol{y})=\frac{\hat{B}^{\ast2}_j(1-\hat{B}^\ast_j)^2}{I_\textrm{inv} +\hat{B}^\ast_j(1-\hat{B}^\ast_j)}.
+\widehat{\VAR}(B_j\vert\boldsymbol{y})=\frac{(\hat{B}'_j)^2(1-\hat{B}'_j)^2}{I_\textrm{inv} +\hat{B}'_j(1-\hat{B}'_j)}.
 \end{equation}
 
 We obtain the estimates of $a_{1j}$ and $a_{0j}$, the two parameters of the Beta distribution in  \eqref{admshrinkage}, by matching them to the estimated unconditional posterior mean and variance of $B_j$ specified in  \eqref{meaninvariance} and \eqref{varianceinvariance};
 %After matching to the two parameters of the Beta distribution in Equation \ref{admshrinkage}, i.e., $a_{1j}$ and $a_{0j}$, we obtain the estimates of $a_{1j}$ and $a_{0j}$ as
 \begin{equation}\label{admpara}
-\hat{a}_{1j}=\frac{I_\textrm{inv}}{1-\hat{B}^\ast_j}~~\textrm{and}~~\hat{a}_{0j}=\frac{I_\textrm{inv}}{\hat{B}^\ast_j}.
+\hat{a}_{1j}=\frac{I_\textrm{inv}}{1-\hat{B}'_j}~~\textrm{and}~~\hat{a}_{0j}=\frac{I_\textrm{inv}}{\hat{B}'_j}.
 \end{equation}
 
 The moments of the Beta distribution are well defined as a function of $a_{1j}$ and $a_{0j}$, i.e.,  $\E(B^c_j\vert\boldsymbol{y})=B(a_{1j} + c, a_{0j})/B(a_{1j}, a_{0j})$ for $c\ge0$. Their estimates are 
@@ -339,7 +341,7 @@ We estimate the values of $b_{1j}$ and $b_{0j}$  by matching them to the estimat
 
 Finally, we estimate the unconditional posterior moments of the expected random effects, $\E((p^E_{j})^c\vert\boldsymbol{y})$, by $\hat{\E}((p^E_{j})^c\vert\hat{\alpha}, \boldsymbol{y})=B(\hat{b}_{1j} + c, \hat{b}_{0j})/B(\hat{b}_{1j}, \hat{b}_{0j})$ for $c\ge0$.
 
-The ADM approximation to a log-Normal density via a F$^\ast$ distribution (represented by a ratio of two independent Gamma random variables) is known to be more accurate than the Laplace approximation \citep{carl1988}.
+The ADM approximation to a log-Normal density via a F distribution (represented by a ratio of two independent Gamma random variables) is known to be more accurate than the Laplace approximation \citep{carl1988}.
 %\begin{equation}\label{priormeanmoments}
 %\widehat{\E}((p^E_{j})^c\vert\boldsymbol{y})= \frac{B(\hat{b}_{1j} + c, \hat{b}_{0j})}{B(\hat{b}_{1j}, \hat{b}_{0j})}.
 %\end{equation}
@@ -449,7 +451,7 @@ It is too complicated to figure out the tail behaviors of $f(\boldsymbol{\beta} 
 Specifically, we assume
 \begin{eqnarray}\label{env}
 g_1(\alpha) &=& g_1(\alpha; \mu, \sigma, a, b)~\equiv~\textrm{Skewed-}t(\alpha\vert\mu, \sigma, a, b),\\
-g_2(\boldsymbol{\beta}) &=& g_2(\boldsymbol{\beta}; \boldsymbol{\mu}^\ast, S_{(m\times m)})~\equiv~t_{4}(\boldsymbol{\beta}\vert \boldsymbol{\mu}^\ast, S),\label{g2approx}
+g_2(\boldsymbol{\beta}) &=& g_2(\boldsymbol{\beta}; \boldsymbol{\xi}, S_{(m\times m)})~\equiv~t_{4}(\boldsymbol{\beta}\vert \boldsymbol{\xi}, S),\label{g2approx}
 \end{eqnarray}
 where the notation Skewed-$t(\alpha\vert\mu, \sigma, a, b)$ represents a density function of a skewed $t$-distribution  at $\alpha$ with location $\mu$, scale $\sigma$, degree of freedom $a+b$, and skewness $a-b$ for any positive constants $a$ and $b$ \citep{jones2003skew}. The article of \cite{jones2003skew} derives the mode of $g_1(\alpha)$ as
 \begin{equation}\label{mode}
@@ -459,9 +461,9 @@ The article also show that the tails of the skewed-$t$ density function  follow 
 \begin{equation}
 \alpha\sim \mu+\sigma\frac{\sqrt{a+b}(2T-1)}{2\sqrt{T(1-T)}}, ~\textrm{where}~ T\sim \textrm{Beta}(a, b).
 \end{equation}
-The notation $t_{4}(\boldsymbol{\beta}\vert\boldsymbol{\mu}^\ast, S)$ in  \eqref{g2approx} indicates a density function of a multivariate $t$-distribution at $\boldsymbol{\beta}$ with 4 degrees of freedom, a location vector $\boldsymbol{\mu}^\ast$, and a $m\times m$ scale matrix $S$ that leads to the variance-covariance matrix $2S$. 
+The notation $t_{4}(\boldsymbol{\beta}\vert\boldsymbol{\xi}, S)$ in  \eqref{g2approx} indicates a density function of a multivariate $t$-distribution at $\boldsymbol{\beta}$ with 4 degrees of freedom, a location vector $\boldsymbol{\xi}$, and a $m\times m$ scale matrix $S$ that leads to the variance-covariance matrix $2S$. 
 
-We determine the parameters of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$, i.e., $\mu$, $\sigma$, $a$, $b$, $\boldsymbol{\mu}^\ast$, and $S$, to make the product of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$ similar to the target joint posterior density $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$. First, we obtain the  mode of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$ and the inverse of the  negative Hessian matrix at the modes, $-H^{-1}$. Let $(\hat{\alpha}, \hat{\boldsymbol{\beta}})$ denote the modes of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$, $-H^{-1}_{\hat{\alpha}}$ indicate (1, 1) element of $-H^{-1}$, and $-H^{-1}_{\hat{\boldsymbol{\beta}}}$ represent  $-H^{-1}$ without the first row and  column. 
+We determine the parameters of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$, i.e., $\mu$, $\sigma$, $a$, $b$, $\boldsymbol{\xi}$, and $S$, to make the product of $g_1(\alpha)$ and $g_2(\boldsymbol{\beta})$ similar to the target joint posterior density $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$. First, we obtain the  mode of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$ and the inverse of the  negative Hessian matrix at the modes, $-H^{-1}$. Let $(\hat{\alpha}, \hat{\boldsymbol{\beta}})$ denote the modes of $f(\alpha, \boldsymbol{\beta} \vert  \boldsymbol{y})$, $-H^{-1}_{\hat{\alpha}}$ indicate (1, 1) element of $-H^{-1}$, and $-H^{-1}_{\hat{\boldsymbol{\beta}}}$ represent  $-H^{-1}$ without the first row and  column. 
 %(1, 1)  and $(2:(m+1), 2:(m+1))$ elements of the  inverse of the negative Hessian matrix at the modes, respectively.
 % $f(\alpha, \boldsymbol{\beta} \vert \boldsymbol{y})\propto e^\alpha L(\alpha, \boldsymbol{\beta})d\alpha d\boldsymbol{\beta}$. 
 
@@ -474,9 +476,9 @@ Next, we set ($a,~ b$) to $(k,~ 2k)$ if $k<10$ (or otherwise $(\log(k),~ 2\log(k
 %, considering an asymptotic normality of the target density as $k$ increases. 
 %In case of using the hyper-prior distribution $dr/r^{1.5}$, whose right tail is thicker than $dr/r^2$ a priori, we set a larger scale $\phi=5*\sqrt{-H^{-1}_{\hat{\alpha}}}$ to cover its thicker tail. The multiplication constants were chosen after simulation studies. We fix the skewness parameter $\delta$ at -2 because in many cases, combined with a large scale parameter, it helped the skewed-normal density cover a long left-tail of the marginal distribution of $\alpha$, known to have a left skewness \citep{morris2012shrinkage}. 
 
-As for $g_2(\boldsymbol{\beta})$, we matches the location vector $\boldsymbol{\mu}^\ast$ to the mode $\hat{\boldsymbol{\beta}}$ and the scale matrix $S$ to $-H^{-1}_{\hat{\boldsymbol{\beta}}}/2$ so that the variance-covariance matrix becomes $-H^{-1}_{\hat{\boldsymbol{\beta}}}$;
+As for $g_2(\boldsymbol{\beta})$, we matches the location vector $\boldsymbol{\xi}$ to the mode $\hat{\boldsymbol{\beta}}$ and the scale matrix $S$ to $-H^{-1}_{\hat{\boldsymbol{\beta}}}/2$ so that the variance-covariance matrix becomes $-H^{-1}_{\hat{\boldsymbol{\beta}}}$;
 \begin{equation}
-g_2(\boldsymbol{\beta})\equiv t_4(\boldsymbol{\beta}\vert \boldsymbol{\mu}^\ast=\hat{\boldsymbol{\beta}}, S=-H^{-1}_{\hat{\boldsymbol{\beta}}}/2).
+g_2(\boldsymbol{\beta})\equiv t_4(\boldsymbol{\beta}\vert \boldsymbol{\xi}=\hat{\boldsymbol{\beta}}, S=-H^{-1}_{\hat{\boldsymbol{\beta}}}/2).
 \end{equation}
 %; when the sample size was small, it increased the acceptance rate of the A-R method
 
@@ -726,7 +728,7 @@ R> coverage.plot(cov)
 \label{sec:ex:hosp}
 
 
-We analyze a data set of 31 hospitals in New York state comprising of the outcomes of the coronary artery bypass graft (CABG) surgery \citep{morris2012}. The data set contains the number of deaths, $\boldsymbol{y}$, for a specified period after CABG surgeries out of the total number of patients, $\boldsymbol{n}$, receiving CABG surgeries in each hospital. Health care providers may use these data to improve their care qualities, and patients may refer to the data to select a better hospital. Our goal is to obtain the point and interval estimates for the unknown true mortality rates (random effects) of 31 hospitals to evaluate  each hospital's reliability on the CABG surgery. We interpret the caseloads, $\boldsymbol{n}$,  as exposures and assume that the state-level death rate per exposure of this surgery ($\lambda^E$) is known as 0.03 to fit the Poisson model for an illustrative purpose.  If covariate information is available or the information about the expected random effect is unknown, we recommend using the Binomial model.
+We analyze a data set of 31 hospitals in New York state comprising of the outcomes of the coronary artery bypass graft (CABG) surgery \citep{morris2012}. The data set contains the number of deaths, $\boldsymbol{y}$, for a specified period after CABG surgeries out of the total number of patients, $\boldsymbol{n}$, receiving CABG surgeries in each hospital. Health care providers may use these data to improve their care qualities, and patients may refer to the data to select a better hospital. Our goal is to obtain the point and interval estimates for the unknown true mortality rates (random effects) of 31 hospitals to evaluate  each hospital's reliability on the CABG surgery (see \cite{morris1995} for the similar ranking problem). We interpret the caseloads, $\boldsymbol{n}$,  as exposures and assume that the state-level death rate per exposure of this surgery ($\lambda^E$) is known as 0.03 to fit the Poisson model for an illustrative purpose.  If covariate information is available or the information about the expected random effect is unknown, we recommend using the Binomial model.
 %\footnote{Visit \emph{http://www.health.ny.gov/statistics/diseases/cardiovascular/} for more profile data of the CABG surgery in New York state.}
 
 These data can be loaded into \proglang{R} using the following code.

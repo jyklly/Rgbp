@@ -1,4 +1,4 @@
-\begin{thebibliography}{30}
+\begin{thebibliography}{31}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -68,19 +68,16 @@ Everson PJ, Morris CN (2000).
 \newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
   Methodology)}, \textbf{62}(2), 399--412.
 
-\bibitem[{Gelman \emph{et~al.}(2014{\natexlab{a}})Gelman, Carlin, Stern, and
+\bibitem[{Gelman \emph{et~al.}(2014)Gelman, Carlin, Stern, and
   Rubin}]{gelman2014bayesian}
-Gelman A, Carlin JB, Stern HS, Rubin DB (2014{\natexlab{a}}).
+Gelman A, Carlin JB, Stern HS, Rubin DB (2014).
 \newblock \emph{Bayesian data analysis}, volume~2.
 \newblock Taylor \& Francis.
 
-\bibitem[{Gelman \emph{et~al.}(2014{\natexlab{b}})Gelman, Su, Yajima, Hill,
-  Pittau, Kerman, and Zheng}]{gelman2014arm}
-Gelman A, Su YS, Yajima M, Hill J, Pittau MG, Kerman J, Zheng T
-  (2014{\natexlab{b}}).
-\newblock \emph{\pkg{arm}: Data Analysis Using Regression and
-  Multilevel/Hierarchical Models, 2010}.
-\newblock \proglang{R}~package version~1.8-5.
+\bibitem[{Ghosh and Rao(1994)}]{ghosh1994small}
+Ghosh M, Rao J (1994).
+\newblock \enquote{Small area estimation: an appraisal.}
+\newblock \emph{Statistical science}, pp. 55--76.
 
 \bibitem[{Jones and Faddy(2003)}]{jones2003skew}
 Jones M, Faddy M (2003).
@@ -127,6 +124,13 @@ Morris C (1988{\natexlab{b}}).
   Estimates in the Familiar Exponential Families.}
 \newblock In S~Gupta, J~Berger (eds.), \emph{Statistical Decision Theory and
   Related Topics IV}, pp. 251--263. Springer-Verlag.
+
+\bibitem[{Morris and Christiansen(1995)}]{morris1995}
+Morris C, Christiansen C (1995).
+\newblock \enquote{Hierarchical Models for Ranking and for Identifying
+  Extremes, with Application.}
+\newblock In J~Bernardo, J~Berger, A~Dawid, A~Smith (eds.), \emph{Bayesian
+  Statistics 5}, pp. 227--296. New York: Oxford University Press.
 
 \bibitem[{Morris and Lysy(2012)}]{morris2012}
 Morris C, Lysy M (2012).
