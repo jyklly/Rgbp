@@ -1,5 +1,11 @@
 import(sn)
 import(mnormt)
+importFrom("graphics", "abline", "axis", "legend", "lines", "par",
+           "points", "sunflowerplot")
+importFrom("stats", "as.formula", "binomial", "dnbinom", "dnorm",
+           "glm", "median", "optim", "pbeta", "pgamma", "pnorm",
+           "poisson", "qbeta", "qgamma", "qnorm", "quantile", "rbeta",
+           "rbinom", "rgamma", "rnorm", "rpois", "runif", "var")
 exportPattern("^[[:alpha:]]+")
 S3method(print, gbp)
 S3method(print, summary.gbp)
