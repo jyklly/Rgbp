@@ -69,7 +69,7 @@
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-\section[Introduction]{Introduction (v3; 2 July 2015)}
+\section[Introduction]{Introduction (v3; 27 July 2015)}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 Gaussian, Poisson, or Binomial data from several independent groups sometimes have more variation than the assumed Gaussian, Poisson, or Binomial distributions of the first-level observed data. To account for this extra-variability, called overdispersion, a  two-level conjugate hierarchical model regards first-level mean parameters as random effects that come from a population-level conjugate prior distribution. The main  goal of our two-level conjugate modeling is to estimate these random effects for a comparison between groups.
 
@@ -109,7 +109,7 @@ The rest of this paper is organized as follows. We specify the Bayesian hierarch
 Our parametrization of the three hierarchical models leads to an intuitive shrinkage interpretation in inference and  facilitates the estimation procedure because the shrinkage factors under our parametrization are a function of only a second-level variance component.
  
 \subsection[Normal-Normal]{Normal-Normal model for Gaussian data}
-The following Normal-Normal hierarchical model (or the Gaussian model) assumed by \pkg{Rgbp} is useful when the group-level aggregate data from independent $k$ groups are continuous variables with known standard errors. The subscript \emph{j} below indicates the \emph{j}th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
+The following Normal-Normal hierarchical model (or the Gaussian model) assumed by \pkg{Rgbp} is useful when the group-level aggregate data from $k$ independent  groups are continuous variables with known standard errors. The subscript \emph{j} below indicates the \emph{j}th group among \emph{k} groups in the dataset. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_{j}\vert \mu_{j} & \stackrel{\textrm{indep.}}{\sim} \textrm{Normal}(\mu_{j}, V_{j}),\label{normalobs}\\
 \mu_{j}\vert \boldsymbol{\beta}, A & \stackrel{\textrm{indep.}}{\sim} \textrm{Normal}(\mu^E_{j}, A),\label{normalprior}
@@ -126,7 +126,7 @@ where $B_{j}\equiv V_{j}/(V_{j} + A)$ is a shrinkage factor of group $j$ and $\b
 %; sometimes we may be able to obtain  information about the mean of the population from previous studies.
 %; in the limit of $r$ going to 0, the conjugate prior distribution gets flatter. 
 \subsection[Poisson-Gamma]{Poisson-Gamma model for Poisson data}\label{poissonsubsec}
-\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from independent $k$ groups comprise of non-negative count data without upper limitation. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may obtain its information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
+\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups comprise of non-negative count data without upper limitation. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may obtain its information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_j\vert \lambda_j &\stackrel{\textrm{indep.}}{\sim}  \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim} \textrm{Gamma}(r\lambda^E, r),
@@ -149,7 +149,7 @@ Note that the conditional posterior variance in  \eqref{gammapost_mean_var} is l
 %in the prior and conditional posterior distributions 
 
 \subsection[Binomial-Beta]{Binomial-Beta model for Binomial data}
-\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from independent $k$ groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
+\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from $k$ independent  groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
 \begin{align}
 y_{j} \vert p_{j} &\stackrel{\textrm{indep.}}{\sim} \textrm{Binomial}(n_{j}, ~p_{j}),\\
 p_{j} \vert \boldsymbol{\beta}, r &\stackrel{\textrm{indep.}}{\sim} \textrm{Beta}(rp^E_j,~ r(1-p^E_j)),
