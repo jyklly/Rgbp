@@ -69,7 +69,7 @@
 %% include your article here, just as usual
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 
-\section[Introduction]{Introduction (v3; 27 July 2015)}
+\section[Introduction]{Introduction (v4; 28 July 2015)}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 Gaussian, Poisson, or Binomial data from several independent groups sometimes have more variation than the assumed Gaussian, Poisson, or Binomial distributions of the first-level observed data. To account for this extra-variability, called overdispersion, a  two-level conjugate hierarchical model regards first-level mean parameters as random effects that come from a population-level conjugate prior distribution. The main  goal of our two-level conjugate modeling is to estimate these random effects for a comparison between groups.
 
@@ -126,7 +126,7 @@ where $B_{j}\equiv V_{j}/(V_{j} + A)$ is a shrinkage factor of group $j$ and $\b
 %; sometimes we may be able to obtain  information about the mean of the population from previous studies.
 %; in the limit of $r$ going to 0, the conjugate prior distribution gets flatter. 
 \subsection[Poisson-Gamma]{Poisson-Gamma model for Poisson data}\label{poissonsubsec}
-\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups comprise of non-negative count data without upper limitation. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may obtain its information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
+\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups comprise of non-negative count data without upper limit. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may obtain its information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_j\vert \lambda_j &\stackrel{\textrm{indep.}}{\sim}  \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim} \textrm{Gamma}(r\lambda^E, r),
@@ -234,18 +234,16 @@ f(\boldsymbol{\lambda}\vert \boldsymbol{y})=\int  f(\boldsymbol{\lambda}\vert r,
 %As for the ADM procedure for the Gaussian model, \cite{kelly2014advances} for the details about the ADM procedure of the Gaussian model adopted in  \pkg{Rgbp}.
 
 
-%Overall, obtaining point and interval estimates of each random effect is our primary inferential interest.  The approximate Bayesian tool assumes that the unconditional posterior distribution of each random effect, i.e., $\mu_j\vert\boldsymbol{y}$, $p_j\vert\boldsymbol{y}$, or $\lambda_j\vert\boldsymbol{y}$,  follows a skewed-Normal distribution for the Gaussian case,  a Beta distribution for the Binomial case, or a Gamma distribution for the Poisson case. We match the parameters of the assumed distribution to the estimated unconditional posterior moments of each random effect, $\hat{\E}(\mu_j^c\vert\boldsymbol{y}$), $\hat{\E}(p_j^c\vert\boldsymbol{y}$), or $\hat{\E}(\lambda_j^c\vert\boldsymbol{y}$) for a non-negative constant $c$. We use these assumed unconditional posterior distributions to make point and interval estimates of each random effect. 
 
-
-In this section, we illustrate our estimation procedure equipped with the adjustment for density maximization (ADM) \citep{carl1988, morris1997, tang2011}, a way to  approximate a distribution of the parameter of interest by one of Pearson family distributions via maximization. Because the ADM procedure for the Gaussian model adopted in \pkg{Rgbp} is well documented in \cite{kelly2014advances}, we describe  the ADM procedure  using the Poisson and Binomial model. 
+We illustrate our estimation procedure which utilizes adjustment for density maximization (ADM) \citep{carl1988, morris1997, tang2011}. ADM is a method  to  approximate a distribution by a member of Pearson family of distributions and obtain moment estimates via maximization. The ADM procedure for the Gaussian model adopted in \pkg{Rgbp} is well documented in \cite{kelly2014advances} and so in this section we will describe  the ADM procedure  using the Poisson and Binomial model. 
 
 \subsection[shrinkage]{Estimation for shrinkage factors and expected random effects}\label{shrinkage}
 
-Estimating the unconditional posterior moments of the shrinkage factors and the expected random effects is crucial because we use their estimated moments to estimate the unconditional posterior moments of the random effects in the end. 
+Our goal here is to estimate the unconditional posterior moments of the shrinkage factors and the expected random effects because they are used to estimate the unconditional posterior moments of the random effects. 
 
-\subsubsection{Unconditional posterior moments of shrinkage factors}  It is noted that  the shrinkage factors  are a function of $r$, i.e., $B_{j}= B_{j}(r)=r/(r+n_{j})$ (or a function of $A$ for the Gaussian model). One way to approximate the distribution of $B_{j}$ is to find the maximum likelihood estimate of $r$, $\hat{r}_{MLE}$, with its Hessian value and to use a Delta method for an asymptotic Normal distribution of $\hat{B}_{j}(\hat{r}_{MLE})$. This Normal approximation, however, is defined on $(-\infty, \infty)$ whereas $B_{j}$ lies on the unit interval between 0 and 1, and hence in small sample sizes the Delta method can result in point estimates lying on the boundary of the parameter space, from which the restricted MLE procedure sometimes suffers \citep{tang2011, kelly2014advances}.
+\subsubsection{Unconditional posterior moments of shrinkage factors}  It is noted that  the shrinkage factors  are a function of $r$, i.e., $B_{j}= B_{j}(r)=r/(r+n_{j})$ (or a function of $A$ for the Gaussian model). A common method of estimation of $B_{j}$ is to approximate the likelihood of $r$ with two derivatives and use  a Delta method for an asymptotic Normal distribution of $\hat{B}_{j}(\hat{r}_{MLE})$. This Normal approximation, however, is defined on $(-\infty, \infty)$ whereas $B_{j}$ lies on the unit interval between 0 and 1, and hence in small sample sizes the Delta method can result in point estimates lying on the boundary of the parameter space, from which the restricted MLE procedure sometimes suffers \citep{tang2011, kelly2014advances}.
 
-To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of the ADM. The ADM approximates the distribution of the function of the parameter of interest by one of the Pearson family distributions using the first two derivatives as the Delta method does; the Delta method is a special case of the ADM based on the Normal distribution. 
+To continue with a maximization-based estimation procedure but to steer clear of aforementioned boundary issues we make use of  ADM. The ADM approximates the distribution of the function of the parameter of interest by one of the Pearson family distributions using the first two derivatives as the Delta method does; the Delta method is a special case of the ADM based on the Normal distribution. 
 
 %The ADM assumes that the unconditional posterior distribution of a shrinkage factor follows a Beta distribution, which allows us to obtain estimates of the unconditional posterior moments, i.e.,  of $E(B_{j}^c\vert\boldsymbol{y})$ for $c\ge0$.  \citet{morris1997} using a Poisson hierarchical model showed that the Beta approximation to the shrinkage factors worked better than Normal approximation, and \citet{tang2011} showed it  using a Gaussian  hierarchical model. 
 
@@ -459,7 +457,7 @@ where the notation Skewed-$t(\alpha\vert\mu, \sigma, a, b)$ represents a density
 \begin{equation}\label{mode}
 \mu+\frac{(a-b)\sqrt{a+b}}{\sqrt{(2a+1)(2b+1)}}.
 \end{equation} 
-The article also show that the tails of the skewed-$t$ density function  follow a power law as $\alpha^{-(2a+1)}$ on the left and $\alpha^{-(2b+1)}$ on the right when $b>a$. It also provides a representation to generate the random variable following their skewed-$t$ distribution as
+and shows that the tails of the skewed-$t$ density function  follow a power law with $\alpha^{-(2a+1)}$ on the left and $\alpha^{-(2b+1)}$ on the right when $b>a$. It also provides a representation to generate the random variable following their skewed-$t$ distribution as
 \begin{equation}
 \alpha\sim \mu+\sigma\frac{\sqrt{a+b}(2T-1)}{2\sqrt{T(1-T)}}, ~\textrm{where}~ T\sim \textrm{Beta}(a, b).
 \end{equation}
@@ -514,7 +512,7 @@ The integration can be done by sampling $(p_1, p_2, \ldots, p_k)$ from the indep
 
 
 \section{Frequency method checking}\label{sec4}
-Whether the 95\%  interval estimates of random effects obtained by a specific model achieve the nominal 95\% confidence level  for any true parameter values is one of the key model evaluation criteria. A \emph{frequency method checking} is a procedure to evaluate it, which is different from a model checking that tests whether a two-level model is appropriate for data  \citep{dean1992testing, modelchecking1996}.   Conditioning that the two-level model is appropriate, the frequency method checking generates pseudo-data sets given specific values of hyper-parameters  and estimates unknown coverage probabilities based on these mock data sets (a parametric bootstrapping). We  describe the frequency method checking based on the Gaussian model because the idea can be easily applied to the other two models.
+The question as to whether the interval estimates of random effects for given confidence level obtained by a specific model achieve the nominal coverage rate  for any true parameter values is one of the key model evaluation criteria. Unlike standard model checking methods that test whether a two-level model is appropriate for data  \citep{dean1992testing, modelchecking1996}, \emph{frequency method checking} is a procedure to evaluate the coverage properties of the model.   Conditioning that the two-level model is appropriate, the frequency method checking generates pseudo-data sets given specific values of hyper-parameters  and estimates unknown coverage probabilities based on these mock data sets (a parametric bootstrapping). We  describe the frequency method checking based on the Gaussian model because the idea can be easily applied to the other two models.
 
 
 
