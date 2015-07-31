@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: article_v6.aux
+The style file: jss.bst
+Database file #1: bibliography.bib
+I was expecting a `,' or a `}'---line 240 of file bibliography.bib
+ :   
+ :   url={http://CRAN.R-project.org/package= arm},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty journal in tak2016propriety
+You've used 32 entries,
+            3140 wiz_defined-function locations,
+            839 strings with 10196 characters,
+and the built_in function-call counts, 25740 in all, are:
+= -- 2161
+> -- 562
+< -- 38
++ -- 224
+- -- 177
+* -- 1946
+:= -- 3461
+add.period$ -- 138
+call.type$ -- 32
+change.case$ -- 191
+chr.to.int$ -- 31
+cite$ -- 33
+duplicate$ -- 2345
+empty$ -- 2423
+format.name$ -- 277
+if$ -- 5344
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 361
+newline$ -- 184
+num.names$ -- 136
+pop$ -- 802
+preamble$ -- 1
+purify$ -- 183
+quote$ -- 0
+skip$ -- 673
+stack$ -- 0
+substring$ -- 2173
+swap$ -- 888
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 276
+warning$ -- 1
+while$ -- 215
+width$ -- 0
+write$ -- 451
+(There was 1 error message)
