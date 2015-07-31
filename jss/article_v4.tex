@@ -104,7 +104,7 @@ The rest of this paper is organized as follows. We specify the Bayesian hierarch
 %A two-level  multilevel model is a powerful tool for exploring the hierarchical structure in data. For example, we can imagine that there exists a district-level hierarchy (bigger population) for observed school-level data, or a state-level hierarchy for observed hospital-level data in a certain state. 
 
 
-\pkg{Rgbp} allows users to choose one of three hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. Although there are possibly more hierarchical models such as Exponential-Gamma \citep{tang2002fitting}, we choose the three models because these are based on the most common types of  data we may encounter in practice. Also, the conjugacy leads to a simple posterior computation.
+\pkg{Rgbp} allows users to choose one of three hierarchical models according to the type of data, namely Normal-Normal, Poisson-Gamma, and Binomial-Beta models. Although there are more hierarchical models, we choose the three models because these are based on the most common types of  data we may encounter in practice. Also, their conjugacy leads to linear posterior means simplifying computations.
 
 Our parametrization of the three hierarchical models leads to an intuitive shrinkage interpretation in inference and  facilitates the estimation procedure because the shrinkage factors under our parametrization are a function of only a second-level variance component.
  
@@ -116,7 +116,7 @@ y_{j}\vert \mu_{j} & \stackrel{\textrm{indep.}}{\sim} \textrm{Normal}(\mu_{j}, V
 \end{align}
 
 
-where $y_j$ is an observed unbiased estimate, e.g., sample mean, for random effect $\mu_j$, $V_{j}$ is a completely known standard error of $y_j$, $\mu^E_{j}$ is an expected random effect defined as $\E(\mu_j\vert \boldsymbol{\beta}, A) = \boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_{1}x_{j, 1}+\beta_{2}x_{j, 2} + \cdots + \beta_{m}x_{j, m}$, and $m$ is the number of regression coefficients to be estimated. \pkg{Rgbp} sets $x_{j, 1}$ to 1 for an intercept term as a default. It also provides a usage without the intercept term.  It is assumed that the second-level variance $A$ is unknown and that the $m\times1$ regression coefficient vector $\boldsymbol{\beta}$ is also unknown unless otherwise specified. If no covariates are available with an intercept term, then $\boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_1$ ($m=1$) and thus $\mu^E_{j}=\mu^E=\beta_1$ for all $j$, resulting in an exchangeable conjugate prior distribution for the random effects.  Based on these conjugate prior distributions for random effects, it is easy to derive the conditional posterior distribution of each random effect. For $j=1, 2, \ldots, k$,
+where $y_j$ is an observed unbiased estimate, e.g., sample mean, for random effect $\mu_j$, $V_{j}$ is a completely known standard error of $y_j$, $\mu^E_{j}$ is an expected random effect defined as $\E(\mu_j\vert \boldsymbol{\beta}, A) = \boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_{1}x_{j, 1}+\beta_{2}x_{j, 2} + \cdots + \beta_{m}x_{j, m}$, and $m$ is the number of regression coefficients to be estimated. \pkg{Rgbp} sets $x_{j, 1}$ to 1 for an intercept term as a default. It also provides a usage without the intercept term.  It is assumed that the second-level variance $A$ is unknown and that the $m\times1$ regression coefficient vector $\boldsymbol{\beta}$ is also unknown unless otherwise specified. If no covariates are available, but with an unknown intercept term, then $\boldsymbol{x}_j^\top \boldsymbol{\beta}=\beta_1$ ($m=1$) and thus $\mu^E_{j}=\mu^E=\beta_1$ for all $j$, resulting in an exchangeable conjugate prior distribution for the random effects.  Based on these conjugate prior distributions for random effects, it is easy to derive the conditional posterior distribution of each random effect. For $j=1, 2, \ldots, k$,
 
 \begin{equation} \label{normalpost}
 \mu_{j}\vert  \boldsymbol{\beta}, A, \boldsymbol{y} \stackrel{\textrm{indep.}}{\sim}\textrm{Normal}(~(1-B_{j})y_{j} + B_{j}\mu^E_{j},~(1-B_{j})V_{j}~),
@@ -126,12 +126,12 @@ where $B_{j}\equiv V_{j}/(V_{j} + A)$ is a shrinkage factor of group $j$ and $\b
 %; sometimes we may be able to obtain  information about the mean of the population from previous studies.
 %; in the limit of $r$ going to 0, the conjugate prior distribution gets flatter. 
 \subsection[Poisson-Gamma]{Poisson-Gamma model for Poisson data}\label{poissonsubsec}
-\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups comprise of non-negative count data without upper limit. However, its usage is limited to the case where the expected random effect is known ($m=0$); we may be able to obtain this information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
+\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups are comprised of non-negative count data without upper limit. However, in this case its usage is limited to the case where the expected random effect is known ($m=0$); we may be able to obtain this information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_j\vert \lambda_j &\stackrel{\textrm{indep.}}{\sim}  \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim} \textrm{Gamma}(r\lambda^E, r),
 \end{align}
-where $y_j$ is the number of events happening, $n_{j}$ is the exposure of group $j$, which is not necessarily an integer, $\lambda^E=\E(\lambda_j\vert r)$ is the known expected random effect ($m=0$), and $r$ is the unknown second-level variance component. The mean and variance of the conjugate Gamma prior distribution are $\lambda^E$ and $\lambda^E/r$, respectively.  \cite{albert1988computational} interprets $r$ as the amount of prior information as $n_{j}$ represents the amount of observed information because the uncertainty of the conjugate prior distribution increases as $r$ decreases and vice versa. The conditional posterior distribution of the random effect $\lambda_j$ for this Poisson model is
+where $y_j$ is the number of events happening, $n_{j}$ is the exposure of group $j$, which is not necessarily an integer, $\lambda^E=\E(\lambda_j\vert r)$ is the known expected random effect ($m=0$), and $r$ is the unknown second-level variance component. The mean and variance of this conjugate Gamma prior distribution are $\lambda^E$ and $\lambda^E/r$, respectively.  \cite{albert1988computational} interprets $r$ as the amount of prior information as $n_{j}$ represents the amount of observed information because the uncertainty of the conjugate prior distribution increases as $r$ decreases and vice versa. The conditional posterior distribution of the random effect $\lambda_j$ for this Poisson model is
 \begin{equation} \label{gammapost}
 \lambda_j\vert r, \boldsymbol{y} \stackrel{\textrm{indep.}}{\sim}\textrm{Gamma}(r\lambda^E + n_j\bar{y}_{j},~ r + n_j),
 \end{equation}  
@@ -149,7 +149,7 @@ Note that the conditional posterior variance in  \eqref{gammapost_mean_var} is l
 %in the prior and conditional posterior distributions 
 
 \subsection[Binomial-Beta]{Binomial-Beta model for Binomial data}
-\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from $k$ independent  groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, the expected random effect is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
+\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from $k$ independent  groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, which is for the case with a known second-level mean ($m=0$), the expected random effect in the Binomial model is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
 \begin{align}
 y_{j} \vert p_{j} &\stackrel{\textrm{indep.}}{\sim} \textrm{Binomial}(n_{j}, ~p_{j}),\\
 p_{j} \vert \boldsymbol{\beta}, r &\stackrel{\textrm{indep.}}{\sim} \textrm{Beta}(rp^E_j,~ r(1-p^E_j)),
@@ -189,7 +189,7 @@ L(A, \boldsymbol{\boldsymbol{\beta}})=\prod_{j=1}^k f(y_j\vert A, \boldsymbol{\b
 \end{equation}
 where $\mu^E_j=\boldsymbol{x}^\top\boldsymbol{\beta}$. The joint posterior density  function of hyper-parameters $f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})$ for the Gaussian  model is proportional to their likelihood function in  \eqref{marginal_normal} because we use flat improper hyper-prior density functions for $A$ and $\boldsymbol{\beta}$;
 \begin{equation}\label{marginal_post_normal}
-f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})\propto L_g(A, \boldsymbol{\boldsymbol{\beta}})dAd\boldsymbol{\beta}.
+f(A, \boldsymbol{\boldsymbol{\beta}}\vert \boldsymbol{y})\propto L(A, \boldsymbol{\boldsymbol{\beta}})dAd\boldsymbol{\beta}.
 \end{equation}
 
 
@@ -207,7 +207,7 @@ Similarly, the likelihood function of $r$ for the Poisson  model  comes from the
 \begin{equation}\label{marginal_poisson}
 L(r)=\prod_{j=1}^k f(y_j\vert r)=\prod^{k}_{j=1} \frac{\Gamma(r \lambda^E+y_j)}{\Gamma(r\lambda^E)(y_j!)}(1-B_{j})^{y_{i}}B_{j}^{r \lambda^E},
 \end{equation}
-where $\Gamma(a)$ is a gamma function defined as $\int_0^\infty x^{a-1}\exp(x)dx$ for a positive constant $a$. The posterior density function of $r$, $f_{\textrm{hyp.post}}(r\vert \boldsymbol{y})$, for the Poisson hierarchical model is  the likelihood function in  \eqref{marginal_poisson} times the hyper-prior density function of $r$, i.e., $dr/r^2$;
+where $\Gamma(a)$ is a gamma function defined as $\int_0^\infty x^{a-1}\exp(x)dx$ for a positive constant $a$. The posterior density function of $r$, $f(r\vert \boldsymbol{y})$, for the Poisson hierarchical model is  the likelihood function in  \eqref{marginal_poisson} times the hyper-prior density function of $r$, i.e., $dr/r^2$;
 \begin{equation}\label{marginal_post_poisson}
 f(r \vert \boldsymbol{y})\propto L_p(r)dr/r^2.
 \end{equation}
@@ -215,7 +215,7 @@ f(r \vert \boldsymbol{y})\propto L_p(r)dr/r^2.
 
 %If all the observed data are extreme, i.e., $y_j$ is either 0 or $n_j$ for all $j$, the likelihood becomes a decreasing function with respect to $r$ for finite values of $\boldsymbol{\beta}$. In this case, the MLE of $r$ is 0.
 
-Our goal is to obtain the point and interval estimates of the random effects from their unconditional posterior distributions; for the Gaussian  model, 
+Our goal is to obtain the point and interval estimates of the random effects from their unconditional posterior distributions. With subscripts suppressed, the strategy is to compute by using these formulas:  for the Gaussian  model, 
 \begin{equation}\label{mcintegration_normal}
 f(\boldsymbol{\mu}\vert \boldsymbol{y})=\int  f(\boldsymbol{\mu}\vert A, \boldsymbol{\beta}, \boldsymbol{y})\cdot f(A, \boldsymbol{\beta}\vert \boldsymbol{y})dA d\boldsymbol{\beta},
 \end{equation}
@@ -1281,7 +1281,7 @@ f(r\vert\boldsymbol{y})&\propto \frac{1}{r^2}L(r)\propto\frac{1}{r^2}\prod^{k}_{
 \end{align}
 where the polynomial function of $r$ in the bracket has constant coefficients. 
 
-If there are at least two groups whose observed values $y_j$ are non-zero, then $f(r\vert\boldsymbol{y})$ goes to zero as $r$ goes to 0 due to the polynomial function of $r$ in \eqref{final_post_proper}; the following two factors in \eqref{final_post_proper} approach one. As $r$ becomes infinite, $f(r\vert\boldsymbol{y})$ touches zero exponentially fast due to the exponential term in the middle of \eqref{final_post_proper}. Thus, the integration of $f(r\vert\boldsymbol{y})$ must be finite.
+If there are at least two groups whose observed values $y_j$ are non-zero, then $f(r\vert\boldsymbol{y})$ goes to zero as $r$ goes to zero due to the polynomial function of $r$ in \eqref{final_post_proper}; the following two factors in \eqref{final_post_proper} approach one. As $r$ becomes infinite, $f(r\vert\boldsymbol{y})$ touches zero exponentially fast due to the exponential term in the middle of \eqref{final_post_proper}. Thus, the integration of $f(r\vert\boldsymbol{y})$ must be finite.
 
 
 
