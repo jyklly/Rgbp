@@ -265,7 +265,7 @@ pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
   given <- list(z = z, n = n, sample.mean = z/n, x.ini = X, 
                 prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
 
-  if (missing(prior.mean)) {
+  if (any(is.na(prior.mean))) {
     ini <- PRInitialValue2ndLevelMeanUnknown(given)
   }else{
     ini <- PRInitialValue2ndLevelMeanKnown(given)
@@ -279,7 +279,7 @@ pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
 
   B.res <- PRShrinkageEst(a.res, given)
 
-  if (missing(prior.mean)) {
+  if (any(is.na(prior.mean))) {
     post.res <- PRPosteriorEst2ndLevelMeanUnknown(B.res, a.res, ini, given)
   }else{
     post.res <- PRPosteriorEst2ndLevelMeanKnown(B.res, given)
