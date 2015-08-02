@@ -2,7 +2,7 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
   # This function makes the initial values needed to run BRIMM.
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
 
-  if (all(given$prior.mean == 0)) {
+  if (any(given$prior.mean == 0)) {
     if(all(given$sample.mean == mean(given$sample.mean))) {
       r.ini <- mean(given$sample.mean) * (1 - mean(given$sample.mean)) / (var(given$sample.mean) + 0.1)
     } else {
