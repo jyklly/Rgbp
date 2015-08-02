@@ -707,7 +707,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
   given <- list(z = z, n = n, sample.mean = z / n, x.ini = X,
                 prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
 
-  if (is.na(prior.mean)) {
+  if (any(is.na(prior.mean))) {
     ini <- BRInitialValue2ndLevelMeanUnknown(given)
   } else {
     ini <- BRInitialValue2ndLevelMeanKnown(given)
@@ -723,7 +723,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
 
     B.res <- BRShrinkageEst(a.res, given)
 
-    if (is.na(prior.mean)) {
+    if (any(is.na(prior.mean))) {
       post.res <- BRPosteriorEst2ndLevelMeanUnknown(B.res, a.res, ini, given)
     } else {
       post.res <- BRPosteriorEst2ndLevelMeanKnown(B.res,given)
@@ -741,7 +741,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
 
   } else {
 
-    if (is.na(prior.mean)) {
+    if (any(is.na(prior.mean))) {
       res <- BRAR(given, ini, n.AR = n.AR, trial.scale = trial.scale, 
                   n.AR.factor = n.AR.factor, t = t, u = u)
     } else {
@@ -749,13 +749,13 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
                                    n.AR.factor = n.AR.factor, t = t, u = u)
     }
 
-    if (is.na(prior.mean)) {
+    if (any(is.na(prior.mean))) {
       p0.mean <- res$prior.mean.hat
     } else {
       p0.mean <- given$prior.mean
     }
 
-    if (is.na(prior.mean)) {
+    if (any(is.na(prior.mean))) {
       b.mean <- res$beta.new
       b.var <- res$beta.var
       beta <- res$beta.sample
