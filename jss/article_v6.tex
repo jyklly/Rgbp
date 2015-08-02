@@ -612,7 +612,7 @@ In this section, we describe the usage of the two main functions of \pkg{Rgbp}, 
 \subsection{Model fitting}
 The function \code{gbp} creates an S3 object ``gbp'' on which  three generic functions \code{plot}, \code{print}, and \code{summary} are defined. %To use these relevant functions, we need to save the outcome of \code{gbp} into an object such as \code{g.output} in the code below).
 
-There are two cases according to whether covariates are available or not. When no covariates are available, the function \code{gbp} requires fitting an intercept term  or designating known values of   the expected random effects, i.e., the intercept term must be either estimated or known. The default of \code{gbp}  is to fit an intercept term. The value(s) of the known expected random effect(s) can be assigned through an optional argument \code{mean.PriorDist}, either a constant when all expected random effects are the same or a $k\times1$ vector. Note that \code{gbp} can fit the Poisson model only when the values of expected random effects, $\lambda^E_j$, are known. The usage of \code{gbp} to  fit each model without any covariates is 
+There are two cases according to whether covariates are available or not. When no covariates are available, the function \code{gbp} requires fitting an intercept term  or designating known values of   the expected random effects, i.e., the intercept term must be either estimated or known. The default of \code{gbp}  is to fit an intercept term. The value(s) of the known expected random effect(s) can be assigned through an optional argument \code{mean.PriorDist}. Note that \code{gbp} can fit the Poisson model only when the values of expected random effects, $\lambda^E_j$, are known. The usage of \code{gbp} to  fit each model without any covariates is 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> g.output <- gbp(y, se.or.n, model = "gaussian")
@@ -621,14 +621,16 @@ R> p.output <- gbp(y, se.or.n, mean.PriorDist, model = "poisson")
 \end{CodeInput}
 \end{CodeChunk}
 
-The argument \code{y} is a vector of $k$ observed sample means  for the Gaussian model, $k$ observed numbers of successful outcomes for the Binomial model, and $k$ observed numbers of events happening for the Poisson model. The argument  \code{se.or.n} is a vector of $k$ standard errors of each sample mean for the Gaussian model, $k$ numbers of trials for the Binomial model, and $k$ exposures for the Poisson model. If we want to designate a known value of the expected random effect $\mu^E=\beta_1$ for the Gaussian model or $p^E=\exp(\beta_1)/(1+\exp(\beta_1))$ for the Binomial model, then we put that value into \code{gbp} using an argument \code{mean.PriorDist}. For example, if  $\mu^E$ is known as 10, then we use the following code. %The usage of the Binomial model is the same.
-\begin{CodeChunk}
-\begin{CodeInput}
-R> g.output <- gbp(y, se.or.n, mean.PriorDist = 10, model = "gaussian")
-\end{CodeInput}
-\end{CodeChunk}
+The argument \code{y} is a vector of $k$ observed sample means  for the Gaussian model, $k$ observed numbers of successful outcomes for the Binomial model, and $k$ observed outcome counts  for the Poisson model. The argument  \code{se.or.n} is a vector of $k$ standard errors of each sample mean for the Gaussian model, $k$ numbers of trials for the Binomial model, and $k$ exposures for the Poisson model. The argument \code{mean.PriorDist} is either a constant (if all the known expected random effects are the same) or a $k\times1$ vector of known expected random effects.
 
-If covariate information for each group is available, we can fit the Gaussian and Binomial models, using the following codes.
+%If we want to designate known values of the expected random effects, then we put that value into \code{gbp} using an argument \code{mean.PriorDist}. For example, if  $\mu^E$ is known as 10, then we use the following code. %The usage of the Binomial model is the same.
+%\begin{CodeChunk}
+%\begin{CodeInput}
+%R> g.output <- gbp(y, se.or.n, mean.PriorDist = 10, model = "gaussian")
+%\end{CodeInput}
+%\end{CodeChunk}
+
+If covariate information for each group is available, users can fit the Gaussian and Binomial models, using the following codes.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> g.output <- gbp(y, se.or.n, X, model = "gaussian")
@@ -636,7 +638,7 @@ R> b.output <- gbp(y, se.or.n, X, model = "binomial")
 \end{CodeInput}
 \end{CodeChunk}
 
-The argument \code{X} is a matrix of covariate(s) each column of which corresponds to one covariate for $k$ groups. For example, if we have two covariates for each group, the argument \code{X} must be $k\times2$ matrix to estimate three regression coefficients $\boldsymbol{\beta}=(\beta_1, \beta_2, \beta_3)$ including an intercept term, $\beta_1$, as a default. If we do not want to include an intercept term ($\beta_1=0$), estimating two regression coefficients for the two covariates, we add an optional argument \code{intercept} as follows.
+The argument \code{X} is a matrix of covariate(s) each column of which corresponds to one covariate for $k$ groups. For example, if users have two covariates for each group, the argument \code{X} must be $k\times2$ matrix to estimate three regression coefficients $\boldsymbol{\beta}=(\beta_1, \beta_2, \beta_3)$ including an intercept term, $\beta_1$, as a default. If users do not want to include an intercept term ($\beta_1=0$), estimating two regression coefficients for the two covariates, users can add an optional argument \code{intercept} as follows.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> g.output <- gbp(y, se.or.n, X, model = "gaussian", intercept = FALSE)
@@ -645,7 +647,7 @@ R> g.output <- gbp(y, se.or.n, X, model = "gaussian", intercept = FALSE)
 
 The function \code{gbp} contains several optional arguments. The argument \code{Alpha}, whose default value is 0.95, sets the confidence level, producing $100\times$\code{Alpha}\% interval estimates for the random effects. For the Gaussian model, setting the argument \code{normal.CI} to \code{TRUE} lets \code{gbp}  use a Normal approximation to the unconditional posterior distribution of the random effect \citep{tang2011}. The default value of \code{normal.CI} is \code{FALSE} for the skewed-Normal approximation \citep{kelly2014advances}. 
 
-The function \code{gbp} uses the A-R method to fit the Binomial model if we assign the desired number of posterior samples ($N$ in  \eqref{weight}) through the argument \code{n.AR}; its default value is 0. There are several arguments related to the A-R method. The argument \code{n.AR.factor} determines how many trial samples the method draws; its default value is 4, meaning that the method draws \code{n.AR} $\times4$ trial samples and accepts or rejects them. The argument \code{trial.scale} is $\psi$ determining the scale parameter of the skewed-$t$ distribution (the envelope function); its default value is 1.3. The argument \code{save.result} indicates whether we save the whole posterior samples of the random effects and hyper-parameters; its default value is \code{TRUE}. The two arguments \code{t} and \code{u}, taking on positive values, allow users to choose the joint hyper-prior distribution $f(r, \boldsymbol{\beta})\propto d\boldsymbol{\beta}dr/(t+r)^{u+1}$; the default values for \code{t} and \code{u} are 0 and 1, respectively, for the joint hyper-prior distribution specified in  \eqref{eq:hyper}. 
+The function \code{gbp} uses the A-R method to fit the Binomial model if users assign the desired number of posterior samples ($N$ in  \eqref{weight}) through the argument \code{n.AR}; its default value is 0. There are several arguments related to the A-R method. The argument \code{n.AR.factor} determines how many trial samples the method draws; its default value is 4, meaning that the function \code{gbp} draws \code{n.AR} $\times4$ trial samples and accepts or rejects them. The argument \code{trial.scale} is $\psi$ determining the scale parameter of the skewed-$t$ distribution; its default value is 1.3. The argument \code{save.result} indicates whether \code{gbp} saves the whole posterior samples of the random effects and hyper-parameters; its default value is \code{TRUE}. The two arguments \code{t} and \code{u}, taking on positive values, allow users to choose the joint hyper-prior density function, $f(r, \boldsymbol{\beta})\propto d\boldsymbol{\beta}dr/(t+r)^{u+1}$; the default values for \code{t} and \code{u} are 0 and 1, respectively, for the joint hyper-prior density function specified in  \eqref{eq:hyper}. 
 
 For example, when there are two covariates, the following code produces 2,000 posterior samples of random effects and hyper-parameters, $r$ and $\boldsymbol{\beta}_{(3\times1)}$ including an intercept term, via the A-R method with 8,000 trial samples.
 \begin{CodeChunk}
@@ -667,7 +669,7 @@ The object \code{b.output} above contains 8,000 weights (\code{b.output$weight})
 
 The S3 object ``gbp'' benefits from three generic functions, \code{print},
 \code{summary}, and \code{plot}. The estimation result for all the random
-effects appears if we type the ``gbp'' object at the \proglang{R} console, which
+effects appears if users type the ``gbp'' object in the \proglang{R} console, which
 plays the same role of the function \code{print} with its default argument
 ``\code{sort = TRUE}''. When the argument \code{sort} is set to \code{TRUE}, the
 function \code{print} prints out the estimation result for all the groups in the
@@ -688,7 +690,7 @@ R> summary(b.output)
 \end{CodeInput}
 \end{CodeChunk}
 
-The function \code{plot} draws a shrinkage plot and $100\times$\code{Alpha}\% interval plot for random effects with its default argument ``\code{sort = TRUE}'' that draws the $100\times$\code{Alpha}\% interval plot in the ascending order of $n$ for the Binomial and Poisson model and the descending order of standard errors for the Gaussian model. When the argument \code{sort} is set to \code{FALSE}  the $100\times$\code{Alpha}\% interval plot is displayed in the order of data input.
+The function \code{plot} draws a shrinkage plot and $100\times$\code{Alpha}\% interval plot for random effects. Its default argument ``\code{sort = TRUE}'' displays the $100\times$\code{Alpha}\% interval plot in the ascending order of $n$ for the Binomial and Poisson model and the descending order of standard errors for the Gaussian model. When the argument \code{sort} is set to \code{FALSE}  the $100\times$\code{Alpha}\% interval plot is displayed in the order of data input.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(b.output)
@@ -706,22 +708,22 @@ R> cov <- coverage(b.output, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 
-The argument \code{nsim} sets the number of simulations, $N_{\textrm{sim}}$, defined in Section \ref{data_generation}. If we do not assign values of the hyper-parameters through the arguments \code{A.or.r} and \code{reg.coef}, then the function \code{coverage} automatically sets the estimated posterior modes of hyper-parameters saved in the ``gbp'' object (or their posterior medians if the acceptance-rejection method for the Binomial model is used) as the generative values of hyper-parameters. If we want to conduct the frequency method checking with different generated values of hyper-parameters, for example, $r=100$ and $\boldsymbol{\beta}=(2, 5)^\top$ when one covariate was used with an intercept term, then we specify them via the arguments \code{A.or.r} and \code{reg.coef};
+The argument \code{nsim} sets the number of simulations, $N_{\textrm{sim}}$, defined in Section \ref{data_generation}. If users do not assign values of the hyper-parameters through the arguments \code{A.or.r} and \code{reg.coef}, then the function \code{coverage} automatically sets the estimated posterior modes of hyper-parameters saved in the ``gbp'' object (or their posterior medians if the acceptance-rejection method for the Binomial model is used) as the generative values of hyper-parameters. If users want to conduct the frequency method checking with different generated values of hyper-parameters, for example, $r=100$ and $\boldsymbol{\beta}=(2, 5)^\top$ when one covariate was used with an intercept term, then users can specify them via the arguments \code{A.or.r} and \code{reg.coef};
 \begin{CodeChunk}
 \begin{CodeInput}
 R> cov <- coverage(b.output, A.or.r = 100, reg.coef = c(2, 5), nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
 
-When we fit a model with a known value of the expected random effect, \code{coverage} conducts the frequency method checking based on the known value. However, we may sometimes want to conduct the frequency method checking with a different value for the expected random effect. For example, if we want to try a different value of the expected random effect, e.g., 30, we add the argument \code{mean.PriorDist} as follows.
+When users fit a model with a known value of the expected random effect, \code{coverage} conducts the frequency method checking based on the known value. However, users might want to conduct the frequency method checking with different values of the expected random effects. For example, if users want to try  a different value of the expected random effect, e.g., 30 (or can be a vector of different values), we add the argument \code{mean.PriorDist} as follows.
 \begin{CodeChunk}
 \begin{CodeInput}
 R> cov <- coverage(p.output, mean.PriorDist = 30, nsim = 1000)
 \end{CodeInput}
 \end{CodeChunk}
-The resulting frequency method checking is based on the estimated posterior mode of $r$ and the newly specified value of the expected random effect, 30.
+The resulting frequency method checking is based on the estimated posterior mode of $r$ (because it is not specified through \code{A.or.r}) and the newly specified value of the expected random effect, 30.
 
-Although the function \code{coverage} does not produce an S3 object, a detailed summary appears in a plot that automatically pops up. In addition, the variable \code{cov}  where we save  the result of \code{coverage} as above contains numerical details; $k$ RB coverage estimates (\code{cov$coverageRB}) and their standard errors (\code{cov$se.coverageRB}), $k$ simple coverage estimates (\code{cov$coverageS}) and their standard errors (\code{cov$se.coverageS}), etc.
+Although the function \code{coverage} does not produce an S3 object, a detailed summary appears in a plot that automatically pops up. In addition, the variable \code{cov}  where we save  the result of \code{coverage} as above contains numerical details; $k$ RB coverage estimates (\code{cov$coverageRB}) and their standard errors (\code{cov$se.coverageRB}), $k$ simple coverage estimates (\code{cov$coverageS}) and their standard errors (\code{cov$se.coverageS}), overall RB coverage estimate (\code{cov$average.coverageRB}) and its standard error (\code{cov$average.coverageRB}), etc.
 
 
 If we save the result into an object such as \code{cov} above, then we can always recall the coverage plot, using the function \code{coverage.plot}.

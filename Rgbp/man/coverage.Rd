@@ -83,11 +83,17 @@
   \item{average.coverageRB}{
     Overall Rao-Blackwellized unbiased coverage estimate across all the groups and simulations.
   }
+  \item{overall.coverageRB}{
+    Overall Rao-Blackwellized unbiased coverage estimate across all the groups and simulations.
+  }
   \item{average.coverageS}{
     Overall simple unbiased coverage estimate across all the groups and simulations.
   }
   \item{se.coverageRB}{
     Standard error of Rao-Blackwellized unbiased coverage estimate for each group.
+  }
+  \item{se.overall.coverageRB}{
+    Standard error of the overall Rao-Blackwellized unbiased coverage estimate.
   }
   \item{se.coverageS}{
     Standard error of simple unbiased coverage estimate for each group.
