@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  1 AUG 2015 23:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  2 AUG 2015 00:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -607,13 +607,6 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [17]
-Overfull \hbox (2.4706pt too wide) in paragraph at lines 726--727
-\T1/aer/m/n/10.95 and their stan-dard er-rors (\T1/aett/m/n/10.95 cov$se.covera
-geRB\T1/aer/m/n/10.95 ), $\OML/cmm/m/it/10.95 k$ \T1/aer/m/n/10.95 sim-ple cov-
-er-age es-ti-mates (\T1/aett/m/n/10.95 cov$coverageS\T1/aer/m/n/10.95 )
- []
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 18 []
  []
@@ -628,7 +621,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 20 []
  []
 
-[20] <hospital1.png, id=568, 541.02126pt x 559.08875pt>
+[20] <hospital1.png, id=569, 541.02126pt x 559.08875pt>
 File: hospital1.png Graphic file (type png)
  <use hospital1.png>
 Package pdftex.def Info: hospital1.png used on input line 856.
@@ -638,7 +631,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 21
  []
 
-[21 <./hospital1.png>] <hospital2.png, id=577, 538.01pt x 513.92pt>
+[21 <./hospital1.png>] <hospital2.png, id=578, 538.01pt x 513.92pt>
 File: hospital2.png Graphic file (type png)
 
 <use hospital2.png>
@@ -659,13 +652,13 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 24 []
  []
 
-[24] <school1.png, id=599, 532.99126pt x 541.02126pt>
+[24] <school1.png, id=600, 532.99126pt x 541.02126pt>
 File: school1.png Graphic file (type png)
  <use school1.png>
 Package pdftex.def Info: school1.png used on input line 1039.
 (pdftex.def)             Requested size: 202.35622pt x 205.40033pt.
 
-<school2.png, id=600, 537.00626pt x 515.9275pt>
+<school2.png, id=601, 537.00626pt x 515.9275pt>
 File: school2.png Graphic file (type png)
  <use school2.png>
 Package pdftex.def Info: school2.png used on input line 1055.
@@ -689,7 +682,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/aer/m/n/10.95 27
  []
 
-[27] <baseball1.png, id=623, 546.04pt x 556.0775pt>
+[27] <baseball1.png, id=624, 546.04pt x 556.0775pt>
 File: baseball1.png Graphic file (type png)
  <use baseball1.png>
 Package pdftex.def Info: baseball1.png used on input line 1212.
@@ -699,7 +692,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 28 []
  []
 
-[28 <./baseball1.png>] <baseball2.png, id=632, 539.01375pt x 508.90125pt>
+[28 <./baseball1.png>] <baseball2.png, id=633, 539.01375pt x 508.90125pt>
 File: baseball2.png Graphic file (type png)
 
 <use baseball2.png>
@@ -748,11 +741,6 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [33]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/aer/m/n/10.95 34 []
- []
-
-[34]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 1320.
  (./article_v6.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1320.
@@ -767,13 +755,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1320.
  ) 
 Here is how much of TeX's memory you used:
- 7975 strings out of 493117
- 116728 string characters out of 6135433
+ 7974 strings out of 493117
+ 116721 string characters out of 6135433
  207797 words of memory out of 5000000
  11038 multiletter control sequences out of 15000+600000
  77584 words of font info for 132 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,14n,34p,1177b,478s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,14n,34p,1177b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/local/tex
 live/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texl
@@ -807,10 +795,10 @@ s/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2014/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2014/texmf-dist/fonts/t
 ype1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v6.pdf (34 pages, 1254438 bytes).
+Output written on article_v6.pdf (33 pages, 1253124 bytes).
 PDF statistics:
- 839 PDF objects out of 1000 (max. 8388607)
- 748 compressed objects within 8 object streams
- 204 named destinations out of 1000 (max. 500000)
+ 836 PDF objects out of 1000 (max. 8388607)
+ 746 compressed objects within 8 object streams
+ 203 named destinations out of 1000 (max. 500000)
  265 words of extra memory for PDF output out of 10000 (max. 10000000)
 
