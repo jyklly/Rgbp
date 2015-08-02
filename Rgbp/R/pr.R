@@ -3,9 +3,9 @@ PRInitialValue2ndLevelMeanKnown <- function(given) {
   # "Kn" means the descriptive second level mean (mean of Beta distribution) is known.
  
   if (all(given$sample.mean == mean(given$sample.mean))) {
-    r.ini <- given$prior.mean / (var(given$sample.mean) + 1)
+    r.ini <- mean(given$prior.mean) / (var(given$sample.mean) + 1)
   } else {
-    r.ini <- given$prior.mean / var(given$sample.mean)
+    r.ini <- mean(given$prior.mean) / var(given$sample.mean)
   }
 
   list(a.ini = -log(r.ini))

@@ -10,9 +10,9 @@ BRInitialValue2ndLevelMeanKnown <- function(given) {
     }
   } else {
     if(all(given$sample.mean == mean(given$sample.mean))) {
-      r.ini <- given$prior.mean * (1 - given$prior.mean) / (var(given$sample.mean) + 0.1)
+      r.ini <- mean(given$prior.mean) * (1 - mean(given$prior.mean)) / (var(given$sample.mean) + 0.1)
     } else {
-      r.ini <- given$prior.mean * (1 - given$prior.mean) / var(given$sample.mean)
+      r.ini <- mean(given$prior.mean) * (1 - mean(given$prior.mean)) / var(given$sample.mean)
     }
   }
   list(r.ini = r.ini, a.ini = -log(r.ini))
