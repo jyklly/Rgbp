@@ -715,7 +715,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
 
   if (n.AR == 0) {
 
-    a.res <- if (is.na(prior.mean)) {
+    a.res <- if (any(is.na(prior.mean))) {
                BRAlphaBetaEst2ndLevelMeanUnknown(given, ini)
              } else {
                BRAlphaEst2ndLevelMeanKnown(given, ini)
