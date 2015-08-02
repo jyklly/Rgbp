@@ -126,7 +126,7 @@ where $B_{j}\equiv V_{j}/(V_{j} + A)$ is a shrinkage factor of group $j$ and $\b
 %; sometimes we may be able to obtain  information about the mean of the population from previous studies.
 %; in the limit of $r$ going to 0, the conjugate prior distribution gets flatter. 
 \subsection[Poisson-Gamma]{Poisson-Gamma model for Poisson data}\label{poissonsubsec}
-\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups are comprised of non-negative count data without upper limit. However, in this case its usage is limited to the case where the expected random effect is known ($m=0$); we may be able to obtain this information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
+\pkg{Rgbp} can estimate a conjugate Poisson-Gamma hierarchical model (or the Poisson model) when the group-level aggregate data from $k$ independent  groups are comprised of non-negative count data without upper limit. However, its usage is limited to the case where the expected random effect is known (or equivalently all the regression coefficients in $\lambda^E_j=\exp(\boldsymbol{x}_j^\top \boldsymbol{\beta})$ is known ($m=0$)); we may be able to obtain this information from the past studies or from experts. For $j=1, 2, \ldots, k$, 
 \begin{align}
 y_j\vert \lambda_j &\stackrel{\textrm{indep.}}{\sim}  \textrm{Poisson}(n_{j}\lambda_{j}),\\
 \lambda_{j}\vert r &\stackrel{i.i.d.}{\sim} \textrm{Gamma}(r\lambda^E, r),
@@ -149,7 +149,7 @@ Note that the conditional posterior variance in  \eqref{gammapost_mean_var} is l
 %in the prior and conditional posterior distributions 
 
 \subsection[Binomial-Beta]{Binomial-Beta model for Binomial data}
-\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from $k$ independent  groups are composed of each group's number of successes out of total number of trials. Unlike the Poisson model, which is for the case with a known second-level mean ($m=0$), the expected random effect in the Binomial model is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
+\pkg{Rgbp} can fit a conjugate Binomial-Beta hierarchical model when the group-level aggregate data from $k$ independent  groups are composed of each group's number of successes out of total number of trials. The expected random effect in the Binomial model is either known ($m=0$) or unknown ($m\ge1$). For $j=1, 2, \ldots, k$,
 \begin{align}
 y_{j} \vert p_{j} &\stackrel{\textrm{indep.}}{\sim} \textrm{Binomial}(n_{j}, ~p_{j}),\\
 p_{j} \vert \boldsymbol{\beta}, r &\stackrel{\textrm{indep.}}{\sim} \textrm{Beta}(rp^E_j,~ r(1-p^E_j)),

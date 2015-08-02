@@ -1,4 +1,4 @@
-\begin{thebibliography}{32}
+\begin{thebibliography}{33}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -154,6 +154,12 @@ Morris C, Tang R (2011).
 \newblock ISSN 08834237.
 \newblock \urlprefix\url{http://www.jstor.org/stable/23059992}.
 
+\bibitem[{Morris(1983)}]{morris1983natural}
+Morris CN (1983).
+\newblock \enquote{Natural exponential families with quadratic variance
+  functions: statistical theory.}
+\newblock \emph{The Annals of Statistics}, pp. 515--529.
+
 \bibitem[{Rao(1945)}]{radhakrishna1945information}
 Rao CR (1945).
 \newblock \enquote{Information and Accuracy Attainable in the Estimation of
@@ -201,10 +207,11 @@ Skellam J (1948).
 \newblock \emph{Journal of the Royal Statistical Society. Series B
   (Methodological)}, \textbf{10}(2), 257--261.
 
-\bibitem[{Tak and Morris(in preparation)}]{tak2016propriety}
-Tak H, Morris C (in preparation).
+\bibitem[{Tak and Morris(2015)}]{tak2016propriety}
+Tak H, Morris C (2015).
 \newblock \enquote{Posterior Propriety and Frequency Coverage Evaluation of
   Bayesian Beta-Binomial Logistic Regression Model.}
+\newblock \emph{in preparation}.
 
 \bibitem[{Tamura and Young(1987)}]{tamura1987stabilized}
 Tamura RN, Young SS (1987).
