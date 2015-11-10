@@ -9,18 +9,18 @@
 \author{Hyungsuk Tak\\Harvard University \And 
              Joseph Kelly\\Google\And
              Carl Morris\\ Harvard University}
-\title{\pkg{Rgbp}: An \proglang{R} Package for Conjugate Gaussian, Poisson, and Binomial Hierarchical Modeling and Frequency Method Checking on Overdispersed Data}
+\title{\pkg{Rgbp}: An \proglang{R} Package for  Gaussian, Poisson, \\and Binomial  Random Effects Models, \\with Frequency Coverage Evaluations}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Hyungsuk Tak, Joseph Kelly, Carl Morris} %% comma-separated
-\Plaintitle{\pkg{Rgbp}: An R Package for Conjugate Gaussian, Poisson, and Binomial Hierarchical Modeling and Frequency Method Checking on Overdispersed Data} %% without formatting
-\Shorttitle{\pkg{Rgbp}: Hierarchical Modeling and Frequency Method Checking on Overdispersed Data} %% a short title (if necessary)
+\Plaintitle{\pkg{Rgbp}: An R Package for  Gaussian, Poisson, and Binomial  Random Effects Modeling and Frequency Method Checking on Overdispersed Data} %% without formatting
+\Shorttitle{\pkg{Rgbp}: Random Effects Models, with Frequency Coverage Evaluations} %% a short title (if necessary)
 %% an abstract and keywords
 \Abstract{
-\pkg{Rgbp} is an \proglang{R} package that utilizes  approximate Bayesian machinery to fit two-level conjugate hierarchical models on overdispersed Gaussian, Poisson, and Binomial data. The data that \pkg{Rgbp} assumes consist of observed sufficient statistics for each random effect, such as sample means, possibly together with covariates of each group. The approximate Bayesian tool equipped with the adjustment for density maximization estimates random effects and hyper-parameters in the conjugate prior distributions. As for the Binomial model, the package has an option to draw their posterior samples via the acceptance-rejection method.  The main goal of \pkg{Rgb} is to produce  Bayesian interval estimates for the random effects that meet their nominal confidence levels.   For this purpose, we adopt unique improper hyper-prior distributions. \pkg{Rgbp} provides a tool to check quickly whether the resulting Bayesian interval estimates for the random effects achieve the nominal confidence levels via a repeated sampling coverage evaluation, which we call  ``frequency method checking."  }
+\pkg{Rgbp} is an \proglang{R} package whose primary goal is to provide estimates and verifiable confidence intervals for all $k$ second-level independent random effects in two-level conjugate hierarchical models for overdispersed Gaussian, Poisson, and Binomial data.  It uses approximate Bayesian machinery with special frequency-justified improper priors for the population hyper-parameters.  A special feature enabled by \pkg{Rgbp}'s speed is an option that draws many repeated samples needed to verify that the nominal confidence levels are met for all the estimated random effects.  In general, \pkg{Rgbp} models data that are summarized by observed sufficient statistics for each random effect, such as sample means, with covariates also allowed for each group.  Inference statistics are provided for the random effects and for the hyper-parameters.}
 % and evaluates repeated sampling frequency property of the resulting approximate Bayesian interval estimates for random effects
 %It is found that such Bayesian-frequentist reconciliation allows \pkg{Rgbp} to have attributes desirable from both perspectives, working well in small samples and yielding good coverage probabilities for its interval estimates.
-\Keywords{overdispersion, hierarchical model, adjustment for density maximization, acceptance-rejection method, repeated sampling coverage evaluation, frequency method checking, \proglang{R}}
+\Keywords{overdispersion, hierarchical model, adjustment for density maximization,  frequency method checking, \proglang{R}}
 \Plainkeywords{multilevel model, conjugate hierarchical generalized linear models, frequency method checking, coverage probability, shrinkage, R} 
 %% without formatting
 %% at least one keyword must be supplied

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  3 AUG 2015 11:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  4 AUG 2015 14:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -492,13 +492,7 @@ LaTeX Font Info:    Try loading font information for T1+aess on input line 68.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/ae/t1aess.fd
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
 )
-Overfull \hbox (8.5956pt too wide) in paragraph at lines 68--68
-[]\T1/aer/m/it/10.95 Keywords\T1/aer/m/n/10.95 : overdis-per-sion, hi-er-ar-chi
--cal model, ad-just-ment for den-sity max-i-miza-tion, acceptance-
- []
-
-
-Underfull \vbox (badness 1062) has occurred while \output is active []
+Underfull \vbox (badness 4479) has occurred while \output is active []
 
  [1
 
@@ -507,7 +501,7 @@ go.jpg>]
 Underfull \vbox (badness 1810) has occurred while \output is active []
 
 LaTeX Font Info:    Font shape `T1/aer/b/sl' in size <10.95> not available
-(Font)              Font shape `T1/aer/bx/sl' tried instead on input line 97.
+(Font)              Font shape `T1/aer/bx/sl' tried instead on input line 99.
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/aer/m/n/10.95 2 []
@@ -755,11 +749,11 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1320.
  ) 
 Here is how much of TeX's memory you used:
- 7961 strings out of 493315
- 116477 string characters out of 6137904
- 206780 words of memory out of 5000000
- 11017 multiletter control sequences out of 15000+600000
- 77584 words of font info for 132 fonts, out of 8000000 for 9000
+ 7962 strings out of 493315
+ 116491 string characters out of 6137904
+ 206426 words of memory out of 5000000
+ 11018 multiletter control sequences out of 15000+600000
+ 77811 words of font info for 133 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  36i,14n,34p,1184b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
@@ -795,7 +789,7 @@ s/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2013/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2013/texmf-dist/fonts/t
 ype1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article_v6.pdf (33 pages, 1267725 bytes).
+Output written on article_v6.pdf (33 pages, 1267225 bytes).
 PDF statistics:
  830 PDF objects out of 1000 (max. 8388607)
  740 compressed objects within 8 object streams

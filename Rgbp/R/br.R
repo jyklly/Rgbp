@@ -387,6 +387,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
     a <- k
   }
 
+
   n.sample <- n.AR.factor * n.AR
   n.accept <- 0
 
