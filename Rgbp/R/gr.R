@@ -1,7 +1,7 @@
 #Note this R code fits the hierarchical normal-normal model using ADM
 #Author: Joseph Kelly
 
-gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
+gr<-function(y,se,X,mu,confidence.lvl=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
 
   ##define some values that will be used often
   muknown <- !missing(mu)
@@ -48,8 +48,8 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   v<-Bhat*(1-Bhat)/(a1+a0+1)
   seB<-sqrt(v)
   skewB<-2*(a0-a1)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))
-  LCLB <- qbeta((1-Alpha)/2,a1,a0)
-  UCLB <- qbeta(1 - (1-Alpha)/2,a1,a0)
+  LCLB <- qbeta((1-confidence.lvl)/2,a1,a0)
+  UCLB <- qbeta(1 - (1-confidence.lvl)/2,a1,a0)
   
   ##if mu is estimated use different formula for posterior sd and estimate mu
   if(muknown){
@@ -81,18 +81,18 @@ gr<-function(y,se,X,mu,Alpha=0.95,intercept=T,eps=0.0001, normal.CI = FALSE){
   if(normal.CI){
     snparam <- NULL
     skewedmat <- matrix(nrow = length(thetahat), ncol = 3)
-    skewedmat[,1] <- qnorm((1-Alpha)/2,thetahat,shat)
+    skewedmat[,1] <- qnorm((1-confidence.lvl)/2,thetahat,shat)
     skewedmat[,2] <- thetahat
-    skewedmat[,3] <- qnorm(1-(1-Alpha)/2,thetahat,shat)
+    skewedmat[,3] <- qnorm(1-(1-confidence.lvl)/2,thetahat,shat)
   }else{
     snparam <- lapply(1:length(thetahat), function(i){as.numeric(gr.cp.to.dp(c(thetahat[i],shat[i],sign(skew[i])*min(abs(skew[i]),0.94))))})
-    tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-Alpha)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
+    tmp <- lapply(1:length(thetahat), function(i){c(qsn((1-confidence.lvl)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"),thetahat[i],qsn(1-(1-confidence.lvl)/2,snparam[[i]][1], snparam[[i]][2], snparam[[i]][3], engine = "biv.nt.prob"))})
     skewedmat <- as.matrix(do.call("rbind", tmp))
   }
   
   ## return output
   ## TODO: discuss with Tak and sync output
-  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var, Alpha = Alpha, weight = NA, snparam = snparam)
+  output<- list(sample.mean=y,se=se,prior.mean=prior.mean, prior.mean.hat = mu,shrinkage=Bhat,sd.shrinkage=seB,post.intv.low=skewedmat[,1],post.mean=thetahat,post.intv.upp=skewedmat[,3],post.sd=shat,model="gr",X=X.ini,beta.new=Betahat,beta.var=Betahatvar,intercept=intercept,a.new=log(Ahat),a.var=est.var, confidence.lvl = confidence.lvl, weight = NA, snparam = snparam)
   return(output)
 }
 

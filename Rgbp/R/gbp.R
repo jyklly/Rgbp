@@ -1,9 +1,9 @@
 ######
-gbp <- function(y, se.or.n, covariates, mean.PriorDist, model, intercept, Alpha, n.AR, n.AR.factor,
+gbp <- function(y, se.or.n, covariates, mean.PriorDist, model, intercept, confidence.lvl, n.AR, n.AR.factor,
                 trial.scale, save.result, normal.CI, t, u) UseMethod("gbp")
 ######
 gbp <- function(y, se.or.n, covariates, mean.PriorDist, model = "gaussian", 
-                        intercept = TRUE, Alpha = 0.95, 
+                        intercept = TRUE, confidence.lvl = 0.95, 
                         n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE, 
                         normal.CI = FALSE, t = 0, u = 1) {
 
@@ -19,12 +19,12 @@ gbp <- function(y, se.or.n, covariates, mean.PriorDist, model = "gaussian",
   
   ######
   res <- switch(model, 
-       gaussian = gr(y, se.or.n, X = covariates, mu = mean.PriorDist, Alpha = Alpha, intercept = intercept, 
+       gaussian = gr(y, se.or.n, X = covariates, mu = mean.PriorDist, confidence.lvl = confidence.lvl, intercept = intercept, 
                      normal.CI = normal.CI), 
-       binomial = br(y, se.or.n, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha,
+       binomial = br(y, se.or.n, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, confidence.lvl = confidence.lvl,
                      n.AR = n.AR, n.AR.factor = n.AR.factor, trial.scale = trial.scale, save.result = TRUE,
                      t = t, u = u), 
-       poisson = pr(y, se.or.n, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, Alpha = Alpha))
+       poisson = pr(y, se.or.n, X = covariates, prior.mean = mean.PriorDist, intercept = intercept, confidence.lvl = confidence.lvl))
   
   class(res) <- "gbp"	
   res
@@ -421,7 +421,7 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   }
 
   plot(index, po.m, ylim = c(ylim.low, ylim.upp), xlab = xl, ylab = "",
-       main = paste(100 * x$Alpha, "% Interval plot"), 
+       main = paste(100 * x$confidence.lvl, "% Interval plot"), 
        col = 2, pch = 19)
   sapply(1 : length(y), function(j) {
     lines(rep(index[j], 2), c(po.low[j], po.upp[j]), lwd = 0.5)

@@ -236,8 +236,8 @@ BRShrinkageEst <- function(a.res, given) {
   a0.beta <- inv.info / B.hat
   central3.B <- 2 * (1 - 2 * B.hat) * B.hat * (1 - B.hat) / 
                 (a1.beta + a0.beta + 1) / (a1.beta + a0.beta + 2)
-  B.hat.low <- qbeta((1 - given$Alpha) / 2, a1.beta, a0.beta)
-  B.hat.upp <- qbeta((1 + given$Alpha) / 2, a1.beta, a0.beta)
+  B.hat.low <- qbeta((1 - given$confidence.lvl) / 2, a1.beta, a0.beta)
+  B.hat.upp <- qbeta((1 + given$confidence.lvl) / 2, a1.beta, a0.beta)
 
   list(B.hat = B.hat, inv.info = inv.info, var.B.hat = var.B.hat, central3.B = central3.B)
 }
@@ -265,8 +265,8 @@ BRPosteriorEst2ndLevelMeanKnown <- function(B.res, given) {
   var.p.hat <- (d1 - d2 * B.hat - d3 * var.B.hat + d4 * central3.B) / n
   a1.beta.p <- (p.hat * (1 - p.hat) / var.p.hat - 1) * p.hat
   a0.beta.p <- (p.hat * (1 - p.hat) / var.p.hat - 1) * (1 - p.hat)
-  p.hat.low <- qbeta((1 - given$Alpha) / 2, a1.beta.p, a0.beta.p)
-  p.hat.upp <- qbeta((1 + given$Alpha) / 2, a1.beta.p, a0.beta.p)
+  p.hat.low <- qbeta((1 - given$confidence.lvl) / 2, a1.beta.p, a0.beta.p)
+  p.hat.upp <- qbeta((1 + given$confidence.lvl) / 2, a1.beta.p, a0.beta.p)
 
   list(post.mean = p.hat, post.sd = sqrt(var.p.hat), 
        post.intv.low = p.hat.low, post.intv.upp = p.hat.upp, prior.mean = p0)
@@ -318,8 +318,8 @@ BRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
                 + k2b * k2p + k2b * k1p^2 - 2 * y * k2b * k1p + y^2 * k2b + k1b^2 * k2p)
   a1.beta.p <- (p.hat * (1 - p.hat) / var.p.hat - 1) * p.hat
   a0.beta.p <- (p.hat * (1 - p.hat) / var.p.hat - 1) * (1 - p.hat)
-  p.hat.low <- qbeta((1 - given$Alpha) / 2, a1.beta.p, a0.beta.p)
-  p.hat.upp <- qbeta((1 + given$Alpha) / 2, a1.beta.p, a0.beta.p)
+  p.hat.low <- qbeta((1 - given$confidence.lvl) / 2, a1.beta.p, a0.beta.p)
+  p.hat.upp <- qbeta((1 + given$confidence.lvl) / 2, a1.beta.p, a0.beta.p)
 
   list(post.mean = p.hat, post.sd = sqrt(var.p.hat),
        post.intv.low = p.hat.low, post.intv.upp = p.hat.upp, prior.mean = p0.hat)
@@ -526,7 +526,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
     beta.var <- apply(beta.sample, 2, var)
   }
 
-  post.intv <- apply(p.sample, 1, quantile, probs = c((1 - given$Alpha) / 2, 1 / 2 + given$Alpha / 2))
+  post.intv <- apply(p.sample, 1, quantile, probs = c((1 - given$confidence.lvl) / 2, 1 / 2 + given$confidence.lvl / 2))
   post.intv.low <- post.intv[1, ]
   post.intv.upp <- post.intv[2, ]
   alpha.mean <- mean(alpha.sample)
@@ -680,7 +680,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, t, u,
   post.m <- rowMeans(p.sample)
   post.sd <- apply(p.sample, 1, sd)
 
-  post.intv <- apply(p.sample, 1, quantile, probs = c((1 - given$Alpha) / 2, 1 / 2 + given$Alpha / 2))
+  post.intv <- apply(p.sample, 1, quantile, probs = c((1 - given$confidence.lvl) / 2, 1 / 2 + given$confidence.lvl / 2))
   post.intv.low <- post.intv[1, ]
   post.intv.upp <- post.intv[2, ]
   alpha.mean <- mean(alpha.sample)
@@ -692,7 +692,7 @@ BRAR2ndLevelMeanKnown <- function(given, ini, n.AR = n.AR, t, u,
        accept.rate = accept.rate, trial.scale = scale)
 }
     
-br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1, 
+br <- function(z, n, X, prior.mean, intercept = TRUE, confidence.lvl = 0.95, t = 0, u = 1, 
                n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE){
 
   # The main function of BRIMM
@@ -706,7 +706,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
   }
 
   given <- list(z = z, n = n, sample.mean = z / n, x.ini = X,
-                prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
+                prior.mean = prior.mean, intercept = intercept, confidence.lvl = confidence.lvl)
 
   if (any(is.na(prior.mean))) {
     ini <- BRInitialValue2ndLevelMeanUnknown(given)
@@ -736,7 +736,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
                    prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
                    post.intv.upp = post.res$post.intv.upp, model="br", X = X, 
                    beta.new = a.res$beta.new, beta.var = a.res$beta.var,
-                   intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha,
+                   intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, confidence.lvl = confidence.lvl,
                    weight = NA, p = NA)
     output
 
@@ -772,7 +772,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
            post.intv.upp = res$post.intv.upp, model = "br", X = X, trial.scale.est = res$trial.scale,
            beta.new = b.mean, beta.var = b.var, weight = res$weight, trial.scale = trial.scale,
-           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = res$p.sample,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, confidence.lvl = confidence.lvl, p = res$p.sample,
            alpha = res$alpha.sample, beta = beta, accept.rate = res$accept.rate, n.AR.factor = n.AR.factor,
            n.AR = n.AR, t = t, u = u)
     } else {
@@ -781,7 +781,7 @@ br <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95, t = 0, u = 1
            prior.mean.hat = p0.mean, post.intv.low = res$post.intv.low, 
            post.intv.upp = res$post.intv.upp, model = "br", X = X, 
            beta.new = b.mean, beta.var = b.var, weight = 1, trial.scale = trial.scale,
-           intercept = intercept, a.new = res$a.new, a.var = res$a.var, Alpha = Alpha, p = 1,
+           intercept = intercept, a.new = res$a.new, a.var = res$a.var, confidence.lvl = confidence.lvl, p = 1,
            alpha = res$alpha.sample, beta = beta, n.AR = n.AR)
 
     }

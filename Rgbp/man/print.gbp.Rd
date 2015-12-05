@@ -33,9 +33,9 @@
   \item{prior.mean.AR}{the posterior mean(s) of the expected random effects, if the acceptance-rejection method is used for the binomial model. The variable name on the display will be "prior.mean".}
   \item{shrinkage}{shrinkage estimate of each group (adjusted posterior mean)}
   \item{shrinkage.AR}{the posterior mean of the shrinkage factor, if the acceptance-rejection method is used for the binomial model. The variable name on the display will be "shrinkage".}
-  \item{low.intv}{lower bound of 100*Alpha\% posterior interval}
+  \item{low.intv}{lower bound of 100*confidence.lvl\% posterior interval}
   \item{post.mean}{posterior mean of each group}
-  \item{upp.intv}{upper bound of 100*Alpha\% posterior interval}
+  \item{upp.intv}{upper bound of 100*confidence.lvl\% posterior interval}
   \item{post.sd}{posterior standard deviation of each group}
 }
 \author{

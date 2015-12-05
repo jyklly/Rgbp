@@ -196,8 +196,8 @@ PRShrinkageEst <- function(a.res, given) {
   var.B.hat <- (B.hat * (1 - B.hat))^2 / ((B.hat * (1 - B.hat)) + inv.info)
   a1.beta <- inv.info / (1 - B.hat)
   a0.beta <- inv.info / B.hat
-  B.hat.low <- qbeta((1 - given$Alpha) / 2, a1.beta, a0.beta)
-  B.hat.upp <- qbeta((1 + given$Alpha) / 2, a1.beta, a0.beta)
+  B.hat.low <- qbeta((1 - given$confidence.lvl) / 2, a1.beta, a0.beta)
+  B.hat.upp <- qbeta((1 + given$confidence.lvl) / 2, a1.beta, a0.beta)
   list(B.hat = B.hat, inv.info = inv.info, var.B.hat = var.B.hat)
 }
 
@@ -216,8 +216,8 @@ PRPosteriorEst2ndLevelMeanKnown <- function(B.res, given) {
                      - (var.B.hat + B.hat^2) * mu0) / n + (y - mu0)^2 * var.B.hat
   u.gamma <- lambda.hat^2 / var.lambda.hat
   v.gamma <- lambda.hat / var.lambda.hat
-  lambda.hat.low <- qgamma((1 - given$Alpha) / 2, shape = u.gamma, rate = v.gamma)
-  lambda.hat.upp <- qgamma((1 + given$Alpha) / 2, shape = u.gamma, rate = v.gamma)
+  lambda.hat.low <- qgamma((1 - given$confidence.lvl) / 2, shape = u.gamma, rate = v.gamma)
+  lambda.hat.upp <- qgamma((1 + given$confidence.lvl) / 2, shape = u.gamma, rate = v.gamma)
   list(post.mean = lambda.hat, post.sd = sqrt(var.lambda.hat), 
        post.intv.low = lambda.hat.low, post.intv.upp = lambda.hat.upp, prior.mean = mu0)
 }
@@ -244,14 +244,14 @@ PRPosteriorEst2ndLevelMeanUnknown <- function(B.res, a.res, ini, given){
                      - (B.hat * (y - mu0.hat))^2)
   u.gamma <- lambda.hat^2 / var.lambda.hat
   v.gamma <- lambda.hat / var.lambda.hat
-  lambda.hat.low <- qgamma((1 - given$Alpha) / 2, shape = u.gamma, rate = v.gamma)
-  lambda.hat.upp <- qgamma((1 + given$Alpha) / 2, shape = u.gamma, rate = v.gamma)
+  lambda.hat.low <- qgamma((1 - given$confidence.lvl) / 2, shape = u.gamma, rate = v.gamma)
+  lambda.hat.upp <- qgamma((1 + given$confidence.lvl) / 2, shape = u.gamma, rate = v.gamma)
   list(post.mean = lambda.hat, post.sd = sqrt(var.lambda.hat), 
        post.intv.low = lambda.hat.low, post.intv.upp = lambda.hat.upp, prior.mean = mu0.hat)
 }
 
 # main function
-pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
+pr <- function(z, n, X, prior.mean, intercept = TRUE, confidence.lvl = 0.95) {
   # The main function of PRIMM
 
   if (missing(X)) { 
@@ -263,7 +263,7 @@ pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
   }
 
   given <- list(z = z, n = n, sample.mean = z/n, x.ini = X, 
-                prior.mean = prior.mean, intercept = intercept, Alpha = Alpha)
+                prior.mean = prior.mean, intercept = intercept, confidence.lvl = confidence.lvl)
 
   if (any(is.na(prior.mean))) {
     ini <- PRInitialValue2ndLevelMeanUnknown(given)
@@ -291,6 +291,6 @@ pr <- function(z, n, X, prior.mean, intercept = TRUE, Alpha = 0.95) {
                  prior.mean.hat = post.res$prior.mean, post.intv.low = post.res$post.intv.low, 
                  post.intv.upp = post.res$post.intv.upp, model = "pr", X = X, 
                  beta.new = a.res$beta.new, beta.var = a.res$beta.var, weight = NA,
-                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, Alpha = Alpha)
+                 intercept = intercept, a.new = a.res$a.new, a.var = a.res$a.var, confidence.lvl = confidence.lvl)
   output
 }

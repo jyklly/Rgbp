@@ -61,27 +61,27 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
         tryCatch({
           if (AR == 0) {
             out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                    } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, X, model = "binomial", Alpha = gbp.object$Alpha)
+                     gbp(sim.z[, i], n, X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                    } else if (!is.na(gbp.object$prior.mean)) {
                      gbp(sim.z[, i], n, mean.PriorDist = p0, model = "binomial", 
-                         Alpha = gbp.object$Alpha)
+                         confidence.lvl = gbp.object$confidence.lvl)
                    }
           } else {
             out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
+                     gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                          n.AR = gbp.object$n.AR, n.AR.factor = gbp.object$n.AR.factor,
                          trial.scale = gbp.object$trial.scale, save.result = FALSE, 
                          t = gbp.object$c, u = gbp.object$u)
                    } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                     gbp(sim.z[, i], n, X, model = "binomial", Alpha = gbp.object$Alpha,
+                     gbp(sim.z[, i], n, X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                          n.AR = gbp.object$n.AR, n.AR.factor = gbp.object$n.AR.factor, 
                          trial.scale = gbp.object$trial.scale, save.result = FALSE,
                          t = gbp.object$c, u = gbp.object$u)
                    } else if (!is.na(gbp.object$prior.mean)) {
                      gbp(sim.z[, i], n, mean.PriorDist = p0, model = "binomial", 
-                         Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR, 
+                         confidence.lvl = gbp.object$confidence.lvl, n.AR = gbp.object$n.AR, 
                          n.AR.factor = gbp.object$n.AR.factor,
                          trial.scale = gbp.object$trial.scale, save.result = FALSE,
                          t = gbp.object$c, u = gbp.object$u)
@@ -176,57 +176,57 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
           if (AR == 0) {
             out <- if (!missing(mean.PriorDist)) {
                      gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
-                         Alpha = gbp.object$Alpha)
+                         confidence.lvl = gbp.object$confidence.lvl)
                    } else if (!missing(A.or.r) & missing(reg.coef)) { 
                      if (!identical(gbp.object$prior.mean, NA)) {
                        gbp(sim.z[, i], n, mean.PriorDist = gbp.object$prior.mean, model = "binomial", 
-                           Alpha = gbp.object$Alpha)
+                           confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    } else if (!missing(reg.coef)) {
                      if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    }
           
           } else {
             out <- if (!missing(mean.PriorDist)) {
                      gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "binomial", 
-                         Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR,
+                         confidence.lvl = gbp.object$confidence.lvl, n.AR = gbp.object$n.AR,
                          n.AR.factor = gbp.object$n.AR.factor,
                          trial.scale = gbp.object$trial.scale, save.result = FALSE,
                          t = gbp.object$c, u = gbp.object$u)
                    } else if (!missing(A.or.r) & missing(reg.coef)) { 
                      if (!identical(gbp.object$prior.mean, NA)) {
                        gbp(sim.z[, i], n, mean.PriorDist = gbp.object$prior.mean, model = "binomial", 
-                           Alpha = gbp.object$Alpha, n.AR = gbp.object$n.AR,
+                           confidence.lvl = gbp.object$confidence.lvl, n.AR = gbp.object$n.AR,
                            n.AR.factor = gbp.object$n.AR.factor,
                            trial.scale = gbp.object$trial.scale, save.result = FALSE,
                            t = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
+                       gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
                            n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
                            t = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
+                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
                            n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
                            t = gbp.object$c, u = gbp.object$u)
                      }
                    } else if (!missing(reg.coef)) {
                      if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "binomial", Alpha = gbp.object$Alpha,
+                       gbp(sim.z[, i], n, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
                            n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
                            t = gbp.object$c, u = gbp.object$u)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", Alpha = gbp.object$Alpha,
+                       gbp(sim.z[, i], n, gbp.object$X, model = "binomial", confidence.lvl = gbp.object$confidence.lvl,
                            n.AR = gbp.object$n.AR, trial.scale = gbp.object$trial.scale, 
                            n.AR.factor = gbp.object$n.AR.factor, save.result = FALSE,
                            t = gbp.object$c, u = gbp.object$u)
@@ -282,11 +282,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, model = "poisson", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.z[, i], n, X, model = "poisson", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, X, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "poisson", Alpha = gbp.object$Alpha)
+                   gbp(sim.z[, i], n, mean.PriorDist = lambda0, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                  }
           
           sh <- r * lambda0 + sim.z[, i]
@@ -375,21 +375,21 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
         tryCatch({
             out <- if (!missing(mean.PriorDist)) {
                      gbp(sim.z[, i], n, mean.PriorDist = mean.PriorDist, model = "poisson", 
-                         Alpha = gbp.object$Alpha)
+                         confidence.lvl = gbp.object$confidence.lvl)
                    } else if (!missing(A.or.r) & missing(reg.coef)) { 
                      if (!identical(gbp.object$prior.mean, NA)) {
                        gbp(sim.z[, i], n, mean.PriorDist = gbp.object$prior.mean, model = "poisson", 
-                           Alpha = gbp.object$Alpha)
+                           confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "poisson", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (!identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "poisson", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, gbp.object$X, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    } else if (!missing(reg.coef)) {
                      if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, model = "poisson", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.z[, i], n, gbp.object$X, model = "poisson", Alpha = gbp.object$Alpha)
+                       gbp(sim.z[, i], n, gbp.object$X, model = "poisson", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    }
           
@@ -439,11 +439,11 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
       for (i in 1 : nsim) {
         tryCatch({
           out <- if (is.na(gbp.object$prior.mean) & identical(gbp.object$X, NA)) {
-                   gbp(sim.y[, i], se, Alpha = gbp.object$Alpha)
+                   gbp(sim.y[, i], se, confidence.lvl = gbp.object$confidence.lvl)
                  } else if (is.na(gbp.object$prior.mean) & !identical(gbp.object$X, NA)) {
-                   gbp(sim.y[, i], se, X, Alpha = gbp.object$Alpha)
+                   gbp(sim.y[, i], se, X, confidence.lvl = gbp.object$confidence.lvl)
                  } else if (!is.na(gbp.object$prior.mean)) {
-                   gbp(sim.y[, i], se, mean.PriorDist = mu0, Alpha = gbp.object$Alpha)
+                   gbp(sim.y[, i], se, mean.PriorDist = mu0, confidence.lvl = gbp.object$confidence.lvl)
                  }
           postmean <- mu0 * (se^2 / (se^2 + A)) + sim.y[, i] * (A / (se^2 + A))
           postsd <- sqrt(se^2 * (A / (se^2 + A)))
@@ -531,21 +531,21 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
         tryCatch({
             out <- if (!missing(mean.PriorDist)) {
                      gbp(sim.y[, i], se, mean.PriorDist = mean.PriorDist, model = "gaussian", 
-                         Alpha = gbp.object$Alpha)
+                         confidence.lvl = gbp.object$confidence.lvl)
                    } else if (!missing(A.or.r) & missing(reg.coef)) { 
                      if (!identical(gbp.object$prior.mean, NA)) {
                        gbp(sim.y[, i], se, mean.PriorDist = gbp.object$prior.mean, model = "gaussian", 
-                           Alpha = gbp.object$Alpha)
+                           confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.y[, i], se, model = "gaussian", Alpha = gbp.object$Alpha)
+                       gbp(sim.y[, i], se, model = "gaussian", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.y[, i], se, gbp.object$X, model = "gaussian", Alpha = gbp.object$Alpha)
+                       gbp(sim.y[, i], se, gbp.object$X, model = "gaussian", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    } else if (!missing(reg.coef)) {
                      if (identical(gbp.object$prior.mean, NA) & identical(gbp.object$X, NA)){
-                       gbp(sim.y[, i], se, model = "gaussian", Alpha = gbp.object$Alpha)
+                       gbp(sim.y[, i], se, model = "gaussian", confidence.lvl = gbp.object$confidence.lvl)
                      } else if (identical(gbp.object$prior.mean, NA) & !identical(gbp.object$X, NA)){
-                       gbp(sim.y[, i], se, gbp.object$X, model = "gaussian", Alpha = gbp.object$Alpha)
+                       gbp(sim.y[, i], se, gbp.object$X, model = "gaussian", confidence.lvl = gbp.object$confidence.lvl)
                      }
                    }
 
@@ -598,7 +598,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
     axis(1, at = seq(1, n.units, by = as.integer(n.units / 10)), labels = TRUE)
   }
 
-  abline(h = gbp.object$Alpha)
+  abline(h = gbp.object$confidence.lvl)
 
   if (is.na(gbp.object$prior.mean) & missing(mean.PriorDist)) {
     if (gbp.object$model == "gr") {
@@ -701,7 +701,7 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
                  overall.coverageRB = avr.cov, se.overal.coverageRB = avr.se.cov,
                  se.coverageRB = se.cov, se.coverageS = se.cov2, 
                  raw.resultRB = coverageRB, raw.resultS = coverageS,
-                 Alpha = gbp.object$Alpha, effective.n = effective.n, 
+                 confidence.lvl = gbp.object$confidence.lvl, effective.n = effective.n, 
                  model = gbp.object$model, case = case, betas =  betas, A.r = A.r, 
                  priormeanused = priormeanused)
   return(output)
@@ -740,7 +740,7 @@ coverage.plot <- function(cov) {
     axis(1, at = seq(1, n.groups, by = as.integer(n.groups / 10)), labels = TRUE)
   }
 
-  abline(h = cov$Alpha)
+  abline(h = cov$confidence.lvl)
 
   if (cov$case == 1) {
     legend("bottomleft", c(paste("Model: Normal-Normal"), 

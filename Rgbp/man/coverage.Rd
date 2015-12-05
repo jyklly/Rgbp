@@ -104,7 +104,7 @@
   \item{raw.resultS}{
     All the simple unbiased coverage estimates for every group and for every simulation.
   }
-  \item{Alpha}{
+  \item{confidence.lvl}{
     Nominal confidence level 
   }
   \item{effective.n}{

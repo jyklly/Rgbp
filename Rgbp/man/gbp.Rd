@@ -6,7 +6,7 @@
 }
 
 \usage{gbp(y, se.or.n, covariates, mean.PriorDist, model, intercept, 
-           Alpha, n.AR, n.AR.factor, trial.scale, save.result,
+           confidence.lvl, n.AR, n.AR.factor, trial.scale, save.result,
            normal.CI, t, u)}
 
 \arguments{
@@ -32,8 +32,8 @@
     \code{TRUE} or \code{FALSE} flag indicating whether an intercept should be
     included in the regression. Default is \code{TRUE}.
   }
-  \item{Alpha}{
-    a \code{float} between 0 and 1 to estimate 100*Alpha\% intervals. Default is 0.95.
+  \item{confidence.lvl}{
+    a \code{float} between 0 and 1 to estimate 100*confidence.lvl\% intervals. Default is 0.95.
   }
 
   \item{n.AR}{
@@ -126,8 +126,8 @@
   \item{sd.shrinkage}{posterior standard deviation of shrinkage}
   \item{post.mean}{posterior mean of each group}
   \item{post.sd}{posterior standard deviation of each group}
-  \item{post.intv.low}{lower bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
-  \item{post.intv.upp}{upper bound of 100*Alpha\% posterior interval (quantile of posterior distribution)}
+  \item{post.intv.low}{lower bound of 100*confidence.lvl\% posterior interval (quantile of posterior distribution)}
+  \item{post.intv.upp}{upper bound of 100*confidence.lvl\% posterior interval (quantile of posterior distribution)}
   \item{model}{"gaussian" for Gaussian, "poisson" for Poisson, and "binomial" for Binomial data}
   \item{X}{a covariate vector or matrix if designated. NA if not}
   \item{beta.new}{regression coefficient estimates}
@@ -135,7 +135,7 @@
   \item{intercept}{whether TRUE or FALSE}
   \item{a.new}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data. Practical meaning (variation of ensemble information) of estimating \eqn{\alpha} will appear in \code{summary(gbp.object)}.}
   \item{a.var}{posterior variance of \eqn{\alpha}}
-  \item{Alpha}{confidence level based on which confidence interval is constructed }
+  \item{confidence.lvl}{confidence level based on which confidence interval is constructed }
   \item{weight}{(only for Binomial model) weights for acceptance-rejection method}
   \item{p}{(only for Binomial model) posterior samples of p based on the acceptance-rejection method, if this method was used. This is a (k by nsim) matrix. Each row contains posteiror samples of each random effect.}
   \item{alpha}{(only for Binomial model) posterior samples of alpha based on the acceptance-rejection method, if this method was used}
