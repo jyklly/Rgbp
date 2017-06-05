@@ -20,7 +20,7 @@
     a vector containing an estimation result of the second-level variance component. \code{\link{print.summary.gbp}}.
   }
   \item{reg}{
-    a vector composed of a summary of regression fit (if fitted). \code{\link{print.summary.gbp}}.
+    a vector composed of a summary of regression fit (if fitted). \cr \code{\link{print.summary.gbp}}.
   }
 }
 

@@ -36,7 +36,7 @@
       \item{Unit w/ min(se or n)}{an estimation result of a group (unit) with the minimum standard error for Gaussian or the minimum total number of trials for Binomial and Poisson data.}
       \item{Unit w/ min(sample.mean)}{appears instead of \code{Group w/ min(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.}
       \item{Unit w/ median(se or n)}{an estimation result of group(s) (unit(s)) with the median standard error for Gaussian or the median total number of trials for Binomial and Poisson data.}
-      \item{Unit w/ median(sample.mean)}{appears instead of \code{Group w/ median(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.}
+      \item{Unit w/ median(sample.mean)}{appears instead of \cr \code{Group w/ median(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.}
       \item{Unit w/ max(se or n)}{an estimation result of a group (unit) with the maximum standard error for Gaussian or the maximum total number of trials for Binomial and Poisson data.}
       \item{Unit w/ max(sample.mean)}{appears instead of \code{Group w/ max(se or n)} when all the groups (units) have the same standard error for Gaussian or the same total number of trials for Binomial and Poisson data.}
       \item{Overall Means}{the overall average for all the groups (units) within each column.}
@@ -47,8 +47,8 @@
       \item{post.mode.alpha}{a posterior mode of \eqn{\alpha} defined as log(\emph{A}) for Gaussian or log(\eqn{\frac{1}{r}}{1 / r}) for Binomial and Poisson data.}
       \item{post.sd.alpha}{standard deviation of the posterior distribution of alpha}
       \item{post.mode.r}{posterior mode of either \eqn{r} for Bianomial and Poisson models or \eqn{A} for Gaussian model.}
-      \item{post.median.alpha}{posterior median of \eqn{\alpha} for Bianomial model, if the acceptance-rejection method is used.}
-      \item{post.median.r}{posterior median of \eqn{r} for Bianomial model, if the acceptance-rejection method is used.}
+      \item{post.median.alpha}{posterior median of \eqn{\alpha} for Bianomial model, if the accept-reject method is used.}
+      \item{post.median.r}{posterior median of \eqn{r} for Bianomial model, if the accept-reject method is used.}
     }
   }
   \item{Regression Summary (if fitted)}{

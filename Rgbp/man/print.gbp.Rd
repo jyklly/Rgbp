@@ -18,9 +18,9 @@
 }
 \details{
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
-  \code{b} like "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
+  \code{b} like \cr "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
 
-  We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
+  We do not need to type "\code{print(b, sort = TRUE)}" but "\code{b}" itself is enough to call \cr \code{print(b, sort = TRUE)}. But if we want to see the result NOT sorted by the order of \code{se} for Gaussian, or of \code{n} for Binomial and Poisson data, \code{print(b, sort = FALSE)} will show the result by the order of data input.
 }
 \value{
   \code{print(gbp.object)} will display:

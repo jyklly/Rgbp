@@ -19,7 +19,7 @@
 
 \details{
   As for the argument \code{x}, if the result of \code{gbp} is designated to 
-  \code{b} like "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
+  \code{b} like \cr "\code{b <- gbp(z, n, model = "binomial")}", the argument \code{x} is supposed to be \code{b}.
 
   This function produces two plots containing information about the prior, sample, and posterior means.
 
