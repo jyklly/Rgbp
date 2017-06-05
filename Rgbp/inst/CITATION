@@ -1,0 +1,26 @@
+bibentry(bibtype = "Article",
+  title        = "{Rgbp}: An {R} Package for Gaussian, Poisson, and Binomial Random Effects Models with Frequency Coverage Evaluations",
+  author       = c(person(given = "Hyungsuk",
+                          family = "Tak",
+                          email = "hyungsuk.tak@gmail.com"),
+                   person(given = "Joseph",
+                          family = "Kelly",
+                          email = "josephkelly@google.com"),
+                   person(given = "Carl",
+                          family = "Morris",
+                          email = "morris@stat.harvard.edu")),
+  journal      = "Journal of Statistical Software",
+  year         = "2017",
+  volume       = "78",
+  number       = "5",
+  pages        = "1--33",
+  doi          = "10.18637/jss.v078.i05",
+
+  header       = "To cite Rgbp in publications use:",
+  textVersion  =
+  paste("Hyungsuk Tak, Joseph Kelly, Carl Morris (2017).",
+        "Rgbp: An R Package for Gaussian, Poisson, and Binomial Random Effects Models with Frequency Coverage Evaluations.",
+        "Journal of Statistical Software, 78(5), 1-33.",
+        "doi:10.18637/jss.v078.i05")
+)
+
