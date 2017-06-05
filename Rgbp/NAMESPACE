@@ -6,7 +6,7 @@ importFrom("stats", "as.formula", "binomial", "dnbinom", "dnorm",
            "glm", "median", "optim", "pbeta", "pgamma", "pnorm",
            "poisson", "qbeta", "qgamma", "qnorm", "quantile", "rbeta",
            "rbinom", "rgamma", "rnorm", "rpois", "runif", "var")
-exportPattern("coverage, gbp")
+exportPattern("coverage", "gbp")
 S3method(print, gbp)
 S3method(print, summary.gbp)
 S3method(plot, gbp)
