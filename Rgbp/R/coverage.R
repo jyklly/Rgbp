@@ -723,8 +723,8 @@ coverage.plot <- function(cov) {
   priormeanused <- cov$priormeanused
 
   # plotting coverage graph
-  oldpar <- par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
-  on.exit(par(oldpar))
+  old.par <- par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  on.exit(par(old.par))
   plot(1 : n.groups, cov$coverageRB, ylim = c(0.5, 1), col = 2,
        ylab = "Coverage rate estimate",
        xlab = paste("Group_ j", ", ", "j = 1, ...,", n.groups), 

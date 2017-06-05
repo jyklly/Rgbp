@@ -369,9 +369,9 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   ylim.low <- ifelse(min(po.low, y) >= 0, 0.8 * min(po.low, y), 1.2 * min(po.low, y))
   ylim.upp <- ifelse(max(po.upp, y) >= 0, 1.2 * max(po.upp, y), 0.8 * max(po.upp, y))
   
-  oldpar <- par(fig = c(0.25, 1, 0.5, 1), xaxs = "r", yaxs = "r", 
+  old.par1 <- par(fig = c(0.25, 1, 0.5, 1), xaxs = "r", yaxs = "r", 
                 mai = c(0.5, 0.5, 0.5, 0.3), las = 1, ps = 13)
-  on.exit(par(oldpar))
+  on.exit(par(old.par1))
 
   if (x$model != "gr") {
     se <- sqrt(y * (1 - y) / se)
@@ -408,10 +408,9 @@ plot.gbp <- function(x, sort = TRUE, ...) {
     points(coords, pch=0)
   })
 
-  oldpar2 <- par(fig = c(0, 1, 0, 0.5), xaxs = "r", yaxs = "r", 
-                mai = c(0.8, 0.7, 0.5, 0.3), las = 1, ps = 13, new = TRUE)  
-  on.exit(par(oldpar2))
-
+  old.par2 <- par(fig = c(0, 1, 0, 0.5), xaxs = "r", yaxs = "r", 
+                mai = c(0.8, 0.7, 0.5, 0.3), las = 1, ps = 13, new = TRUE)
+  on.exit(par(old.par2))
 
   if (sort == TRUE) {
     if (x$model == "gr") {
@@ -446,10 +445,10 @@ plot.gbp <- function(x, sort = TRUE, ...) {
   }
 
   if (x$model == "br" & length(x$weight) != 1) { 
-    oldpar3 <- par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", 
+    old.par3 <- par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", 
                    mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 9,
-                   oma = c(0, 0, 0, 0), new = TRUE)  
-    on.exit(par(oldpar3))
+                   oma = c(0, 0, 0, 0), new = TRUE)
+    on.exit(par(old.par3))
     plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
            lwd = c(NA, NA, 2, 2, 2), 
@@ -458,10 +457,10 @@ plot.gbp <- function(x, sort = TRUE, ...) {
              "Posterior sd \nof random effect", "Crossover"),
            seg.len = 0.5, bty = "n",xpd = TRUE)
   } else {
-    oldpar3 <- par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", 
+    old.par3 <- par(fig = c(0, 0.35, 0.5, 1), xaxs = "r", yaxs = "r", 
                    mai = c(0.4, 0.1, 0.5, 0), las = 1, ps = 13,
-                   oma = c(0, 0, 0, 0), new = TRUE)  
-    on.exit(par(oldpar3))
+                   oma = c(0, 0, 0, 0), new = TRUE)
+    on.exit(par(old.par3))
     plot(1, type="n", axes=F, xlab="", ylab="")
     legend("topleft", pch = c(19, 1, NA, NA, NA,0), col = c(2, 1, 4,"darkviolet", "darkgreen",1), 
            lwd = c(NA, NA, 2, 2, 2), 
