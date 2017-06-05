@@ -43,8 +43,8 @@ gr<-function(y,se,X,mu,confidence.lvl=0.95,intercept=T,eps=0.0001, normal.CI = F
   ninfo <- -1*est$hessian
   Avar<-est.var*Ahat^2
   Bhat<-V/(V+Ahat)
-  a0<-ninfo/Bhat
-  a1<-ninfo/(1-Bhat)
+  a0<- c(ninfo) / Bhat
+  a1<- c(ninfo) / (1 - Bhat)
   v<-Bhat*(1-Bhat)/(a1+a0+1)
   seB<-sqrt(v)
   skewB<-2*(a0-a1)*sqrt(1+a0+a1)/(sqrt(a0*a1)*(2+a0+a1))

@@ -231,9 +231,9 @@ BRShrinkageEst <- function(a.res, given) {
 
   B.hat <- exp(-a.new) / (given$n + exp(-a.new))  # shriankge = B
   inv.info <- 1 / a.var
-  var.B.hat <- (B.hat * (1 - B.hat))^2 / ((B.hat * (1 - B.hat)) + inv.info)
-  a1.beta <- inv.info / (1 - B.hat)
-  a0.beta <- inv.info / B.hat
+  var.B.hat <- (B.hat * (1 - B.hat))^2 / ((B.hat * (1 - B.hat)) + c(inv.info))
+  a1.beta <- c(inv.info) / (1 - B.hat)
+  a0.beta <- c(inv.info) / B.hat
   central3.B <- 2 * (1 - 2 * B.hat) * B.hat * (1 - B.hat) / 
                 (a1.beta + a0.beta + 1) / (a1.beta + a0.beta + 2)
   B.hat.low <- qbeta((1 - given$confidence.lvl) / 2, a1.beta, a0.beta)
