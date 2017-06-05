@@ -579,7 +579,8 @@ coverage <- function(gbp.object, A.or.r, reg.coef, mean.PriorDist, nsim = 100) {
   effective.n <- sum(!is.na(coverageS[1, ]))
 
   # plotting coverage graph
-  par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  oldpar <- par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  on.exit(par(oldpar))
   n.units <- length(gbp.object$se)
   plot(1 : length(gbp.object$se), result, ylim = c(0.5, 1), col = 2,
        ylab = "Coverage rate estimate",
@@ -722,7 +723,8 @@ coverage.plot <- function(cov) {
   priormeanused <- cov$priormeanused
 
   # plotting coverage graph
-  par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  oldpar <- par(xaxs = "r", yaxs = "r", mai = c(1, 0.9, 1, 0.3), las = 1)
+  on.exit(par(oldpar))
   plot(1 : n.groups, cov$coverageRB, ylim = c(0.5, 1), col = 2,
        ylab = "Coverage rate estimate",
        xlab = paste("Group_ j", ", ", "j = 1, ...,", n.groups), 
