@@ -44,7 +44,7 @@
   }
 
   \item{trial.scale}{
-    A scale used in the trial distribution of \eqn{\alpha}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be larger than before. If there are relatively huge weights, scale should be larger than before. Default is NA.
+    A scale used in the trial distribution of \eqn{\alpha}. If resultant weight has too mamy 0's, scale should be smaller than before. If resultant weight has too few 0's, scale should be larger than before. If there are relatively huge weights, scale should be larger than before. Default is 1.3.
   }
 
   \item{save.result}{
