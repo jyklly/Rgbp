@@ -287,7 +287,9 @@
 }
 
 \references{
-Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}. 618-632.
+  Tak, H., Kelly, J., and Morris, C. (2017) Rgbp: An R Package for Gaussian, Poisson, and Binomial Random Effects Models with Frequency Coverage Evaluations. \emph{Journal of Statistical Software}. \bold{78}, 5, 1--33.
+
+  Christiansen, C. and Morris, C. (1997). Hierarchical Poisson Regression Modeling. \emph{Journal of the American Statistical Association}. \bold{92}, 438, 618--632.
 }
 
 \author{Hyungsuk Tak, Joseph Kelly, and Carl Morris}

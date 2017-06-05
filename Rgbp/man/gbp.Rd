@@ -147,8 +147,10 @@
 }
 
 \references{
+  Tak, H., Kelly, J., and Morris, C. (2017) Rgbp: An R Package for Gaussian, Poisson, and Binomial Random Effects Models with Frequency Coverage Evaluations. \emph{Journal of Statistical Software}. \bold{78}, 5, 1--33.
+
   Morris, C. and Lysy, M. (2012). Shrinkage Estimation in Multilevel Normal Models. 
-  \emph{Statistical Science}. \bold{27}. 115-134.
+  \emph{Statistical Science}. \bold{27}, 1, 115--134.
 }
 
 \author{
