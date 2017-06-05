@@ -4,7 +4,7 @@ gbp <- function(y, se.or.n, covariates, mean.PriorDist, model, intercept, confid
 ######
 gbp <- function(y, se.or.n, covariates, mean.PriorDist, model = "gaussian", 
                         intercept = TRUE, confidence.lvl = 0.95, 
-                        n.AR = 0, n.AR.factor = 4, trial.scale = NA, save.result = TRUE, 
+                        n.AR = 0, n.AR.factor = 4, trial.scale = 1.3, save.result = TRUE, 
                         normal.CI = FALSE, t = 0, u = 1) {
 
   ##input checks
