@@ -1,5 +1,5 @@
 import(sn)
-import(mnormt)
+importFrom("mnormt", "rmt", "dmt")
 importFrom("graphics", "abline", "axis", "legend", "lines", "par",
            "points", "sunflowerplot")
 importFrom("stats", "as.formula", "binomial", "dnbinom", "dnorm",

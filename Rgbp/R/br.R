@@ -403,8 +403,8 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
     alpha.ar <- mode.adj + scale * alpha.ar.temp 
     alpha.den <- Skewedt(alpha.ar.temp, a, b) / scale
     df <- 4
-    beta.ar <- rmt(n = n.sample, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
-    beta.den <- dmt(beta.ar, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+    beta.ar <- beta.temp + rmt(n = n.sample, S = beta.var * (df - 2) / df, df = df)
+    beta.den <- dmt(beta.ar - beta.temp, S = beta.var * (df - 2) / df, df = df)
 
     if (m == 1) {
       ab.logpost <- sapply(1 : n.sample, function(j) { 
@@ -436,8 +436,8 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
       alpha.ar.temp2 <- sqrt(a + b) * (2 * B2 - 1) / 2 / sqrt(B2 * (1 - B2))
       alpha.ar2 <- mode.adj + scale * alpha.ar.temp2
       alpha.den2 <- Skewedt(alpha.ar.temp2, a, b) / scale
-      beta.ar2 <- rmt(n = n.sample2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
-      beta.den2 <- dmt(beta.ar2, mean = beta.temp, S = beta.var * (df - 2) / df, df = df)
+      beta.ar2 <- beta.temp + rmt(n = n.sample2, S = beta.var * (df - 2) / df, df = df)
+      beta.den2 <- dmt(beta.ar2 - beta.temp, S = beta.var * (df - 2) / df, df = df)
 
       if (m == 1) {
         ab.logpost2 <- sapply(1 : n.sample2, function(j) { 
@@ -515,7 +515,7 @@ BRAR <- function(given, ini, n.AR = n.AR, trial.scale = trial.scale,
   }
 
   post.m <- rowMeans(p.sample)
-  post.sd <- apply(p.sample, 1, sd)
+  post.sd <- sqrt(apply(p.sample, 1, var))
   if (m == 1) {
     prior.m <- mean(p0.sample)
     beta.mean <- mean(beta.sample)

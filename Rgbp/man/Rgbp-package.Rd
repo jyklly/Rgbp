@@ -10,8 +10,8 @@ Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeli
   \tabular{ll}{
     Package: \tab Rgbp\cr
     Type: \tab Package\cr
-    Version: \tab 1.0.0\cr
-    Date: \tab 2013-03-16\cr
+    Version: \tab 1.1.3\cr
+    Date: \tab 2018-05-16\cr
     License: \tab GPL-2\cr
     Main functions: \tab \code{\link{gbp}}, \code{\link{coverage}}\cr
   }
@@ -106,7 +106,7 @@ Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeli
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    b <- gbp(z, n, model = "binomial")
+    b <- gbp(z, n, model = "binomial", n.AR = 100)
     b
     print(b, sort = FALSE)
     summary(b)
