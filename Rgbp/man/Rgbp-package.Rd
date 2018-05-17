@@ -106,7 +106,7 @@ Bayesian-frequentist reconciliation via approximate Bayesian hierarchical modeli
     # If we do not have any covariate and do not know a mean of the prior distribution #
     ####################################################################################
 
-    b <- gbp(z, n, model = "binomial", n.AR = 100)
+    b <- gbp(z, n, model = "binomial")
     b
     print(b, sort = FALSE)
     summary(b)
